@@ -47,3 +47,22 @@ export const loanHistory = [
         status: 'Paid'
     }
 ]
+
+export const depositHistory = [
+    {
+        date: '11-04-2022',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved'
+    },
+    {
+        date: '11-04-2019',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Approved'
+    },
+]
