@@ -1,114 +1,68 @@
-import React from 'react'
+import ApplicationPg1 from "./ApplicationPg1"
+import ApplicationPg2 from "./ApplicationPg2"
+import ApplicationPg3 from "./ApplicationPg3"
+import ApplicationVerify from "./ApplicationVerify"
+import { useState } from "react"
 
 function LoanRequest() {
+  const [ pageNumber, setPageNumber ] = useState(1)
   return (
-    <div className=''>
+    <div className='h-full'>
       <h1>Loan Application</h1>
-      <div className="bg-white h-full m-10 p-6">
-          <div className='mb-3'>
-            <h1 className='font-semibold'>Applicant's Personal Information</h1>
-            <form action="" className='m-2'>
-              <div className='flex flex-wrap gap-5'>
-                <div className='flex flex-col w-56'>
-                  <label htmlFor="" className='text-sm'>Position in SACCO</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className=' text-sm'>Postal Address</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className=' text-sm'>Land line number</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className=' text-sm'>Marital Status</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className=' text-sm'>Number of dependents</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
+      <div className="flex bg-white p-6 min-h-full">
+          <div className='flex flex-grow flex-col min-h-full'>
+            {pageNumber === 1 &&
+              <ApplicationPg1 />
+            }
+            {pageNumber === 2 &&
+              <ApplicationPg2 />
+            }
+            {pageNumber === 3 &&
+              <ApplicationPg3 />
+            }
+            {pageNumber === 4 &&
+              <ApplicationVerify />
+            }
+            <div className="flex-grow flex justify-between items-end">
+              {pageNumber !== 1 && pageNumber !== 4 &&
+              <div className=''>
+                <input
+                  type="submit"
+                  value='Previous'
+                  className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+                  onClick={() => {
+                    setPageNumber(pageNumber - 1)
+                  }}
+                />
               </div>
-            </form>
-          </div>
-          <div className='mb-3'>
-            <h1 className='font-semibold'>Physical Address</h1>
-            <form action="" className='m-2'>
-              <div className='flex flex-wrap gap-5'>
-                <div className='flex flex-col w-56'>
-                  <label htmlFor="" className='text-sm'>Town</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+              }
+
+              {pageNumber !== 3 && pageNumber !== 4 && 
+                <div className='flex justify-end w-full'>
+                  <input
+                    type="submit"
+                    value='Next'
+                    className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+                    onClick={() => {
+                      setPageNumber(pageNumber + 1)
+                    }}
+                  />
                 </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className='text-sm'>Estate</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+              }
+
+              {pageNumber === 3 && pageNumber !== 4 &&
+                <div className='flex justify-end w-full'>
+                  <input
+                    type="submit"
+                    value='Submit'
+                    className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+                    onClick={() => {
+                      setPageNumber(pageNumber + 1)
+                    }}
+                  />
                 </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className='text-sm'>Stree</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className='text-sm'>House Number</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className='text-sm'>Ownership</label>
-                    <div className='flex justify-between'>
-                      <div className='flex gap-1'>
-                        <input type="radio" id="" name="ownership" value="Owned" />
-                        <label htmlFor="" className='text-sm'>Owned</label>
-                      </div>
-                      <div className='flex gap-1'>
-                        <input type="radio" id="" name="ownership" value="Rented" />
-                        <label htmlFor="" className='text-sm'>Rented</label>
-                      </div>
-                    </div>
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className='text-sm'>Years Spent</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-              </div>
-            </form>
-          </div>
-          <div className='mb-3'>
-            <h1 className='font-semibold'>Next of Kin</h1>
-            <form action="" className='m-2'>
-              <div className='flex flex-wrap gap-5'>
-                <div className='flex flex-col w-56'>
-                  <label htmlFor="" className='text-sm'>Name</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className=' text-sm'>Profession</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className=' text-sm'>Contact</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-              </div>
-            </form>
-          </div>
-          <div className='mb-3'>
-            <h1 className='font-semibold'>now</h1>
-            <form action="" className='m-2'>
-              <div className='flex flex-wrap gap-5'>
-                <div className='flex flex-col w-56'>
-                  <label htmlFor="" className='text-sm'>Name</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className=' text-sm'>Profession</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                  <label htmlFor="" className=' text-sm'>Contact</label>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                </div>
-              </div>
-            </form>
+              }
+            </div>
           </div>
       </div>
     </div>

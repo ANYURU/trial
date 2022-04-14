@@ -15,9 +15,9 @@ const PrivateRoute = () => {
                 <div className=''>
                     <Sidebar />
                 </div>
-                <div className='bg-back w-full h-screen relative flex flex-col'>
+                <div className='bg-back w-full h-screen relative flex flex-col '>
                     <Navbar />
-                    <div className='flex-grow mx-5 mt-5 overflow-y-hidden'>
+                    <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
                         <Outlet />
                     </div>
                 </div>
