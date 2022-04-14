@@ -12,3 +12,38 @@ export const users = [
         role: 'admin'
     }
 ]
+
+export const loanHistory = [
+    {
+        date: '11-04-2022',
+        amountToPay: 20000,
+        amountPaid: 5000,
+        principal: 20000,
+        interest: 5,
+        status: 'Pending'
+    },
+    {
+        date: '12-04-2022',
+        amountToPay: 64000,
+        amountPaid: 4000,
+        principal: 100000,
+        interest: 5,
+        status: 'Paid'
+    },
+    {
+        date: '01-04-2022',
+        amountToPay: 20000,
+        amountPaid: 5000,
+        principal: 20000,
+        interest: 5,
+        status: 'Pending'
+    },
+    {
+        date: '07-06-2021',
+        amountToPay: 64000,
+        amountPaid: 4000,
+        principal: 100000,
+        interest: 5,
+        status: 'Paid'
+    }
+]
