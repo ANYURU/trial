@@ -8,10 +8,7 @@ export default function Sidebar() {
 
     const [ show, setShow ] = useState(false)
     const [ selectedIndex, setSelectedIndex ] = useState(null)
-
     const lit = menuItem.filter(item => item.sublinks).map(item => item.sublinks)
-    
-
   return (
     <div className='h-full w-64'>
         <div className='bg-white flex justify-center items-center mb-6'>
@@ -37,15 +34,14 @@ export default function Sidebar() {
             {show && index === selectedIndex &&
                 <div className='bg-accent mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer'>
                     {
-                        lit[index-1].map((item, i) => (
-                            <div>
-                                <NavLink
-                                    to={`${item.link}`}
-                                    className='flex px-2 py-1 rounded-md'
-                                >
-                                    {item.label}
-                                </NavLink>
-                            </div>
+                        lit[index-1].map((item, index) => (
+                            <NavLink
+                                key={index}
+                                to={`${item.link}`}
+                                className='flex px-2 py-1 rounded-md'
+                            >
+                                {item.label}
+                            </NavLink>
                         ))
                     }
                 </div>
