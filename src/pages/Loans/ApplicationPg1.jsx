@@ -90,7 +90,7 @@ export default function ApplicationPg1() {
             </form>
         </div>
         <div className='mb-3'>
-            <h1 className='font-semibold'>now</h1>
+            <h1 className='font-semibold'>Spouse</h1>
             <form action="" className='m-2'>
             <div className='flex flex-wrap gap-5'>
                 <div className='flex flex-col w-56'>

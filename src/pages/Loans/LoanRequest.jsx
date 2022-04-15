@@ -1,6 +1,7 @@
 import ApplicationPg1 from "./ApplicationPg1"
 import ApplicationPg2 from "./ApplicationPg2"
 import ApplicationPg3 from "./ApplicationPg3"
+import ApplicationPg4 from "./ApplicationPg4"
 import ApplicationVerify from "./ApplicationVerify"
 import { useState } from "react"
 
@@ -18,13 +19,16 @@ function LoanRequest() {
               <ApplicationPg2 />
             }
             {pageNumber === 3 &&
-              <ApplicationPg3 />
+              <ApplicationPg4 />
             }
             {pageNumber === 4 &&
+              <ApplicationPg3 />
+            }
+            {pageNumber === 5 &&
               <ApplicationVerify />
             }
             <div className="flex-grow flex justify-between items-end">
-              {pageNumber !== 1 && pageNumber !== 4 &&
+              {pageNumber !== 1 && pageNumber !== 5 &&
               <div className=''>
                 <input
                   type="submit"
@@ -37,7 +41,7 @@ function LoanRequest() {
               </div>
               }
 
-              {pageNumber !== 3 && pageNumber !== 4 && 
+              {pageNumber !== 4 && pageNumber !== 5 && 
                 <div className='flex justify-end w-full'>
                   <input
                     type="submit"
@@ -50,7 +54,7 @@ function LoanRequest() {
                 </div>
               }
 
-              {pageNumber === 3 && pageNumber !== 4 &&
+              {pageNumber === 4 && pageNumber !== 5 &&
                 <div className='flex justify-end w-full'>
                   <input
                     type="submit"
