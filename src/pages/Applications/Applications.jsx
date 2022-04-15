@@ -1,7 +1,11 @@
 import { memberApplications } from "../../helpers/mockData"
 import { MdAdd, MdSearch } from "react-icons/md"
+import { filterByStatus } from "../../helpers/utilites"
+import { useState } from "react"
 
 function Applications() {
+  const [ status, setStatus ] = useState('')
+  const members = filterByStatus(memberApplications, status)
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Applications Details</h1>
@@ -21,17 +25,21 @@ function Applications() {
       </div>
       <div className="my-2 flex justify-between px-1">
           <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1" placeholder="Search" />
-          <button className="w-3/12 bg-primary py-2 text-white rounded-md flex justify-center items-center">Add Member <MdAdd /></button>
+          <button className="w-3/12 bg-primary py-2 text-white rounded-md flex justify-center items-center"
+            onClick={() => {}}
+          >Add Member <MdAdd /></button>
       </div>
       <div className='my-3'>
             <form action="" className='m-1'>
             <div className='flex justify-between gap-5'>
               <div className='flex flex-col w-56'>
-                <select name="status" id="" className="py-2 px-2 rounded bg-white">
-                    <option value="Status">Status</option>
-                    <option value="Status">Approved</option>
-                    <option value="Status">Pending</option>
-                    <option value="Status">Rejected</option>
+                <select name="status" id="" className="py-2 px-2 rounded bg-white"
+                  onChange={(event) => setStatus(event.target.value)}
+                >
+                    <option value="">Status</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Rejected">Rejected</option>
                 </select>
               </div>
               <div className='flex flex-col w-56'>
@@ -50,7 +58,7 @@ function Applications() {
               </tr>
             </thead>
             <tbody>
-              {memberApplications.map((member, index) => (
+              {members.map((member, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50" : ""} hover:bg-gray-100`} key={index}>
                   <td className='px-6 py-3'>{member.date}</td><td className='px-6 py-3'>{member.name}</td><td className='px-6 py-3'>{member.id}</td><td className='px-6 py-3'>{member.amount}</td><td className='px-6 py-3'>{member.status}</td>
                 </tr>
