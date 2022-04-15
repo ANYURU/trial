@@ -1,6 +1,6 @@
 import { depositHistory } from "../../helpers/mockData"
 
-function DepositHistory() {
+export default function DepositHistory() {
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Deposit History</h1>
@@ -25,5 +25,3 @@ function DepositHistory() {
     </div>
   )
 }
-
-export default DepositHistory
