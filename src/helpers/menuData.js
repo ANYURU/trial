@@ -16,12 +16,12 @@ const menuItem = [
         link: 'loans',
         sublinks: [
             {
-                label: 'Request',
-                link: 'loans/request'
-            },
-            {
                 label: 'History',
                 link: 'loans/history'
+            },
+            {
+                label: 'Request',
+                link: 'loans/request'
             },
             {
                 label: 'Payment',
