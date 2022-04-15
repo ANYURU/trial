@@ -8,7 +8,7 @@ export default function SignUp() {
   const navigate = useNavigate()
   const handleSubmit = (event, values) => {
     event.preventDefault()
-    navigate('/dashboard')
+    navigate('/verify')
   }
 
   return (
