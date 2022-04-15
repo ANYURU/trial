@@ -3,7 +3,7 @@ import { Submit } from "../../components"
 function WithdrawRequest() {
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>Loan History</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase'>Withdraw Request</h1>
       <div className="flex bg-white p-6 min-h-full">
       <div className='flex flex-grow flex-col min-h-full'>
         <div className='mb-3'>
