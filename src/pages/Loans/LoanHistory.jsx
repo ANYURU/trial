@@ -1,6 +1,6 @@
 import { loanHistory } from "../../helpers/mockData"
 
-function LoanHistory() {
+export default function LoanHistory() {
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Loan History</h1>
@@ -25,5 +25,3 @@ function LoanHistory() {
     </div>
   )
 }
-
-export default LoanHistory
