@@ -26,6 +26,9 @@ import Mwana from './Accounts/Mwana'
 import Fixed from './Accounts/Fixed'
 import Shares from './Accounts/Shares'
 
+// applications
+import Applications from './Applications/Applications'
+
 
 // exports
 export { Loans, LoanHistory, LoanPayment, LoanRequest }
@@ -36,4 +39,4 @@ export { Accounts, Savings, Mwana, Fixed, Shares}
 
 
 
-export { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit }
+export { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications }

@@ -66,3 +66,27 @@ export const depositHistory = [
         status: 'Approved'
     },
 ]
+
+export const memberApplications = [
+    {
+        date: '11-21-2021',
+        name: 'Nakityo Joanita',
+        id: 213103938,
+        amount: 500000,
+        status: 'Approved'
+    },
+    {
+        date: '03-03-2022',
+        name: 'Anyuru David',
+        id: 213103938,
+        amount: 300000,
+        status: 'Pending'
+    },
+    {
+        date: '01-04-2022',
+        name: 'Kasasira Charles',
+        id: 213103938,
+        amount: 180000,
+        status: 'Rejected'
+    },
+]

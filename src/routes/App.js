@@ -1,4 +1,4 @@
-import { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit } from "../pages";
+import { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications } from "../pages";
 import { Loans, LoanHistory, LoanPayment, LoanRequest } from "../pages";
 import { Withdraw, WithdrawHistory, WithdrawRequest } from "../pages";
 import { Accounts, Savings, Mwana, Fixed, Shares } from "../pages";
@@ -16,6 +16,7 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPassword/>} />
           <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/applications" element={<Applications />} />
               <Route path="/loans" element={<Loans />} />
                 <Route path='loans/history' element={<LoanHistory />} />
                 <Route path='loans/Payment' element={<LoanPayment />} />
