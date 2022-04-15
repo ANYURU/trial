@@ -1,12 +1,47 @@
-import React from 'react'
+import { Submit } from "../../components"
 
 function MakeDeposit() {
   return (
-    <div className=''>
-      <h1>Make Deposit</h1>
-      <div className="bg-white h-full m-10">
-          <button className="bg-blue-600 text-white rounded-md shadow-md p-2 m-2"
-          >show</button>
+    <div className='h-full'>
+      <h1 className='mb-5 mt-2 font-bold uppercase'>Deposit</h1>
+      <div className="flex bg-white p-6 min-h-full">
+      <div className='flex flex-grow flex-col min-h-full'>
+        <div className='mb-3'>
+            <form action="" className='m-2'>
+              <div className='flex flex-wrap gap-5'>
+                  <div className='flex flex-col w-56'>
+                    <label htmlFor="" className='text-sm'>Please select an account</label>
+                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                  </div>
+                  <div className='flex flex-col w-56 '>
+                    <label htmlFor="" className=' text-sm'>Enter Amount</label>
+                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                  </div>
+              </div>
+            </form>
+        </div>
+        <div className='mb-3'>
+            <form action="" className='m-2'>
+              <div className='flex flex-wrap gap-5'>
+                  <div className='flex flex-col w-56'>
+                    <label htmlFor="" className='text-sm'>Enter Account</label>
+                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                  </div>
+                  <div className='flex flex-col w-56 '>
+                    <label htmlFor="" className=' text-sm'>Upload Receipt</label>
+                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                  </div>
+              </div>
+            </form>
+        </div>
+          <div className='mb-3'>
+              <h1 className='font-semibold'>Practiculars</h1>
+              <textarea name="" id="" cols="30" rows="10" className='outline outline-1 rounded-md w-full'></textarea>
+          </div>
+        <div className="w-56">
+          <Submit value='Request' />
+        </div>
+      </div>
       </div>
     </div>
   )
