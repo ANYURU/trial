@@ -168,9 +168,15 @@ const adminMenuItem = [
         ]
     },
     {
-        label: 'Applications',
+        label: 'Members',
         icon: <MdOutlinePersonOutline />,
-        link: 'applications'
+        link: 'members',
+        sublinks: [
+            {
+                label: 'Applications',
+                link: 'members/applications'
+            }
+        ]
     },
     {
         label: 'Profile',

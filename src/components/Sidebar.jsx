@@ -8,9 +8,8 @@ export default function Sidebar() {
 
     const [ show, setShow ] = useState(false)
     const [ selectedIndex, setSelectedIndex ] = useState(null)
-    const lit = menuItem.filter(item => item.sublinks).map(item => item.sublinks)
+    const lit = adminMenuItem.filter(item => item.sublinks).map(item => item.sublinks)
 
-    console.log(adminMenuItem)
   return (
     <div className='h-full w-64'>
         <div className='bg-white flex justify-center items-center mb-6'>
@@ -27,7 +26,7 @@ export default function Sidebar() {
                     <i className='mx-2'>{item.icon}</i>
                     {item.label}
                 </div>
-                {index !== 0 && index < 5 && 
+                {index !== 0 && index < 6 && 
                     (show && index === selectedIndex 
                     ? <MdKeyboardArrowUp onClick={() => setShow(!show)} />
                     : <MdKeyboardArrowDown onClick={() => {setShow(!show);setSelectedIndex(index)}} />)

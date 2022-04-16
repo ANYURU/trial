@@ -31,6 +31,9 @@ import Shares from './Accounts/Shares'
 // applications
 import Applications from './Applications/Applications'
 
+// members
+import Members from './Members/Members'
+
 
 // exports
 export { Loans, LoanHistory, LoanPayment, LoanRequest }
@@ -38,6 +41,8 @@ export { Loans, LoanHistory, LoanPayment, LoanRequest }
 export { Withdraw, WithdrawHistory, WithdrawRequest}
 
 export { Accounts, Savings, Mwana, Fixed, Shares}
+
+export { Members }
 
 
 
