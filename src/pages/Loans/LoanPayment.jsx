@@ -11,11 +11,17 @@ function LoanPayment() {
               <div className='flex flex-wrap gap-5'>
                   <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Please select an account</label>
-                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                      <option value="">--Select Account--</option>
+                      <option value="savings">Savings</option>
+                      <option value="shares">Shares</option>
+                      <option value="fixed">Fixed</option>
+                      <option value="mwana">Mwana</option>
+                    </select>
                   </div>
                   <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Enter Amount</label>
-                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter Amount' className='ring-1 ring-black rounded px-2 py-1' />
                   </div>
               </div>
             </form>
@@ -24,19 +30,19 @@ function LoanPayment() {
             <form action="" className='m-2'>
               <div className='flex flex-wrap gap-5'>
                   <div className='flex flex-col w-56'>
-                    <label htmlFor="" className='text-sm'>Enter Account</label>
-                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <label htmlFor="" className='text-sm'>Enter Phone Number</label>
+                    <input type="text" name="" id="" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1' />
                   </div>
                   <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Upload Receipt</label>
-                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
                   </div>
               </div>
             </form>
         </div>
           <div className='mb-3'>
               <h1 className='font-semibold'>Practiculars</h1>
-              <textarea name="" id="" cols="30" rows="10" className='outline outline-1 rounded-md w-full'></textarea>
+              <textarea name="" id="" cols="30" rows="10" className='outline outline-1 p-2 rounded-md w-full'></textarea>
           </div>
         <div className="w-56">
           <Submit value='Request' />
