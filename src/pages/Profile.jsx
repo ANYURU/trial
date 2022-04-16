@@ -2,10 +2,14 @@ import { MdEdit } from "react-icons/md"
 import profileImg from '../assets/images/abudi.png'
 import { ConfirmModal } from "../components"
 import { useState } from "react"
+import { useOutletContext } from "react-router-dom"
 
 function Profile() {
   const [ popUp, setPopUp ] = useState(false)
   const [ editPop, setEditPop ] = useState(false)
+
+  const { user } = useOutletContext()
+
   return (
     <div className='h-full'>
       <h1 className="mb-5 mt-2 font-bold uppercase">Profile</h1>
@@ -22,37 +26,37 @@ function Profile() {
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>name</p>
             <div className='flex-grow flex'>
-              <p className='font-bold'>Mutamba Abudi</p>
+              <p className='font-bold'>{user.name}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Telephone Number</p>
             <div className='flex-grow flex'>
-              <p className='font-bold'>0772519722</p>
+              <p className='font-bold'>{user.phoneNo}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Email</p>
             <div className='flex-grow flex'>
-              <p className='font-bold'>mutambaabudi@gmail.com</p>
+              <p className='font-bold'>{user.email}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Member Status</p>
             <div className='flex-grow flex'>
-              <p className='font-bold bg-green-600 text-white px-3 py-1 rounded-md'>Active</p>
+              <p className={`${user.memberStatus === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{user.memberStatus}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Marital Status</p>
             <div className='flex-grow flex'>
-            <p className='font-bold'>Single</p>
+            <p className='font-bold'>{user.maritalStatus}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Position in the SACCO</p>
             <div className='flex-grow flex'>
-            <p className='font-bold'>Administrator</p>
+            <p className='font-bold'>{user.saccoPosition}</p>
             </div>
           </div>
         </div>

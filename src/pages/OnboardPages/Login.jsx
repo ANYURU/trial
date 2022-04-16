@@ -4,10 +4,13 @@ import { PhoneTextField, PasswordTextField, Submit } from "../../components";
 import { Formik } from "formik";
 import { validationSchema } from "../../helpers/validator";
 import { users } from "../../helpers/mockData";
+import { useAuth } from "../../auth/AuthContext";
 
 
 export default function Login() {
   const navigate = useNavigate()
+
+  const { setUser } = useAuth()
 
   const handleSubmit = (event, values) => {
     event.preventDefault()
@@ -15,6 +18,7 @@ export default function Login() {
     if(checkNumber.length !== 0){
       const user = checkNumber.filter(user => user.password === values.password)
       if(user.length !== 0){
+        setUser(user[0])
         navigate('/dashboard')
       }
     }

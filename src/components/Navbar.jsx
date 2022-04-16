@@ -3,8 +3,9 @@ import { IoMdPower } from 'react-icons/io'
 import { MdSettings } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { MdKeyboardArrowDown } from 'react-icons/md'
+import { memberApplications } from '../helpers/mockData'
 
-function Navbar() {
+function Navbar({ user }) {
   const [show, setShow] = useState(false)
   const navigate = useNavigate()
   const navRef = useRef()
@@ -16,10 +17,10 @@ function Navbar() {
             ref={navRef}
           >
             <div className='flex items-center cursor-pointer'>
-              <p className='mb-0 cursor-pointer'>Hello Abudi</p>
+              <p className='mb-0 cursor-pointer'>Hello {user.name.split(' ')[1]}</p>
               <div>
                 <div className='w-10 h-10 bg-accent rounded-full mx-2'></div>
-                <p className='text-accent-red'>inactive</p>
+                <p className={`${user.memberStatus === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.memberStatus}</p>
               </div>
               <MdKeyboardArrowDown />
             </div>

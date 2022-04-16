@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom"
 import { IoCloseSharp } from 'react-icons/io5'
 import { NavLink, } from 'react-router-dom'
-import { menuItem } from '../helpers/menuData'
+import { menuData } from '../helpers/menuData'
 import logo from '../assets/images/tube.png'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import { useState } from 'react'
@@ -11,7 +11,7 @@ function MobileMenu({ setShowMenu }) {
     const [ show, setShow ] = useState(false)
     const [ selectedIndex, setSelectedIndex ] = useState(null)
 
-    const lit = menuItem.filter(item => item.sublinks).map(item => item.sublinks)
+    const lit = menuData.admin.filter(item => item.sublinks).map(item => item.sublinks)
 
   return ReactDOM.createPortal(
     <div className="bg-black bg-opacity-40 w-screen h-screen absolute top-0 left-0 right-0 bottom-0 flex justify-start items-center">
@@ -26,7 +26,7 @@ function MobileMenu({ setShowMenu }) {
           <IoCloseSharp />
         </div>
         <div className='h-full'>
-        {menuItem.map((item, index) => (
+        {menuData.admin.map((item, index) => (
             <>
             <NavLink
                 key={index}

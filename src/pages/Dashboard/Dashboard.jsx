@@ -2,9 +2,12 @@ import { Doughnut, Line } from "react-chartjs-2";
 import { chartColors } from "../../components/Charts/colors"; 
 import Chart from 'chart.js/auto'
 import { useMediaQuery } from "../../hooks";
+import { useAuth } from "../../auth/AuthContext";
 
 export default function Dashboard() {
   const matches = useMediaQuery('(min-width: 800px)')
+
+  const { user } = useAuth()
 
   const data = {
     maintainAspectRatio: false,
