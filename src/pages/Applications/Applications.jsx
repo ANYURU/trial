@@ -6,20 +6,24 @@ import { useState } from "react"
 function Applications() {
   const [ status, setStatus ] = useState('')
   const members = filterByStatus(memberApplications, status)
+
+  const approvedMembers = memberApplications.filter(member => member.status === 'Approved')
+  const pendingMembers = memberApplications.filter(member => member.status === 'Pending')
+  const rejectedMembers = memberApplications.filter(member => member.status === 'Rejected')
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Applications Details</h1>
       <div className="flex justify-between my-3">
           <div className="bg-green-400 w-4/12 flex flex-col justify-center items-center py-2 border-l-8 border-green-800">
-              <h1 className="text-lg font-bold">0</h1>
+              <h1 className="text-lg font-bold">{approvedMembers.length}</h1>
               <p className="uppercase">Approved</p>
           </div>
           <div className="bg-yellow-400 w-4/12 flex flex-col justify-center items-center py-2 border-l-8 border-yellow-600">
-              <h1 className="text-lg font-bold">0</h1>
+              <h1 className="text-lg font-bold">{pendingMembers.length}</h1>
               <p className="uppercase">Pending</p>
           </div>
           <div className="bg-red-400 w-4/12 flex flex-col justify-center items-center py-2 border-l-8 border-red-800">
-              <h1 className="text-lg font-bold">0</h1>
+              <h1 className="text-lg font-bold">{rejectedMembers.length}</h1>
               <p className="uppercase">Rejected</p>
           </div>
       </div>

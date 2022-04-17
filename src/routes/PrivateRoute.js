@@ -1,8 +1,9 @@
-import { Outlet } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { Outlet, Navigate } from 'react-router-dom'
+import { Login } from '../pages'
 import { Sidebar, Loader, Navbar, MobileNav } from '../components'
 import { useMediaQuery } from '../hooks'
 import { useAuth } from '../auth/AuthContext'
+
 
 const PrivateRoute = () => {
 
@@ -36,7 +37,8 @@ const PrivateRoute = () => {
 
 
     ) : 
-    <Loader />
+    // <Loader />
+    <Navigate to='/' />
 }
 
 export default PrivateRoute
