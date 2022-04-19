@@ -1,6 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from '../../assets/images/tube.png'
-import { PhoneTextField, PasswordTextField, Submit } from "../../components";
+import { PasswordTextField, Submit } from "../../components";
 import { Formik } from "formik";
 import { validationSchema } from "../../helpers/validator";
 import { users } from "../../helpers/mockData";
@@ -11,13 +11,7 @@ export default function SetPassword() {
 
   const handleSubmit = (event, values) => {
     event.preventDefault()
-    const checkNumber = users.filter(user => user.phoneNo === values.phoneNo)
-    if(checkNumber.length !== 0){
-      const user = checkNumber.filter(user => user.password === values.password)
-      if(user.length !== 0){
-        navigate('/dashboard')
-      }
-    }
+    navigate('/dashboard')
   }
 
   return (
