@@ -11,15 +11,21 @@ function Navbar({ user }) {
   const navRef = useRef()
 
   return (
-    <div className='bg-white top-0 flex justify-end p-2 py-4'>
+    <div className={`bg-white top-0 flex ${user?.name === undefined? 'justify-between' : 'justify-end'} items-center p-2 py-4`}>
+          {user?.name === undefined && <div className='bg-accent-red p-2 flex justify-center items-center text-white rounded-md cursor-pointer'
+          onClick={() => {
+            navigate('/application')
+          }}>
+            <p>Complete the application</p>
+          </div>}
            <div className='flex items-end relative mr-8'
             onClick={() => setShow(!show)}
             ref={navRef}
           >
             <div className='flex items-center cursor-pointer'>
-              <p className='mb-0 cursor-pointer'>Hello 
+              <p className='mb-0 cursor-pointer'>Hello  
               {user?.name !== undefined
-              ? user?.name.split(' ')[1]
+              ? ` ${user?.name.split(' ')[1]}`
               : ''}
               </p>
               <div>
