@@ -3,11 +3,13 @@ import { chartColors } from "../../components/Charts/colors";
 import Chart from 'chart.js/auto'
 import { useMediaQuery } from "../../hooks";
 import { useAuth } from "../../auth/AuthContext";
+import { RegistrationModal } from "../../components";
 
 export default function Dashboard() {
   const matches = useMediaQuery('(min-width: 800px)')
 
   const { user } = useAuth()
+  console.log(user)
 
   const data = {
     maintainAspectRatio: false,
@@ -48,6 +50,7 @@ export default function Dashboard() {
   return (
     <div className={`flex flex-col ${matches && 'overflow-y-hidden'}`}>
       {/* Account Summaries */}
+      {user?.name === undefined && <RegistrationModal />}
       <div>
         <h1 className="mb-5 mt-2 font-bold uppercase">Dashboard</h1>
         <div>

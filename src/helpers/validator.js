@@ -6,6 +6,11 @@ export const validationSchema = Yup.object({
   password: Yup.string().trim().min(8, 'Password must be atleast 8 characters').required("Password is required"),
 })
 
+export const registerValidationSchema = Yup.object({
+  password: Yup.string().trim().min(8, 'Password must be atleast 8 characters').required("Password is required"),
+  confirmPassword: Yup.string().trim().required("Confirm Password is required"),
+})
+
 export const validationSubmitSchema = Yup.object({
   phoneNo: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required")
 })

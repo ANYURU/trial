@@ -1,7 +1,7 @@
 import { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications } from "../pages";
 import { Loans, LoanHistory, LoanPayment, LoanRequest, Verification, SetPassword } from "../pages";
 import { Withdraw, WithdrawHistory, WithdrawRequest, Members } from "../pages";
-import { Accounts, Savings, Mwana, Fixed, Shares } from "../pages";
+import { Accounts, Savings, Mwana, Fixed, Shares, MemberApplication } from "../pages";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
@@ -39,6 +39,7 @@ export default function App() {
 
                 <Route path="members" element={<Members />} />
                 <Route path="members/applications" element={<Applications />} />
+                <Route path="application" element={<MemberApplication />} />
 
 
               <Route path="/profile" element={<Profile />} />

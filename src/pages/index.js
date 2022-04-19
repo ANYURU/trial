@@ -30,6 +30,7 @@ import Shares from './Accounts/Shares'
 
 // applications
 import Applications from './Applications/Applications'
+import MemberApplication from './Applications/MemberApplication'
 
 // members
 import Members from './Members/Members'
@@ -46,4 +47,4 @@ export { Members }
 
 
 
-export { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications, Verification, SetPassword }
+export { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications, Verification, SetPassword, MemberApplication }
