@@ -1,5 +1,4 @@
 import { Outlet } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { Sidebar, Loader, Navbar, MobileNav } from '../components'
 import { useMediaQuery } from '../hooks'
 
