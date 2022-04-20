@@ -10,17 +10,20 @@ import Accounts from './Accounts/Accounts'
 import Profile from './Profile'
 import DepositHistory from './Deposit/DepositHistory'
 import MakeDeposit from './Deposit/MakeDeposit'
+import DepositVerify from './Deposit/DepositVerify'
 
 // loans
 import Loans from './Loans/Loans'
 import LoanHistory from './Loans/LoanHistory'
 import LoanPayment from './Loans/LoanPayment'
 import LoanRequest from './Loans/LoanRequest'
+import LoanVerify from './Loans/LoanVerify'
 
 // withdraw
 import Withdraw from './Withdraw/Withdraw'
 import WithdrawHistory from './Withdraw/WithdrawHistory'
 import WithdrawRequest from './Withdraw/WithdrawRequest'
+import WithdrawVerify from './Withdraw/WithdrawVerify'
 
 // accounts
 import Savings from './Accounts/Savings'
@@ -47,4 +50,4 @@ export { Members }
 
 
 
-export { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications, Verification, SetPassword, MemberApplication }
+export { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications, Verification, SetPassword, MemberApplication, WithdrawVerify, LoanVerify, DepositVerify }

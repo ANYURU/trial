@@ -1,6 +1,6 @@
-import { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications } from "../pages";
-import { Loans, LoanHistory, LoanPayment, LoanRequest, Verification, SetPassword } from "../pages";
-import { Withdraw, WithdrawHistory, WithdrawRequest, Members } from "../pages";
+import { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications, LoanVerify } from "../pages";
+import { Loans, LoanHistory, LoanPayment, LoanRequest, Verification, SetPassword, DepositVerify } from "../pages";
+import { Withdraw, WithdrawHistory, WithdrawRequest, Members, WithdrawVerify } from "../pages";
 import { Accounts, Savings, Mwana, Fixed, Shares, MemberApplication } from "../pages";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
@@ -22,10 +22,12 @@ export default function App() {
                 <Route path='loans/history' element={<LoanHistory />} />
                 <Route path='loans/Payment' element={<LoanPayment />} />
                 <Route path='loans/request' element={<LoanRequest />} />
+                <Route path='loans/verify' element={<LoanVerify />} />
 
               <Route path="deposit" element={<Deposit />} />
                 <Route path="deposit/history" element={<DepositHistory />} />
                 <Route path="deposit/deposit" element={<MakeDeposit />} />
+                <Route path="deposit/verify" element={<DepositVerify />} />
 
               <Route path="accounts" element={<Accounts />} />
                 <Route path="accounts/savings" element={<Savings />} />
@@ -36,6 +38,7 @@ export default function App() {
               <Route path="/withdraw" element={<Withdraw />} />
                 <Route path="withdraw/history" element={<WithdrawHistory />} />
                 <Route path="withdraw/request" element={<WithdrawRequest />} />
+                <Route path="withdraw/verify" element={<WithdrawVerify />} />
 
                 <Route path="members" element={<Members />} />
                 <Route path="members/applications" element={<Applications />} />

@@ -7,7 +7,6 @@ import { useOutletContext } from "react-router-dom"
 function Profile() {
   const [ popUp, setPopUp ] = useState(false)
   const [ editPop, setEditPop ] = useState(false)
-
   const { user } = useOutletContext()
 
   return (
@@ -18,9 +17,7 @@ function Profile() {
           <img src={profileImg} width={100} height={100} className='rounded-full' alt="profile" />
           <i className='text-white p-2 bg-primary rounded text-lg'
             onClick={() => setEditPop(true)}
-          >
-            <FaRegEdit />
-          </i>
+          ><FaRegEdit /></i>
         </div>
         <div className='mb-3'>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>

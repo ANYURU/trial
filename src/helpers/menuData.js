@@ -87,10 +87,6 @@ export const menuData = {
             icon: <SiHomeassistantcommunitystore />,
             link: 'loans',
             sublinks: [
-                // {
-                //     label: 'History',
-                //     link: 'loans/history'
-                // },
                 {
                     label: 'Request',
                     link: 'loans/request'
@@ -98,6 +94,10 @@ export const menuData = {
                 {
                     label: 'Payment',
                     link: 'loans/payment'
+                },
+                {
+                    label: 'Verify',
+                    link: 'loans/verify'
                 }
             ]
         },
@@ -110,6 +110,10 @@ export const menuData = {
                     label: 'Make Deposit',
                     link: '/deposit/deposit'
                 },
+                {
+                    label: 'Verify',
+                    link: '/deposit/verify'
+                },
             ]
         },
         {
@@ -121,6 +125,10 @@ export const menuData = {
                     label: 'Request',
                     link: 'withdraw/request'
                 },
+                {
+                    label: 'Verify',
+                    link: 'withdraw/verify'
+                }
             ]
         },
         {
