@@ -7,6 +7,11 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import MobileNav from "./MobileNav";
 import MobileMenu from "./MobileMenu";
+import VerificationCode from "./Form/VerfificationCode";
+import ConfirmPasswordField from "./Form/ConfirmPasswordField";
+import RegistrationModal from "./Modals/RegistrationModal";
+import Nominee from "./Nominees";
+import ContextMenu from "./ContextMenu";
 
 
-export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu }
+export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu }

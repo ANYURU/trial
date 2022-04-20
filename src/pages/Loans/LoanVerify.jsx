@@ -1,13 +1,13 @@
 import { Submit } from "../../components"
 
-function WithdrawRequest() {
+function LoanVerify() {
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>Withdraw Request</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase'>Loan Verification</h1>
       <div className="flex bg-white p-6 min-h-full">
       <div className='flex flex-grow flex-col min-h-full'>
         <div className='mb-3'>
-              <form action="" className='m-2'>
+            <form action="" className='m-2'>
               <div className='flex flex-wrap gap-5'>
                   <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Please select an account</label>
@@ -20,12 +20,26 @@ function WithdrawRequest() {
                     </select>
                   </div>
                   <div className='flex flex-col w-56 '>
-                    <label htmlFor="" className=' text-sm'>Enter amount to withdraw</label>
-                    <input type="text" name="" id="" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1' />
+                    <label htmlFor="" className=' text-sm'>Enter Amount</label>
+                    <input type="text" name="" id="" placeholder='Enter Amount' className='ring-1 ring-black rounded px-2 py-1' />
                   </div>
               </div>
-              </form>
-          </div>
+            </form>
+        </div>
+        <div className='mb-3'>
+            <form action="" className='m-2'>
+              <div className='flex flex-wrap gap-5'>
+                  <div className='flex flex-col w-56'>
+                    <label htmlFor="" className='text-sm'>Enter Phone Number</label>
+                    <input type="text" name="" id="" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1' />
+                  </div>
+                  <div className='flex flex-col w-56 '>
+                    <label htmlFor="" className=' text-sm'>Upload Receipt</label>
+                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                  </div>
+              </div>
+            </form>
+        </div>
           <div className='mb-3'>
               <h1 className='font-semibold'>Practiculars</h1>
               <textarea name="" id="" cols="30" rows="10" className='outline outline-1 p-2 rounded-md w-full'></textarea>
@@ -39,4 +53,4 @@ function WithdrawRequest() {
   )
 }
 
-export default WithdrawRequest
+export default LoanVerify
