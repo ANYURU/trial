@@ -7,21 +7,18 @@ import { RegistrationModal } from "../../components";
 
 export default function Dashboard() {
   const matches = useMediaQuery('(min-width: 800px)')
-
   const { user } = useAuth()
-  console.log(user)
-
   const data = {
-    maintainAspectRatio: false,
-    responsive: false,
-    labels: ["a", "b"],
+    maintainAspectRatio: true,
+    responsive: true,
     datasets: [
       {
         data: [300, 50],
         backgroundColor: chartColors,
         hoverBackgroundColor: chartColors
       }
-    ]
+    ],
+    labels: ["Company Shares", "My Shares"]
   };
 
   const data2 = {
@@ -47,6 +44,7 @@ export default function Dashboard() {
       }
     }
   };
+  
   return (
     <div className={`flex flex-col ${matches && 'overflow-y-hidden'}`}>
       {/* Account Summaries */}
@@ -54,10 +52,8 @@ export default function Dashboard() {
       <div>
         <h1 className="mb-5 mt-2 font-bold uppercase">Dashboard</h1>
         <div>
-          {matches 
+          {matches
           ?
-          <>
-            
             <div className="flex justify-between mb-5 gap-5">
                 <div className="bg-white w-3/12 flex flex-col py-7 rounded-md justify-center items-center">
                   <h1 className="font-bold text-2xl">0</h1>
@@ -76,9 +72,7 @@ export default function Dashboard() {
                   <h1 className="font-semibold">Fixed</h1>
                 </div>
             </div>
-          </>
           :
-          <>
             <div className="flex flex-col gap-5">
               <div className="flex gap-5">
                 <div className="bg-white w-6/12 flex flex-col py-7 rounded-md justify-center items-center">
@@ -101,7 +95,6 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-          </>
           }
         </div>
       </div>
