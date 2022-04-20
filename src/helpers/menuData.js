@@ -3,8 +3,7 @@ import { IoMdCard } from 'react-icons/io'
 import { RiExchangeDollarLine } from 'react-icons/ri'
 import { SiHomeassistantcommunitystore } from 'react-icons/si'
 
-
-const menuData = {
+export const menuData = {
     member : [
         {
             label: 'Dashboard',
@@ -16,10 +15,6 @@ const menuData = {
             icon: <SiHomeassistantcommunitystore />,
             link: 'loans',
             sublinks: [
-                {
-                    label: 'History',
-                    link: 'loans/history'
-                },
                 {
                     label: 'Request',
                     link: 'loans/request'
@@ -38,10 +33,6 @@ const menuData = {
                 {
                     label: 'Deposit',
                     link: '/deposit/deposit'
-                },
-                {
-                    label: 'history',
-                    link: 'deposit/history'
                 }
             ]
         },
@@ -53,10 +44,6 @@ const menuData = {
                 {
                     label: 'Request',
                     link: 'withdraw/request'
-                },
-                {
-                    label: 'History',
-                    link: 'withdraw/history'
                 }
             ]
         },
@@ -177,7 +164,3 @@ const menuData = {
         }
     ]
 }
-
-
-
-export { menuData }
