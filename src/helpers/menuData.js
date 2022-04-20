@@ -1,4 +1,4 @@
-import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineBungalow } from 'react-icons/md'
+import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineBungalow, MdPeopleOutline } from 'react-icons/md'
 import { IoMdCard } from 'react-icons/io'
 import { RiExchangeDollarLine } from 'react-icons/ri'
 import { SiHomeassistantcommunitystore } from 'react-icons/si'
@@ -123,10 +123,6 @@ const menuData = {
                     label: 'Make Deposit',
                     link: '/deposit/deposit'
                 },
-                // {
-                //     label: 'history',
-                //     link: 'deposit/history'
-                // }
             ]
         },
         {
@@ -138,10 +134,6 @@ const menuData = {
                     label: 'Request',
                     link: 'withdraw/request'
                 },
-                // {
-                //     label: 'History',
-                //     link: 'withdraw/history'
-                // }
             ]
         },
         {
@@ -169,7 +161,7 @@ const menuData = {
         },
         {
             label: 'Members',
-            icon: <MdOutlinePersonOutline />,
+            icon: <MdPeopleOutline />,
             link: 'members',
             sublinks: [
                 {

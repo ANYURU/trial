@@ -28,9 +28,9 @@ const PrivateRoute = () => {
         :
             <>
                 <div>
-                    <MobileNav />
+                    <MobileNav user={user} />
                     <div className='flex flex-col bg-back overflow-x-hidden h-screen px-2 mt-20'>
-                        <Outlet />
+                        <Outlet context={{ user }} />
                     </div>
                 </div>
             </>

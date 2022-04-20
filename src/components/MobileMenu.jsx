@@ -14,8 +14,8 @@ function MobileMenu({ setShowMenu }) {
     const lit = menuData.admin.filter(item => item.sublinks).map(item => item.sublinks)
 
   return ReactDOM.createPortal(
-    <div className="bg-black bg-opacity-40 w-screen h-screen absolute top-0 left-0 right-0 bottom-0 flex justify-start items-center">
-      <div className="bg-white h-screen w-11/12 top-0 left-0 shadow-sm">
+    <div className="bg-black bg-opacity-40 w-screen h-screen absolute top-0 left-0 right-0 bottom-0 flex justify-start items-center overflow-y-hidden">
+      <div className="bg-white h-screen w-11/12 top-0 left-0 bottom-0 shadow-sm">
         <div 
             className="flex justify-between px-3 items-center"
             onClick={() => setShowMenu(false)}
@@ -37,7 +37,7 @@ function MobileMenu({ setShowMenu }) {
                     <i className='mx-2'>{item.icon}</i>
                     {item.label}
                 </div>
-                {index !== 0 && index !== 5 && 
+                {index !== 0 && index < 5 && 
                     (show && index === selectedIndex 
                     ? <MdKeyboardArrowUp onClick={() => setShow(!show)} />
                     : <MdKeyboardArrowDown onClick={() => {setShow(!show);setSelectedIndex(index)}} />)

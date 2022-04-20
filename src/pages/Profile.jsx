@@ -1,4 +1,4 @@
-import { MdEdit } from "react-icons/md"
+import { FaRegEdit } from "react-icons/fa"
 import profileImg from '../assets/images/abudi.png'
 import { ConfirmModal } from "../components"
 import { useState } from "react"
@@ -19,7 +19,7 @@ function Profile() {
           <i className='text-white p-2 bg-primary rounded text-lg'
             onClick={() => setEditPop(true)}
           >
-            <MdEdit />
+            <FaRegEdit />
           </i>
         </div>
         <div className='mb-3'>
@@ -109,7 +109,7 @@ function Profile() {
               {editPop &&
                 <ConfirmModal setPopUp={setEditPop}>
                   <h1 className="font-bold">Edit</h1>
-                  <div className='mb-3 flex gap-3'>
+                  <div className='mb-3 flex flex-wrap gap-3'>
                     <div className='flex flex-col'>
                       <p>name</p>
                       <div className='flex-grow flex'>
@@ -136,7 +136,7 @@ function Profile() {
                       </div>
                     </div>
                   </div>
-                  <div className='mb-3 flex gap-3'>
+                  <div className='mb-3 flex flex-wrap gap-3'>
                     <div className='flex flex-col lg:w-8/12 sm:w-10/12 md:w-8/12'>
                       <p className='w-6/12'>Email Address</p>
                       <div className='flex-grow flex'>
@@ -157,7 +157,7 @@ function Profile() {
                     </div>
                   </div>
 
-                  <div className='mb-3 flex gap-3'>
+                  <div className='mb-3 flex flex-wrap gap-3'>
                     <div className='flex flex-col'>
                       <p>Present Address</p>
                       <div className='flex-grow flex'>
@@ -172,7 +172,7 @@ function Profile() {
                     </div>
                   </div>
 
-                  <div className='mb-3 flex gap-3'>
+                  <div className='mb-3 flex flex-wrap gap-3'>
                     <div className='flex flex-col'>
                       <p>Father's Name</p>
                       <div className='flex-grow flex'>
@@ -187,16 +187,16 @@ function Profile() {
                     </div>
                   </div>
 
-                  <div className='mb-3 flex gap-3'>
+                  <div className='mb-3 flex flex-wrap gap-3'>
                     <div className='flex flex-col'>
                       <p>Upload Photo</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="file" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
                       </div>
                     </div>
                   </div>
 
-                  <div className='mb-3 flex gap-3'>
+                  <div className='mb-3 flex flex-wrap gap-3'>
                     <div className='flex flex-col'>
                       <p>Enter password to save changes</p>
                       <div className='flex-grow flex'>
