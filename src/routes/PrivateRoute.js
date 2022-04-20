@@ -1,17 +1,13 @@
 import { Outlet, Navigate } from 'react-router-dom'
-import { Login } from '../pages'
 import { Sidebar, Loader, Navbar, MobileNav } from '../components'
 import { useMediaQuery } from '../hooks'
 import { useAuth } from '../auth/AuthContext'
 
 
 const PrivateRoute = () => {
-
     const matches = useMediaQuery('(min-width: 800px)')
     const { user } = useAuth()
-
     return user ? (
-
         matches 
         ?
             <div className='flex'>
@@ -26,16 +22,12 @@ const PrivateRoute = () => {
                 </div>
             </div>
         :
-            <>
                 <div>
                     <MobileNav user={user} />
                     <div className='flex flex-col bg-back overflow-x-hidden h-screen px-2 mt-20'>
                         <Outlet context={{ user }} />
                     </div>
                 </div>
-            </>
-
-
     ) : 
     // <Loader />
     <Navigate to='/' />
