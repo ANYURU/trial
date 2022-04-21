@@ -1,4 +1,4 @@
 
 export const filterByStatus = (data, criteria) => criteria ? data.filter(member => member.status === criteria) : data
 
-// const searchByName = (data) => data.filter(row => row.clientDetails).filter(row => row.clientDetails.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+export const searchByName = (data, searchText) => data.filter(member => member.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
