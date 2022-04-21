@@ -1,15 +1,18 @@
 import { memberApplications } from "../../helpers/mockData"
-import { MdAdd, MdSearch } from "react-icons/md"
+import { MdAdd } from "react-icons/md"
 import { filterByStatus } from "../../helpers/utilites"
 import { useState } from "react"
+import { FaEllipsisV } from 'react-icons/fa'
+import { searchByName } from "../../helpers/utilites"
 
 function Applications() {
   const [ status, setStatus ] = useState('')
   const members = filterByStatus(memberApplications, status)
-
   const approvedMembers = memberApplications.filter(member => member.status === 'Approved')
   const pendingMembers = memberApplications.filter(member => member.status === 'Pending')
   const rejectedMembers = memberApplications.filter(member => member.status === 'Rejected')
+
+  const [ searchText, setSearchText ] = useState('')
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Applications Details</h1>
@@ -28,7 +31,9 @@ function Applications() {
           </div>
       </div>
       <div className="my-2 flex justify-between px-1">
-          <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1" placeholder="Search" />
+          <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1" placeholder="Search" 
+            onChange={(event) => setSearchText(event.target.value)}
+          />
           <button className="w-3/12 bg-primary py-2 text-white rounded-md flex justify-center items-center"
             onClick={() => {}}
           >Add Member <MdAdd /></button>
@@ -58,13 +63,20 @@ function Applications() {
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Member's Name</th><th className='px-6 py-4'>ID</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Member's Name</th><th className='px-6 py-4'>ID</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th><th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {members.map((member, index) => (
+              {searchByName(members, searchText).map((member, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50" : ""} hover:bg-gray-100`} key={index}>
                   <td className='px-6 py-3'>{member.date}</td><td className='px-6 py-3'>{member.name}</td><td className='px-6 py-3'>{member.id}</td><td className='px-6 py-3'>{member.amount}</td><td className='px-6 py-3'>{member.status}</td>
+                  <td className="p-2">
+                        <i
+                          onClick={() => {}}
+                        >
+                          <FaEllipsisV />
+                        </i>
+                  </td>
                 </tr>
               ))}
             </tbody>

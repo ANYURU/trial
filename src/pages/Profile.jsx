@@ -63,16 +63,19 @@ function Profile() {
             <div className='flex flex-col gap-5'>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <input type="password" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
               </div>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>New Password</label>
-                <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <input type="password" name="" id="" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1' />
               </div>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>Confirm Password</label>
-                <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <input type="password" name="" id="" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1' />
               </div>
+                <div className="flex justify-end gap-3 mt-3">
+                  <button className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white">Save</button>
+                </div>
             </div>
             </form>
         </div>
@@ -84,7 +87,7 @@ function Profile() {
             <div className='flex mt-1'>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <input type="password" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
               </div>
             </div>
             <div className='w-full flex justify-end'>
@@ -108,15 +111,15 @@ function Profile() {
                   <h1 className="font-bold">Edit</h1>
                   <div className='mb-3 flex flex-wrap gap-3'>
                     <div className='flex flex-col'>
-                      <p>name</p>
+                      <p>Name</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter Name' className='ring-1 ring-black rounded px-2 py-1' defaultValue={user.name} />
                       </div>
                     </div>
                     <div className='flex flex-col'>
                       <p>Date of Birth</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="date" name="" id="" placeholder='dd/mm/yyyy' className='ring-1 ring-black rounded px-2 py-1' defaultValue={user.date} />
                       </div>
                     </div>
                     <div>
@@ -137,19 +140,19 @@ function Profile() {
                     <div className='flex flex-col lg:w-8/12 sm:w-10/12 md:w-8/12'>
                       <p className='w-6/12'>Email Address</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter Email-address' className='ring-1 ring-black rounded px-2 py-1' />
                       </div>
                     </div>
                     <div className='flex flex-col'>
                       <p className='w-6/12'>Phone Number</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="tel" name="" id="" placeholder='Phone Number' className='ring-1 ring-black rounded px-2 py-1' defaultValue={user.phoneNo} />
                       </div>
                     </div>
                     <div className='flex flex-col'>
                       <p>ID/ Passport Number</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder="ID/Passport No." className='ring-1 ring-black rounded px-2 py-1' />
                       </div>
                     </div>
                   </div>
@@ -158,13 +161,13 @@ function Profile() {
                     <div className='flex flex-col'>
                       <p>Present Address</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter present Address' className='ring-1 ring-black rounded px-2 py-1' />
                       </div>
                     </div>
                     <div className='flex flex-col'>
                       <p>Marital Status</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter marital status' className='ring-1 ring-black rounded px-2 py-1' />
                       </div>
                     </div>
                   </div>
@@ -173,13 +176,13 @@ function Profile() {
                     <div className='flex flex-col'>
                       <p>Father's Name</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder="Enter Father's name" className='ring-1 ring-black rounded px-2 py-1' />
                       </div>
                     </div>
                     <div className='flex flex-col'>
                       <p>Father's Address</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder="Enter Father's address" className='ring-1 ring-black rounded px-2 py-1' />
                       </div>
                     </div>
                   </div>
@@ -197,7 +200,7 @@ function Profile() {
                     <div className='flex flex-col'>
                       <p>Enter password to save changes</p>
                       <div className='flex-grow flex'>
-                        <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="password" name="" id="" placeholder='Enter Password' className='ring-1 ring-black rounded px-2 py-1' />
                       </div>
                     </div>
                   </div>

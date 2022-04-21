@@ -14,7 +14,6 @@ function Members() {
   const [ show, setShow ] = useState(false)
 
   const [memberModal, setMemberModal] = useState(false)
-
   const [ searchText, setSearchText ] = useState('')
 
   return (

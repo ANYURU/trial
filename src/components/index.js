@@ -13,6 +13,7 @@ import RegistrationModal from "./Modals/RegistrationModal";
 import MemberModal from "./Modals/MemberModal";
 import Nominee from "./Nominees";
 import ContextMenu from "./ContextMenu";
+import AccSummary from "./Dashboard/AccSummary";
 
 
-export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu, MemberModal }
+export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu, MemberModal, AccSummary }
