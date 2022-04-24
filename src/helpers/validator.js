@@ -9,3 +9,8 @@ export const validationSchema = Yup.object({
 export const validationSubmitSchema = Yup.object({
   phoneNo: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required")
 })
+
+const otpRegExp = /^[0-9]{6}$/gm
+export const otpValidationSchema = Yup.object({
+  otp: Yup.string().required().matches(otpRegExp, 'Invalid OTP')
+})

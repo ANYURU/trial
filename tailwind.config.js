@@ -12,7 +12,6 @@ module.exports = {
         'white': '#fff',
         'black': '#000',
         'primary': '#27427A'
-  
       },
       fontFamily: {
         'montserrat': ['Montserrat', 'sans-serif'],

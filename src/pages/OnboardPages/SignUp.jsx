@@ -3,12 +3,32 @@ import logo from '../../assets/images/tube.png'
 import { validationSubmitSchema } from "../../helpers/validator";
 import { Formik } from "formik";
 import { PhoneTextField, Submit } from "../../components";
+import { supabase } from "../../helpers/supabase";
+import axios from "axios";
+import { getOTP } from '../../helpers/getotp'
+
 
 export default function SignUp() {
   const navigate = useNavigate()
-  const handleSubmit = (event, values) => {
+  const handleSubmit = async (event, values) => {
     event.preventDefault()
-    navigate('/dashboard')
+    const { phoneNo } = values
+    const { error } = await supabase.from('o').insert({phone_number: '+256' + phoneNo.slice(1)})
+    if(error) {
+      console.log(error)
+    }
+    
+    getOTP(phoneNo)
+
+    // axios.post('http://localhost:5000/get-otp/', {
+    //   phone_number: '+256' + phoneNo.slice(1),
+    // })
+    // .then(response => {
+    //   console.log(response)
+    // })
+    // .catch(error => console.log(error))    
+    // navigate('/dashboard')
+    navigate('/verify')
   }
 
   return (
@@ -30,10 +50,16 @@ export default function SignUp() {
                   </Link>
                   </span>
                 </p>
+                <p>
+                  <button>Resend code</button>
+                </p>
+                <p>
+                  <Link to=""></Link>
+                </p>
               </div>
             </form>
           )}}
     </Formik>
   </div>
   )
-  }
+}

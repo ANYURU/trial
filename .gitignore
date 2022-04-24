@@ -105,3 +105,6 @@ dist
 
 # Environment Variables
 .env.local
+# Supabase
+**/supabase/.branches
+**/supabase/.temp

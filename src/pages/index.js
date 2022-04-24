@@ -2,6 +2,7 @@ import Login from './OnboardPages/Login'
 import Dashboard from './Dashboard/Dashboard'
 import ForgotPassword from './OnboardPages/ForgotPassword'
 import SignUp from './OnboardPages/SignUp'
+import Verify from './OnboardPages/Verify'
 
 import Deposit from './Deposit/Deposit'
 import Accounts from './Accounts/Accounts'
@@ -36,4 +37,4 @@ export { Accounts, Savings, Mwana, Fixed, Shares}
 
 
 
-export { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit }
+export { Login, Dashboard, ForgotPassword, SignUp, Verify, Deposit, Profile, DepositHistory, MakeDeposit }
