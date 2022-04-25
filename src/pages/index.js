@@ -49,6 +49,4 @@ export { Accounts, Savings, Mwana, Fixed, Shares}
 
 export { Members, DepositVerify, LoanVerify, WithdrawVerify, Applications, MemberApplication }
 
-
-
 export { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, Deposit, Profile, DepositHistory, MakeDeposit }

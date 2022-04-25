@@ -5,8 +5,7 @@ import { Formik } from "formik";
 import { registerValidationSchema } from "../../helpers/validator";
 import { toast, ToastContainer } from 'react-toastify'
 import { useAuth } from "../../auth/AuthContext";
-
-
+import { supabase } from "../../helpers/supabase";
 
 export default function SetPassword() {
   const navigate = useNavigate()
@@ -26,7 +25,7 @@ export default function SetPassword() {
         maritalStatus: 'single',
         saccoPosition: 'member',
         role: 'member'
-    },)
+      },)
       navigate('/dashboard')
     }
     else {

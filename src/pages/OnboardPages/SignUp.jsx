@@ -4,7 +4,6 @@ import { validationSubmitSchema } from "../../helpers/validator";
 import { Formik } from "formik";
 import { PhoneTextField, Submit } from "../../components";
 import { supabase } from "../../helpers/supabase";
-import axios from "axios";
 import { getOTP } from '../../helpers/getotp'
 
 
@@ -13,22 +12,14 @@ export default function SignUp() {
   const handleSubmit = async (event, values) => {
     event.preventDefault()
     const { phoneNo } = values
-    const { error } = await supabase.from('o').insert({phone_number: '+256' + phoneNo.slice(1)})
+    const { error } = await supabase.from('otps').insert({phone_number: '+256' + phoneNo.slice(1)})
     if(error) {
       console.log(error)
+    } else {
+      localStorage.setItem('phone', phoneNo)
+      getOTP(phoneNo)
+      navigate('/verify')
     }
-    
-    // getOTP(phoneNo)
-
-    axios.post('http://localhost:5000/get-otp/', {
-      phone_number: '+256' + phoneNo.slice(1),
-    })
-    .then(response => {
-      console.log(response)
-    })
-    .catch(error => console.log(error))    
-    // navigate('/dashboard')
-    navigate('/verify')
   }
 
   return (
@@ -51,7 +42,10 @@ export default function SignUp() {
                   </span>
                 </p>
                 <p>
-                  <button>Resend code</button>
+                  <button onClick={async () => {
+                    const phoneNo = localStorage.getItem('phone')
+                    getOTP(phoneNo)
+                  }}>Resend code</button>
                 </p>
                 <p>
                   <Link to=""></Link>
