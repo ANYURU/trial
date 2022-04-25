@@ -18,15 +18,15 @@ export default function SignUp() {
       console.log(error)
     }
     
-    getOTP(phoneNo)
+    // getOTP(phoneNo)
 
-    // axios.post('http://localhost:5000/get-otp/', {
-    //   phone_number: '+256' + phoneNo.slice(1),
-    // })
-    // .then(response => {
-    //   console.log(response)
-    // })
-    // .catch(error => console.log(error))    
+    axios.post('http://localhost:5000/get-otp/', {
+      phone_number: '+256' + phoneNo.slice(1),
+    })
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => console.log(error))    
     // navigate('/dashboard')
     navigate('/verify')
   }

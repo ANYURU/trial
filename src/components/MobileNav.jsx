@@ -6,7 +6,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import MobileMenu from './MobileMenu'
 
-function MobileNav() {
+function MobileNav({user}) {
     const [show, setShow] = useState(false)
   const navigate = useNavigate()
   const navRef = useRef()
@@ -29,10 +29,14 @@ function MobileNav() {
             >
             
             <div className='flex items-center cursor-pointer'>
-              <p className='mb-0 cursor-pointer'>Hello Abudi</p>
+            <p className='mb-0 cursor-pointer'>Hello  
+              {user?.name !== undefined
+              ? ` ${user?.name.split(' ')[1]}`
+              : ''}
+              </p>
               <div>
                 <div className='w-10 h-10 bg-accent rounded-full mx-2'></div>
-                <p className='text-accent-red'>inactive</p>
+                <p className={`${user.memberStatus === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.memberStatus}</p>
               </div>
               <MdKeyboardArrowDown />
                 <div className={show ? 'absolute px-3 py-3 shadow-sm w-full bg-white top-12 z-10' : 'hidden'}>

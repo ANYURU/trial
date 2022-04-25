@@ -3,6 +3,7 @@ import { StrictMode } from 'react';
 import App from './routes/App'
 import { AuthProvider } from './auth/AuthContext'
 import './index.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const container = document.getElementById('root')
 const root = createRoot(container)
