@@ -42,7 +42,7 @@ export default function SignUp() {
                   </span>
                 </p>
                 <p>
-                  <button onClick={async () => {
+                  <button onClick={() => {
                     const phoneNo = localStorage.getItem('phone')
                     getOTP(phoneNo)
                   }}>Resend code</button>

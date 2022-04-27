@@ -3,40 +3,40 @@ import logo from '../../assets/images/tube.png'
 import { PasswordTextField, ConfirmPasswordField, Submit } from "../../components";
 import { Formik } from "formik";
 import { registerValidationSchema } from "../../helpers/validator";
-import { toast, ToastContainer } from 'react-toastify'
 import { useAuth } from "../../auth/AuthContext";
-import { supabase } from "../../helpers/supabase";
 
 export default function SetPassword() {
   const navigate = useNavigate()
-  
+  const {signUp ,setUser } = useAuth()
 
-  const { setUser } = useAuth()
-
-  const handleSubmit = (event, values) => {
+  const handleSubmit = async (event, values) => {
     event.preventDefault()
-    // check if passwords are the same
-    if ( values.password === values.confirmPassword){
-      setUser({
-        phoneNo: '0750118523',
-        password: 'passwd123',
-        email: 'charleskasasira01@gmail.com',
-        memberStatus: 'inactive',
-        maritalStatus: 'single',
-        saccoPosition: 'member',
-        role: 'member'
-      },)
+    console.log(values.password)
+    console.log(localStorage.getItem('phone').slice(1), typeof(localStorage.getItem('phone').slice(1)))
+
+    const { error } = await signUp({
+      phone: '+256' + localStorage.getItem('phone'),
+      password: values.password
+    })
+    
+    if(error) {
+      console.log(error)
+    } else {
+     
       navigate('/dashboard')
     }
-    else {
-      toast.error(`Password didn't match`, {position: "top-center"})
-    }
-    // navigate('/dashboard')
+    // setUser({
+    //   phoneNo: '0750118523',
+    //   password: 'passwd123',
+    //   email: 'charleskasasira01@gmail.com',
+    //   memberStatus: 'inactive',
+    //   maritalStatus: 'single',
+    //   saccoPosition: 'member',
+    //   role: 'member'
+    // },)
   }
-
+  
   return (
-    <>
-      <ToastContainer/>
     <div className=" inline-flex justify-center items-center w-screen h-screen font-montserrat">
       <Formik initialValues={{ password: '', confirmPassword: ''}} validationSchema={registerValidationSchema}>
         {({values, errors, touched, handleChange, handleBlur}) => {
@@ -58,6 +58,5 @@ export default function SetPassword() {
         }}
       </Formik>
     </div>
-    </>
   )
 }

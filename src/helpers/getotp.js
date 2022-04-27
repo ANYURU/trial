@@ -9,11 +9,13 @@ import axios from "axios";
 
 export const getOTP = async (phoneNumber) => {
     try{
-        const { data } = await axios.post('http://localhost:5000/get-otp/', {
+        const { data } = await axios.post(process.env.REACT_APP_GET_OTP, {
           phone_number: '+256' + phoneNumber.slice(1),
         })
+        console.log(data)
         return data  
     } catch (error) {
+        console.log(error)
         return  error
     }
 }
