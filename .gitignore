@@ -108,3 +108,4 @@ dist
 # Supabase
 **/supabase/.branches
 **/supabase/.temp
+.vercel

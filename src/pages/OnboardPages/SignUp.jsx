@@ -17,7 +17,14 @@ export default function SignUp() {
       console.log(error)
     } else {
       localStorage.setItem('phone', phoneNo)
-      getOTP(phoneNo)
+      const res = fetch("/api/getotp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({phone_number: `+256${phoneNo.slice(1)}`})
+      });
+      console.log(res)
       navigate('/verify')
     }
   }
