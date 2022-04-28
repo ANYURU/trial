@@ -22,8 +22,8 @@ export default function SetPassword() {
     if(error) {
       console.log(error)
     } else {
-     
       navigate('/dashboard')
+      localStorage.removeItem('phoneNumber')
     }
     // setUser({
     //   phoneNo: '0750118523',

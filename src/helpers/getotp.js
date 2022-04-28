@@ -9,11 +9,11 @@ import axios from "axios";
 
 export const getOTP = async (phoneNumber) => {
     try{
-        const { data } = await axios.post(process.env.REACT_APP_GET_OTP, {
+        const response = await axios.post('https://tube-verification-service.vercel.app/get-otp', {
           phone_number: '+256' + phoneNumber.slice(1),
         })
-        console.log(data)
-        return data  
+        console.log(response)
+        return response 
     } catch (error) {
         console.log(error)
         return  error
