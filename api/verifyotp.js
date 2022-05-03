@@ -1,4 +1,5 @@
 require('dotenv').config()
+const { createClient } = require('@supabase/supabase-js')
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_ANON_KEY
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -7,7 +8,7 @@ export default async (req, res) => {
     try {
         const { phone_number, otp: submittedOtp } = req.body
         if(phone_number && submittedOtp) {
-            const { data, error } = await supabase.from('otps').select().eq('phone_number', phone_number)
+            const { data, error } = await supabase.from('otps').select().eq('phone_number', phone_number) // I have learnt how to make this work eve
             if(error) {
                 res.json(error)
             } else {

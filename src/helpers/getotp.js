@@ -1,5 +1,3 @@
-import axios from "axios";
-
 /**
  * @function 
  * @name getOTP
@@ -8,15 +6,15 @@ import axios from "axios";
  */
 
 export const getOTP = async (phoneNumber) => {
-    try{
-        const response = await axios.post('https://tube-verification-service.vercel.app/get-otp', {
-          phone_number: '+256' + phoneNumber.slice(1),
-        })
-        console.log(response)
-        return response 
-    } catch (error) {
-        console.log(error)
-        return  error
-    }
+    const response = await fetch("/api/getotp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({phone_number: `+256${phoneNumber.slice(1)}`})
+    })
+
+    return response
+    
 }
 

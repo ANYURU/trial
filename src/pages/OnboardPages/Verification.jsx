@@ -13,8 +13,9 @@ function Verification() {
     event.preventDefault()
     const phoneNumber = localStorage.getItem('phone')
     const { code } = values
-    const data = await verifyOTP(phoneNumber, parseInt(code))
-    return data?.error ? toast.error(`${data.error}`, {position: "top-center"}) : data?.msg === true && navigate('/set-password')
+    verifyOTP(phoneNumber, code)
+    .then(response => response.json())
+    .then(data => data?.error ? toast.error(`${data.error}`, {position: "top-center"}) : data?.msg === true && navigate('/set-password'))
   }
 
 

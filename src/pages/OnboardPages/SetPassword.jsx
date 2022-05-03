@@ -7,33 +7,22 @@ import { useAuth } from "../../auth/AuthContext";
 
 export default function SetPassword() {
   const navigate = useNavigate()
-  const {signUp ,setUser } = useAuth()
+  const { signUp } = useAuth()
 
   const handleSubmit = async (event, values) => {
     event.preventDefault()
-    console.log(values.password)
-    console.log(localStorage.getItem('phone').slice(1), typeof(localStorage.getItem('phone').slice(1)))
 
     const { error } = await signUp({
-      phone: '+256' + localStorage.getItem('phone'),
+      phone: '+256' + localStorage.getItem('phone').slice(1),
       password: values.password
     })
-    
+  
     if(error) {
       console.log(error)
     } else {
-      navigate('/dashboard')
+      navigate('/dashboard') 
       localStorage.removeItem('phoneNumber')
     }
-    // setUser({
-    //   phoneNo: '0750118523',
-    //   password: 'passwd123',
-    //   email: 'charleskasasira01@gmail.com',
-    //   memberStatus: 'inactive',
-    //   maritalStatus: 'single',
-    //   saccoPosition: 'member',
-    //   role: 'member'
-    // },)
   }
   
   return (

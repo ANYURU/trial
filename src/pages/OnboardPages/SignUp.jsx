@@ -4,8 +4,7 @@ import { validationSubmitSchema } from "../../helpers/validator";
 import { Formik } from "formik";
 import { PhoneTextField, Submit } from "../../components";
 import { supabase } from "../../helpers/supabase";
-import { getOTP } from '../../helpers/getotp'
-
+import { getOTP } from "../../helpers/getotp";
 
 export default function SignUp() {
   const navigate = useNavigate()
@@ -17,14 +16,7 @@ export default function SignUp() {
       console.log(error)
     } else {
       localStorage.setItem('phone', phoneNo)
-      const res = fetch("/api/getotp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({phone_number: `+256${phoneNo.slice(1)}`})
-      });
-      console.log(res)
+      getOTP(phoneNo)
       navigate('/verify')
     }
   }
@@ -44,18 +36,9 @@ export default function SignUp() {
                 <p>
                   <span>
                   <Link to="/">
-                  Aleady have have an account?,<span className="text-primary font-semibold">Login.</span>
+                  Aleady have have an account? <span className="text-primary font-semibold">Login.</span>
                   </Link>
                   </span>
-                </p>
-                <p>
-                  <button onClick={() => {
-                    const phoneNo = localStorage.getItem('phone')
-                    getOTP(phoneNo)
-                  }}>Resend code</button>
-                </p>
-                <p>
-                  <Link to=""></Link>
                 </p>
               </div>
             </form>

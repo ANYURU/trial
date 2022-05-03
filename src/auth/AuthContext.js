@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect, createContext } from 'react';
 import { supabase } from '../helpers/supabase';
+import { getProfile } from '../helpers/getProfile';
 
 // create a context for authentication
 const AuthContext = createContext();
@@ -18,9 +19,20 @@ export const AuthProvider = ({ children }) => {
 
     // listen for changes to auth
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
+      async (event, session) => {
+        if(event === 'SIGNED_IN') {
+          if(session?.user) {
+            console.log("voila")
+            const { user } = session
+            getProfile(user)
+            .then((profile) => {
+              console.log(profile)
+              session?.user ? setUser({...session?.user, profile: { ...profile }}) : setUser(null)
+              setLoading(false);
+            })
+            .catch(error => console.log(error))
+          }
+        }        
       }
     );
 

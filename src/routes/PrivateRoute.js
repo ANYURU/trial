@@ -2,11 +2,14 @@ import { Outlet, Navigate} from 'react-router-dom'
 import { Sidebar, Loader, Navbar, MobileNav } from '../components'
 import { useMediaQuery } from '../hooks'
 import { useAuth } from '../auth/AuthContext'
+import { useEffect } from 'react'
 
 
 const PrivateRoute = () => {
     const matches = useMediaQuery('(min-width: 800px)')
     const { user } = useAuth()
+
+
     return user ? (
         matches 
         ?
