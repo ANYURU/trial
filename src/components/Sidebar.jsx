@@ -12,7 +12,6 @@ export default function Sidebar({ user }) {
 
     return (
         <div className='h-full w-64'>
-            {/* {console.log(user)} */}
             <div className='bg-white flex justify-center items-center mb-6'>
                 <img src={logo} alt="tube" width={110} />
             </div>
