@@ -1,6 +1,6 @@
 import { Nominee } from "../../components"
 
-function ApplicationPg2() {
+function ApplicationPg2({getValues}) {
   return (
       <>
         <div className='mb-3'>

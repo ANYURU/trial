@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
       async (event, session) => {
         if(event === 'SIGNED_IN') {
           if(session?.user) {
-            console.log("voila")
             const { user } = session
             getProfile(user)
             .then((profile) => {
