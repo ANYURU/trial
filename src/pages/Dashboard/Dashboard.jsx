@@ -2,12 +2,28 @@ import { Doughnut, Line } from "react-chartjs-2";
 import { chartColors } from "../../components/Charts/colors"; 
 import Chart from 'chart.js/auto'
 import { useMediaQuery } from "../../hooks";
-import { useAuth } from "../../auth/AuthContext";
 import { RegistrationModal } from "../../components";
+import { useAuth } from "../../auth/AuthContext";
+import { useState } from "react";
+import { useEffect } from "react";
+import { getProfile } from "../../helpers/getProfile";
 
 export default function Dashboard() {
   const matches = useMediaQuery('(min-width: 800px)')
+  const [ profile, setProfile ] = useState({})
   const { user } = useAuth()
+
+  useEffect(() => {
+    getProfile(user)
+      .then(profile => {
+        setProfile(profile ?? profile)
+      })
+      .catch(error => {
+        console.log(error)
+        setProfile(null)
+      })
+  })
+  
   const data = {
     maintainAspectRatio: true,
     responsive: true,
@@ -48,7 +64,7 @@ export default function Dashboard() {
   return (
     <div className={`flex flex-col ${matches && 'overflow-y-hidden'}`}>
       {/* Account Summaries */}
-      {user?.name === undefined && <RegistrationModal />}
+      {profile?.fullname === null && <RegistrationModal />}
       <div>
         <h1 className="mb-5 mt-2 font-bold uppercase">Dashboard</h1>
         <div>

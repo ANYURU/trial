@@ -67,13 +67,7 @@ function MemberApplication() {
       <Formik 
         initialValues={initialValues}
         onSubmit={async ( values ) => {
-          // console.log(values)
-          const { data, error } = await supabase.from('profiles').update(
-            {
-              ...values
-            }  
-          ).eq('id', user.id)
-
+          const { data, error } = await supabase.from('profiles').update(values).eq('id', user.id)
           if(error) {
             console.log(error)
           } else {

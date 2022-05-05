@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         if(event === 'SIGNED_IN') {
           if(session?.user) {
             const { user } = session
-            getProfile(user)
+            getProfile( user )
             .then((profile) => {
               console.log(profile)
               session?.user ? setUser({...session?.user, profile: { ...profile }}) : setUser(null)
