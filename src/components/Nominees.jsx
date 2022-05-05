@@ -1,7 +1,6 @@
 import { FieldArray } from "formik";
 import { InputField } from "./Form/CustomInputField";
 
-
 export default function Nominee({ values, errors, touched, handleChange, handleBlur }) {
     let { nominees } = values
     return (
@@ -13,7 +12,6 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                         <>
                             { values.nominees && values.nominees.length > 0 && (
                                 values.nominees.map(({name, id, contact, dob, percentage}, index) => (
-                    
                                     <div key={index} className='flex flex-wrap gap-5 mb-3 outline outline-1 rounded p-2'>
                                         <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][name]`}  label="Name" placeholder="Enter Full name" value={name}/>
                                         <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][id]`}  label="Nominee's ID" placeholder="Enter Nominee's ID" value={id}/>
@@ -37,7 +35,6 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                             >
                                 +
                             </button>
-
                             <button
                                 className='bg-accent-red text-white px-3 py-2 rounded m-2'
                                 onClick={() => nominees.length > 1 && arrayHelpers.pop()}

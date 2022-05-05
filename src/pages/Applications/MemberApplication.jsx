@@ -16,19 +16,25 @@ function MemberApplication() {
     marital_status:'',
     fathers_name:'',
     fathers_address:'',
-    status:'',
-    employers_name: '',
-    employers_address:'',
-    position:'',
-    work_station:'',
-    gross_monthly_income:'',
-    appointment_date:'',
-    payroll_number:'',
-    source_of_income:'',
-    business_name: '',
-    business_address: '',
-    business_location: '',
-    other_income_sources: '',
+    income_sources: {
+      status:'',
+      employed:{
+        employers_name: '',
+        employers_address:'',
+        position:'',
+        work_station:'',
+        gross_monthly_income:'',
+        appointment_date:'',
+        payroll_number:'',
+        source_of_income:''  
+      }, 
+      business: {
+        business_name: '',
+        business_address: '',
+        business_location: '',
+        other_income_sources: '',
+      }
+    },
     nominees: [
       {
         name:'',
@@ -37,7 +43,15 @@ function MemberApplication() {
         dob:'',
         percentage:''
       }
-    ]
+    ],
+    proposed_mode_of_remittances: {
+      standing_order:false,
+      direct_debit:false,
+      date_effective: '',
+      others: ''
+    },
+    proposed_monthly_contributions:'', 
+    amount_in_words:''
   }   
   
   
