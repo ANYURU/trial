@@ -16,7 +16,7 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                         <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][name]`}  label="Name" placeholder="Enter Full name" value={name}/>
                                         <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][id]`}  label="Nominee's ID" placeholder="Enter Nominee's ID" value={id}/>
                                         <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][contact]`}  label="Contact" placeholder="address / mobile " value={contact}/>
-                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][dob]`} label="Date of Birth" placeholder="dd/mm/yyyy" value={dob}/>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][dob]`} label="Date of Birth" placeholder="dd/mm/yyyy" value={dob} type="date"/>
                                         <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][percentage]`}  label="Percentage" placeholder="Enter percentage" value={percentage}/>
                                     </div>
                                 ))

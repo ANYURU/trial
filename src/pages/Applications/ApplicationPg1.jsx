@@ -41,7 +41,7 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
                 <h1 className='font-semibold'>Applicant's Details</h1>
                 <div className='flex flex-wrap gap-5'>
                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="name"  label="Name" placeholder="Enter Full name" value={name}/>
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="dob" label="Date of Birth" placeholder="06/04/2022" value={dob}/>
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="dob" label="Date of Birth" placeholder="06/04/2022" value={dob} type="date"/>
                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="gender" label="Gender" placeholder="Gender" value={gender}/>
                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="present_address" label="Present Address" placeholder="Address" value={present_address}/>
                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="email_address" label="Email Address" placeholder="example@gmail.com" type="email" value={email_address}/>
@@ -88,7 +88,7 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][position]" label="Position" placeholder="Enter position" value={position}/>
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][work_station]" label="Work station" placeholder="Enter work station" value={work_station}/>
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][gross_monthly_income]" label="Enter gross income" placeholder="Gross Monthly Income" value={gross_employed}/>
-                            <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][appointment_date]" label="Appointment Date" placeholder="07/04/2022" value={appointment_date}/>
+                            <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][appointment_date]" label="Appointment Date" placeholder="07/04/2022" value={appointment_date} type="date"/>
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][payroll_number]" label="Payroll Number" placeholder="Enter payroll No." value={payroll_number}/>
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][source_of_income]" label="Source of Income" placeholder="-- Select source --" value={source_of_income}/>
                         </div>
