@@ -1,12 +1,15 @@
 import { useState } from "react"
 import ApplicationPg1 from "./ApplicationPg1"
 import ApplicationPg2 from "./ApplicationPg2"
-import { Formik }  from 'formik'
+import { Formik, Form }  from 'formik'
+import { supabase } from '../../helpers/supabase'
+import { useAuth } from '../../auth/AuthContext'
+import { toast, ToastContainer } from 'react-toastify'
 
 function MemberApplication() {
   const [ pageNumber, setPageNumber ] = useState(1)
   const initialValues = {
-    name:'',
+    fullname:'',
     dob:'',
     gender:'',
     present_address:'',
@@ -52,76 +55,87 @@ function MemberApplication() {
     },
     proposed_monthly_contributions:'', 
     amount_in_words:''
-  }   
+  }  
+
+  const { user } = useAuth()
+  
   
   
   return (
-    <Formik initialValues={initialValues}>
-      {({values, errors, touched, handleChange, handleBlur}) => {
-        return (
-          <div className='h-full'>
-            <h1 className="mb-5 mt-2 font-bold uppercase">MemberShip Application</h1>
-            <div className="flex bg-white p-6 min-h-full">
-                <div className='flex flex-grow flex-col min-h-full'>
-                  {pageNumber === 1 &&
-                    <ApplicationPg1 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
-                  }
-                  {pageNumber === 2 &&
-                    <ApplicationPg2 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
-                  }
-                  <div className="flex-grow flex justify-between items-end">
-                  {pageNumber === 1 && 
-                      <div className='flex justify-end w-full'>
+    <>
+      <ToastContainer />
+      <Formik 
+        initialValues={initialValues}
+        onSubmit={async ( values ) => {
+          // console.log(values)
+          const { data, error } = await supabase.from('profiles').update(
+            {
+              ...values
+            }  
+          ).eq('id', user.id)
+
+          if(error) {
+            console.log(error)
+          } else {
+            toast.success(`Sucessfully registered`, {position: "top-center"})
+            console.log(data)
+          }
+        }}
+      >
+        {({values, errors, touched, handleChange, handleBlur}) => {
+          return (
+            <Form className='h-full'>
+              <h1 className="mb-5 mt-2 font-bold uppercase">MemberShip Application</h1>
+              <div className="flex bg-white p-6 min-h-full">
+                  <div className='flex flex-grow flex-col min-h-full'>
+                    {pageNumber === 1 &&
+                      <ApplicationPg1 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
+                    }
+                    {pageNumber === 2 &&
+                      <ApplicationPg2 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
+                    }
+                    <div className="flex-grow flex justify-between items-end">
+                    {pageNumber === 1 && 
+                        <div className='flex justify-end w-full'>
+                          <input
+                            type="submit"
+                            value='Next'
+                            className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+                            onClick={() => {
+                              setPageNumber(pageNumber + 1)
+                            }}
+                          />
+                        </div>
+                      }
+        
+                      {pageNumber === 2 &&
+                      <div className=''>
                         <input
                           type="submit"
-                          value='Next'
+                          value='Previous'
                           className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                          onClick={() => {
-                            setPageNumber(pageNumber + 1)
-                          }}
-                        />
-                      </div>
-                    }
-      
-                    {pageNumber === 2 &&
-                    <div className=''>
-                      <input
-                        type="submit"
-                        value='Previous'
-                        className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                        onClick={(event) => {
-                          event.preventDefault()
-                          setPageNumber(pageNumber - 1)
-                        }}
-                      />
-                    </div>
-                    }
-      
-                    {pageNumber === 2 &&
-                      <div className='flex justify-end w-full'>
-                        <input
-                          type="submit"
-                          value='Submit'
-                          className='outline outline-primary outline-2 text-white bg-primary px-4 py-1 rounded-lg cursor-pointer'
                           onClick={(event) => {
                             event.preventDefault()
-                            setPageNumber(pageNumber + 1)
-                            // handleSubmit();
-                           
+                            setPageNumber(pageNumber - 1)
                           }}
                         />
-
-                        <button onClick={(event) => {
-                          event.preventDefault()
-                          console.log(values)
-                        }}>try submitting</button>
                       </div>
-                    }
+                      }
+        
+                      {pageNumber === 2 &&
+                        <div className='flex justify-end w-full'>
+                          <button 
+                            type='submit'
+                            className='outline outline-primary outline-2 text-white bg-primary px-4 py-1 rounded-lg cursor-pointer'
+                          > submit </button>
+                        </div>
+                      }
+                    </div>
                   </div>
-                </div>
-            </div>
-          </div>)}}
-    </Formik>
+              </div>
+            </Form>)}}
+      </Formik>
+    </>
     )
   
 }

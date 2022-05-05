@@ -3,7 +3,7 @@ import { InputField } from "../../components/Form/CustomInputField"
 
 export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur }) {
     const { 
-        name,
+        fullname,
         dob, 
         gender, 
         present_address, 
@@ -40,7 +40,7 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
             <div className='mb-3'>
                 <h1 className='font-semibold'>Applicant's Details</h1>
                 <div className='flex flex-wrap gap-5'>
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="name"  label="Name" placeholder="Enter Full name" value={name}/>
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="fullname"  label="Name" placeholder="Enter Full name" value={fullname}/>
                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="dob" label="Date of Birth" placeholder="06/04/2022" value={dob} type="date"/>
                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="gender" label="Gender" placeholder="Gender" value={gender}/>
                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="present_address" label="Present Address" placeholder="Address" value={present_address}/>
