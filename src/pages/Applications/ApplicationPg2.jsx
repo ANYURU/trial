@@ -1,6 +1,8 @@
 import { Nominee } from "../../components"
 
-function ApplicationPg2({getValues}) {
+function ApplicationPg2({ values, errors, touched, handleChange, handleBlur }) {
+
+    
   return (
       <>
         <div className='mb-3'>
@@ -44,7 +46,7 @@ function ApplicationPg2({getValues}) {
             </div>
             </form>
         </div>
-        <Nominee />
+        <Nominee values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
       </>
   )
 }

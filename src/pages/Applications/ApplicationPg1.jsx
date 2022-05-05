@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { InputField } from "../../components/Form/CustomInputField"
 
-export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur}) {
+export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur }) {
     const { 
         name,
         dob, 

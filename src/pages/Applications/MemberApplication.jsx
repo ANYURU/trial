@@ -28,7 +28,16 @@ function MemberApplication() {
     business_name: '',
     business_address: '',
     business_location: '',
-    other_income_sources: ''
+    other_income_sources: '',
+    nominees: [
+      {
+        name:'',
+        id:'',
+        contact:'',
+        dob:'',
+        percentage:''
+      }
+    ]
   }   
   
   

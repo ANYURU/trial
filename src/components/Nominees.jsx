@@ -1,51 +1,52 @@
-import { useState } from "react";
+import { FieldArray } from "formik";
+import { InputField } from "./Form/CustomInputField";
 
-export default function Nominee() {
-    const [ nomineeNumber, setNomineeNumber ] = useState([
-        {
-            name: '',
-            mark: '20'
-        },
-    ])
+
+export default function Nominee({ values, errors, touched, handleChange, handleBlur }) {
+    let { nominees } = values
     return (
         <div className='mb-3'>
             <h1 className='font-semibold'>Nominee Information</h1>
-                {nomineeNumber.map((nominee, index) => (
-                    <div className='flex flex-wrap gap-5 mb-3 outline outline-1 rounded p-2'>
-                        <div className='flex flex-col w-56 '>
-                            <label htmlFor="" className=' text-sm'>Name</label>
-                            <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                        </div>
-                        <div className='flex flex-col w-56 '>
-                            <label htmlFor="" className=' text-sm'>Nominee's ID</label>
-                            <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                        </div>
-                        <div className='flex flex-col w-56 '>
-                            <label htmlFor="" className=' text-sm'>Contact</label>
-                            <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                        </div>
-                        <div className='flex flex-col w-56 '>
-                            <label htmlFor="" className=' text-sm'>Date of Birth</label>
-                            <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                        </div>
-                        <div className='flex flex-col w-56 '>
-                            <label htmlFor="" className=' text-sm'>Percentage</label>
-                            <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
-                        </div>
-                    </div>
-                ))}
-                <button 
-                    onClick={() => {
-                        setNomineeNumber([ ...nomineeNumber, { name: '', mark: '20'},])
-                    }}
-                    className='bg-primary text-white px-3 py-2 rounded m-2'
-                >+</button>
-                <button 
-                    onClick={() => {
-                        setNomineeNumber([ ...nomineeNumber, { name: '', mark: '20'},])
-                    }}
-                    className='bg-accent-red text-white px-3 py-2 rounded m-2'
-                >-</button>
+                <FieldArray
+                    name="nominees"
+                    render={(arrayHelpers) =>( 
+                        <>
+                            { values.nominees && values.nominees.length > 0 && (
+                                values.nominees.map(({name, id, contact, dob, percentage}, index) => (
+                    
+                                    <div key={index} className='flex flex-wrap gap-5 mb-3 outline outline-1 rounded p-2'>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][name]`}  label="Name" placeholder="Enter Full name" value={name}/>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][id]`}  label="Nominee's ID" placeholder="Enter Nominee's ID" value={id}/>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][contact]`}  label="Contact" placeholder="address / mobile " value={contact}/>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][dob]`} label="Date of Birth" placeholder="dd/mm/yyyy" value={dob}/>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][percentage]`}  label="Percentage" placeholder="Enter percentage" value={percentage}/>
+                                    </div>
+                                ))
+                            )}
+                            <button
+                                className='bg-primary text-white px-3 py-2 rounded m-2'
+                                onClick={() => arrayHelpers.push(
+                                    { 
+                                        name:'', 
+                                        id:'', 
+                                        contact:'', 
+                                        dob:'', 
+                                        percentage:''
+                                    }
+                                )}
+                            >
+                                +
+                            </button>
+
+                            <button
+                                className='bg-accent-red text-white px-3 py-2 rounded m-2'
+                                onClick={() => nominees.length > 1 && arrayHelpers.pop()}
+                            >
+                                -   
+                            </button>
+                        </>
+                    )}
+                />
         </div>
     )
 }
