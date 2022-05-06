@@ -7,23 +7,12 @@ import { useAuth } from "../../auth/AuthContext";
 import { useState } from "react";
 import { useEffect } from "react";
 import { getProfile } from "../../helpers/getProfile";
+import { useOutletContext } from "react-router-dom";
 
 export default function Dashboard() {
   const matches = useMediaQuery('(min-width: 800px)')
-  const [ profile, setProfile ] = useState({})
-  const { user } = useAuth()
+  const [ profile ] = useOutletContext()
 
-  useEffect(() => {
-    getProfile(user)
-      .then(profile => {
-        setProfile(profile ?? profile)
-      })
-      .catch(error => {
-        console.log(error)
-        setProfile(null)
-      })
-  })
-  
   const data = {
     maintainAspectRatio: true,
     responsive: true,
@@ -64,6 +53,7 @@ export default function Dashboard() {
   return (
     <div className={`flex flex-col ${matches && 'overflow-y-hidden'}`}>
       {/* Account Summaries */}
+      {console.log(profile)}
       {profile?.fullname === null && <RegistrationModal />}
       <div>
         <h1 className="mb-5 mt-2 font-bold uppercase">Dashboard</h1>

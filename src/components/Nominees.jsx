@@ -23,7 +23,9 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                             )}
                             <button
                                 className='bg-primary text-white px-3 py-2 rounded m-2'
-                                onClick={() => arrayHelpers.push(
+                                onClick={(event) => {
+                                    event.preventDefault()
+                                    arrayHelpers.push(
                                     { 
                                         name:'', 
                                         id:'', 
@@ -31,13 +33,16 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                         dob:'', 
                                         percentage:''
                                     }
-                                )}
+                                )}}
                             >
                                 +
                             </button>
                             <button
                                 className='bg-accent-red text-white px-3 py-2 rounded m-2'
-                                onClick={() => nominees.length > 1 && arrayHelpers.pop()}
+                                onClick={(event) => {
+                                    event.preventDefault()
+                                    nominees.length > 1 && arrayHelpers.pop()
+                                }}
                             >
                                 -   
                             </button>

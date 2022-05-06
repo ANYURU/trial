@@ -5,6 +5,7 @@ import { Formik, Form }  from 'formik'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
+import { useNavigate } from "react-router-dom"
 
 function MemberApplication() {
   const [ pageNumber, setPageNumber ] = useState(1)
@@ -58,8 +59,7 @@ function MemberApplication() {
   }  
 
   const { user } = useAuth()
-  
-  
+  const navigate = useNavigate()
   
   return (
     <>
@@ -72,6 +72,7 @@ function MemberApplication() {
             console.log(error)
           } else {
             toast.success(`Sucessfully registered`, {position: "top-center"})
+            navigate('/dashboard')
             console.log(data)
           }
         }}

@@ -5,7 +5,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import React, { useState } from 'react'
 
 export default function Sidebar({ user }) {
-    const role = user?.profile?.user_role?.roles.includes("member") ? "member" : "admin"
+    const role = user?.user_role?.roles.includes("member") ? "member" : "admin"
     const [ show, setShow ] = useState(false)
     const [ selectedIndex, setSelectedIndex ] = useState(null)
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
