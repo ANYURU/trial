@@ -12,6 +12,7 @@ const PrivateRoute = () => {
     const [ profile, setProfile ] = useState({})
 
     useEffect(() => {
+        // Getting information that is required in all components.
         getProfile( user )
             .then(data => {
                 setProfile(data)

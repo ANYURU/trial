@@ -11,7 +11,6 @@ function Navbar({ user }) {
 
   return (
     <div className={`bg-white top-0 flex ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2 py-4`}>
-      {console.log(user)}
           {(user?.fullname === undefined || user.fullname === null) && <div className='bg-accent-red p-2 flex justify-center items-center text-white rounded-md cursor-pointer'
           onClick={() => {
             navigate('/application')

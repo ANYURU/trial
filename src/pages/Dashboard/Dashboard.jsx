@@ -3,10 +3,6 @@ import { chartColors } from "../../components/Charts/colors";
 import Chart from 'chart.js/auto'
 import { useMediaQuery } from "../../hooks";
 import { RegistrationModal } from "../../components";
-import { useAuth } from "../../auth/AuthContext";
-import { useState } from "react";
-import { useEffect } from "react";
-import { getProfile } from "../../helpers/getProfile";
 import { useOutletContext } from "react-router-dom";
 
 export default function Dashboard() {
@@ -53,7 +49,6 @@ export default function Dashboard() {
   return (
     <div className={`flex flex-col ${matches && 'overflow-y-hidden'}`}>
       {/* Account Summaries */}
-      {console.log(profile)}
       {profile?.fullname === null && <RegistrationModal />}
       <div>
         <h1 className="mb-5 mt-2 font-bold uppercase">Dashboard</h1>
