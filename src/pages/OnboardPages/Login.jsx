@@ -3,20 +3,19 @@ import logo from '../../assets/images/tube.png'
 import { PhoneTextField, PasswordTextField, Submit } from "../../components";
 import { Formik } from "formik";
 import { validationSchema } from "../../helpers/validator";
-import { users } from "../../helpers/mockData";
 import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer } from 'react-toastify'
 
 export default function Login() {
   const navigate = useNavigate()
 
-  const { signIn, setUser } = useAuth()
+  const { signIn } = useAuth()
 
   const handleSubmit = async (event, values) => {
     event.preventDefault()
 
-    const { error } = await signIn({
-      phone: '+256' + values.phoneNo,
+    const { error } = await signIn({  
+      phone: '256' + values.phoneNo.slice(1),
       password: values.password
     })
 
@@ -26,16 +25,6 @@ export default function Login() {
     } else {
       navigate('/dashboard')
     }
-    // const checkNumber = users.filter(user => user.phoneNo === values.phoneNo)
-    // if(checkNumber.length !== 0){
-    //   const user = checkNumber.filter(user => user.password === values.password)
-    //   if(user.length !== 0){
-    //     setUser(user[0])
-    //     navigate('/dashboard')
-    //   } else {
-    //     toast.error(`User not found`, {position: "top-center"})
-    //   }
-    // }
   }
 
   return (
