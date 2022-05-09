@@ -3,7 +3,7 @@ import logo from '../../assets/images/tube.png'
 import { validationSubmitSchema } from "../../helpers/validator";
 import { Formik } from "formik";
 import { PhoneTextField, Submit } from "../../components";
-import { supabase } from "../../helpers/supabase";
+// import { supabase } from "../../helpers/supabase";
 import { getOTP } from "../../helpers/getotp";
 
 export default function SignUp() {
@@ -11,14 +11,24 @@ export default function SignUp() {
   const handleSubmit = async (event, values) => {
     event.preventDefault()
     const { phoneNo } = values
-    const { error } = await supabase.from('otps').insert({phone_number: '+256' + phoneNo.slice(1)})
-    if(error) {
-      console.log(error)
-    } else {
-      localStorage.setItem('phone', phoneNo)
-      getOTP(phoneNo)
-      navigate('/verify')
-    }
+    
+    navigate('/verify')
+    await getOTP( phoneNo, "VERIFICATION" )
+      .then( response => response.json() )
+      .then( data => {
+        console.log(data) 
+      })
+      .catch( error => console.log(error) )
+    
+
+    // const { error } = await supabase.from('otps').insert({phone_number: '+256' + phoneNo.slice(1)})
+    // if(error) {
+    //   console.log(error)
+    // } else {
+    //   localStorage.setItem('phone', phoneNo)
+    //   getOTP(phoneNo)
+    //   navigate('/verify')
+    // }
   }
 
   return (

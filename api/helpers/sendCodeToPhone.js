@@ -18,7 +18,7 @@ const { USERNAME, APIKEY, SENDERID } = process.env
  * @returns { Promise<Africastalking> } A promise that returns a json object.
  */
 
-const sendCodeToPhone = (phone_number, otp) => {
+const sendCodeToPhone = (phone_number, msg) => {
     const client = africastalking({
         username: USERNAME,
         apiKey: APIKEY
@@ -26,7 +26,7 @@ const sendCodeToPhone = (phone_number, otp) => {
     
     return client.SMS.send({
         to:phone_number,
-        message: `Bweyogerere Tubeerebumu Sacco. \n Your verification code is ${otp}.`,
+        message: msg,
         from: SENDERID,
     })
 }

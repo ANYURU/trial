@@ -7,7 +7,7 @@ import { useOutletContext } from "react-router-dom"
 function Profile() {
   const [ popUp, setPopUp ] = useState(false)
   const [ editPop, setEditPop ] = useState(false)
-  const { user } = useOutletContext()
+  const [ profile ] = useOutletContext()
 
   return (
     <div className='h-full'>
@@ -23,37 +23,37 @@ function Profile() {
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>name</p>
             <div className='flex-grow flex'>
-              <p className='font-bold'>{user.name}</p>
+              <p className='font-bold'>{profile?.fullname}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Telephone Number</p>
             <div className='flex-grow flex'>
-              <p className='font-bold'>{user.phoneNo}</p>
+              <p className='font-bold'>{profile?.phone_number}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Email</p>
             <div className='flex-grow flex'>
-              <p className='font-bold'>{user.email}</p>
+              <p className='font-bold'>{profile?.email_address}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Member Status</p>
             <div className='flex-grow flex'>
-              <p className={`${user.memberStatus === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{user.memberStatus}</p>
+              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Marital Status</p>
             <div className='flex-grow flex'>
-            <p className='font-bold'>{user.maritalStatus}</p>
+            <p className='font-bold'>{profile?.marital_status}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Position in the SACCO</p>
             <div className='flex-grow flex'>
-            <p className='font-bold'>{user.saccoPosition}</p>
+            <p className='font-bold'>{profile?.saccoPosition}</p>
             </div>
           </div>
         </div>

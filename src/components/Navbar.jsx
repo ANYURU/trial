@@ -25,7 +25,7 @@ function Navbar({ user }) {
               <p className='mb-0 cursor-pointer'>Hello  
               {(user?.fullname !== undefined && user.fullname !== null)
               ? ` ${user?.fullname.split(' ')[1]}`
-              : ''}
+              : ' Newbie !!'}
               </p>
               <div>
                 <div className='w-10 h-10 bg-accent rounded-full mx-2'></div>
