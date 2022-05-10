@@ -7,28 +7,23 @@ import { PhoneTextField, Submit } from "../../components";
 import { getOTP } from "../../helpers/getotp";
 
 export default function SignUp() {
+  
   const navigate = useNavigate()
+  
   const handleSubmit = async (event, values) => {
     event.preventDefault()
     const { phoneNo } = values
     
+    localStorage.setItem('phone_number', phoneNo)
     navigate('/verify')
-    await getOTP( phoneNo, "VERIFICATION" )
+    
+    getOTP( phoneNo, "VERIFICATION" )
       .then( response => response.json() )
       .then( data => {
-        console.log(data) 
+        localStorage.setItem('verification_key', data?.Details)
+        return 
       })
       .catch( error => console.log(error) )
-    
-
-    // const { error } = await supabase.from('otps').insert({phone_number: '+256' + phoneNo.slice(1)})
-    // if(error) {
-    //   console.log(error)
-    // } else {
-    //   localStorage.setItem('phone', phoneNo)
-    //   getOTP(phoneNo)
-    //   navigate('/verify')
-    // }
   }
 
   return (

@@ -69,6 +69,7 @@ export default async (req, res) => {
                 const response = { "Status": "Failure", "Details": error?.message }
                 return res.status(status).json(response)
             } else {
+                console.log(data)
 
                 let details = {
                     "timestamp": now,

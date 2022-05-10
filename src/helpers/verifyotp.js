@@ -6,17 +6,16 @@
  * @returns {Object}
  */
 
-export const verifyOTP = async (phoneNumber, submittedOTP) => {
+export const verifyOTP = async (phoneNumber, otp, verification_key) => {
     return fetch("/api/verifyotp", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
           },
         body: JSON.stringify({
-            phone_number: `+256${phoneNumber.slice(1)}`, 
-            otp: parseInt(submittedOTP)
+            check: phoneNumber, 
+            verification_key: verification_key,
+            otp: otp   
         })
-    })
-
-   
+    }) 
 }

@@ -52,8 +52,8 @@ async function encode( string ) {
 async function decode( string ) {
     const key = password_derive_bytes(password, '', 100, 32);
     // Initalize decipher object to decrypt using AES-256 Algorithm
-    const decipher = crypto.createDecipheriv('aes-256-cbc', key, ivstring);
-    const decrypted = decipher.update(string, 'base64', 'utf8')
+    let decipher = crypto.createDecipheriv('aes-256-cbc', key, ivstring);
+    let decrypted = decipher.update(string, 'base64', 'utf8')
     decrypted += decipher.final();
     return decrypted   
 } 
