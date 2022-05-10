@@ -1,3 +1,4 @@
+// Importing helper modules 
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
 const generateOTP = require('./helpers/generateOTP');
@@ -9,7 +10,6 @@ const { encode } = require('./helpers/middleware')
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_ANON_KEY
 const supabase = createClient(supabaseUrl, supabaseKey);
-
 
 export default async (req, res) => {
     try {
@@ -53,17 +53,17 @@ export default async (req, res) => {
         }
 
         const { data, error, status } = await supabase
-        .from('otps')
-        .insert(
-            [
-                {
-                    otp: otp,
-                    updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                    expiration_time: expiration_time
-                }
-            ]
+            .from('otps')
+            .insert(
+                [
+                    {
+                        otp: otp,
+                        updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                        expiration_time: expiration_time
+                    }
+                ]
             )
-        .single()
+            .single()
             
             if (error) {
                 const response = { "Status": "Failure", "Details": error?.message }
@@ -80,16 +80,14 @@ export default async (req, res) => {
 
                 const encoded = await encode( JSON.stringify( details ) )
                 
-                sendCodeToPhone(`+256${phone_number.slice(1)}`, phone_message)
-                    .then((data) => {
-                        console.log(data)
-                        return res.json( { "Status": "Success", "Details": encoded } )
-                       
+                sendCodeToPhone(phone_number, phone_message)
+                    .then( data => {
+                        console.log( data )
+                        return res.json( { "Status": "Success", "Details": encoded } ) 
                     })
-                    .catch(error => {
-                        console.log("error")
-                        console.log(error)
-                        return res.status(400).json({ "Status": "Failure", "Details": error })
+                    .catch( error => {
+                        console.log( error )
+                        return res.status(400).json( { "Status": "Failure", "Details": error } )
                     })
             }
     } catch (error) {
