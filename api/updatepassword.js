@@ -7,8 +7,6 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 export default async ( req, res ) => {
     try {
         const { phone_number, new_password } = req.body
-        console.log(phone_number)
-        console.log(new_password)
 
         if ( !phone_number ) {
             const response = { "Status":"Failure","Details":"Phone number not provided" }

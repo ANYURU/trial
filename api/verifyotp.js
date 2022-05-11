@@ -10,10 +10,7 @@ const compareDates = require('./helpers/compareDates')
 export default async ( req, res ) => {
     const current_date = new Date()
     try {
-        const { verification_key, otp, check} = req.body;
-        console.log(`${verification_key}`)
-        console.log(otp)
-        console.log(check)
+        const { verification_key, otp, check} = req.body
 
         if(!verification_key) {
             const response = {"Status": "Failure", "Details": "OTP not provided"}
