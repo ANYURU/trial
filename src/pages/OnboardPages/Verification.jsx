@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from '../../assets/images/tube.png'
 import { verifyCodeSchema } from "../../helpers/validator";
 import { Formik } from "formik";
@@ -9,16 +9,22 @@ import { getOTP } from '../../helpers/getotp'
 
 function Verification() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const type = location?.state?.type
+ 
+
+
   const handleSubmit = async (event, values) => {
     event.preventDefault()
     
     const phoneNumber = localStorage.getItem('phone_number')
     const verification_key = localStorage.getItem('verification_key')
+    console.log(verification_key)
     const { code } = values
     
     verifyOTP( phoneNumber, code, verification_key )
       .then( response => response.json() )
-      .then( data => data?.Status === "Failure" ? toast.error(`${data.Details}`, {position: "top-center"}) : data?.Status === "Success" && navigate('/set-password') )
+      .then( data => data?.Status === "Failure" ? toast.error(`${data.Details}`, {position: "top-center"}) : data?.Status === "Success" && navigate('/set-password', { state: { type: type } }) )
       .catch( error => console.log(error) )
   }
 

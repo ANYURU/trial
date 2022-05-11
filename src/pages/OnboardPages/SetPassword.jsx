@@ -1,30 +1,51 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from '../../assets/images/tube.png'
 import { PasswordTextField, ConfirmPasswordField, Submit } from "../../components";
 import { Formik } from "formik";
 import { registerValidationSchema } from "../../helpers/validator";
 import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer} from "react-toastify";
+import { updatePassword } from "../../helpers/updatePassword";
 
 export default function SetPassword() {
   const navigate = useNavigate()
   const { signUp } = useAuth()
 
+  const location = useLocation()
+
   const handleSubmit = async (event, values) => {
     event.preventDefault()
+    const phoneNo = '256'+localStorage.getItem('phone_number').slice(1)
+    const { password } = values
 
-    const { error } = await signUp({
-      phone:'256'+localStorage.getItem('phone_number').slice(1),
-      password: values.password
-    })
-  
-    if( error ) {
-      toast.error(`${error?.message}`, {position: "top-center"})
-    } else {
-      navigate('/dashboard') 
-      localStorage.removeItem('phone_number')
-      localStorage.removeItem('verification_key')
+    if ( location.state.type === "signup" ) {
+      const { error } = await signUp({
+        phone: phoneNo,
+        password: password
+      })
+    
+      if( error ) {
+        toast.error(`${error?.message}`, {position: "top-center"})
+      } else {
+        navigate('/dashboard') 
+        localStorage.removeItem('phone_number')
+        localStorage.removeItem('verification_key')
+      }
+    } 
+    else {
+      updatePassword( phoneNo, password )
+        .then( ( response ) => response.json() )
+        .then( ( data ) => {
+          if ( data?.Status === "Failure" ) {
+            toast.error(`${data?.Details}`, {position: "top-center"})
+          } else {
+           toast.success(`${data?.Details}`, {position: "top-center"})
+            navigate('/')
+          }
+        })
+
     }
+
   }
   
   return (

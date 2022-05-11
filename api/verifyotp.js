@@ -11,6 +11,9 @@ export default async ( req, res ) => {
     const current_date = new Date()
     try {
         const { verification_key, otp, check} = req.body;
+        console.log(`${verification_key}`)
+        console.log(otp)
+        console.log(check)
 
         if(!verification_key) {
             const response = {"Status": "Failure", "Details": "OTP not provided"}

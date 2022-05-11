@@ -23,7 +23,7 @@ export default function SignUp() {
         else {
 
           localStorage.setItem('phone_number', phoneNo)
-          navigate('/verify')
+          navigate('/verify', { state: { type: "signup" } })
           
           getOTP( phoneNo, "VERIFICATION" )
             .then( response => response.json() )
