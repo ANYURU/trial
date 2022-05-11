@@ -19,7 +19,7 @@ export default function Login() {
     supabase.rpc('does_phone_exist', { phone: `256${phoneNo.slice(1)}`})
       .then(async ({ data }) => {
         if ( data ) {
-          const { data ,error } = await signIn({  
+          const { error } = await signIn({  
             phone: '256'+ phoneNo.slice(1),
             password: password
           })
