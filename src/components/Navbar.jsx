@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 
 function Navbar({ user }) {
-  const [show, setShow] = useState(false)
+  const [ show, setShow ] = useState(false)
   const navigate = useNavigate()
   const navRef = useRef()
 
@@ -29,7 +29,7 @@ function Navbar({ user }) {
               </p>
               <div>
                 <div className='w-10 h-10 bg-accent rounded-full mx-2'></div>
-                <p className={`${user.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.member_status}</p>
+                <p className={`${user?.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.member_status}</p>
               </div>
               <MdKeyboardArrowDown />
             </div>

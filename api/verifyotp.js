@@ -32,9 +32,7 @@ export default async ( req, res ) => {
             return res.status(400).json(response)
         }
 
-        let { otp_id, check: check_obj } = JSON.parse(decoded)
-        console.log(otp_id)
-        console.log(check_obj)
+        let { otp_id, check: check_obj } = JSON.parse( decoded )
 
         if( check_obj !== check ) {
             const response={"Status": "Failure", "Details": "OTP was not sent to this particular email."}

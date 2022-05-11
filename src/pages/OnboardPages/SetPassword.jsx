@@ -4,6 +4,7 @@ import { PasswordTextField, ConfirmPasswordField, Submit } from "../../component
 import { Formik } from "formik";
 import { registerValidationSchema } from "../../helpers/validator";
 import { useAuth } from "../../auth/AuthContext";
+import { toast, ToastContainer} from "react-toastify";
 
 export default function SetPassword() {
   const navigate = useNavigate()
@@ -13,20 +14,22 @@ export default function SetPassword() {
     event.preventDefault()
 
     const { error } = await signUp({
-      phone: '+256' + localStorage.getItem('phone').slice(1),
+      phone:'256'+localStorage.getItem('phone_number').slice(1),
       password: values.password
     })
   
-    if(error) {
-      console.log(error)
+    if( error ) {
+      toast.error(`${error?.message}`, {position: "top-center"})
     } else {
       navigate('/dashboard') 
-      localStorage.removeItem('phoneNumber')
+      localStorage.removeItem('phone_number')
+      localStorage.removeItem('verification_key')
     }
   }
   
   return (
     <div className=" inline-flex justify-center items-center w-screen h-screen font-montserrat">
+      <ToastContainer />
       <Formik initialValues={{ password: '', confirmPassword: ''}} validationSchema={registerValidationSchema}>
         {({values, errors, touched, handleChange, handleBlur}) => {
           return (

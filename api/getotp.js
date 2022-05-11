@@ -16,7 +16,6 @@ export default async (req, res) => {
         const { phone_number, type } = req.body
         let phone_message
 
-        console.log(phone_number)
         
         if ( !phone_number ) {
             const response={"Status":"Failure","Details":"Phone Number not provided"}
@@ -33,7 +32,6 @@ export default async (req, res) => {
         const expiration_time = addMinutesToDate(now, 3)
     
         if( type ) {
-            console.log(type)
             if( type == "VERIFICATION" ) {
                 const message = require('./helpers/phoneVerification')
                 phone_message = message( otp )
@@ -69,8 +67,6 @@ export default async (req, res) => {
                 const response = { "Status": "Failure", "Details": error?.message }
                 return res.status(status).json(response)
             } else {
-                console.log(data)
-
                 let details = {
                     "timestamp": now,
                     "check": phone_number,
@@ -83,17 +79,13 @@ export default async (req, res) => {
                 
                 sendCodeToPhone(phone_number, phone_message)
                     .then( data => {
-                        console.log( data )
                         return res.json( { "Status": "Success", "Details": encoded } ) 
                     })
                     .catch( error => {
-                        console.log( error )
                         return res.status(400).json( { "Status": "Failure", "Details": error } )
                     })
             }
     } catch (error) {
-        console.log("now")
-        console.log(error)
         const response = { "Status":"Failure", "Details": error}
         res.status(400).json(response)
     }

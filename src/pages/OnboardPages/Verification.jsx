@@ -18,7 +18,7 @@ function Verification() {
     
     verifyOTP( phoneNumber, code, verification_key )
       .then( response => response.json() )
-      .then( data => data?.Status === "Failure" ? toast.error(`${data.Details}`, {position: "top-center"}) : data?.Status === "Success" && navigate('/set-password'))
+      .then( data => data?.Status === "Failure" ? toast.error(`${data.Details}`, {position: "top-center"}) : data?.Status === "Success" && navigate('/set-password') )
       .catch( error => console.log(error) )
   }
 
