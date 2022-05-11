@@ -5,10 +5,12 @@ import { Formik, Form }  from 'formik'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
-import { useNavigate } from "react-router-dom"
+import { useOutletContext, useNavigate } from "react-router-dom"
+
 
 function MemberApplication() {
   const [ pageNumber, setPageNumber ] = useState(1)
+  const [ profile, setProfile ] = useOutletContext()
   const initialValues = {
     fullname:'',
     dob:'',
@@ -67,12 +69,13 @@ function MemberApplication() {
       <Formik 
         initialValues={initialValues}
         onSubmit={async ( values ) => {
-          const { data, error } = await supabase.from('profiles').update(values).eq('id', user.id)
+          const { data, error } = await supabase.from('profiles').update(values).eq('id', user.id).single()
           if(error) {
             console.log(error)
           } else {
             toast.success(`Sucessfully registered`, {position: "top-center"})
             navigate('/dashboard')
+            setProfile(data)
             console.log(data)
           }
         }}

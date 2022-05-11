@@ -10,7 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 export default function SignUp() {
   const navigate = useNavigate()
   
-  const handleSubmit = async (event, values) => {
+  const handleSubmit = async ( event, values ) => {
     event.preventDefault()
     const { phoneNo } = values
 
