@@ -8,14 +8,13 @@ import { supabase } from "../../helpers/supabase";
 import { toast, ToastContainer } from "react-toastify";
 
 export default function SignUp() {
-  
   const navigate = useNavigate()
   
-
   const handleSubmit = async (event, values) => {
     event.preventDefault()
     const { phoneNo } = values
 
+    // Check if the phone number has really been used
     supabase.rpc('does_phone_exist', { phone: `256${phoneNo.slice(1)}`})
       .then(({ data }) => {
         if ( data ) {

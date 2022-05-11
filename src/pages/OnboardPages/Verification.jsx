@@ -5,7 +5,7 @@ import { Formik } from "formik";
 import { VerificationCode, Submit } from "../../components";
 import { verifyOTP } from '../../helpers/verifyotp'
 import { toast, ToastContainer} from "react-toastify";
-import {getOTP} from '../../helpers/getotp'
+import { getOTP } from '../../helpers/getotp'
 
 function Verification() {
   const navigate = useNavigate()
@@ -39,8 +39,14 @@ function Verification() {
                 <div className='flex justify-between w-full mt-3 text-sm'>
                   {/* <Link to="/sign-up" className="text-primary font-semibold">Resend Code</Link> */}
                   <button className="text-primary font-semibold"onClick={() => {
-                    const phoneNo = localStorage.getItem('phone')
-                    getOTP(phoneNo)
+                    const phoneNo = localStorage.getItem('phone_number')
+                    getOTP( phoneNo, "VERIFICATION" )
+                      .then( response => response.json() )
+                      .then( data => {
+                        localStorage.setItem('verification_key', data?.Details)
+                        return 
+                      })
+                      .catch( error => console.log( error ) )
                   }}> Resend Code </button>
                   <Link to="/sign-up" className="text-primary font-semibold">Change Phone Number</Link>
                 </div>
