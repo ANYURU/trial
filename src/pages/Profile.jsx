@@ -23,7 +23,9 @@ function Profile() {
       <h1 className="mb-5 mt-2 font-bold uppercase">Profile</h1>
       <div className="flex flex-col bg-white p-6 min-h-full">
         <div className='flex justify-between items-center mb-2'>
-          <img src={profile?.avatar ? profile.avatar : profileImg} width={100} height={100} className='rounded-full' alt="profile" />
+          <div className='h-16 w-16'>
+            <img src={profile?.avatar ? profile.avatar : profileImg} width={100} height={100} className='rounded-full w-full h-full' alt="profile" />
+          </div>
           <i className='text-white p-2 bg-primary rounded text-lg'
             onClick={() => setEditPop(true)}
           ><FaRegEdit /></i>
@@ -126,15 +128,18 @@ function Profile() {
                           if ( data ) {
                             // console.log("Got it")
                             // Do the logic that updates the values and resets the form.
-                            const { error } = await supabase.from('members')
+                            const { error, data } = await supabase.from('members')
                               .update({ name: name, dob: dob, gender: gender, email_address: email_address, phone_number: phone_number, id_passport_number: id_passport_number, present_address: present_address, marital_status: marital_status, fathers_address: fathers_address, fathers_name:fathers_name, avatar: avatar })
                               .eq('id', id)
+                              .single()
 
                               if ( error ) {
                                 toast.error(`${error?.message}`, {position: "top-center"})
                               } else {
                                 // Clear the form and navigate them to where you want them to go.
                                 setEditPop(false)
+                                setProfile({...profile, ...data})
+
                               }
                   
                           } else {
@@ -245,9 +250,7 @@ function Profile() {
                               <div className='flex-grow flex'>
                                 <input type="file" name="avatar" id="avatar" placeholder='Avatar' className='ring-1 ring-black rounded px-2 py-1' onChange={async ( event ) => {
                                   const file = event.target.files[0]
-                                  console.log(file)
                                   const fileString = await toBase64(file)
-                                  console.log(fileString)
                                   values.avatar = fileString
                                 }} />
                               </div>

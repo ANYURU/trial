@@ -29,7 +29,7 @@ function Navbar({ user }) {
               </p>
               <div>
                 <div className='w-10 h-10 bg-accent rounded-full mx-2'>
-                  { user?.avatar && <img src={`${user?.avatar}`} alt=""/>}
+                  { user?.avatar && <img src={`${user?.avatar}`} alt="" className='rounded-full h-full w-full'/>}
                 </div>
                 <p className={`${user?.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.member_status}</p>
               </div>
