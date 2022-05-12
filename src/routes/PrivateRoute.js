@@ -14,7 +14,7 @@ const PrivateRoute = () => {
     useEffect(() => {
         // Getting information that is required in all components.
         getProfile( user )
-            .then(data => {
+            .then( data => {
                 setProfile(data)
             })
             .catch(error => console.log(error))

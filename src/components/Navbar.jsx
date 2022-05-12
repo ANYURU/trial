@@ -28,7 +28,9 @@ function Navbar({ user }) {
               : ' Newbie !!'}
               </p>
               <div>
-                <div className='w-10 h-10 bg-accent rounded-full mx-2'></div>
+                <div className='w-10 h-10 bg-accent rounded-full mx-2'>
+                  { user?.avatar && <img src={`${user?.avatar}`} alt=""/>}
+                </div>
                 <p className={`${user?.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.member_status}</p>
               </div>
               <MdKeyboardArrowDown />

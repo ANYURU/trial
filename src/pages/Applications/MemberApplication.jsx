@@ -57,7 +57,7 @@ function MemberApplication() {
       others: ''
     },
     proposed_monthly_contributions:'', 
-    amount_in_words:''
+    amount_in_words:'',
   }  
 
   const { user } = useAuth()

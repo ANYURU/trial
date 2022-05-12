@@ -1,6 +1,7 @@
 /**
  * consuming the verification service 
- * @function verifyOTP
+ * @function 
+ * @name verifyOTP
  * @param {string} phoneNumber 
  * @param {number} submittedOTP 
  * @returns {Object}
