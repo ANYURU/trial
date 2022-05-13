@@ -16,6 +16,8 @@ function Profile() {
     ...profile,
     password:''
   }
+  const { id } = supabase.auth.user()
+
 
   return (
     <div className='h-full'>
@@ -74,15 +76,29 @@ function Profile() {
             <div className='flex flex-col gap-5'>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <input type="text" name="" id="old_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onBlur={async ({ target: { value }}) => {
+                  // supabase.rpc('check_password', { current_password: value, _user_id: id })
+                  //   .then(({data}) => {
+                  //     if ( data ) {
+                  //       document.getElementById('new_password').disabled = false
+                  //       document.getElementById('confirm_password').disabled = false
+                  //     } else {
+                  //       toast.error(`Wrong password.`, {position: "top-center"})
+                  //       document.getElementById('new_password').disabled = true
+                  //       document.getElementById('confirm_password').disabled = true
+                  //     }  
+                  //   })
+                  //   .catch(error => toast.error(`${error?.message}`), {position: "top-center"})
+
+                }} />
               </div>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>New Password</label>
-                <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <input type="text" name="" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1' disabled="true"/>
               </div>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>Confirm Password</label>
-                <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <input type="text" name="" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1' disabled="true"/>
               </div>
             </div>
             </form>
@@ -120,14 +136,12 @@ function Profile() {
                   <Formik
                     initialValues={ initialValues }
                     onSubmit = { async ( values ) => {
-                      const { id } = supabase.auth.user()
                       const { password, name, dob, gender, email_address, phone_number, id_passport_number, present_address, marital_status, fathers_address, fathers_name, avatar } = values
-                      console.log(values)
                       supabase.rpc('check_password', { current_password: password, _user_id: id })
                         .then(async ({ data })  => {
                           if ( data ) {
-                            // console.log("Got it")
                             // Do the logic that updates the values and resets the form.
+                            // console.log("Got it")
                             const { error, data } = await supabase.from('members')
                               .update({ name: name, dob: dob, gender: gender, email_address: email_address, phone_number: phone_number, id_passport_number: id_passport_number, present_address: present_address, marital_status: marital_status, fathers_address: fathers_address, fathers_name:fathers_name, avatar: avatar })
                               .eq('id', id)
@@ -136,10 +150,8 @@ function Profile() {
                               if ( error ) {
                                 toast.error(`${error?.message}`, {position: "top-center"})
                               } else {
-                                // Clear the form and navigate them to where you want them to go.
                                 setEditPop(false)
                                 setProfile({...profile, ...data})
-
                               }
                   
                           } else {
@@ -149,9 +161,6 @@ function Profile() {
                         .catch(error => {
                             console.log(`Error ${error}`)
                         })
-
-
-
                     }}
                   >
                     {({ values, errors, touched, handleChange, handleBlur }) => {

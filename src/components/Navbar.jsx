@@ -3,11 +3,13 @@ import { IoMdPower } from 'react-icons/io'
 import { MdSettings } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { MdKeyboardArrowDown } from 'react-icons/md'
+import { useAuth } from '../auth/AuthContext'
 
 function Navbar({ user }) {
   const [ show, setShow ] = useState(false)
   const navigate = useNavigate()
   const navRef = useRef()
+  const { signOut } = useAuth()
 
   return (
     <div className={`bg-white top-0 flex ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2 py-4`}>
@@ -47,7 +49,10 @@ function Navbar({ user }) {
               </p>
               <p style={{marginBottom: '0'}}
                 className='flex cursor-pointer justify-center items-center hover:bg-gray-100 p-2'
-                onClick={() => navigate('/login')}
+                onClick={async () => {
+                  await signOut()
+                  navigate('/login')
+                }} // bingo
               >
                 <span className='mr-1 '>
                   <IoMdPower />
