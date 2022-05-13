@@ -25,8 +25,7 @@ function Profile() {
       <h1 className="mb-5 mt-2 font-bold uppercase">Profile</h1>
       <div className="flex flex-col bg-white p-6 min-h-full">
         <div className='flex justify-between items-center mb-2'>
-          <div className='h-16 w-16'>
-            <img src={profile?.avatar ? profile.avatar : profileImg} width={100} height={100} className='rounded-full w-full h-full' alt="profile" />
+          <div className='w-16 h-16 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{"background-image": `url(${profile?.avatar})`}}>
           </div>
           <i className='text-white p-2 bg-primary rounded text-lg'
             onClick={() => setEditPop(true)}
