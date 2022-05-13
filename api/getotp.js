@@ -1,10 +1,10 @@
 // Importing helper modules 
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
-const generateOTP = require('./helpers/generateOTP');
-const sendCodeToPhone = require('./helpers/sendCodeToPhone');
-const addMinutesToDate = require('./helpers/addMinutesToDate')
-const { encode } = require('./helpers/middleware')
+const generateOTP = require('./helpers/_generateOTP');
+const sendCodeToPhone = require('./helpers/_sendCodeToPhone');
+const addMinutesToDate = require('./helpers/_addMinutesToDate')
+const { encode } = require('./helpers/_middleware')
 
 // Creating an instance of the supabase client
 const supabaseUrl = process.env.SUPABASE_URL
