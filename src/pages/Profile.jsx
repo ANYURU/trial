@@ -76,29 +76,15 @@ function Profile() {
             <div className='flex flex-col gap-5'>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="text" name="" id="old_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onBlur={async ({ target: { value }}) => {
-                  // supabase.rpc('check_password', { current_password: value, _user_id: id })
-                  //   .then(({data}) => {
-                  //     if ( data ) {
-                  //       document.getElementById('new_password').disabled = false
-                  //       document.getElementById('confirm_password').disabled = false
-                  //     } else {
-                  //       toast.error(`Wrong password.`, {position: "top-center"})
-                  //       document.getElementById('new_password').disabled = true
-                  //       document.getElementById('confirm_password').disabled = true
-                  //     }  
-                  //   })
-                  //   .catch(error => toast.error(`${error?.message}`), {position: "top-center"})
-
-                }} />
+                <input type="text" name="old_password" id="old_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1'/>
               </div>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>New Password</label>
-                <input type="text" name="" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1' disabled="true"/>
+                <input type="text" name="new_password" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1'/>
               </div>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>Confirm Password</label>
-                <input type="text" name="" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1' disabled="true"/>
+                <input type="text" name="" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1'/>
               </div>
             </div>
             </form>

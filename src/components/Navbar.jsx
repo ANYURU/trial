@@ -30,8 +30,8 @@ function Navbar({ user }) {
               : ' Newbie !!'}
               </p>
               <div>
-                <div className='w-10 h-10 bg-accent rounded-full mx-2'>
-                  { user?.avatar && <img src={`${user?.avatar}`} alt="" className='rounded-full h-full w-full'/>}
+                <div className='w-10 h-10 bg-accent rounded-full mx-2 overflow-hidden bg-contain'>
+                  { user?.avatar && <img src={`${user?.avatar}`} alt=""/>}
                 </div>
                 <p className={`${user?.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.member_status}</p>
               </div>
@@ -52,7 +52,7 @@ function Navbar({ user }) {
                 onClick={async () => {
                   await signOut()
                   navigate('/login')
-                }} // bingo
+                }} 
               >
                 <span className='mr-1 '>
                   <IoMdPower />

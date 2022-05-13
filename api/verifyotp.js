@@ -4,8 +4,8 @@ const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_ANON_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-const { decode } = require('./helpers/middleware')
-const compareDates = require('./helpers/compareDates')
+const { decode } = require('./helpers/_middleware')
+const compareDates = require('./helpers/_compareDates')
 
 export default async ( req, res ) => {
     const current_date = new Date()
