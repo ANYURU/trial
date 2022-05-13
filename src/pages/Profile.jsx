@@ -1,5 +1,5 @@
 import { FaRegEdit } from "react-icons/fa"
-import profileImg from '../assets/images/abudi.png'
+// import profileImg from '../assets/images/abudi.png'
 import { ConfirmModal } from "../components"
 import { useState } from "react"
 import { useOutletContext } from "react-router-dom"
@@ -7,6 +7,7 @@ import { Formik, Form } from 'formik'
 import { supabase } from "../helpers/supabase"
 import { toBase64 } from "../helpers/toBase64"
 import { toast, ToastContainer } from 'react-toastify'
+import { changeUserPasswordValidationSchema } from '../helpers/validator'
 
 function Profile() {
   const [ popUp, setPopUp ] = useState(false)
@@ -71,22 +72,61 @@ function Profile() {
         </div>
         <div className='mb-3'>
             <h1 className='font-semibold'>Applicant's Personal Information</h1>
-            <form action="" className='m-2'>
-            <div className='flex flex-col gap-5'>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="text" name="old_password" id="old_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1'/>
-              </div>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>New Password</label>
-                <input type="text" name="new_password" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1'/>
-              </div>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Confirm Password</label>
-                <input type="text" name="" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1'/>
-              </div>
-            </div>
-            </form>
+              <Formik
+                initialValues={{ current_password:'', new_password:'', confirm_password:'' }}
+                validationSchema={changeUserPasswordValidationSchema}
+                onSubmit={ async ( values ) => {
+                  const { current_password, new_password } = values
+                  supabase.rpc('change_user_password', { current_password: current_password, new_password: new_password})
+                    .then(async ({ error }) => {
+                      if ( error ) {
+                        toast.error(`${error.message}`, {position:'top-center'})
+                      } else {
+                        toast.success('Password successfully updated.', {position:'top-center'})
+                      }
+                      
+                    })
+
+                }}
+              >
+                {({ values, errors, touched, handleChange, handleBlur, isValid, dirty }) => {
+                  return (
+                    <Form className='m-2'>
+                      <div className='flex flex-col gap-5'>
+                        <div>
+                          <div className='flex flex-col w-56'>
+                            <label htmlFor="" className='text-sm'>Current Password</label>
+                            <input type="text" name="current_password" id="current_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.current_password}/>
+                          </div>
+                          {touched?.current_password && errors?.current_password && <div className="error text-red-600 text-xs">{errors?.current_password}</div>}
+                        </div>
+                        <div>
+                          <div className='flex flex-col w-56'>
+                            <label htmlFor="" className='text-sm'>New Password</label>
+                            <input type="text" name="new_password" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.new_password}/>
+                          </div>
+                          {touched?.new_password && errors?.new_password && <div className="error text-red-600 text-xs">{errors?.new_password}</div>}
+                        </div>
+                        <div className='flex justify-between align-middle'>
+                          <div>
+                            <div className='flex flex-col w-56' >
+                              <label htmlFor="" className='text-sm'>Confirm Password</label>
+                              <input type="text" name="confirm_password" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.confirm_password}/>
+                            </div>
+                            {touched?.confirm_password && errors?.confirm_password && <div className="error text-red-600 text-xs justify-start">{errors?.confirm_password}</div>}
+                          </div>
+                          <button 
+                            className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white h-8 self-end"
+                            disabled={!(isValid && dirty)}
+                            // type='submit'
+                          >Save</button>
+                        </div>
+                      </div>
+                    </Form>
+                  )
+                }
+                }
+              </Formik>
         </div>
         <div className='mb-3'>
             <h1 className='font-semibold'>Danger Zone</h1>
@@ -123,7 +163,7 @@ function Profile() {
                     onSubmit = { async ( values ) => {
                       const { password, name, dob, gender, email_address, phone_number, id_passport_number, present_address, marital_status, fathers_address, fathers_name, avatar } = values
                       supabase.rpc('check_password', { current_password: password, _user_id: id })
-                        .then(async ({ data })  => {
+                        .then( async ({ data })  => {
                           if ( data ) {
                             // Do the logic that updates the values and resets the form.
                             // console.log("Got it")

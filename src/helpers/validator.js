@@ -26,3 +26,9 @@ export const otpValidationSchema = Yup.object({
 export const verifyCodeSchema = Yup.object({
   code: Yup.string().min(6, 'Code must be 6-digits').max(6, 'Code must be 6-digit').required("Verification Code is required")
 })
+
+export const changeUserPasswordValidationSchema = Yup.object({
+  new_password: Yup.string().trim().min(8, 'Must be atleast 8 characters!').notOneOf([Yup.ref('current_password')], 'Must not be the same as current password!').required("Required!"),
+  confirm_password: Yup.string().trim().oneOf([Yup.ref('new_password')], 'Must be the same as New password!').notOneOf([Yup.ref('current_password')], 'Must not be the same as current password!').required("Required!"),
+  current_password: Yup.string().trim().min(8, 'Must be atleast 8 characters!').required('Required!')
+})
