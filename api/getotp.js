@@ -15,7 +15,6 @@ export default async (req, res) => {
     try {
         const { phone_number, type } = req.body
         let phone_message
-
         
         if ( !phone_number ) {
             const response={"Status":"Failure","Details":"Phone Number not provided"}
@@ -33,15 +32,15 @@ export default async (req, res) => {
     
         if( type ) {
             if( type == "VERIFICATION" ) {
-                const message = require('./helpers/phoneVerification')
+                const message = require('./helpers/_phoneVerification')
                 phone_message = message( otp )
             }
             else if( type == "FORGOT PASSWORD") {
-                const message = require('./helpers/phoneForget')
+                const message = require('./helpers/_phoneForget')
                 phone_message = message(otp)
             }
             else if( type == "2FA") {
-                const message = require('./helpers/phone2FA')
+                const message = require('./helpers/_phone2FA')
                 phone_message = message(otp)
             }
             else {
@@ -67,6 +66,7 @@ export default async (req, res) => {
                 const response = { "Status": "Failure", "Details": error?.message }
                 return res.status(status).json(response)
             } else {
+                console.log('here')
                 let details = {
                     "timestamp": now,
                     "check": phone_number,
@@ -80,6 +80,7 @@ export default async (req, res) => {
                 sendCodeToPhone(phone_number, phone_message)
                     .then( data => {
                         return res.json( { "Status": "Success", "Details": encoded } ) 
+
                     })
                     .catch( error => {
                         return res.status(400).json( { "Status": "Failure", "Details": error } )
@@ -87,6 +88,7 @@ export default async (req, res) => {
             }
     } catch (error) {
         const response = { "Status":"Failure", "Details": error}
+        console.log(response)
         res.status(400).json(response)
     }
 }

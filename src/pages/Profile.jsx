@@ -7,7 +7,7 @@ import { Formik, Form } from 'formik'
 import { supabase } from "../helpers/supabase"
 import { toBase64 } from "../helpers/toBase64"
 import { toast, ToastContainer } from 'react-toastify'
-import { changeUserPasswordValidationSchema } from '../helpers/validator'
+import { changeUserPasswordValidationSchema, selfTermination } from '../helpers/validator'
 
 function Profile() {
   const [ popUp, setPopUp ] = useState(false)
@@ -83,10 +83,8 @@ function Profile() {
                         toast.error(`${error.message}`, {position:'top-center'})
                       } else {
                         toast.success('Password successfully updated.', {position:'top-center'})
-                      }
-                      
+                      }                     
                     })
-
                 }}
               >
                 {({ values, errors, touched, handleChange, handleBlur, isValid, dirty }) => {
@@ -96,14 +94,14 @@ function Profile() {
                         <div>
                           <div className='flex flex-col w-56'>
                             <label htmlFor="" className='text-sm'>Current Password</label>
-                            <input type="text" name="current_password" id="current_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.current_password}/>
+                            <input type="password" name="current_password" id="current_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.current_password}/>
                           </div>
                           {touched?.current_password && errors?.current_password && <div className="error text-red-600 text-xs">{errors?.current_password}</div>}
                         </div>
                         <div>
                           <div className='flex flex-col w-56'>
                             <label htmlFor="" className='text-sm'>New Password</label>
-                            <input type="text" name="new_password" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.new_password}/>
+                            <input type="password" name="new_password" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.new_password}/>
                           </div>
                           {touched?.new_password && errors?.new_password && <div className="error text-red-600 text-xs">{errors?.new_password}</div>}
                         </div>
@@ -111,14 +109,14 @@ function Profile() {
                           <div>
                             <div className='flex flex-col w-56' >
                               <label htmlFor="" className='text-sm'>Confirm Password</label>
-                              <input type="text" name="confirm_password" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.confirm_password}/>
+                              <input type="password" name="confirm_password" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.confirm_password}/>
                             </div>
                             {touched?.confirm_password && errors?.confirm_password && <div className="error text-red-600 text-xs justify-start">{errors?.confirm_password}</div>}
                           </div>
                           <button 
                             className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white h-8 self-end"
                             disabled={!(isValid && dirty)}
-                            // type='submit'
+                            type='submit'
                           >Save</button>
                         </div>
                       </div>
@@ -134,6 +132,37 @@ function Profile() {
             <h1>Self Termination</h1>
             <p>Self termination implies that you no longer subscribe to and therefore sieze being a member of Bweyogerere Tuberebumu sacco. If you’re sure that you want to terminate your membership, click terminate to terminate to proceed.</p>
             <div className='flex mt-1'>
+              <Formik
+                initialValues={{'password':''}}
+                validationSchema={selfTermination}
+                onSubmit={async (values) => {
+                  const { password } = values
+                  supabase.rpc('check_password', { current_password: password, _user_id: id })
+                    .then(({data }) => {
+                      if( data ) {
+                        // call the self termination function
+
+
+                      } else {
+                        toast.error(`Wrong password`, {position:'top-center'});
+                      }
+                    })
+
+
+                }}
+              
+              >
+                
+
+                {({values, errors, touched, handleChange, handleBlur}) => {
+                  return (
+                    <Form>
+
+                    </Form>
+                  )
+
+                }}
+              </Formik>
               <div className='flex flex-col w-56'>
                 <label htmlFor="" className='text-sm'>Old Password</label>
                 <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
