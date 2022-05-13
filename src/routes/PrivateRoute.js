@@ -12,12 +12,13 @@ const PrivateRoute = () => {
     const [ profile, setProfile ] = useState({})
 
     useEffect(() => {
+        // Getting information that is required in all components.
         getProfile( user )
-            .then(data => {
+            .then( data => {
                 setProfile(data)
             })
             .catch(error => console.log(error))
-    }, [user])
+    }, [ user ])
 
     return user ? (
         
@@ -25,12 +26,12 @@ const PrivateRoute = () => {
         ?
             <div className='flex'>
                 <div className=''>
-                    <Sidebar user={profile} />
+                    <Sidebar user={ profile } />
                 </div>
                 <div className='bg-back w-full h-screen relative flex flex-col '>
-                    <Navbar user={profile} />
+                    <Navbar user={ profile } />
                     <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
-                        <Outlet context={[ profile ]} />
+                        <Outlet context={[ profile, setProfile ]} />
                     </div>
                 </div>
             </div>

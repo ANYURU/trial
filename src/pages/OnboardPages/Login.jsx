@@ -5,6 +5,7 @@ import { Formik } from "formik";
 import { validationSchema } from "../../helpers/validator";
 import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer } from 'react-toastify'
+import { supabase } from "../../helpers/supabase";
 
 export default function Login() {
   const navigate = useNavigate()
@@ -13,18 +14,25 @@ export default function Login() {
 
   const handleSubmit = async (event, values) => {
     event.preventDefault()
+    const { phoneNo, password } = values
 
-    const { error } = await signIn({  
-      phone: '256' + values.phoneNo.slice(1),
-      password: values.password
-    })
+    supabase.rpc('does_phone_exist', { phone: `256${phoneNo.slice(1)}`})
+      .then(async ({ data }) => {
+        if ( data ) {
+          const { error } = await signIn({  
+            phone: '256'+ phoneNo.slice(1),
+            password: password
+          })
 
-    if ( error ) {
-      console.log(error)
-      toast.error(`User not found`, {position: "top-center"})
-    } else {
-      navigate('/dashboard')
-    }
+          if ( error ) {
+            toast.error(`${error?.message}`, { position: "top-center" })
+          } else {
+            navigate('/dashboard')
+          }
+        } else {
+          toast.error(`User does not exist.`, { position: "top-center" })
+        }
+      })
   }
 
   return (
@@ -40,7 +48,7 @@ export default function Login() {
               <PasswordTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
               <Submit value="Login" disabled={Object.keys(errors).length === 0 ? false : true} />
               <div className='flex justify-between w-full mt-3 text-sm'>
-                <Link to="/sign-up">Don't have an account?,<span className="text-primary font-semibold">SignUp.</span></Link>
+                <Link to="/sign-up">Don't have an account? <span className="text-primary font-semibold">SignUp.</span></Link>
                 <Link to="/forgot-password" className="text-primary font-semibold">Forgot Password?</Link>
               </div>
             </form>

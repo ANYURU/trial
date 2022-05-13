@@ -60,7 +60,6 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
                             <div className='flex gap-1'>
                                 <input type="radio" name="income_sources[status]" value="Employed" onChange={(event) => {
                                     event.target.checked && setEmployed(true) 
-                                    console.log(event.target.checked)
                                     if(event.target.checked) values.income_sources.status = event.target.value
                                 }}/>
                                 <label htmlFor="" className='text-sm'>Employed</label>

@@ -3,26 +3,44 @@ import logo from '../../assets/images/tube.png'
 import { validationSubmitSchema } from "../../helpers/validator";
 import { Formik } from "formik";
 import { PhoneTextField, Submit } from "../../components";
-import { supabase } from "../../helpers/supabase";
 import { getOTP } from "../../helpers/getotp";
+import { supabase } from "../../helpers/supabase";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function SignUp() {
   const navigate = useNavigate()
-  const handleSubmit = async (event, values) => {
+  
+  const handleSubmit = async ( event, values ) => {
     event.preventDefault()
     const { phoneNo } = values
-    const { error } = await supabase.from('otps').insert({phone_number: '+256' + phoneNo.slice(1)})
-    if(error) {
-      console.log(error)
-    } else {
-      localStorage.setItem('phone', phoneNo)
-      getOTP(phoneNo)
-      navigate('/verify')
-    }
+
+    // Check if the phone number has really been used
+    supabase.rpc('does_phone_exist', { phone: `256${phoneNo.slice(1)}`})
+      .then(({ data }) => {
+        if ( data ) {
+          toast.error(`Phone number has already been registered.`, {position: "top-center"})
+        }
+        else {
+
+          localStorage.setItem('phone_number', phoneNo)
+          navigate('/verify', { state: { type: "signup" } })
+          
+          getOTP( phoneNo, "VERIFICATION" )
+            .then( response => response.json() )
+            .then( data => {
+              localStorage.setItem('verification_key', data?.Details)
+              return 
+            })
+            .catch( error => console.log( error ) )
+          }
+        }
+      )
+      .catch(error => console.log(error))     
   }
 
   return (
     <div className=" inline-flex justify-center items-center w-screen h-screen font-montserrat">
+      <ToastContainer />
       <Formik initialValues={{phoneNo: ''}} validationSchema={validationSubmitSchema} >
         {({values, errors, touched, handleChange, handleBlur}) => {
           return (
@@ -36,7 +54,7 @@ export default function SignUp() {
                 <p>
                   <span>
                   <Link to="/">
-                  Aleady have have an account? <span className="text-primary font-semibold">Login.</span>
+                    Aleady have have an account? <span className="text-primary font-semibold">Login.</span>
                   </Link>
                   </span>
                 </p>
