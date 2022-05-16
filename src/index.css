@@ -2,10 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Poppins&display=swap');
-
-
 
 body {
   margin: 0;
@@ -30,8 +27,6 @@ code {
   background-color: #27427A !important;
 }
 
-
-
 .top-container {
   display: grid;
   width: 100vw;
@@ -53,7 +48,6 @@ code {
   bottom: 0;
   background-color: #fff;
 }
-
 
 .content{
   margin-left: 260px;

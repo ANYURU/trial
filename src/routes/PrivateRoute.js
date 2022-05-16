@@ -20,6 +20,8 @@ const PrivateRoute = () => {
             .catch(error => console.log(error))
     }, [ user ])
 
+    console.log(profile)
+
     return user ? (
         
         matches 

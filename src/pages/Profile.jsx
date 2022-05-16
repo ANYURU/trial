@@ -97,10 +97,11 @@ function Profile() {
             <div className='m-2 outline outline-1 p-2 rounded-md'>
             <h1>Self Termination</h1>
             <p>Self termination implies that you no longer subscribe to and therefore sieze being a member of Bweyogerere Tuberebumu sacco. If you’re sure that you want to terminate your membership, click terminate to terminate to proceed.</p>
+            <br />
             <div className='flex mt-1'>
               <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="password" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <label htmlFor="" className='text-sm'>Enter Password to confirm</label>
+                <input type="password" name="" id="" placeholder='Password' className='ring-1 ring-black rounded px-2 py-1' />
               </div>
             </div>
             <div className='w-full flex justify-end'>
@@ -259,17 +260,17 @@ function Profile() {
                             <div className='flex flex-col'>
                               <p>Enter password to save changes</p>
                               <div className='flex-grow flex'>
-                                <input type="password" name="password" id="password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.password}/>
+                                <input type="password" name="password" id="password" placeholder='Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.password}/>
                                 {touched?.dob && errors?.password && <div className="error">{errors?.password}</div>}
                               </div>
                             </div>
                           </div>
 
                           <div className="flex justify-end gap-3 mt-3">
-                            <button 
+                            <input 
                               className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white"
                               type='submit'
-                            >Save</button>
+                              value='Save'/>
                           </div>
                         </Form>
                       )}}
