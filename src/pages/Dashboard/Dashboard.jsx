@@ -3,17 +3,52 @@ import Chart from 'chart.js/auto'
 import { useMediaQuery } from "../../hooks";
 import { RegistrationModal } from "../../components";
 import { useOutletContext } from "react-router-dom";
-import { data, data2, options } from "../../helpers/utilites";
-import { AccSummary } from "../../components";
 
 export default function Dashboard() {
   const matches = useMediaQuery('(min-width: 800px)')
-  const { user } = useOutletContext()
-  
+  const [ profile ] = useOutletContext()
+
+  const data = {
+    maintainAspectRatio: true,
+    responsive: true,
+    datasets: [
+      {
+        data: [300, 50],
+        backgroundColor: chartColors,
+        hoverBackgroundColor: chartColors
+      }
+    ],
+    labels: ["Company Shares", "My Shares"]
+  };
+
+  const data2 = {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    datasets: [
+      {
+        label: "Performance",
+        data: [33, 53, 85, 41, 44, 65, 34],
+        fill: false,
+        borderColor: "#27427A"
+      }
+    ]
+  };
+
+  const options = {
+    legend: {
+      display: false,
+      position: "right"
+    },
+    elements: {
+      arc: {
+        borderWidth: 0
+      }
+    }
+  };
   
   return (
     <div className={`flex flex-col ${matches && 'overflow-y-hidden'}`}>
-      {user?.name === undefined && <RegistrationModal />}
+      {/* Account Summaries */}
+      {profile?.fullname === null && <RegistrationModal />}
       <div>
         <h1 className="mb-5 mt-2 font-bold uppercase">Dashboard</h1>
         <AccSummary />

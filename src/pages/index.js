@@ -3,7 +3,8 @@ import Dashboard from './Dashboard/Dashboard'
 import ForgotPassword from './OnboardPages/ForgotPassword'
 import SignUp from './OnboardPages/SignUp'
 import Verification from './OnboardPages/Verification'
-import SetPassword from './OnboardPages/SetPassword'
+import SetPassword  from './OnboardPages/SetPassword'
+
 
 import Deposit from './Deposit/Deposit'
 import Accounts from './Accounts/Accounts'
@@ -46,8 +47,6 @@ export { Withdraw, WithdrawHistory, WithdrawRequest}
 
 export { Accounts, Savings, Mwana, Fixed, Shares}
 
-export { Members }
+export { Members, DepositVerify, LoanVerify, WithdrawVerify, Applications, MemberApplication }
 
-
-
-export { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications, Verification, SetPassword, MemberApplication, WithdrawVerify, LoanVerify, DepositVerify }
+export { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, Deposit, Profile, DepositHistory, MakeDeposit }

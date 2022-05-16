@@ -1,7 +1,7 @@
-import { Login, Dashboard, ForgotPassword, SignUp, Deposit, Profile, DepositHistory, MakeDeposit, Applications, LoanVerify } from "../pages";
-import { Loans, LoanHistory, LoanPayment, LoanRequest, Verification, SetPassword, DepositVerify } from "../pages";
-import { Withdraw, WithdrawHistory, WithdrawRequest, Members, WithdrawVerify } from "../pages";
-import { Accounts, Savings, Mwana, Fixed, Shares, MemberApplication } from "../pages";
+import { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, Deposit, Profile, DepositHistory, MakeDeposit } from "../pages";
+import { Loans, LoanHistory, LoanPayment, LoanRequest, LoanVerify } from "../pages";
+import { Withdraw, WithdrawHistory, WithdrawRequest, DepositVerify, WithdrawVerify, Members, Applications, MemberApplication } from "../pages";
+import { Accounts, Savings, Mwana, Fixed, Shares } from "../pages";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 

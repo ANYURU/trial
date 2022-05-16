@@ -3,16 +3,45 @@ import logo from '../../assets/images/tube.png'
 import { validationSubmitSchema } from "../../helpers/validator";
 import { Formik } from "formik";
 import { PhoneTextField, Submit } from "../../components";
+import { getOTP } from "../../helpers/getotp";
+import { supabase } from "../../helpers/supabase";
+import { toast, ToastContainer} from 'react-toastify'
 
+// "FORGOT PASSWORD"
 export default function ForgotPassword() {
   const navigate = useNavigate()
-  const handleSubmit = (event, values) => {
+  const handleSubmit = async (event, values) => {
     event.preventDefault()
-    navigate('/dashboard')
+    const { phoneNo } = values
+    console.log(phoneNo)
+    supabase.rpc('does_phone_exist', { phone: `256${phoneNo.slice(1)}`})
+    .then(({ data }) => {
+      console.log(data)
+      if( data ) {
+        localStorage.setItem('phone_number', phoneNo)
+        navigate('/verify', { state: { type: "forgot-password"}})
+        
+        getOTP( phoneNo, "FORGOT PASSWORD" )
+          .then( response => response.json() )
+          .then( data => {
+            localStorage.setItem('verification_key', data?.Details)
+            return 
+          })
+          .catch( error => console.log( error ) )
+
+        } else {
+          // Inform the user that the phone number doesnot exist in the database
+          toast.error(`Phone number does not exist.`, {position: "top-center"})
+
+        }
+      })
+
+          
   }
 
   return (
     <div className=" inline-flex justify-center items-center w-screen h-screen font-montserrat">
+      <ToastContainer />
       <Formik initialValues={{phoneNo: ''}} validationSchema={validationSubmitSchema} >
         {({values, errors, touched, handleChange, handleBlur}) => {
           return (

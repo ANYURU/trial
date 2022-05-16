@@ -3,16 +3,17 @@ import { IoMdPower } from 'react-icons/io'
 import { MdSettings } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { MdKeyboardArrowDown } from 'react-icons/md'
-import { memberApplications } from '../helpers/mockData'
+import { useAuth } from '../auth/AuthContext'
 
 function Navbar({ user }) {
-  const [show, setShow] = useState(false)
+  const [ show, setShow ] = useState(false)
   const navigate = useNavigate()
   const navRef = useRef()
+  const { signOut } = useAuth()
 
   return (
-    <div className={`bg-white top-0 flex ${user?.name === undefined? 'justify-between' : 'justify-end'} items-center p-2 py-4`}>
-          {user?.name === undefined && <div className='bg-accent-red p-2 flex justify-center items-center text-white rounded-md cursor-pointer'
+    <div className={`bg-white top-0 flex ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2 py-4`}>
+          {(user?.fullname === undefined || user.fullname === null) && <div className='bg-accent-red p-2 flex justify-center items-center text-white rounded-md cursor-pointer'
           onClick={() => {
             navigate('/application')
           }}>
@@ -24,13 +25,15 @@ function Navbar({ user }) {
           >
             <div className='flex items-center cursor-pointer'>
               <p className='mb-0 cursor-pointer'>Hello  
-              {user?.name !== undefined
-              ? ` ${user?.name.split(' ')[1]}`
-              : ''}
+              {(user?.fullname !== undefined && user.fullname !== null)
+              ? ` ${user?.fullname.split(' ')[1]}`
+              : ' Newbie !!'}
               </p>
               <div>
-                <div className='w-10 h-10 bg-accent rounded-full mx-2'></div>
-                <p className={`${user.memberStatus === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.memberStatus}</p>
+                <div className='w-10 h-10 bg-accent rounded-full mx-2 overflow-hidden'>
+                  { user?.avatar && <img src={`${user?.avatar}`} alt=""/>}
+                </div>
+                <p className={`${user?.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.member_status}</p>
               </div>
               <MdKeyboardArrowDown />
             </div>
@@ -46,7 +49,10 @@ function Navbar({ user }) {
               </p>
               <p style={{marginBottom: '0'}}
                 className='flex cursor-pointer justify-center items-center hover:bg-gray-100 p-2'
-                onClick={() => navigate('/login')}
+                onClick={async () => {
+                  await signOut()
+                  navigate('/login')
+                }} 
               >
                 <span className='mr-1 '>
                   <IoMdPower />

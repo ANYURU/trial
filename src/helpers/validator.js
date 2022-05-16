@@ -6,13 +6,21 @@ export const validationSchema = Yup.object({
   password: Yup.string().trim().min(8, 'Password must be atleast 8 characters').required("Password is required"),
 })
 
+
+
 export const registerValidationSchema = Yup.object({
   password: Yup.string().trim().min(8, 'Password must be atleast 8 characters').required("Password is required"),
-  confirmPassword: Yup.string().trim().required("Confirm Password is required"),
+  // Matching passwords schema
+  confirmPassword: Yup.string().trim().required("Confirm Password is required").oneOf([Yup.ref('password')], 'Password must be the same!').required('Required!')
 })
 
 export const validationSubmitSchema = Yup.object({
   phoneNo: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required")
+})
+
+const otpRegExp = /^[0-9]{6}$/gm
+export const otpValidationSchema = Yup.object({
+  otp: Yup.string().required().matches(otpRegExp, 'Invalid OTP')
 })
 
 export const verifyCodeSchema = Yup.object({
