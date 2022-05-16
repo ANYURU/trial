@@ -6,28 +6,36 @@ import { validationSchema } from "../../helpers/validator";
 import { users } from "../../helpers/mockData";
 import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer } from 'react-toastify'
+import { Loader } from "../../components";
 
 export default function Login() {
   const navigate = useNavigate()
 
-  const { setUser } = useAuth()
+  const { loading, signIn, setUser } = useAuth()
 
-  const handleSubmit = (event, values) => {
+  const handleSubmit = async (event, values) => {
     event.preventDefault()
-    const checkNumber = users.filter(user => user.phoneNo === values.phoneNo)
-    if(checkNumber.length !== 0){
-      const user = checkNumber.filter(user => user.password === values.password)
-      if(user.length !== 0){
-        setUser(user[0])
-        navigate('/dashboard')
-      } else {
-        toast.error(`User not found`, {position: "top-center"})
-      }
+    const { phoneNo, password } = values
+    const { error } = await signIn({phoneNo, password})
+    console.log(error)
+    if(error) {
+      toast.error(`User not found`, {position: "top-center"})
     }
+    // const checkNumber = users.filter(user => user.phoneNo === values.phoneNo)
+    // if(checkNumber.length !== 0){
+    //   const user = checkNumber.filter(user => user.password === values.password)
+    //   if(user.length !== 0){
+    //     setUser(user[0])
+    //     navigate('/dashboard')
+    //   } else {
+    //     toast.error(`User not found`, {position: "top-center"})
+    //   }
+    // }
   }
 
   return (
     <div className=" inline-flex justify-center items-center w-screen h-screen font-montserrat">
+      {loading && <Loader />}
       <ToastContainer/>
       <Formik initialValues={{ phoneNo: '', password: ''}} validationSchema={validationSchema}>
         {({values, errors, touched, handleChange, handleBlur}) => {
