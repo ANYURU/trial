@@ -3,6 +3,7 @@
   theme: {
     extend: {
       screens: {
+        'sm': '700px',
         'md':'800px'
       },
       colors: {

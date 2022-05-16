@@ -7,7 +7,6 @@ import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
 import { useOutletContext, useNavigate } from "react-router-dom"
 
-
 function MemberApplication() {
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ profile, setProfile ] = useOutletContext()

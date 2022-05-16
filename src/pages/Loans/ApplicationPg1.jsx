@@ -1,5 +1,6 @@
+import { useState } from "react"
 
-export default function ApplicationPg1() {
+export default function ApplicationPg1({ profile, handleChange }) {
   return (
     <>
         <div className='mb-3'>
@@ -7,39 +8,48 @@ export default function ApplicationPg1() {
             <form action="" className='m-2'>
                 <div className='flex flex-wrap gap-5'>
                     <div className='flex flex-col w-56'>
-                        <label htmlFor="" className='text-sm'>Position in SACCO</label>
-                        <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
-                        <option value="">--Position--</option>
-                        <option value="member">Member</option>
-                        <option value="treasure">Treasure</option>
-                        <option value="secretary">Secretary</option>
-                        <option value="chairperson">Chairperson</option>
-                        <option value="chairperson-credits">Chairperson Credits</option>
-                        <option value="vice-chairperson">Vice Chairperson</option>
-                        <option value="vice-chairperson-credits">Vice Chairperson Credits</option>
+                        <label htmlFor="position_in_sacco" className='text-sm'>Position in SACCO</label>
+                        <select name="position_in_sacco" defaultValue={profile?.user_role && profile?.user_role.roles.length ===1 ? 'member': ''} id="" className="ring-1 ring-black rounded px-2 py-2 bg-white"
+                            onChange={handleChange("position_in_sacco")}
+                        >
+                            <option value="">--Position--</option>
+                            <option value="member">Member</option>
+                            <option value="treasure">Treasure</option>
+                            <option value="secretary">Secretary</option>
+                            <option value="chairperson">Chairperson</option>
+                            <option value="chairperson-credits">Chairperson Credits</option>
+                            <option value="vice-chairperson">Vice Chairperson</option>
+                            <option value="vice-chairperson-credits">Vice Chairperson Credits</option>
                         </select>
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Postal Address</label>
-                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="postal_address" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1'
+                        onChange={handleChange("postal_address")}
+                    />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Land line number</label>
-                    <input type="text" name="" id="" placeholder='(222) 222 - 2222' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="landline_number" id="" placeholder='(222) 222 - 2222' className='ring-1 ring-black rounded px-2 py-1' 
+                        onChange={handleChange("landline_number")}
+                    />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label htmlFor="" className=' text-sm'>Marital Status</label>
-                        <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                        <select name="marital_status" id="" defaultValue={profile?.marital_status && profile.marital_status} className="ring-1 ring-black rounded px-2 py-2 bg-white">
                             <option value="">--Marital Status--</option>
                             <option value="single">Single</option>
-                            <option value="Married">Married</option>
+                            <option value="married">Married</option>
                             <option value="widowed">Widowed</option>
                             <option value="divorced">Divorced</option>
                         </select>
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Number of dependents</label>
-                    <input type="text" name="" id="" placeholder='No. of dependants' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="no_of_dependents" id="" placeholder='No. of dependants' className='ring-1 ring-black rounded px-2 py-1' 
+                        onChange={handleChange("no_of_dependents")}
+                        required
+                    />
                     </div>
                 </div>
                 </form>
@@ -98,7 +108,7 @@ export default function ApplicationPg1() {
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Contact</label>
-                    <input type="text" name="" id="" placeholder='Enter contact' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter contact' defaultValue={profile.phone_number} className='ring-1 ring-black rounded px-2 py-1' />
                     </div>
                 </div>
                 </form>
