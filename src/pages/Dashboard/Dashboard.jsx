@@ -3,6 +3,8 @@ import Chart from 'chart.js/auto'
 import { useMediaQuery } from "../../hooks";
 import { RegistrationModal } from "../../components";
 import { useOutletContext } from "react-router-dom";
+import { chartColors } from "../../components/Charts/colors";
+import { AccSummary } from "../../components";
 
 export default function Dashboard() {
   const matches = useMediaQuery('(min-width: 800px)')
