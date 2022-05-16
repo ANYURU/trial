@@ -26,11 +26,11 @@ const PrivateRoute = () => {
         
         matches 
         ?
-            <div className='flex'>
+            <div className='top-container'>
                 <div className=''>
                     <Sidebar user={ profile } />
                 </div>
-                <div className='bg-back w-full h-screen relative flex flex-col '>
+                <div className='bg-back w-full h-screen relative flex flex-col content'>
                     <Navbar user={ profile } />
                     <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
                         <Outlet context={[ profile, setProfile ]} />

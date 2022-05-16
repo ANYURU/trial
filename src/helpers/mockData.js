@@ -71,7 +71,7 @@ export const depositHistory = [
         account: 'Shares',
         amount: 180000,
         depositMethod: 'Bank',
-        status: 'Approved'
+        status: 'Rejected'
     },
 ]
 

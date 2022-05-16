@@ -29,22 +29,22 @@ function Members() {
         </div>
         <div className='my-3'>
             <form action="" className='m-1'>
-            <div className='flex justify-between gap-5'>
-              <div className='flex flex-col w-56'>
-                <select name="status" id="" className="py-2 px-2 rounded bg-white"
-                  onChange={(event) => setStatus(event.target.value)}
-                >
-                    <option value="">Status</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Rejected">Rejected</option>
-                </select>
+              <div className='flex justify-between gap-5'>
+                <div className='flex flex-col w-56'>
+                  <select name="status" id="" className="py-2 px-2 rounded bg-white"
+                    onChange={(event) => setStatus(event.target.value)}
+                  >
+                      <option value="">Status</option>
+                      <option value="Approved">Approved</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+                <div className='flex flex-col w-56'>
+                  <label htmlFor="" className='text-sm'>Date</label>
+                  <input type="date" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                </div>
               </div>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Date</label>
-                <input type="date" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
-              </div>
-            </div>
             </form>
         </div>
         <div className="flex bg-white p-6 min-h-full">

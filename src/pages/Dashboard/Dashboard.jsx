@@ -51,18 +51,20 @@ export default function Dashboard() {
     <div className={`flex flex-col ${matches && 'overflow-y-hidden'}`}>
       {/* Account Summaries */}
       {profile?.fullname === null && <RegistrationModal />}
-      <div>
+      <div className="">
         <h1 className="mb-5 mt-2 font-bold uppercase">Dashboard</h1>
         <AccSummary />
       </div>
-      <div className="flex flex-col flex-grow mt-5">
+      <div className="flex flex-col flex-grow mt-5 mb-5 overflow-x-hidden">
         <h1 className="text-center font-semibold mb-5">Member Performance</h1>
         <div className={`flex gap-5 flex-grow ${!matches && 'flex-col w-full justify-center'}`}>
-          <div className={`bg-white lg:w-6/12 sm:w-11/12  flex flex-col px-2 py-5 rounded-md justify-center items-center ${!matches && ''} `}>
-            <Line data={data2} />
+          <div className={`bg-white lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md justify-center items-center`}>
+            <div>
+              <Line data={data2} />
+            </div>
           </div>
-          <div className={`bg-white lg:w-6/12 sm:w-11/12  flex flex-col px-2 py-5 rounded-md justify-center items-center ${!matches && ''} `}>
-            <div className="p-4">
+          <div className={`bg-white lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md justify-center items-center`}>
+            <div>
               <Doughnut data={data} options={options} />
             </div>
           </div>

@@ -2,6 +2,9 @@
   content: [  "./src/**/*.{js,jsx,ts,tsx}",  ],
   theme: {
     extend: {
+      screens: {
+        'md':'800px'
+      },
       colors: {
         'transparent': 'transparent',
         'lightblue': '#7788ab',
