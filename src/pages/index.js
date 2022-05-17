@@ -25,6 +25,7 @@ import Withdraw from './Withdraw/Withdraw'
 import WithdrawHistory from './Withdraw/WithdrawHistory'
 import WithdrawRequest from './Withdraw/WithdrawRequest'
 import WithdrawVerify from './Withdraw/WithdrawVerify'
+import WithdrawMembers from './Withdraw/WithdrawMembers'
 
 // accounts
 import Savings from './Accounts/Savings'
@@ -43,7 +44,7 @@ import Members from './Members/Members'
 // exports
 export { Loans, LoanHistory, LoanPayment, LoanRequest }
 
-export { Withdraw, WithdrawHistory, WithdrawRequest}
+export { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers}
 
 export { Accounts, Savings, Mwana, Fixed, Shares}
 

@@ -55,3 +55,38 @@ code {
   box-shadow: 1px 0 2px -1px rgba(0, 0, 0, 0.1);
 }
 
+/* search input with icon */
+.searchInput {
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput input {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 17px;
+}
+
+.search_icon{
+  position: absolute;
+  right: 15px;
+  font-weight: bolder;
+  font-size: 1.2rem;
+  color: #9fa6b1;
+}
+
+.searchInput input:focus {
+  outline: 2px solid #27427A;
+}
+
+.inputDate {
+  padding: 10px 15px;
+}
+
+.inputDate:focus {
+  outline: 2px solid #27427A;
+}
