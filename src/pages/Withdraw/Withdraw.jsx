@@ -5,29 +5,39 @@ import { searchByName, filterByStatus } from "../../helpers/utilites"
 
 export default function Withdrawy() {
   const [ status, setStatus ] = useState('')
-  const [ searchText, setSearchText ] = useState('')
+  const [ account, setAccount ] = useState('')
+  const [ filterName, setFilterName ] = useState('')
 
-  const loans = filterByStatus(depositHistory, status)
+  let loans = filterByStatus(depositHistory, "status", status)
+
+  loans = filterByStatus(loans, "account", account)
 
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Withdraw</h1>
-      <div className="my-2 flex justify-between px-1">
-          <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1" placeholder="Search"
-            onChange={(event) => setSearchText(event.target.value)}
-          />
-      </div>
+
       <div className='my-3'>
             <form action="" className='m-1'>
               <div className='flex justify-between gap-5'>
                 <div className='flex flex-col w-56'>
                   <select name="status" id="" className="py-2 px-2 rounded bg-white"
-                    onChange={(event) => setStatus(event.target.value)}
+                    onChange={(event) => {setFilterName(event.target.name);setStatus(event.target.value)}}
                   >
                       <option value="">Status</option>
                       <option value="Approved">Approved</option>
                       <option value="Pending">Pending</option>
                       <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+                <div className='flex flex-col w-56'>
+                  <select name="account" id="" className="py-2 px-2 rounded bg-white"
+                    onChange={(event) => {setFilterName(event.target.name);setStatus(event.target.value)}}
+                  >
+                      <option value="">Account</option>
+                      <option value="Savings">Savings</option>
+                      <option value="Shares">Shares</option>
+                      <option value="Mwana">Mwana</option>
+                      <option value="Fixed">Fixed</option>
                   </select>
                 </div>
                 <div className='flex flex-col w-56'>

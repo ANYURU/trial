@@ -1,6 +1,6 @@
 import { chartColors } from "../components/Charts/colors";
 
-export const filterByStatus = (data, criteria) => criteria ? data.filter(member => member.status === criteria) : data
+export const filterByStatus = (data, criteria, criteriaCheck) => criteriaCheck ? data.filter(member => member[criteria] === criteriaCheck) : data
 
 export const searchByName = (data, searchText) => data.filter(member => member.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
 
