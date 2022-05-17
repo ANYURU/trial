@@ -24,13 +24,13 @@ const PrivateRoute = () => {
         
         matches 
         ?
-            <div className='top-container'>
+            <div className='top-container bg-back'>
                 <div className=''>
                     <Sidebar user={ profile } />
                 </div>
-                <div className='bg-back w-full h-screen relative flex flex-col content'>
+                <div className='h-screen relative flex flex-col content'>
                     <Navbar user={ profile } />
-                    <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                    <div className='flex-grow mt-20 mx-4'>
                         <Outlet context={[ profile, setProfile ]} />
                     </div>
                 </div>

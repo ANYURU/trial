@@ -23,6 +23,12 @@ code {
     monospace;
 }
 
+.navbar {
+  width: calc(100vw - 260px);
+  z-index: 1;
+  box-shadow: 0 3px 2px -2px rgba(0, 0, 0, 0.1);
+}
+
 .active{
   background-color: #27427A;
   color: #fff;
@@ -40,22 +46,12 @@ code {
   overflow-x: hidden;
 }
 
-/* .side-bar{
-  display: grid; 
-  position: fixed;
-  grid-template-rows: 11vh 80vh 9vh;
-  width: 260px;
-  border-right: 1px solid #c6c7c8;
-  align-items: stretch;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  background-color: #fff;
-} */
-
 .content{
-  /* margin-left: 260px; */
   width: calc(100vw - 260px);
+}
+
+.sidebar{
+  width: 260px;
+  box-shadow: 1px 0 2px -1px rgba(0, 0, 0, 0.1);
 }
 

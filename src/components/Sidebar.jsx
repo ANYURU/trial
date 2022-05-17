@@ -11,7 +11,7 @@ export default function Sidebar({ user }) {
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
 
     return (
-        <div className='h-full w-64'>
+        <div className='h-full fixed bg-white sidebar'>
             <div className='bg-white flex justify-center items-center mb-6'>
                 <img src={logo} alt="tube" width={110} />
             </div>
