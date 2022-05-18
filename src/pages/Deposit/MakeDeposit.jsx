@@ -5,23 +5,25 @@ import { uploadFile } from '../../helpers/uploadFile'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from "../../auth/AuthContext"
 import { toast, ToastContainer } from 'react-toastify'
+import { depositRequestValidationSchema } from '../../helpers/validator'
 
 function MakeDeposit() {
   const [ evidence, setEvidence ] = useState({})
   const { user:{ id } } = useAuth()
+  const initialValues = {
+    account_type: '',
+    amount: '',
+    phone_number: '',
+    details: ''
+  }
    
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Deposit</h1>
       <div className="flex bg-white p-6 min-h-full">
       <Formik
-        initialValues={{
-          account_type: '',
-          amount: '',
-          phone_number: '',
-          details: ''
-        }}
-        onSubmit={async ( values ) => {
+        initialValues={initialValues}
+        onSubmit={async ( values, { resetForm } ) => {
           const { account_type, amount, phone_number, details } = values
           console.log(account_type)
           try {
@@ -50,21 +52,18 @@ function MakeDeposit() {
               ]
             )
 
-            if( error ) {
-              console.log(error)
-              throw error
-              
-            } else {
-              console.log(data)
-              toast(`Your request has been submitted. And is awaiting verification.`, {position: 'top-center'})
-            }
+            if( error ) throw error
+            
+            console.log(data)
+            resetForm({values: initialValues})
+            toast(`Request submitted for review.`, {position: 'top-center'})
+            
           } catch ( error ) {
-            toast(`${error?.message}`, {position:'top-center'})
-            // give an informative message indicating the error
+            toast.success(`${error?.message}`, {position:'top-center'})
           }
-
         }}
-        // validationSchema={{}}
+
+        validationSchema={ depositRequestValidationSchema }
       >
         {({ values, errors, touched, handleChange, handleBlur}) => {
           return (
@@ -83,10 +82,12 @@ function MakeDeposit() {
                               <option value="fixed">Fixed</option>
                               <option value="mwana">Mwana</option>
                             </select>
+                            {touched?.account_type && errors?.account_type&& <div className="error text-red-600 text-xs">{errors?.account_type}</div>}
                           </div>
                           <div className='flex flex-col w-56 '>
                             <label htmlFor="" className=' text-sm'>Enter Amount</label>
                             <input type="text" name="amount" id="amount" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values.amount}/>
+                            {touched?.amount && errors?.amount && <div className="error text-red-600 text-xs">{errors?.amount}</div>}
                           </div>
                       </div>
                     </div>
@@ -97,6 +98,7 @@ function MakeDeposit() {
                           <div className='flex flex-col w-56'>
                             <label htmlFor="" className='text-sm'>Enter Phone Number</label>
                             <input type="text" name="phone_number" id="phone_number" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values.phone_number}/>
+                            {touched?.phone_number && errors?.phone_number && <div className="error text-red-600 text-xs">{errors?.phone_number}</div>}
                           </div>
                           <div className='flex flex-col w-56 '>
                             <label htmlFor="" className=' text-sm'>Upload Receipt</label>
@@ -105,6 +107,7 @@ function MakeDeposit() {
                                 setEvidence(event.currentTarget.files[0])
                               }}
                             />
+                            {touched?.evidence && errors?.evidence && <div className="error text-red-600 text-xs">{errors?.evidence}</div>}
                           </div>
                       </div>
                     </div>

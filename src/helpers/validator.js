@@ -36,3 +36,11 @@ export const changeUserPasswordValidationSchema = Yup.object({
 export const selfTermination = Yup.object({
   password: Yup.string().min(8, 'Must be atleast 8 characters!').required('Required!')
 })
+
+export const depositRequestValidationSchema = Yup.object({
+  amount: Yup.number('Must be a number').required('Required!'),
+  account_type: Yup.string().required('Required!'),
+  evidence: Yup.string().required('Required!'),
+  details: Yup.string(),
+  phone_number: Yup.string().required('Required!')
+})
