@@ -37,10 +37,17 @@ export const selfTermination = Yup.object({
   password: Yup.string().min(8, 'Must be atleast 8 characters!').required('Required!')
 })
 
+
+
+// creating a custom yup validation method
+Yup.addMethod(Yup.string, 'isNumber', function () {
+  return this.matches(/^[0-9]+$/, {message:'Must be a number', excludedEmptyStrings: true}).required("Required!")
+})
+
 export const depositRequestValidationSchema = Yup.object({
-  amount: Yup.number('Must be a number').required('Required!'),
+  amount: Yup.string().isNumber(),
   account_type: Yup.string().required('Required!'),
-  evidence: Yup.string().required('Required!'),
   details: Yup.string(),
-  phone_number: Yup.string().required('Required!')
+  phone_number: Yup.string().required('Required!'),
+  evidence: Yup.string().required('Required!')
 })

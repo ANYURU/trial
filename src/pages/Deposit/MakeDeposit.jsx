@@ -1,6 +1,5 @@
 import { Submit } from "../../components"
 import { Formik,  Form } from 'formik'
-import { useState } from 'react'
 import { uploadFile } from '../../helpers/uploadFile'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from "../../auth/AuthContext"
@@ -8,13 +7,13 @@ import { toast, ToastContainer } from 'react-toastify'
 import { depositRequestValidationSchema } from '../../helpers/validator'
 
 function MakeDeposit() {
-  const [ evidence, setEvidence ] = useState({})
   const { user:{ id } } = useAuth()
   const initialValues = {
     account_type: '',
     amount: '',
     phone_number: '',
-    details: ''
+    details: '',
+    evidence: ''
   }
    
   return (
@@ -24,7 +23,7 @@ function MakeDeposit() {
       <Formik
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
-          const { account_type, amount, phone_number, details } = values
+          const { account_type, amount, phone_number, details, evidence } = values
           console.log(account_type)
           try {
             const { Key: url } = await uploadFile(evidence, 'deposits')
@@ -56,23 +55,23 @@ function MakeDeposit() {
             
             console.log(data)
             resetForm({values: initialValues})
-            toast(`Request submitted for review.`, {position: 'top-center'})
+            toast.success(`Request submitted for review.`, {position: 'top-center'})
             
           } catch ( error ) {
-            toast.success(`${error?.message}`, {position:'top-center'})
+            toast.error(`${error?.message}`, {position:'top-center'})
           }
         }}
 
         validationSchema={ depositRequestValidationSchema }
       >
-        {({ values, errors, touched, handleChange, handleBlur}) => {
+        {({ values, errors, touched, handleChange, handleBlur, isValid, dirty}) => {
           return (
             <Form>
               <div className='flex flex-grow flex-col min-h-full'>
                 <ToastContainer />
                 <div className='mb-3'>
-                    <div action="" className='m-2'>
-                      <div className='flex flex-wrap gap-5'>
+                    <div className='m-2'>
+                      <div className='flex flex-wrap gap-5 h-16'>
                           <div className='flex flex-col w-56'>
                             <label htmlFor="" className='text-sm'>Please select an account</label>
                             <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-2 bg-white" onChange={handleChange} onBlur={handleBlur} value={values.account_type}>
@@ -86,15 +85,15 @@ function MakeDeposit() {
                           </div>
                           <div className='flex flex-col w-56 '>
                             <label htmlFor="" className=' text-sm'>Enter Amount</label>
-                            <input type="text" name="amount" id="amount" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values.amount}/>
+                            <input type="number" name="amount" id="amount" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values.amount}/>
                             {touched?.amount && errors?.amount && <div className="error text-red-600 text-xs">{errors?.amount}</div>}
                           </div>
                       </div>
                     </div>
                 </div>
                 <div className='mb-3'>
-                    <div action="" className='m-2'>
-                      <div className='flex flex-wrap gap-5'>
+                    <div className='m-2'>
+                      <div className='flex flex-wrap gap-5 h-20'>
                           <div className='flex flex-col w-56'>
                             <label htmlFor="" className='text-sm'>Enter Phone Number</label>
                             <input type="text" name="phone_number" id="phone_number" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values.phone_number}/>
@@ -102,12 +101,8 @@ function MakeDeposit() {
                           </div>
                           <div className='flex flex-col w-56 '>
                             <label htmlFor="" className=' text-sm'>Upload Receipt</label>
-                            <input type="file" name="evidence" id="evidence" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1'  
-                              onChange={(event) => {   
-                                setEvidence(event.currentTarget.files[0])
-                              }}
-                            />
-                            {touched?.evidence && errors?.evidence && <div className="error text-red-600 text-xs">{errors?.evidence}</div>}
+                            <input type="file" name="evidence" id="evidence" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur}/>
+                            {touched?.evidence && errors?.evidence && <div className="error text-red-600 text-xs">{errors?.evidence}</div>} 
                           </div>
                       </div>
                     </div>
@@ -117,7 +112,7 @@ function MakeDeposit() {
                       <textarea name="details" id="details" cols="30" rows="10" className='outline outline-1 rounded-md w-full p-2' onChange={handleChange} onBlur={handleBlur} value={values.details}></textarea>
                   </div>
                 <div className="w-56">
-                  <Submit value='Request' />
+                  <Submit value='Request' disabled={!(isValid && dirty)}/>
                 </div>
               </div>
             </Form>
