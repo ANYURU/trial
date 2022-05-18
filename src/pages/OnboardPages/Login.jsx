@@ -17,7 +17,7 @@ export default function Login() {
     event.preventDefault()
     const { phoneNo, password } = values
 
-    supabase.rpc('does_phone_exist', { phone: `256${phoneNo.slice(1)}`})
+      supabase.rpc('does_phone_exist', { phone: `256${phoneNo.slice(1)}`})
       .then(async ({ data }) => {
         if ( data ) {
           const { error } = await signIn({  
