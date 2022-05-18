@@ -66,7 +66,6 @@ export default async (req, res) => {
                 const response = { "Status": "Failure", "Details": error?.message }
                 return res.status(status).json(response)
             } else {
-                console.log('here')
                 let details = {
                     "timestamp": now,
                     "check": phone_number,
@@ -88,7 +87,6 @@ export default async (req, res) => {
             }
     } catch (error) {
         const response = { "Status":"Failure", "Details": error}
-        console.log(response)
         res.status(400).json(response)
     }
 }

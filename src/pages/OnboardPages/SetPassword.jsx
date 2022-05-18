@@ -29,6 +29,7 @@ export default function SetPassword() {
     
       if( error ) {
         toast.error(`${error?.message}`, {position: "top-center"})
+        console.log(error)
       } else {
         navigate('/dashboard') 
         localStorage.removeItem('phone_number')

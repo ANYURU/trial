@@ -26,7 +26,7 @@ function Profile() {
       <h1 className="mb-5 mt-2 font-bold uppercase">Profile</h1>
       <div className="flex flex-col bg-white p-6 min-h-full">
         <div className='flex justify-between items-center mb-2'>
-          <div className='w-16 h-16 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{"background-image": `url(${profile?.avatar})`}}>
+          <div className='w-16 h-16 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{backgroundImage: `url(${profile?.avatar})`}}>
           </div>
           <i className='text-white p-2 bg-primary rounded text-lg'
             onClick={() => setEditPop(true)}
@@ -131,11 +131,10 @@ function Profile() {
             <div className='m-2 outline outline-1 p-2 rounded-md'>
             <h1>Self Termination</h1>
             <p>Self termination implies that you no longer subscribe to and therefore sieze being a member of Bweyogerere Tuberebumu sacco. If you’re sure that you want to terminate your membership, click terminate to terminate to proceed.</p>
-            <div className='flex mt-1'>
               <Formik
                 initialValues={{'password':''}}
                 validationSchema={selfTermination}
-                onSubmit={async (values) => {
+                onSubmit={ async (values) => {
                   const { password } = values
                   supabase.rpc('check_password', { current_password: password, _user_id: id })
                     .then(({data }) => {
@@ -147,31 +146,28 @@ function Profile() {
                         toast.error(`Wrong password`, {position:'top-center'});
                       }
                     })
-
-
                 }}
               
               >
-                
-
-                {({values, errors, touched, handleChange, handleBlur}) => {
+                {({ values, errors, touched, handleChange, handleBlur }) => {
                   return (
                     <Form>
-
+                      <div className='flex mt-1'>
+                        <div className='flex flex-col w-56'>
+                          <label htmlFor="" className='text-sm'>Current Password</label>
+                          <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                        </div>
+                      </div>
+                      <div className='w-full flex justify-end'>
+                        <button className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
+                          onClick={() => setPopUp(true)}
+                        >Terminate</button>
+                      </div>
                     </Form>
                   )
 
                 }}
               </Formik>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
-              </div>
-            </div>
-            <div className='w-full flex justify-end'>
-              <button className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
-                onClick={() => setPopUp(true)}
-              >Terminate</button>
               {popUp &&
                 <ConfirmModal setPopUp={setPopUp}>
                   <h1 className="font-bold">Are you sure you want to terminate your account?</h1>
@@ -179,7 +175,7 @@ function Profile() {
                   <div className="flex justify-end gap-3 mt-3">
                     <button className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
                       onClick={() => setPopUp(false)}
-                    >Cancel</button>
+                      >Cancel</button>
                     <button className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white">Terminate</button>
                   </div>
                 </ConfirmModal>
@@ -341,7 +337,6 @@ function Profile() {
                   </Formik> 
                 </ConfirmModal>
               }
-            </div>
             </div>
         </div>
       </div>
