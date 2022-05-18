@@ -12,7 +12,7 @@ function MakeDeposit() {
     account_type: '',
     amount: '',
     phone_number: '',
-    details: '',
+    particulars: '',
     evidence: ''
   }
    
@@ -23,7 +23,7 @@ function MakeDeposit() {
       <Formik
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
-          const { account_type, amount, phone_number, details, evidence } = values
+          const { account_type, amount, phone_number, particulars, evidence } = values
           console.log(account_type)
           try {
             const { Key: url } = await uploadFile(evidence, 'deposits')
@@ -45,7 +45,7 @@ function MakeDeposit() {
                         file_url: url
                       }
                     ],
-                    details
+                    particulars
                   }
                 }
               ]
@@ -81,7 +81,7 @@ function MakeDeposit() {
                               <option value="fixed">Fixed</option>
                               <option value="mwana">Mwana</option>
                             </select>
-                            {touched?.account_type && errors?.account_type&& <div className="error text-red-600 text-xs">{errors?.account_type}</div>}
+                            {touched?.account_type && errors?.account_type && <div className="error text-red-600 text-xs">{errors?.account_type}</div>}
                           </div>
                           <div className='flex flex-col w-56 '>
                             <label htmlFor="" className=' text-sm'>Enter Amount</label>
@@ -109,7 +109,7 @@ function MakeDeposit() {
                 </div>
                   <div className='mb-3'>
                       <h1 className='font-semibold'>Practiculars</h1>
-                      <textarea name="details" id="details" cols="30" rows="10" className='outline outline-1 rounded-md w-full p-2' onChange={handleChange} onBlur={handleBlur} value={values.details}></textarea>
+                      <textarea name="particulars" id="particulars" cols="30" rows="10" className='outline outline-1 rounded-md w-full p-2' onChange={handleChange} onBlur={handleBlur} value={values.particulars}></textarea>
                   </div>
                 <div className="w-56">
                   <Submit value='Request' disabled={!(isValid && dirty)}/>

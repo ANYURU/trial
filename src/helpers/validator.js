@@ -50,7 +50,7 @@ Yup.addMethod(Yup.string, 'isNumber', function () {
 export const depositRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
   account_type: Yup.string().required('Required!'),
-  details: Yup.string(),
+  particulars: Yup.string(),
   phone_number: Yup.string().required('Required!'),
   evidence: Yup.string().required('Required!')
 })
@@ -60,5 +60,4 @@ export const withdrawRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
   account_type: Yup.string().required('Required!'),
   particulars: Yup.string(),
-  evidence: Yup.string().required('Required!')
 })
