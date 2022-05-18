@@ -55,7 +55,7 @@ function MakeDeposit() {
             
             console.log(data)
             resetForm({values: initialValues})
-            toast.success(`Request submitted for review.`, {position: 'top-center'})
+            toast.success(`Request submitted for review.`, { position: 'top-center' })
             
           } catch ( error ) {
             toast.error(`${error?.message}`, {position:'top-center'})

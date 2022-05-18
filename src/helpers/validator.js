@@ -41,7 +41,10 @@ export const selfTermination = Yup.object({
 
 // creating a custom yup validation method
 Yup.addMethod(Yup.string, 'isNumber', function () {
-  return this.matches(/^[0-9]+$/, {message:'Must be a number', excludedEmptyStrings: true}).required("Required!")
+  return this.matches(/^[0-9]+$/, { 
+    message:'Must be a number', 
+    excludedEmptyStrings: true 
+  }).required("Required!")
 })
 
 export const depositRequestValidationSchema = Yup.object({
@@ -49,5 +52,13 @@ export const depositRequestValidationSchema = Yup.object({
   account_type: Yup.string().required('Required!'),
   details: Yup.string(),
   phone_number: Yup.string().required('Required!'),
+  evidence: Yup.string().required('Required!')
+})
+
+
+export const withdrawRequestValidationSchema = Yup.object({
+  amount: Yup.string().isNumber(),
+  account_type: Yup.string().required('Required!'),
+  particulars: Yup.string(),
   evidence: Yup.string().required('Required!')
 })
