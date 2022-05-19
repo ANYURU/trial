@@ -11,8 +11,6 @@ function MobileNav({ user }) {
   const navigate = useNavigate()
   const navRef = useRef()
 
-  console.log(user)
-
   const [ showMenu, setShowMenu ] = useState(false)
   return (
     <div className='fixed flex justify-between top-0 right-0 left-0 items-center mobile-navbar p-2 bg-white overflow-hidden'>

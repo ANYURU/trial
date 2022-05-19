@@ -18,96 +18,141 @@ function Profile() {
   }
   const { id } = supabase.auth.user()
 
+  const handleTermination = (event, values) => {
+    event.preventDefault()
+    supabase.rpc('check_password', { current_password: values.password, _user_id: id })
+        .then(async ({ data })  => {
+          if ( data ) {
+            setPopUp(true)
+          } else {
+            toast.error(`Wrong password.`, {position: "top-center"})
+          }})
+          .catch(error => {
+            console.log(`Error ${error}`)
+          })
+    document.terminationForm.reset()
+  }
+
+  const handleChangePassword = (event, values) => {
+    event.preventDefault()
+    console.log(values)
+    if (values.new_password !== values.confirm_password){
+      toast.error("Passwords don't match", { position: "top-center"})
+    } else {
+      supabase.rpc('check_password', { current_password: values.old_password, _user_id: id })
+        .then(async ({ data })  => {
+          if ( data ) {
+            const { user, error } = await supabase.auth.update({password: values.new_password})
+            if (user){
+              toast.success(`Successfully updated password.`, {position: "top-center"})
+            } else if(error){
+              toast.error(`Error ${error}.`, {position: "top-center"})
+            }
+          } else {
+            toast.error(`Wrong password.`, {position: "top-center"})
+          }})
+          .catch(error => {
+            console.log(`Error ${error}`)
+          })
+    }
+    document.changePasswordForm.reset()
+  }
+
+
+
 
   return (
     <div className='h-full'>
       <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase">Profile</h1>
-      <div className="flex flex-col bg-white p-6 min-h-full">
-        <div className='flex justify-between items-center mb-2'>
-          <div className='h-16 w-16'>
-            <img src={profile?.avatar ? profile.avatar : ""} width={100} height={100} className='rounded-full w-full h-full' alt={profile?.fullname} />
-          </div>
+      <div className="bg-white m-2 p-6 min-h-full">
+        <h1 className='font-semibold mb-3'>Profile Details</h1>
+        <div className='flex justify-between items-start mb-5'>
+          { profile?.avatar ? <img src={`${profile?.avatar}`} className='h-16 w-16' alt="profile"/> :
+              <span className='h-16 w-16 bg-accent rounded-full flex justify-center font-bold items-center overflow-hidden'>
+                {(profile?.fullname !== undefined && profile.fullname !== null) && ` ${profile?.fullname.split('')[0]}`}
+              </span>
+          }
           <i className='text-white p-2 bg-primary rounded text-lg'
             onClick={() => setEditPop(true)}
           ><FaRegEdit /></i>
         </div>
-        <div className='mb-3'>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Name</p>
-            <div className='flex-grow flex'>
-              <p className='font-bold'>{profile?.fullname}</p>
+        <section className='mb-5'>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Name</p>
+            <p className='font-bold  col-span-3'>{profile?.fullname}</p>
+          </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Telephone Number</p>
+            <p className='font-bold  col-span-3'>{profile?.phone_number}</p>
+          </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Email</p>
+              <p className='font-bold  col-span-3'>{profile?.email_address}</p>
+          </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Member Status</p>
+            <div className=" col-span-3">
+              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md w-24`}>{profile?.member_status}</p>
             </div>
           </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Telephone Number</p>
-            <div className='flex-grow flex'>
-              <p className='font-bold'>{profile?.phone_number}</p>
-            </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Marital Status</p>
+            <p className='font-bold  col-span-3'>{profile?.marital_status}</p>
           </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Email</p>
-            <div className='flex-grow flex'>
-              <p className='font-bold'>{profile?.email_address}</p>
-            </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Position in the SACCO</p>
+            <p className='font-bold col-span-3'>{profile?.position_in_sacco}</p>
           </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Member Status</p>
-            <div className='flex-grow flex'>
-              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status}</p>
-            </div>
-          </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Marital Status</p>
-            <div className='flex-grow flex'>
-            <p className='font-bold'>{profile?.marital_status}</p>
-            </div>
-          </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Position in the SACCO</p>
-            <div className='flex-grow flex'>
-            <p className='font-bold'>{profile?.position_in_sacco}</p>
-            </div>
-          </div>
-        </div>
-        <div className='mb-3'>
-            <h1 className='font-semibold'>Applicant's Personal Information</h1>
-            <form action="" className='m-2'>
-            <div className='flex flex-col gap-5'>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="text" name="old_password" id="old_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1'/>
-              </div>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>New Password</label>
-                <input type="text" name="new_password" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1'/>
-              </div>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Confirm Password</label>
-                <input type="text" name="" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1'/>
-              </div>
-                <div className="flex justify-end gap-3 mt-3">
-                  <button className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white">Save</button>
+        </section>
+        {/* handleChangePassword */}
+        <Formik
+          initialValues={{old_password: '', new_password: '', confirm_password: ''}}
+        >
+          {({ values, errors, touched, handleChange, handleBlur }) => {
+            return (
+          <Form className='mb-3' name="changePasswordForm" onSubmit={(event) => handleChangePassword(event, values)}>
+              <h1 className='font-semibold mb-3'>Password Reset</h1>
+                <div className='flex flex-col w-56 mb-5'>
+                  <label htmlFor="" className='text-sm'>Old Password</label>
+                  <input type="password" name="old_password" id="old_password" onChange={handleChange("old_password")} placeholder='Old Password' className='ring-1 ring-black rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1' required/>
                 </div>
-            </div>
-            </form>
-        </div>
-        <div className='mb-3'>
+                <div className='flex flex-col w-56 mb-5'>
+                  <label htmlFor="" className='text-sm'>New Password</label>
+                  <input type="password" name="new_password" id="new_password" onChange={handleChange("new_password")} placeholder='New Password' className='ring-1 ring-black rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1' required/>
+                </div>
+                <div className='flex flex-col w-56 mb-5'>
+                  <label htmlFor="" className='text-sm'>Confirm Password</label>
+                  <input type="password" name="" id="confirm_password" onChange={handleChange("confirm_password")} placeholder='Confirm Password' className='ring-1 ring-black rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1' required/>
+                </div>
+                <div className="flex justify-end gap-3 mt-3">
+                  <input type="submit" value="Save" className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white"/>
+                </div>
+          </Form>
+            )}}
+        </Formik>
+        {/* handleTermination */}
+        <Formik
+          initialValues={{password: ''}}
+        >
+          {({ values, errors, touched, handleChange, handleBlur }) => {
+            return (
+        <Form className='mb-3' name="terminationForm" onSubmit={(event) => handleTermination(event, values)}>
             <h1 className='font-semibold'>Danger Zone</h1>
-            <div className='m-2 outline outline-1 p-2 rounded-md'>
+            <div className='my-2 outline outline-1 p-2 rounded-md'>
               <h1>Self Termination</h1>
               <p>Self termination implies that you no longer subscribe to and therefore sieze being a member of Bweyogerere Tuberebumu sacco. If you’re sure that you want to terminate your membership, click terminate to terminate to proceed.</p>
               <br />
               <div className='flex mt-1'>
                 <div className='flex flex-col w-56'>
                   <label htmlFor="" className='text-sm'>Enter Password to confirm</label>
-                  <input type="password" name="" id="" placeholder='Password' className='ring-1 ring-black rounded px-2 py-1' />
+                  <input type="password" name="password" id="" placeholder='Password' onChange={handleChange("password")} className='ring-1 ring-black rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary' required />
                 </div>
               </div>
               <div className='w-full flex justify-end'>
-                <button className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
-                  onClick={() => setPopUp(true)}
-                >Terminate</button>
+                <input type="submit" className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
+                  value="Terminate"
+                />
                 {popUp &&
                   <ConfirmModal setPopUp={setPopUp}>
                     <h1 className="font-bold">Are you sure you want to terminate your account?</h1>
@@ -125,7 +170,8 @@ function Profile() {
                 }
               </div>
             </div>
-        </div>
+          </Form>)}}
+        </Formik>
       </div>
     </div>
   )
