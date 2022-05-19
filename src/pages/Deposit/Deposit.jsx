@@ -3,7 +3,7 @@ import { depositHistory } from "../../helpers/mockData"
 export default function Deposit() {
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>Deposit</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase'>My Deposit</h1>
       <div className="flex bg-white p-6 min-h-full">
         <div className="w-full relative overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>

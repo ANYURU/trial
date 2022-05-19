@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import { supabase } from "../../helpers/supabase"
 import { useState, useEffect } from "react"
 import { Loader } from "../../components"
+import { downloadFile } from "../../helpers/utilites"
 
 export default function DepositVerify() {
   const { id } = useParams()
@@ -12,6 +13,7 @@ export default function DepositVerify() {
   })
 
   const [ deposit, setDeposit ] = useState(null)
+  const [ imageURL, setImageURL ] = useState('')
 
   const getApplication = async () => {
     const { error, data } = await supabase
@@ -21,6 +23,16 @@ export default function DepositVerify() {
     .eq("application_id", id)
     setDeposit(data[0])
   }
+
+  if (deposit){
+    downloadFile(deposit.application_meta.files[0].file_url.substring(9), "deposits")
+    .then((data) => setImageURL(data.avatar_url))
+    .catch(error => error)
+  }
+
+  // console.log(imageURL)
+
+  
   
 
   return (
@@ -36,6 +48,7 @@ export default function DepositVerify() {
                 <div className="my-6">Amount: {deposit.application_meta && deposit?.application_meta.amount}</div>
                 <div className="my-6">Method of Withdraw: Bank</div>
                 <div className="my-6">Account/Mobile Number: {deposit.application_meta &&  deposit?.application_meta.phone_number}</div>
+                <img src={imageURL} width={200} className="rounded" alt="receipt" />
               </div>
           </div>
           <div className="flex gap-10 justify-end items-center mt-3">
