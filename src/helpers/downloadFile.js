@@ -3,7 +3,7 @@ import { supabase } from "./supabase"
 /**
  * @function 
  * @name downloadImage
- * @param {string} path the path to the file as retrieved from the database.
+ * @param {string} path the path or file url to the file as retrieved from the database.
  * @param {string} storage_bucket The storage bucket in supabase where you want to store the file.
  * @returns {object} An object containing either and error message or an avatar url.
  */

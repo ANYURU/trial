@@ -7,7 +7,7 @@ import { withdrawRequestValidationSchema } from '../../helpers/validator'
 
 
 function WithdrawRequest() {
-  const { user:{ id } } = useAuth()
+  const { user:{ id, fullname: applicants_name } } = useAuth()
   const initialValues = {
     account_type: '',
     amount:'',
@@ -38,6 +38,7 @@ function WithdrawRequest() {
                       updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                       reviewed: false,
                       application_meta: {
+                        applicants_name,
                         account_type,
                         amount,
                         particulars
@@ -47,8 +48,6 @@ function WithdrawRequest() {
                 )
               
               if( error ) throw error
-              console.log('here')
-              console.log(data)
               toast.success(`Request submitted for review.`, {position: 'top-center'})
               resetForm({ values: initialValues })
             } catch (error) {

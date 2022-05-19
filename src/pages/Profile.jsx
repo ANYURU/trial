@@ -19,7 +19,6 @@ function Profile() {
   }
   const { id } = supabase.auth.user()
 
-
   return (
     <div className='h-full'>
       <ToastContainer />
@@ -132,16 +131,17 @@ function Profile() {
             <h1>Self Termination</h1>
             <p>Self termination implies that you no longer subscribe to and therefore sieze being a member of Bweyogerere Tuberebumu sacco. If you’re sure that you want to terminate your membership, click terminate to terminate to proceed.</p>
               <Formik
-                initialValues={{'password':''}}
+                initialValues={{'current_password':''}}
                 validationSchema={selfTermination}
-                onSubmit={ async (values) => {
-                  const { password } = values
-                  supabase.rpc('check_password', { current_password: password, _user_id: id })
+                onSubmit={ async (values, { resetForm }) => {
+                  const { current_password } = values
+                  console.log(current_password)
+                  supabase.rpc('check_password', { current_password, _user_id: id })
                     .then(({data }) => {
                       if( data ) {
                         // call the self termination function
-
-
+                        setPopUp(true)
+                        resetForm({values:{'current_password':''}})
                       } else {
                         toast.error(`Wrong password`, {position:'top-center'});
                       }
@@ -153,14 +153,16 @@ function Profile() {
                   return (
                     <Form>
                       <div className='flex mt-1'>
-                        <div className='flex flex-col w-56'>
+                        <div className='flex flex-col w-56 h-18'>
                           <label htmlFor="" className='text-sm'>Current Password</label>
-                          <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                          <input type="password" name="current_password" id="current_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.current_password}/>
+                          { touched?.current_password && errors?.current_password && <div className='error text-red-600 text-xs'> { errors?.error } </div> }
                         </div>
                       </div>
                       <div className='w-full flex justify-end'>
-                        <button className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
-                          onClick={() => setPopUp(true)}
+                        <button 
+                          className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
+                          type='submit'
                         >Terminate</button>
                       </div>
                     </Form>
@@ -173,10 +175,30 @@ function Profile() {
                   <h1 className="font-bold">Are you sure you want to terminate your account?</h1>
                   <p>If you terminate this account, you can’t recover it.</p>
                   <div className="flex justify-end gap-3 mt-3">
+                    <Formik
+                      onSubmit={ async () => {
+                        supabase.rpc('self_terminate', {})
+                          .then(({ data }) => {
+                            console.log(data)
+                          })
+                          .catch(error => console.log(error))
+
+                      }}
+                    >
+                      {() => {
+                        return (
+                          <Form>
+                            <button 
+                              className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white"
+                              type='submit'
+                            >Terminate</button>
+                          </Form>  
+                        )
+                      }}
+                    </Formik>
                     <button className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
                       onClick={() => setPopUp(false)}
-                      >Cancel</button>
-                    <button className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white">Terminate</button>
+                    >Cancel</button>
                   </div>
                 </ConfirmModal>
               }
@@ -197,13 +219,12 @@ function Profile() {
                               .eq('id', id)
                               .single()
 
-                              if ( error ) {
-                                toast.error(`${error?.message}`, {position: "top-center"})
-                              } else {
-                                setEditPop(false)
-                                setProfile({...profile, ...data})
-                              }
-                  
+                            if ( error ) {
+                              toast.error(`${error?.message}`, {position: "top-center"})
+                            } else {
+                              setEditPop(false)
+                              setProfile({...profile, ...data})
+                            }
                           } else {
                             toast.error(`Wrong password.`, {position: "top-center"})
                           }

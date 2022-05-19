@@ -34,7 +34,7 @@ export const changeUserPasswordValidationSchema = Yup.object({
 })
 
 export const selfTermination = Yup.object({
-  password: Yup.string().min(8, 'Must be atleast 8 characters!').required('Required!')
+  current_password: Yup.string().min(8, 'Must be atleast 8 characters!').required('Required!')
 })
 
 

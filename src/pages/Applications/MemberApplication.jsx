@@ -60,23 +60,60 @@ function MemberApplication() {
     amount_in_words:'',
   }  
 
-  const { user } = useAuth()
+  const { user : { id } } = useAuth()
   const navigate = useNavigate()
+  const [ employed, setEmployed ] = useState(true)
   
   return (
     <>
       <ToastContainer />
       <Formik 
         initialValues={initialValues}
-        onSubmit={async ( values ) => {
-          const { data, error } = await supabase.from('profiles').update(values).eq('id', user.id).single()
-          if(error) {
-            console.log(error)
-          } else {
-            toast.success(`Sucessfully registered`, {position: "top-center"})
+        onSubmit={async ( values, { resetForm } ) => {
+          const { fullname: applicants_name, ...rest } = values
+          // const { data, error } = await supabase.from('members').update(values).eq('id', user.id).single()
+          // if(error) {
+          //   console.log(error)
+          // } else {
+          //   toast.success(`Sucessfully registered`, { position: "top-center" })
+          //   navigate('/dashboard')
+          //   setProfile(data)
+          //   console.log(data)
+          // }
+          try {
+            const { data, error } = await supabase
+              .from('applications')
+              .insert(
+                [
+                  {
+                    application_id: id,
+                    type: "membership",
+                    created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                    updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                    reviewed: false,
+                    application_meta: {
+                      ...rest,
+                      applicants_name
+                    }
+                  }
+                ]
+              )
+              .single()
+
+            if (error) throw error
+            
+            resetForm({ values: initialValues })
+            toast.success(`Membership submitted for review`, {position:'top-center'})
+            
+            const { application_meta } = data
+            
             navigate('/dashboard')
-            setProfile(data)
-            console.log(data)
+            setProfile( application_meta )
+            console.log( application_meta )
+            
+          } catch ( error ) {
+            // handle the errors depending on error status codes & give appropriate messages to the users
+            toast.error(`${error?.message}`, {position:'top-center'})
           }
         }}
       >
@@ -87,7 +124,7 @@ function MemberApplication() {
               <div className="flex bg-white p-6 min-h-full">
                   <div className='flex flex-grow flex-col min-h-full'>
                     {pageNumber === 1 &&
-                      <ApplicationPg1 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
+                      <ApplicationPg1 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} employed={employed} setEmployed={setEmployed}/>
                     }
                     {pageNumber === 2 &&
                       <ApplicationPg2 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>

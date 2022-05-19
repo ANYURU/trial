@@ -7,7 +7,8 @@ import { toast, ToastContainer } from 'react-toastify'
 import { depositRequestValidationSchema } from '../../helpers/validator'
 
 function MakeDeposit() {
-  const { user:{ id } } = useAuth()
+  const { user: { id, fullname } } = useAuth()
+
   const initialValues = {
     account_type: '',
     amount: '',
@@ -26,7 +27,7 @@ function MakeDeposit() {
           const { account_type, amount, phone_number, particulars, evidence } = values
           console.log(account_type)
           try {
-            const { Key: url } = await uploadFile(evidence, 'deposits')
+            const { Key: url } = await uploadFile(evidence, 'deposits', 'deposit')
             const { error, data } = await supabase
               .from('applications')
               .insert([
@@ -37,6 +38,7 @@ function MakeDeposit() {
                   updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                   reviewed: false,
                   application_meta: {
+                    applicants_name: fullname,
                     account_type,
                     amount,
                     phone_number,
@@ -54,7 +56,7 @@ function MakeDeposit() {
             if( error ) throw error
             
             console.log(data)
-            resetForm({values: initialValues})
+            resetForm({ values: initialValues })
             toast.success(`Request submitted for review.`, { position: 'top-center' })
             
           } catch ( error ) {

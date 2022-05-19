@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { InputField } from "../../components/Form/CustomInputField"
 
-export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur }) {
+export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur, employed, setEmployed }) {
     const { 
         fullname,
         dob, 
@@ -33,7 +33,7 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
             }
         },
     } = values
-    const [ employed, setEmployed ] = useState(true)
+    // const [ employed, setEmployed ] = useState(true)
 
     return (
         <>
@@ -61,14 +61,18 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
                                 <input type="radio" name="income_sources[status]" value="Employed" onChange={(event) => {
                                     event.target.checked && setEmployed(true) 
                                     if(event.target.checked) values.income_sources.status = event.target.value
-                                }}/>
+                                }}
+                                    checked={ values?.income_sources?.status === "Employed" }
+                                />
                                 <label htmlFor="" className='text-sm'>Employed</label>
                             </div>
                             <div className='flex gap-1'>
                                 <input type="radio" name="income_sources[status]" value="Business" onChange={(event) => {
                                     event.target.checked && setEmployed(false)
                                     values.income_sources.status = event.target.value
-                                }} />
+                                }}
+                                  checked={ values?.income_sources?.status === "Business" }
+                                />
                                 <label htmlFor="" className='text-sm'>Business</label>
                             </div>
                         </div>
