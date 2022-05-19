@@ -25,9 +25,9 @@ function MakeDeposit() {
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
           const { account_type, amount, phone_number, particulars, evidence } = values
-          console.log(account_type)
+          console.log(evidence)
           try {
-            const { Key: url } = await uploadFile(evidence, 'deposits', 'deposit')
+            const { Key: url } = await uploadFile(evidence, 'deposits')
             const { error, data } = await supabase
               .from('applications')
               .insert([
@@ -103,7 +103,9 @@ function MakeDeposit() {
                           </div>
                           <div className='flex flex-col w-56 '>
                             <label htmlFor="" className=' text-sm'>Upload Receipt</label>
-                            <input type="file" name="evidence" id="evidence" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur}/>
+                            <input type="file" name="evidence" id="evidence" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' onChange={(event) => {
+                              values.evidence = event.currentTarget.files[0]
+                            }} onBlur={handleBlur}/>
                             {touched?.evidence && errors?.evidence && <div className="error text-red-600 text-xs">{errors?.evidence}</div>} 
                           </div>
                       </div>

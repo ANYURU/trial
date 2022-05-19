@@ -8,15 +8,15 @@ import { supabase } from "./supabase"
  * @returns {Object} An object containing either an error or some data.
  */
 
-export const uploadFile = async ( file, storage_bucket, prefix ) => {
+export const uploadFile = async ( file, storage_bucket ) => {
     const timestamp = new Date().getTime().toString()
-    const fileExtension = file.split('.').pop()
+    const fileExtension = file?.name.split('.').pop()
 
     try {
         const { error, data } = await supabase
             .storage
             .from(storage_bucket)
-            .upload(`public/${prefix}${timestamp}.${fileExtension}`, file)
+            .upload(`public/${timestamp}.${fileExtension}`, file)
 
         if( error ) {
             throw error
