@@ -111,9 +111,9 @@ export const menuData = {
                     link: '/deposit/deposit'
                 },
                 {
-                    label: 'Verify',
-                    link: '/deposit/verify'
-                },
+                    label: 'Deposit Applications',
+                    link: '/deposit/members'
+                }
             ]
         },
         {

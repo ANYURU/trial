@@ -12,6 +12,7 @@ import Profile from './Profile'
 import DepositHistory from './Deposit/DepositHistory'
 import MakeDeposit from './Deposit/MakeDeposit'
 import DepositVerify from './Deposit/DepositVerify'
+import DepositAdmin from './Deposit/DepositAdmin'
 
 // loans
 import Loans from './Loans/Loans'
@@ -42,7 +43,7 @@ import Members from './Members/Members'
 
 
 // exports
-export { Loans, LoanHistory, LoanPayment, LoanRequest }
+export { Loans, LoanHistory, LoanPayment, LoanRequest, DepositAdmin }
 
 export { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers}
 
