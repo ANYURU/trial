@@ -105,9 +105,159 @@ export const depositHistory = [
         depositMethod: 'Bank',
         status: 'Rejected'
     },
+    {
+        date: '11-04-2022',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved'
+    },
+    {
+        date: '11-04-2019',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Rejected'
+    },
+    {
+        date: '11-04-2022',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved'
+    },
+    {
+        date: '11-04-2019',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Pending'
+    },
+    {
+        date: '11-04-2022',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved'
+    },
+    {
+        date: '11-04-2019',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Rejected'
+    },
+    {
+        date: '11-04-2022',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved'
+    },
+    {
+        date: '11-04-2019',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Rejected'
+    },
+    {
+        date: '11-04-2022',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved'
+    },
+    {
+        date: '11-04-2019',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Pending'
+    },
+    {
+        date: '11-04-2022',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved'
+    },
+    {
+        date: '11-04-2019',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Rejected'
+    },
 ]
 
 export const withdrawHistory = [
+    {
+        date: '2022-04-11',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved',
+        name: "Anyuru David Derrick"
+    },
+    {
+        date: '2019-11-04',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Rejected',
+        name: "Nakityo Joanita"
+    },
+    {
+        date: '2022-11-04',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved',
+        name: "Charles Kasasira"
+    },
+    {
+        date: '201911-04',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Pending',
+        name: "Charles Kasasira"
+    },
+    {
+        date: '2022-11-04',
+        transactionId: 190012186,
+        account: 'Savings',
+        amount: 300000,
+        depositMethod: 'Bank',
+        status: 'Approved',
+        name: "Charles Kasasira"
+    },
+    {
+        date: '2019-11-04',
+        transactionId: 190012067,
+        account: 'Shares',
+        amount: 180000,
+        depositMethod: 'Bank',
+        status: 'Rejected',
+        name: "Charles Kasasira"
+    },
     {
         date: '2022-04-11',
         transactionId: 190012186,
