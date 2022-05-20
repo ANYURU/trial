@@ -11,7 +11,7 @@ function MakeDeposit() {
               <div className='flex flex-wrap gap-5'>
                   <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Please select an account</label>
-                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white" required>
                       <option value="">--Select Account--</option>
                       <option value="savings">Savings</option>
                       <option value="shares">Shares</option>
@@ -21,7 +21,7 @@ function MakeDeposit() {
                   </div>
                   <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Enter Amount</label>
-                    <input type="text" name="" id="" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1 focus:ring-primary focus:outline-none focus:ring-2' required />
                   </div>
               </div>
             </form>
@@ -31,11 +31,16 @@ function MakeDeposit() {
               <div className='flex flex-wrap gap-5'>
                   <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Enter Phone Number</label>
-                    <input type="text" name="" id="" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1 focus:ring-primary focus:outline-none focus:ring-2' />
                   </div>
                   <div className='flex flex-col w-56 '>
-                    <label htmlFor="" className=' text-sm'>Upload Receipt</label>
-                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <label className='text-sm'>Upload Receipt</label>
+                    <input type="file" className='block ring-2 ring-primary rounded-lg w-full text-sm text-slate-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-primary file:text-white
+                        hover:file:bg-primary' />
                   </div>
               </div>
             </form>

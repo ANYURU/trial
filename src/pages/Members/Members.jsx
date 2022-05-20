@@ -5,6 +5,7 @@ import { useState } from "react"
 import { FaEllipsisV } from 'react-icons/fa'
 import { ContextMenu } from "../../components"
 import { MemberModal } from "../../components"
+import { Pagination } from "../../components"
 
 function Members() {
   const [ status, setStatus ] = useState('')
@@ -15,6 +16,14 @@ function Members() {
 
   const [memberModal, setMemberModal] = useState(false)
   const [ searchText, setSearchText ] = useState('')
+
+  //pagination
+  const [ currentPage, setCurrentPage ] = useState(1)
+  const [ withdrawPerPage, setWithdrawPerPage ] = useState(10)
+  const indexOfLastPage = currentPage * withdrawPerPage
+  const indexOfFirstPage = indexOfLastPage - withdrawPerPage
+
+  const shownMembers = members.slice(indexOfFirstPage, indexOfLastPage)
 
   return (
     <div className="h-full">
@@ -47,7 +56,7 @@ function Members() {
               </div>
             </form>
         </div>
-        <div className="flex bg-white p-6 min-h-full">
+        <div className="bg-white p-6 min-h-full">
             <div className="w-full relative overflow-x-auto sm:rounded-lg">
               <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
@@ -56,27 +65,39 @@ function Members() {
                   </tr>
                 </thead>
                 <tbody>
-                  {searchByName(members, searchText).map((member, index) => (
+                  {searchByName(shownMembers, searchText).map((member, index) => (
                     <tr className={`${index % 2 === 0 ? "bg-gray-50" : ""} hover:bg-gray-100`} key={index}>
                       {memberModal && activeIndex === index && <MemberModal member={activeIndex === index && member} setMemberModal={setMemberModal} />}
                       <td className='px-6 py-3'>{member.date}</td><td className='px-6 py-3'>{member.name}</td><td className='px-6 py-3'>{member.id}</td><td className='px-6 py-3'>{member.amount}</td><td className='px-6 py-3'>{member.status}</td>
                       <td className="p-2">
-                        <i
-                          onClick={() => {
-                            setActiveIndex(index)
-                            setShow(!show)
-                          }}
-                        >
-                          
-                          <FaEllipsisV />
-                        </i>
-                          <ContextMenu activeIndex={activeIndex} show={show} index={index} setShow={setShow} setMemberModal={setMemberModal} member={activeIndex === index ? member : null} />
+                        <div class="relative">
+                            <button class="block p-2 rounded-md "
+                              onClick={() => {
+                                setActiveIndex(index)
+                                setShow(!show)
+                              }}
+                            >
+                                <FaEllipsisV />
+                            </button>
+                            <ContextMenu activeIndex={activeIndex} show={show} index={index} setShow={setShow} setMemberModal={setMemberModal} member={activeIndex === index ? member : null} />
+                        </div>
                       </td>
                       
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div className="flex justify-between px-6 my-5">
+              <Pagination
+                pages={Math.ceil(members.length/withdrawPerPage)}
+                setCurrentPage={setCurrentPage}
+                indexOfFirstPage={indexOfFirstPage}
+                indexOfLastPage={indexOfLastPage}
+                data={members}
+                depositsPerPage={withdrawPerPage}
+                setDepositsPerPage={setWithdrawPerPage}
+              />
             </div>
           </div>
     </div>

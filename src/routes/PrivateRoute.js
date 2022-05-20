@@ -8,7 +8,7 @@ import { getProfile } from '../helpers/getProfile'
 
 const PrivateRoute = () => {
     const matches = useMediaQuery('(min-width: 800px)')
-    const { user } = useAuth()
+    const { user, darkMode } = useAuth()
     const [ profile, setProfile ] = useState({})
 
     useEffect(() => {
@@ -24,11 +24,11 @@ const PrivateRoute = () => {
         
         matches 
         ?
-            <div className='top-container bg-back'>
+            <div className={`top-container bg-back ${darkMode ? "dark" : ""} `}>
                 <div className=''>
                     <Sidebar user={ profile } />
                 </div>
-                <div className='h-screen relative flex flex-col content'>
+                <div className='h-screen relative flex flex-col content dark:bg-gray-800'>
                     <Navbar user={ profile } />
                     <div className='flex-grow mt-20 mx-4'>
                         <Outlet context={[ profile, setProfile ]} />

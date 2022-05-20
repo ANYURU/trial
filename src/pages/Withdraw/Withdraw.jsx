@@ -2,6 +2,7 @@ import { depositHistory } from "../../helpers/mockData"
 import { useState } from "react"
 import { MdAdd } from "react-icons/md"
 import { searchByName, filterByStatus } from "../../helpers/utilites"
+import { Pagination } from "../../components"
 
 export default function Withdrawy() {
   const [ status, setStatus ] = useState('')
@@ -11,6 +12,14 @@ export default function Withdrawy() {
   let loans = filterByStatus(depositHistory, "status", status)
 
   loans = filterByStatus(loans, "account", account)
+
+  //pagination
+  const [ currentPage, setCurrentPage ] = useState(1)
+  const [ withdrawPerPage, setWithdrawPerPage ] = useState(10)
+  const indexOfLastPage = currentPage * withdrawPerPage
+  const indexOfFirstPage = indexOfLastPage - withdrawPerPage
+
+  const shownWithdraw = loans.slice(indexOfFirstPage, indexOfLastPage)
 
   return (
     <div className='h-full'>
@@ -47,7 +56,7 @@ export default function Withdrawy() {
               </div>
             </form>
         </div>
-      <div className="flex bg-white p-6 min-h-full">
+      <div className="bg-white p-6 min-h-full">
         <div className="w-full relative overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
@@ -56,7 +65,7 @@ export default function Withdrawy() {
               </tr>
             </thead>
             <tbody>
-              {loans.map((loan, index) => (
+              {shownWithdraw.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50" : ""} hover:bg-gray-100`} key={index}>
                   <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.transactionId}</td><td className='px-6 py-3'>{loan.account}</td><td className='px-6 py-3'>{loan.amount}</td><td className='px-6 py-3'>{loan.depositMethod}</td><td className='px-6 py-3'>{loan.status}</td>
                 </tr>
@@ -64,6 +73,17 @@ export default function Withdrawy() {
             </tbody>
           </table>
         </div>
+        <div className="flex justify-between px-6 my-5">
+          <Pagination
+            pages={Math.ceil(loans.length/withdrawPerPage)}
+            setCurrentPage={setCurrentPage}
+            indexOfFirstPage={indexOfFirstPage}
+            indexOfLastPage={indexOfLastPage}
+            data={loans}
+            depositsPerPage={withdrawPerPage}
+            setDepositsPerPage={setWithdrawPerPage}
+          />
+          </div>
       </div>
     </div>
   )

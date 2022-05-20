@@ -3,6 +3,7 @@ import { useState } from "react"
 import { MdAdd } from "react-icons/md"
 import { searchByName, filterByStatus } from "../../helpers/utilites"
 import { MdOutlineSearch } from 'react-icons/md'
+import Pagination from "../../components/Pagination"
 
 export default function WithdrawMembers() {
   const [ status, setStatus ] = useState('')
@@ -20,44 +21,34 @@ export default function WithdrawMembers() {
   loans = filterByStatus(loans, "account", account)
   loans = loans.filter(loan => !date || loan.date === date)
 
+  const approved = Math.round((approvedMembers.length/loans.length) * 100)
+  const pending = Math.round((pendingMembers.length/loans.length) * 100)
+  const rejected = Math.round((rejectedMembers.length/loans.length) * 100)
+
+  //pagination
+  const [ currentPage, setCurrentPage ] = useState(1)
+  const [ withdrawPerPage, setWithdrawPerPage ] = useState(10)
+  const indexOfLastPage = currentPage * withdrawPerPage
+  const indexOfFirstPage = indexOfLastPage - withdrawPerPage
+
+  const shownWithdraw = loans.slice(indexOfFirstPage, indexOfLastPage)
+
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Members Withdraw History</h1>
-      {loans.length > 0 &&
-      <div className="flex justify-between my-3 gap-0 w-full">
-          <div className={`bg-green-400 w-${
-            Math.round(((approvedMembers.length)*12)/loans.length) <= 0
-            ? "0.5"
-            : Math.round(((approvedMembers.length)*12)/loans.length) === 12
-            ? "11" 
-            : Math.round(((approvedMembers.length)*12)/loans.length)
-          }/12 flex flex-col justify-center items-center py-1 border-l-8 border-green-800`}>
-              <h1 className="text-lg font-bold">{approvedMembers.length}</h1>
-              <p className="uppercase">Approved</p>
-          </div>
 
-          {pendingMembers.length > 0 &&<div className={`bg-yellow-400 w-${
-            Math.round(((pendingMembers.length)*12)/loans.length) <= 0
-            ? "0.5"
-            : Math.round(((pendingMembers.length)*12)/loans.length) === 12
-            ? "11" 
-            : Math.round(((pendingMembers.length)*12)/loans.length)
-          }/12 flex flex-col justify-center items-center py-1 border-l-8 border-yellow-600`}>
-              <h1 className="text-lg font-bold">{pendingMembers.length}</h1>
-              <p className="uppercase">Pending</p>
-          </div>}
-
-          <div className={`bg-red-400 w-${
-            Math.round(((rejectedMembers.length)*12)/loans.length) <= 0
-            ? "0.5"
-            : Math.round(((rejectedMembers.length)*12)/loans.length) === 12
-            ? "11" 
-            : Math.round(((rejectedMembers.length)*12)/loans.length)
-          }/12 flex flex-col justify-center items-center py-1 border-l-8 border-red-800`}>
-              <h1 className="text-lg font-bold">{rejectedMembers.length}</h1>
-              <p className="uppercase">Rejected</p>
+        <div className="bg-white rounded">
+          <div className="w-full h-7 rounded flex overflow-hidden">
+            <div className="h-7 inline-block bg-green-400" style={{width: `${approved}%`}}></div>
+            <div className="h-7 inline-block bg-yellow-400" style={{width: `${pending}%`}}></div>
+            <div className="h-7 inline-block bg-red-400" style={{width: `${rejected}%`}}></div>
           </div>
-      </div>}
+          <div className="flex justify-between px-2 items-center py-2">
+            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-green-400 inline-block rounded-full"></div> Approved: {approvedMembers.length}</div>
+            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-yellow-400 inline-block rounded-full"></div> Pending: {pendingMembers.length}</div>
+            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-red-400 inline-block rounded-full"></div> Reject: {rejectedMembers.length}</div>
+          </div>
+        </div>
       <div className='my-3'>
           <div className="my-2 flex justify-between searchInput">
               <input type="text" name="" id="" className="px-2 py-2 sm:py-1" placeholder="Search by name..." 
@@ -94,7 +85,7 @@ export default function WithdrawMembers() {
               </div>
             </form>
         </div>
-      <div className="flex bg-white p-6 min-h-full">
+      <div className="bg-white p-6 min-h-full">
         <div className="w-full relative overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
@@ -103,7 +94,7 @@ export default function WithdrawMembers() {
               </tr>
             </thead>
             <tbody>
-              {searchByName(loans, searchText).map((loan, index) => (
+              {searchByName(shownWithdraw, searchText).map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50" : ""} hover:bg-gray-100`} key={index}>
                   <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.transactionId}</td><td className='px-6 py-3'>{loan.name}</td><td className='px-6 py-3'>{loan.account}</td><td className='px-6 py-3'>{loan.amount}</td><td className='px-6 py-3'>{loan.depositMethod}</td><td className='px-6 py-3'>{loan.status}</td>
                 </tr>
@@ -111,6 +102,17 @@ export default function WithdrawMembers() {
             </tbody>
           </table>
         </div>
+        <div className="flex justify-between px-6 my-5">
+          <Pagination
+            pages={Math.ceil(withdrawHistory.length/withdrawPerPage)}
+            setCurrentPage={setCurrentPage}
+            indexOfFirstPage={indexOfFirstPage}
+            indexOfLastPage={indexOfLastPage}
+            data={withdrawHistory}
+            depositsPerPage={withdrawPerPage}
+            setDepositsPerPage={setWithdrawPerPage}
+          />
+          </div>
       </div>
     </div>
   )

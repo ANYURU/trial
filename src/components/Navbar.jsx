@@ -4,28 +4,37 @@ import { MdSettings } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { useAuth } from '../auth/AuthContext'
+import { DarkModeSwitch } from 'react-toggle-dark-mode';
 
 function Navbar({ user }) {
   const [ show, setShow ] = useState(false)
   const navigate = useNavigate()
   const navRef = useRef()
-  const { signOut } = useAuth()
+  const { signOut, darkMode, setDarkMode } = useAuth()
 
   return (
-    <div className={`fixed bg-white right-0 top-0 flex navbar ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2`}>
+    <div className={` dark:bg-gray-900 fixed bg-white z-10 right-0 top-0 flex navbar ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2`}>
           {(user?.fullname === undefined || user.fullname === null) && <div className='bg-accent-red p-2 flex justify-center items-center text-white rounded-md cursor-pointer'
           onClick={() => {
             navigate('/application')
           }}>
             <p>Complete the application</p>
           </div>}
+          <div className='mx-3'>
+            <DarkModeSwitch
+              style={{ marginBottom: '0' }}
+              checked={darkMode}
+              onChange={() => setDarkMode(!darkMode)}
+              size={40}
+            />
+          </div>
            <div className='flex items-end relative mr-5'
             onClick={() => setShow(!show)}
             ref={navRef}
           >
             <div className='flex items-center cursor-pointer'>
               <div className='text-center'>
-                <p className='mb-0 cursor-pointer'>Hello  
+                <p className='mb-0 cursor-pointer dark:text-white'>Hello  
                 {(user?.fullname !== undefined && user.fullname !== null)
                 ? ` ${user?.fullname.split(' ')[0]}`
                 : ' Newbie !!'}
@@ -38,7 +47,9 @@ function Navbar({ user }) {
                   {(user?.fullname !== undefined && user.fullname !== null) && ` ${user?.fullname.split('')[0]}`}
                 </div>
               }
-              <MdKeyboardArrowDown />
+              <i className='dark:text-white'>
+                <MdKeyboardArrowDown />
+              </i>
             </div>
             <div className={show ? 'absolute px-3 py-3 shadow-sm w-full bg-white top-12 z-10' : 'hidden'}>
               <p style={{marginBottom: '0'}}

@@ -11,8 +11,8 @@ export default function Sidebar({ user }) {
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
 
     return (
-        <div className='h-full fixed bg-white sidebar dark:bg-gray-900'>
-            <div className='bg-white flex justify-center items-center mb-6'>
+        <div className='h-full fixed  bg-white sidebar dark:bg-gray-900'>
+            <div className='bg-white dark:bg-gray-900 flex justify-center items-center mb-6'>
                 <img src={logo} alt="tube" width={110} />
             </div>
             {menuData[`${role}`].map((item, index) => (
@@ -22,7 +22,7 @@ export default function Sidebar({ user }) {
                         to={`/${item.link}`}
                         className='flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-accent'
                     >
-                        <div className='flex items-center'>
+                        <div className='flex items-center dark:text-white'>
                             <i className='mx-2'>{item.icon}</i>
                             {item.label}
                         </div>
@@ -33,7 +33,7 @@ export default function Sidebar({ user }) {
                         }
                     </NavLink>
                     {show && index === selectedIndex &&
-                        <div className='bg-accent mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer'>
+                        <div className='bg-accent mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer dark:text-white dark:bg-slate-900'>
                             {
                                 lit[index-1].map((item, index) => (
                                     <NavLink

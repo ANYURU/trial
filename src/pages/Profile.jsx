@@ -7,6 +7,7 @@ import { supabase } from "../helpers/supabase"
 import { toBase64 } from "../helpers/toBase64"
 import { toast, ToastContainer } from 'react-toastify'
 import EditModal from "../components/EditModal"
+import { Loader } from "../components"
 
 function Profile() {
   const [ popUp, setPopUp ] = useState(false)
@@ -65,7 +66,9 @@ function Profile() {
     <div className='h-full'>
       <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase">Profile</h1>
-      <div className="bg-white m-2 p-6 min-h-full">
+      <div className="bg-white dark:bg-gray-900 dark:text-white m-2 p-6 min-h-full">
+      { profile?.fullname ? 
+      <>
         <h1 className='font-semibold mb-3'>Profile Details</h1>
         <div className='flex justify-between items-start mb-5'>
           { profile?.avatar ? <img src={`${profile?.avatar}`} className='h-16 w-16' alt="profile"/> :
@@ -172,7 +175,13 @@ function Profile() {
             </div>
           </Form>)}}
         </Formik>
-      </div>
+        </>
+        :
+          <div className="display flex justify-center">
+            <Loader />
+          </div>
+        }
+      </div> 
     </div>
   )
 }

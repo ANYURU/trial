@@ -9,6 +9,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
 
+  const [ darkMode, setDarkMode ] = useState(true)
+
   useEffect(() => {
     // get session data if there is an active session
     const session = supabase.auth.session();
@@ -36,7 +38,8 @@ export const AuthProvider = ({ children }) => {
     signIn: data => supabase.auth.signIn(data),
     signOut: () => supabase.auth.signOut(),
     user, setUser,
-    loading, setLoading
+    loading, setLoading,
+    darkMode, setDarkMode
   };
 
   // use a provider to pass down the value

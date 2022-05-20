@@ -36,15 +36,39 @@ export default function Dashboard() {
   };
 
   const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    animation: {
+      easing: 'easeInOutQuad',
+      duration: 520
+    },
     legend: {
-      display: false,
-      position: "right"
+      display: false
     },
     elements: {
       arc: {
         borderWidth: 0
       }
-    }
+    },
+    cutoutPercentage: 25
+  };
+
+  const options2 = {
+    responsive: true,
+    maintainAspectRatio: true,
+    animation: {
+      easing: 'easeInOutQuad',
+      duration: 520
+    },
+    legend: {
+      display: false
+    },
+    elements: {
+      arc: {
+        borderWidth: 0
+      }
+    },
+    cutoutPercentage: 25
   };
   
   return (
@@ -60,7 +84,7 @@ export default function Dashboard() {
         <div className={`flex gap-5 flex-grow ${!matches && 'flex-col w-full justify-center'}`}>
           <div className={`bg-white lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md justify-center items-center`}>
             <div>
-              <Line data={data2} />
+              <Line data={data2} options={options2} />
             </div>
           </div>
           <div className={`bg-white lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md justify-center items-center`}>
