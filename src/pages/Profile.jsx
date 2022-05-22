@@ -65,8 +65,8 @@ function Profile() {
   return (
     <div className='h-full'>
       <ToastContainer />
-      <h1 className="mb-5 mt-2 font-bold uppercase">Profile</h1>
-      <div className="bg-white dark:bg-gray-900 dark:text-white m-2 p-6 min-h-full">
+      <h1 className="mb-5 mt-2 font-bold uppercase text dark:text-white">Profile</h1>
+      <div className="bg-white dark:bg-dark-bg-700 dark:text-white m-2 p-6 min-h-full">
       { profile?.fullname ? 
       <>
         <h1 className='font-semibold mb-3'>Profile Details</h1>

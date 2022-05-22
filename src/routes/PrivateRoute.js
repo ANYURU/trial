@@ -28,7 +28,7 @@ const PrivateRoute = () => {
                 <div className=''>
                     <Sidebar user={ profile } />
                 </div>
-                <div className='h-screen relative flex flex-col content dark:bg-gray-800'>
+                <div className='h-screen relative flex flex-col content dark:bg-dark-bg'>
                     <Navbar user={ profile } />
                     <div className='flex-grow mt-20 mx-4'>
                         <Outlet context={[ profile, setProfile ]} />
@@ -36,7 +36,7 @@ const PrivateRoute = () => {
                 </div>
             </div>
         :
-                <div className='bg-back'>
+                <div className={`bg-back ${darkMode ? "dark" : ""}`}>
                     <div className="">
                         <MobileNav user={profile} />
                     </div>

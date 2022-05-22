@@ -37,7 +37,7 @@ export default function DepositVerify() {
 
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>Verify Deposit</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Verify Deposit</h1>
       <div className="flex bg-white p-6 min-h-full">
       {deposit  ? <div className='flex flex-grow flex-col min-h-full'>
            <div className='mb-3'>

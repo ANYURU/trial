@@ -27,7 +27,7 @@ function Members() {
 
   return (
     <div className="h-full">
-        <h1 className='mb-5 mt-2 font-bold uppercase'>Members</h1>
+        <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Members</h1>
         <div className="my-2 flex justify-between px-1">
           <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1" placeholder="Search"
             onChange={(event) => setSearchText(event.target.value)}
@@ -40,7 +40,7 @@ function Members() {
             <form action="" className='m-1'>
               <div className='flex justify-between gap-5'>
                 <div className='flex flex-col w-56'>
-                  <select name="status" id="" className="py-2 px-2 rounded bg-white"
+                  <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
                     onChange={(event) => setStatus(event.target.value)}
                   >
                       <option value="">Status</option>
@@ -49,14 +49,14 @@ function Members() {
                       <option value="Rejected">Rejected</option>
                   </select>
                 </div>
-                <div className='flex flex-col w-56'>
-                  <label htmlFor="" className='text-sm'>Date</label>
-                  <input type="date" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <div className='flex flex-col w-56 dark:text-secondary-text'>
+                  <label htmlFor="" className='text-sm '>Date</label>
+                  <input type="date" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-700' />
                 </div>
               </div>
             </form>
         </div>
-        <div className="bg-white p-6 min-h-full">
+        <div className="bg-white p-6 min-h-full dark:bg-dark-bg-700">
             <div className="w-full relative overflow-x-auto sm:rounded-lg">
               <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>

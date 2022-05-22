@@ -11,8 +11,8 @@ export default function Deposit() {
   const shownDeposits = depositHistory.slice(indexOfFirstPage, indexOfLastPage)
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>My Deposit</h1>
-      <div className="bg-white p-6 min-h-full">
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Deposit</h1>
+      <div className="bg-white p-6 min-h-full dark:bg-dark-bg-700">
         <div className="w-full relative overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>

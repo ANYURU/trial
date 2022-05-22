@@ -34,7 +34,7 @@ export default function DepositAdmin() {
   
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>Member Deposits</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Member Deposits</h1>
       <div className="my-2 flex justify-between searchInput">
           <input type="text" className="px-2 py-2 sm:py-1" placeholder="Search by name..." 
             onChange={(event) => setSearchText(event.target.value)}

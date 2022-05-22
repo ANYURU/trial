@@ -16,7 +16,11 @@
         'back': '#DEE1E3',
         'white': '#fff',
         'black': '#000',
-        'primary': '#27427A'
+        'primary': '#27427A',
+        "dark-bg": "#121212",
+        "dark-bg-700": "#181818",
+        "dark-bg-600": "#282828",
+        "secondary-text": "#b3b3b3"
       },
       fontFamily: {
         'montserrat': ['Montserrat', 'sans-serif'],

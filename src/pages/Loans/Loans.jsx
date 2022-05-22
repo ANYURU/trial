@@ -4,8 +4,8 @@ import { Pagination } from "../../components"
 export default function Loan() {
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>My Loans</h1>
-      <div className="flex bg-white dark:bg-slate-900 p-6 min-h-full">
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Loans</h1>
+      <div className="flex bg-white dark:bg-dark-bg-700 p-6 min-h-full">
         <div className="w-full relative overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
