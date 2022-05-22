@@ -1,16 +1,23 @@
 import { useState, useRef } from 'react'
-import { IoMdPower } from 'react-icons/io'
-import { MdSettings } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { useAuth } from '../auth/AuthContext'
 import { DarkModeSwitch } from 'react-toggle-dark-mode';
+import ProfileModal from './Modals/ProfileModal'
 
 function Navbar({ user }) {
   const [ show, setShow ] = useState(false)
   const navigate = useNavigate()
-  const navRef = useRef()
+  // const navRef = useRef()
   const { signOut, darkMode, setDarkMode } = useAuth()
+
+  if(show === true){
+    window.onclick = function(event) {
+        if (!event.target.matches('.dialog')) {
+            setShow(false)
+        }
+    }
+  }
 
   return (
     <div className={` dark:bg-dark-bg-700 fixed bg-white z-10 right-0 top-0 flex navbar ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2`}>
@@ -28,11 +35,10 @@ function Navbar({ user }) {
               size={30}
             />
           </div>
-           <div className='flex items-end relative mr-5'
-            onClick={() => setShow(!show)}
-            ref={navRef}
+           <div className='flex items-end relative mr-5' 
+            onClick={(event) => {setShow(!show);event.stopPropagation()}}
           >
-            <div className='flex items-center cursor-pointer'>
+            <div className='flex items-center cursor-pointer dialog'>
               <div className='text-center'>
                 <p className='mb-0 cursor-pointer dark:text-white'>Hello  
                 {(user?.fullname !== undefined && user.fullname !== null)
@@ -51,29 +57,7 @@ function Navbar({ user }) {
                 <MdKeyboardArrowDown />
               </i>
             </div>
-            <div className={show ? 'absolute px-3 py-3 shadow-sm w-full bg-white top-12 z-10' : 'hidden'}>
-              <p style={{marginBottom: '0'}}
-                onClick={() => navigate('/profile')}
-                className='flex cursor-pointer justify-center items-center hover:bg-gray-100 p-2'
-              >
-                <span className='mr-1 '>
-                  <MdSettings />
-                </span>
-                Profile
-              </p>
-              <p style={{marginBottom: '0'}}
-                className='flex cursor-pointer justify-center items-center hover:bg-gray-100 p-2'
-                onClick={async () => {
-                  await signOut()
-                  navigate('/login')
-                }} 
-              >
-                <span className='mr-1 '>
-                  <IoMdPower />
-                </span>
-                Logout
-              </p>
-          </div>
+            <ProfileModal show={show} setShow={setShow} />
           </div>
       </div>
   )

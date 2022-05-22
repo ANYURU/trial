@@ -5,10 +5,15 @@ import { RegistrationModal } from "../../components";
 import { useOutletContext } from "react-router-dom";
 import { chartColors } from "../../components/Charts/colors";
 import { AccSummary } from "../../components";
+import { useEffect } from "react";
 
 export default function Dashboard() {
   const matches = useMediaQuery('(min-width: 800px)')
   const [ profile ] = useOutletContext()
+
+  useEffect(() => {
+    document.title = 'Dashboard'
+  }, [])
 
   const data = {
     maintainAspectRatio: true,

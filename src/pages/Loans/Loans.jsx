@@ -1,7 +1,11 @@
 import { loanHistory } from "../../helpers/mockData"
 import { Pagination } from "../../components"
+import { useEffect } from "react"
 
 export default function Loan() {
+  useEffect(() => {
+    document.title = 'Loans'
+  }, [])
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Loans</h1>
