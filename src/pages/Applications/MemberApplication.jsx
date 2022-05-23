@@ -62,7 +62,7 @@ function MemberApplication() {
 
   const { user : { id: applicants_id } } = useAuth()
   const navigate = useNavigate()
-  const [ employed, setEmployed ] = useState(true)
+  const [ employed, setEmployed ] = useState(null)
   
   return (
     <>
@@ -70,6 +70,7 @@ function MemberApplication() {
       <Formik 
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
+          console.log(values)
           const { fullname: applicants_name, ...rest } = values
           try {
             const { data, error } = await supabase
@@ -108,7 +109,7 @@ function MemberApplication() {
           }
         }}
       >
-        {({values, errors, touched, handleChange, handleBlur}) => {
+        {({ values, errors, touched, handleChange, handleBlur }) => {
           return (
             <Form className='h-full'>
               <h1 className="mb-5 mt-2 font-bold uppercase">MemberShip Application</h1>
@@ -127,8 +128,10 @@ function MemberApplication() {
                             type="submit"
                             value='Next'
                             className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                            onClick={() => {
+                            onClick={(event) => {
+                              event.preventDefault()
                               setPageNumber(pageNumber + 1)
+                              console.log(values)
                             }}
                           />
                         </div>

@@ -7,7 +7,7 @@ import { withdrawRequestValidationSchema } from '../../helpers/validator'
 
 
 function WithdrawRequest() {
-  const { user:{ id: applicants_id, fullname: applicants_name } } = useAuth()
+  const { user: { id: applicants_id, fullname: applicants_name } } = useAuth()
   const initialValues = {
     account_type: '',
     amount:'',
