@@ -20,28 +20,33 @@ const PrivateRoute = () => {
             .catch(error => console.log(error))
     }, [ user ])
 
+
     return user ? (
         
         matches 
         ?
-            <div className={`top-container bg-back ${darkMode ? "dark" : ""} `}>
-                <div className=''>
-                    <Sidebar user={ profile } />
-                </div>
-                <div className='h-screen relative flex flex-col content dark:bg-dark-bg'>
-                    <Navbar user={ profile } />
-                    <div className='flex-grow mt-20 mx-4'>
-                        <Outlet context={[ profile, setProfile ]} />
+            <div className={`${darkMode ? "dark" : ""}`}>
+                <div className={`top-container bg-back dark:bg-dark-bg  `}>
+                    <div className=''>
+                        <Sidebar user={ profile } />
+                    </div>
+                    <div className='h-screen relative flex flex-col content dark:bg-dark-bg'>
+                        <Navbar user={ profile } />
+                        <div className='flex-grow mt-20 mx-4'>
+                            <Outlet context={[ profile, setProfile ]} />
+                        </div>
                     </div>
                 </div>
             </div>
         :
-                <div className={`bg-back ${darkMode ? "dark" : ""}`}>
-                    <div className="">
-                        <MobileNav user={profile} />
-                    </div>
-                    <div className='flex flex-col h-screen px-2 mt-20 dark:bg-dark-bg'>
-                        <Outlet context={[profile]} />
+                <div className={`${darkMode ? "dark" : ""}`}>
+                    <div className={`bg-back dark:bg-dark-bg h-screen`}>
+                        <div className="">
+                            <MobileNav user={profile} />
+                        </div>
+                        <div className='flex flex-col h-screen px-2 mt-20 dark:bg-dark-bg'>
+                            <Outlet context={[profile]} />
+                        </div>
                     </div>
                 </div>
     ) : 

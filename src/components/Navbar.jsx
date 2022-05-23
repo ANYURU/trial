@@ -20,7 +20,7 @@ function Navbar({ user }) {
   }
 
   return (
-    <div className={` dark:bg-dark-bg-700 fixed bg-white z-10 right-0 top-0 flex navbar ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2`}>
+    <div className={` dark:bg-dark-bg-700 fixed bg-white z-5 right-0 top-0 flex navbar ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2`}>
           {(user?.fullname === undefined || user.fullname === null) && <div className='bg-accent-red p-2 flex justify-center items-center text-white rounded-md cursor-pointer'
           onClick={() => {
             navigate('/application')

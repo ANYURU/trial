@@ -1,26 +1,3 @@
-export const users = [
-    {
-        name: 'Charles Kasasira',
-        phoneNo: '0750118523',
-        password: 'passwd123',
-        email: 'charleskasasira01@gmail.com',
-        memberStatus: 'inactive',
-        maritalStatus: 'single',
-        saccoPosition: 'member',
-        role: 'member'
-    },
-    {
-        name: 'Anyuru David Derrick',
-        phoneNo: '0750118500',
-        password: 'passwd321',
-        email: 'anyurudavidderrick@gmail.com',
-        memberStatus: 'active',
-        maritalStatus: 'single',
-        saccoPosition: 'administrator',
-        role: 'admin'
-    }
-]
-
 export const loanHistory = [
     {
         date: '11-04-2022',
@@ -363,6 +340,27 @@ export const memberApplications = [
         id: 213103938,
         amount: 300000,
         status: 'Pending'
+    },
+    {
+        date: '01-04-2022',
+        name: 'Kasasira Charles',
+        id: 213103938,
+        amount: 180000,
+        status: 'Rejected'
+    },
+    {
+        date: '03-03-2022',
+        name: 'Anyuru David',
+        id: 213103938,
+        amount: 300000,
+        status: 'Pending'
+    },
+    {
+        date: '01-04-2022',
+        name: 'Kasasira Charles',
+        id: 213103938,
+        amount: 180000,
+        status: 'Rejected'
     },
     {
         date: '01-04-2022',

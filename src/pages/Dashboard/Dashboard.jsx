@@ -12,7 +12,7 @@ export default function Dashboard() {
   const [ profile ] = useOutletContext()
 
   useEffect(() => {
-    document.title = 'Dashboard'
+    document.title = 'Dashboard - Bweyogere tuberebumu'
   }, [])
 
   const data = {

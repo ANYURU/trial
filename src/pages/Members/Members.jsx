@@ -1,13 +1,18 @@
 import { memberApplications } from "../../helpers/mockData"
 import { MdAdd } from "react-icons/md"
 import { filterByStatus, searchByName } from "../../helpers/utilites"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FaEllipsisV } from 'react-icons/fa'
 import { ContextMenu } from "../../components"
 import { MemberModal } from "../../components"
 import { Pagination } from "../../components"
+import { ConfirmModal } from "../../components"
 
 function Members() {
+  useEffect(() => {
+    document.title = 'Members - Bweyogere tuberebumu'
+  }, [])
+
   const [ status, setStatus ] = useState('')
   const members = filterByStatus(memberApplications, status)
 
@@ -15,6 +20,7 @@ function Members() {
   const [ show, setShow ] = useState(false)
 
   const [memberModal, setMemberModal] = useState(false)
+  const [ deleteModal, setDeleteModal ] = useState(false)
   const [ searchText, setSearchText ] = useState('')
 
   //pagination
@@ -25,11 +31,19 @@ function Members() {
 
   const shownMembers = members.slice(indexOfFirstPage, indexOfLastPage)
 
+  if(show === true){
+    window.onclick = function(event) {
+        if (!event.target.matches('.dialog')) {
+            setShow(false)
+        }
+    }
+  }
+
   return (
     <div className="h-full">
         <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Members</h1>
         <div className="my-2 flex justify-between px-1">
-          <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1" placeholder="Search"
+          <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1 dark:bg-dark-bg-600" placeholder="Search"
             onChange={(event) => setSearchText(event.target.value)}
           />
           <button className="w-3/12 bg-primary py-2 text-white rounded-md flex justify-center items-center"
@@ -57,7 +71,7 @@ function Members() {
             </form>
         </div>
         <div className="bg-white p-6 min-h-full dark:bg-dark-bg-700">
-            <div className="w-full relative overflow-x-auto sm:rounded-lg">
+            <div className="w-full overflow-x-auto sm:rounded-lg">
               <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
                   <tr>
@@ -66,20 +80,32 @@ function Members() {
                 </thead>
                 <tbody>
                   {searchByName(shownMembers, searchText).map((member, index) => (
-                    <tr className={`${index % 2 === 0 ? "bg-gray-50" : ""} hover:bg-gray-100`} key={index}>
+                    <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
                       {memberModal && activeIndex === index && <MemberModal member={activeIndex === index && member} setMemberModal={setMemberModal} />}
+                      {deleteModal && activeIndex === index && 
+                      <ConfirmModal setPopUp={setDeleteModal}>
+                          <h1 className="font-bold">Are you sure you want to delete {member.name.toUpperCase()}?</h1>
+                          <p>If you terminate this account, you can't recover it.</p>
+                          <div className="flex justify-end gap-3 mt-3">
+                            <button className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500" onClick={() => setDeleteModal(false)}
+                            >Cancel</button>
+                            <button className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white" onClick={() => setDeleteModal(false)}>Delete</button>
+                          </div>
+                      </ConfirmModal>
+                      }
                       <td className='px-6 py-3'>{member.date}</td><td className='px-6 py-3'>{member.name}</td><td className='px-6 py-3'>{member.id}</td><td className='px-6 py-3'>{member.amount}</td><td className='px-6 py-3'>{member.status}</td>
                       <td className="p-2">
                         <div class="relative">
-                            <button class="block p-2 rounded-md "
-                              onClick={() => {
+                            <button class="block p-2 rounded-md dialog"
+                              onClick={(event) => {
                                 setActiveIndex(index)
                                 setShow(!show)
+                                event.stopPropagation()
                               }}
                             >
                                 <FaEllipsisV />
                             </button>
-                            <ContextMenu activeIndex={activeIndex} show={show} index={index} setShow={setShow} setMemberModal={setMemberModal} member={activeIndex === index ? member : null} />
+                            <ContextMenu activeIndex={activeIndex} show={show} index={index} setShow={setShow} setMemberModal={setMemberModal} deleteModal={deleteModal} setDeleteModal={setDeleteModal} member={activeIndex === index ? member : null} />
                         </div>
                       </td>
                       

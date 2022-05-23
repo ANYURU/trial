@@ -1,8 +1,13 @@
 import { depositHistory } from "../../helpers/mockData"
 import { Pagination } from "../../components"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function Deposit() {
+  useEffect(() => {
+    document.title = 'Deposit - Bweyogere tuberebumu'
+  }, [])
+
+  // pagination
   const [ currentPage, setCurrentPage ] = useState(1)
   const [ depositsPerPage, setDepositsPerPage ] = useState(10)
   const indexOfLastPage = currentPage * depositsPerPage
@@ -22,7 +27,7 @@ export default function Deposit() {
             </thead>
             <tbody>
               {shownDeposits.map((loan, index) => (
-                <tr className={`${index % 2 === 0 ? "bg-gray-50" : ""} hover:bg-gray-100`} key={index}>
+                <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
                   <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.transactionId}</td><td className='px-6 py-3'>{loan.account}</td><td className='px-6 py-3'>{loan.amount}</td><td className='px-6 py-3'>{loan.depositMethod}</td><td className='px-6 py-3'>{loan.status}</td>
                 </tr>
               ))}

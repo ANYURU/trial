@@ -15,13 +15,12 @@ function EditModal({ setEditPop }) {
     password:''
   }
   const { id } = supabase.auth.user()
-
   const [ loading, setLoading ] = useState(false)
 
 
   return (
-    <ConfirmModal setPopUp={setEditPop}>
-      <h1 className="font-bold">Edit</h1>
+    <ConfirmModal setPopUp={setEditPop} >
+      <h1 className="font-bold dark:text-white">Edit</h1>
       
       <Formik
         initialValues={ initialValues }
