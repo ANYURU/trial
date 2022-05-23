@@ -7,7 +7,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import { depositRequestValidationSchema } from '../../helpers/validator'
 
 function MakeDeposit() {
-  const { user: { id, fullname } } = useAuth()
+  const { user: { id: applicants_id, fullname:applicants_name } } = useAuth()
 
   const initialValues = {
     account_type: '',
@@ -32,13 +32,13 @@ function MakeDeposit() {
               .from('applications')
               .insert([
                 { 
-                  applicants_id: id,
-                  type: "deposit",
+                  _type: "deposit",
                   created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                   updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                   reviewed: false,
                   application_meta: {
-                    applicants_name: fullname,
+                    applicants_id,
+                    applicants_name,
                     account_type,
                     amount,
                     phone_number,

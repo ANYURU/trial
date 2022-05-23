@@ -86,12 +86,12 @@ function MemberApplication() {
               .insert(
                 [
                   {
-                    application_id: id,
-                    type: "membership",
+                    _type: "membership",
                     created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                     updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                     reviewed: false,
                     application_meta: {
+                      applicants_id: id,
                       ...rest,
                       applicants_name
                     }
