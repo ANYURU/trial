@@ -60,7 +60,7 @@ function MemberApplication() {
     amount_in_words:'',
   }  
 
-  const { user : { id } } = useAuth()
+  const { user : { id: applicants_id } } = useAuth()
   const navigate = useNavigate()
   const [ employed, setEmployed ] = useState(true)
   
@@ -82,7 +82,7 @@ function MemberApplication() {
                     updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                     reviewed: false,
                     application_meta: {
-                      applicants_id: id,
+                      applicants_id,
                       ...rest,
                       applicants_name
                     }
