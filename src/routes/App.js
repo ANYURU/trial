@@ -4,10 +4,21 @@ import { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers, DepositVer
 import { Accounts, Savings, Mwana, Fixed, Shares, DepositAdmin } from "../pages";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
+import { useState } from "react";
 
 
 export default function App() {
+  const [ loading, setLoading ] = useState(true)
+  const preloader = document.getElementById("preloader");
+  if (preloader) {
+    setTimeout(() => {
+      preloader.style.display = "none";
+      setLoading(false);
+    }, 1000);
+  }
+
   return (
+    !loading &&
     <Router>
       <Routes>
           <Route path="/" element={<Login />} />

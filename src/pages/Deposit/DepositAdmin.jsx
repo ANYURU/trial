@@ -15,7 +15,7 @@ export default function DepositAdmin() {
     const { error, data } = await supabase
     .from("applications")
     .select()
-    .eq("type", "deposit")
+    .eq("_type", "deposit")
     setDeposits(data)
   }
 

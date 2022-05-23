@@ -19,7 +19,7 @@ export default function DepositVerify() {
     const { error, data } = await supabase
     .from("applications")
     .select()
-    .eq("type", "deposit")
+    .eq("_type", "deposit")
     .eq("application_id", id)
     setDeposit(data[0])
   }
@@ -48,7 +48,7 @@ export default function DepositVerify() {
                 <div className="my-6">Amount: {deposit.application_meta && deposit?.application_meta.amount}</div>
                 <div className="my-6">Method of Withdraw: Bank</div>
                 <div className="my-6">Account/Mobile Number: {deposit.application_meta &&  deposit?.application_meta.phone_number}</div>
-                <img src={imageURL} width={200} className="rounded" alt="receipt" />
+                <img src={imageURL} width={200} className="rounded" alt="receipt" loading="lazy"/>
               </div>
           </div>
           <div className="flex gap-10 justify-end items-center mt-3">
