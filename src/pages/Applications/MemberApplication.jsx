@@ -71,15 +71,6 @@ function MemberApplication() {
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
           const { fullname: applicants_name, ...rest } = values
-          // const { data, error } = await supabase.from('members').update(values).eq('id', user.id).single()
-          // if(error) {
-          //   console.log(error)
-          // } else {
-          //   toast.success(`Sucessfully registered`, { position: "top-center" })
-          //   navigate('/dashboard')
-          //   setProfile(data)
-          //   console.log(data)
-          // }
           try {
             const { data, error } = await supabase
               .from('applications')
