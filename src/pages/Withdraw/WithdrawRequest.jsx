@@ -7,7 +7,7 @@ import { withdrawRequestValidationSchema } from '../../helpers/validator'
 
 
 function WithdrawRequest() {
-  const { user:{ id, fullname: applicants_name } } = useAuth()
+  const { user:{ id: applicants_id, fullname: applicants_name } } = useAuth()
   const initialValues = {
     account_type: '',
     amount:'',
@@ -32,12 +32,12 @@ function WithdrawRequest() {
                 .insert(
                   [
                     {
-                      applicants_id: id,
                       type: "withdraw",
                       created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                       updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                       reviewed: false,
                       application_meta: {
+                        applicants_id,
                         applicants_name,
                         account_type,
                         amount,
