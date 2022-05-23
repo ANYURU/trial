@@ -40,7 +40,7 @@ const PrivateRoute = () => {
                     <div className="">
                         <MobileNav user={profile} />
                     </div>
-                    <div className='flex flex-col h-screen px-2 mt-20'>
+                    <div className='flex flex-col h-screen px-2 mt-20 dark:bg-dark-bg'>
                         <Outlet context={[profile]} />
                     </div>
                 </div>

@@ -9,7 +9,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  const [ darkMode, setDarkMode ] = useState(true)
+  const [ darkMode, setDarkMode ] = useState(!localStorage.getItem("darkMode") || false)
+  console.log(darkMode)
 
   useEffect(() => {
     // get session data if there is an active session

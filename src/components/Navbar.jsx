@@ -9,7 +9,7 @@ function Navbar({ user }) {
   const [ show, setShow ] = useState(false)
   const navigate = useNavigate()
   // const navRef = useRef()
-  const { signOut, darkMode, setDarkMode } = useAuth()
+  const { darkMode, setDarkMode } = useAuth()
 
   if(show === true){
     window.onclick = function(event) {
@@ -31,7 +31,11 @@ function Navbar({ user }) {
             <DarkModeSwitch
               style={{ marginBottom: '0' }}
               checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
+              onChange={() => {
+                const local = localStorage.getItem("darkMode")
+                setDarkMode(darkMode => !darkMode)
+                localStorage.setItem("darkMode", !local)
+              }}
               size={30}
             />
           </div>

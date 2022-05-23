@@ -20,7 +20,7 @@ export default function Sidebar({ user }) {
                     <NavLink
                         key={item.link}
                         to={`/${item.link}`}
-                        className='flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-dark-bg-600'
+                        className='flex justify-between mx-2 px-3 py-1 rounded-lg dark:hover:bg-dark-bg-600 hover:bg-accent'
                     >
                         <div className='flex items-center dark:text-secondary-text'>
                             <i className='mx-2'>{item.icon}</i>

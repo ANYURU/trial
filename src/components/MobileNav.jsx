@@ -1,30 +1,49 @@
 import { useState, useRef } from 'react'
-import { IoMdPower } from 'react-icons/io'
-import { MdSettings } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { GiHamburgerMenu } from 'react-icons/gi'
+import { IoCloseSharp } from 'react-icons/io5'
 import MobileMenu from './MobileMenu'
+import ProfileModal from './Modals/ProfileModal'
+import { DarkModeSwitch } from 'react-toggle-dark-mode';
+import { useAuth } from '../auth/AuthContext'
 
 function MobileNav({ user }) {
-    const [show, setShow] = useState(false)
+    
   const navigate = useNavigate()
-  const navRef = useRef()
 
   const [ showMenu, setShowMenu ] = useState(false)
+  const { darkMode, setDarkMode } = useAuth()
+
+  const [show, setShow] = useState(false)
+  if(show === true){
+    window.onclick = function(event) {
+        if (!event.target.matches('.dialog')) {
+            setShow(false)
+        }
+    }
+  }
   return (
-    <div className='fixed flex justify-between top-0 right-0 left-0 items-center mobile-navbar p-2 bg-white overflow-hidden'>
+    <div className='fixed flex justify-between z-20 top-0 right-0 left-0 items-center mobile-navbar p-2 bg-white dark:bg-dark-bg-700 dark:text-white'>
             <div
                 onClick={() => {
-                    setShowMenu(true)
-                }} className='mx-3'
+                    setShowMenu(!showMenu)
+                }} className='mx-3 font-bold cursor-pointer'
             >
-                <GiHamburgerMenu className='font-bold'/>
+                { !showMenu ? <GiHamburgerMenu className='font-bold'/> : <IoCloseSharp className='font-bold'/>}
             </div>
+
+            <div className='mx-3'>
+            <DarkModeSwitch
+              style={{ marginBottom: '0' }}
+              checked={darkMode}
+              onChange={() => setDarkMode(!darkMode)}
+              size={30}
+            />
+          </div>
             
-           <div className='flex items-end relative mr-8'
-                onClick={() => setShow(!show)}
-                ref={navRef}
+           <div className='flex items-end relative mr-8 dialog'
+                onClick={(event) => {setShow(!show); event.stopPropagation()}}
             >
             
             <div className='flex items-center cursor-pointer'>
@@ -46,33 +65,19 @@ function MobileNav({ user }) {
                 <p className={`${user.memberStatus === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.memberStatus}</p>
               </div>
               <MdKeyboardArrowDown />
-                <div className={show ? 'absolute px-3 py-3 shadow-sm w-full bg-white top-12 z-10' : 'hidden'}>
-                    <p style={{marginBottom: '0'}}
-                        onClick={() => navigate('/profile')}
-                        className='flex cursor-pointer justify-center items-center hover:bg-gray-100 p-2'
-                    >
-                        <span className='mr-1 '>
-                        <MdSettings />
-                        </span>
-                        Profile
-                    </p>
-                    <p style={{marginBottom: '0'}}
-                        className='flex cursor-pointer justify-center items-center hover:bg-gray-100 p-2'
-                        onClick={() => navigate('/login')}
-                    >
-                        <span className='mr-1 '>
-                        <IoMdPower />
-                        </span>
-                        Logout
-                    </p>
-                </div>
+                <ProfileModal show={show} setShow={setShow} />
             </div>
             
           </div>
 
-          {showMenu &&
-            <MobileMenu setShowMenu={setShowMenu}/>
-          }
+          {/* {showMenu && */}
+            {/* <div className='{bg-black bg-opacity-40 top-10 right-0 bottom-0 w-screen h-screen z-10 fixed'> */}
+              <div className={` w-screen h-screen z-10 fixed top-10 right-0 bottom-0 flex justify-start items-center overflow-y-hidden ease-in-out duration-300
+               ${showMenu ? "left-0 " : "-left-full"}`}>
+                <MobileMenu setShowMenu={setShowMenu}/>
+              </div>
+            {/* </div> */}
+          {/* } */}
       </div>
   )
 }

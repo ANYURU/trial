@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom"
+// import ReactDOM from "react-dom"
 import { IoCloseSharp } from 'react-icons/io5'
 import { NavLink, } from 'react-router-dom'
 import { menuData } from '../helpers/menuData'
@@ -13,9 +13,9 @@ function MobileMenu({ setShowMenu }) {
 
     const lit = menuData.admin.filter(item => item.sublinks).map(item => item.sublinks)
 
-  return ReactDOM.createPortal(
-    <div className="bg-black bg-opacity-40 w-screen h-screen absolute top-0 left-0 right-0 bottom-0 flex justify-start items-center overflow-y-hidden">
-      <div className="bg-white h-screen w-11/12 top-0 left-0 bottom-0 shadow-sm">
+  return (
+    <>
+      <div className="bg-white dark:bg-dark-bg-700 h-screen w-11/12 top-0 left-0 bottom-0 shadow-sm ">
         <div 
             className="flex justify-between px-3 items-center"
             onClick={() => setShowMenu(false)}
@@ -23,7 +23,6 @@ function MobileMenu({ setShowMenu }) {
         <div className='bg-white flex justify-center items-center mb-6'>
             <img src={logo} alt="tube" width={110} />
         </div>
-          <IoCloseSharp />
         </div>
         <div className='h-full'>
         {menuData.admin.map((item, index) => (
@@ -31,7 +30,7 @@ function MobileMenu({ setShowMenu }) {
             <NavLink
                 key={index}
                 to={`/${item.link}`}
-                className='flex justify-between mx-2 px-3 py-2 rounded-lg hover:bg-accent'
+                className='flex justify-between mx-2 px-3 py-2 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600'
             >
                 <div className='flex items-center'>
                     <i className='mx-2'>{item.icon}</i>
@@ -64,8 +63,7 @@ function MobileMenu({ setShowMenu }) {
 
     </div>
       </div>
-    </div>,
-    document.getElementById('portal')
+    </>
   )
 }
 
