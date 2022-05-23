@@ -4,50 +4,59 @@ import { useMediaQuery } from '../hooks'
 import { useAuth } from '../auth/AuthContext'
 import { useEffect, useState } from 'react'
 import { getProfile } from '../helpers/getProfile'
+import Loader from '../components/Loader'
 
 
 const PrivateRoute = ({ allowedRoles }) => {
     const matches = useMediaQuery('(min-width: 800px)')
     const { user } = useAuth()
     const [ profile, setProfile ] = useState({})
+    const [ roles, setRoles ] = useState(null)
     const location = useLocation()
-    const [ userRoles, setUserRoles ] = useState("")
 
     useEffect(() => {
         // Getting information that is required in all components.
         getProfile( user )
             .then( data => {
                 const { user_role: { roles  }} = data
-                setUserRoles( roles )
+                setRoles( roles )
                 setProfile(data)
                 
             })
             .catch(error => console.log(error))
     }, [ user ])
 
-    return user ? (
+    return user?.role === "authenticated" ? (
         
         matches 
         ?
             <div className='flex'>
                 <div className=''>
-                    {console.log(user)}
                     <Sidebar user={ profile } />
                 </div>
                 <div className='bg-back w-full h-screen relative flex flex-col '>
                     <Navbar user={ profile } />
-                    <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
                         {
-                            userRoles  && (
-                                userRoles.find( role => allowedRoles.includes(role)) 
-                                ? 
-                                <Outlet context={[ profile, setProfile ]} />
+                            profile && (
+                                roles !== null ? (
+                                    roles.find( role => allowedRoles.includes(role)) 
+                                    ? 
+                                    <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                                        <Outlet context={[ profile, setProfile ]} />
+                                    </div>
+                                    :
+                                    <div className='flex-grow mx-5 mt-5 overflow-y-auto h-full w-full'>
+                                        <Navigate to="unauthorized" state={{ from: location }} replace/>
+                                    </div>    
+                                ) 
                                 :
-                                <Navigate to='/notauthorized' state={ { from: location } } replace/>
-                            )
-
+                                <div className='bg-back h-full mx-5 mt-5 w-full'>
+                                    <Loader />
+                                </div>
+                                
+                                // <Navigate to='/notauthorized' state={ { from: location } } replace/>
+                            ) 
                         }
-                    </div>
                 </div>
             </div>
         :

@@ -4,6 +4,7 @@ import { Withdraw, WithdrawHistory, WithdrawRequest, DepositVerify, WithdrawVeri
 import { Accounts, Savings, Mwana, Fixed, Shares } from "../pages";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
+import Unauthorized from "../pages/Unauthorized";
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
               <Route path="application" element={<MemberApplication />} />
 
 
+            <Route path='/unauthorized' element={<Unauthorized />} /> 
             <Route path="/profile" element={<Profile />} />
           </Route>
 
