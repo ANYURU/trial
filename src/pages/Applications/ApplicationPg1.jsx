@@ -61,12 +61,6 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
                         <div className='flex justify-between' role='group'>
                             <div className='flex gap-1'>
                                 <input type="radio" name="income_sources[status]" value="Employed" id="employed"
-                                // onChange={(event) => {
-                                    // if(event.target.checked === false) setEmployed(false) 
-                                    // values.income_sources.status = event.target.value
-                                    // console.log(values)
-                                    // console.log(event.target.checked)
-                                // }}
                                     onChange={(event) => {
                                         if (event.target.checked){
                                             setEmployed(true)    
