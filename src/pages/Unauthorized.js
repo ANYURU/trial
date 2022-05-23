@@ -12,10 +12,9 @@ function Unauthorized() {
     }, [ navigateBack, navigate])
 
     return (
-        <p>
-            You do not have access to this to the requested page. Click <span><button onClick={() => setNavigateBack(true)}>Go back</button></span>.
-        </p>
-      
+        <div className='w-full h-full flex justify-center items-center bg-white'>
+            <p>You do not have access to this to the requested page. Click <button onClick={() => setNavigateBack(true)} className="text-primary font-semibold">Go back</button> to go back.</p>
+        </div> 
     )
 }
 
