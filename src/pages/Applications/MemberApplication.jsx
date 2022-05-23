@@ -83,8 +83,8 @@ function MemberApplication() {
                     reviewed: false,
                     application_meta: {
                       applicants_id,
-                      ...rest,
-                      applicants_name
+                      applicants_name,
+                      ...rest
                     }
                   }
                 ]

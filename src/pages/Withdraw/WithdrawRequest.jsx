@@ -27,7 +27,7 @@ function WithdrawRequest() {
             console.log(values)
             const { account_type, amount, particulars } = values
             try {
-              const { data, error } = await supabase
+              const { error } = await supabase
                 .from('applications')
                 .insert(
                   [
