@@ -20,6 +20,7 @@ import LoanHistory from './Loans/LoanHistory'
 import LoanPayment from './Loans/LoanPayment'
 import LoanRequest from './Loans/LoanRequest'
 import LoanVerify from './Loans/LoanVerify'
+import { LoanAdmin } from './Loans'
 
 // withdraw
 import Withdraw from './Withdraw/Withdraw'
@@ -43,7 +44,7 @@ import Members from './Members/Members'
 
 
 // exports
-export { Loans, LoanHistory, LoanPayment, LoanRequest, DepositAdmin }
+export { Loans, LoanHistory, LoanPayment, LoanRequest, DepositAdmin, LoanAdmin }
 
 export { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers}
 

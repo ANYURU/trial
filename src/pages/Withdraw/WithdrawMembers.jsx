@@ -86,6 +86,8 @@ export default function WithdrawMembers() {
             </form>
         </div>
       <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
+        { loans.length > 0 &&
+        <>
         <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
@@ -113,6 +115,7 @@ export default function WithdrawMembers() {
             setDepositsPerPage={setWithdrawPerPage}
           />
           </div>
+          </>}
       </div>
     </div>
   )

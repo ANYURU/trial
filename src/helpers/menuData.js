@@ -97,8 +97,8 @@ export const menuData = {
                     link: 'loans/payment'
                 },
                 {
-                    label: 'Verify',
-                    link: 'loans/verify'
+                    label: 'Member Applications',
+                    link: 'loans/members'
                 }
             ]
         },

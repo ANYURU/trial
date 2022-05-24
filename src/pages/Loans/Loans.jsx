@@ -7,6 +7,12 @@ export default function Loan() {
     document.title = 'Loans - Bweyogere tuberebumu'
   }, [])
 
+  const [ status, setStatus ] = useState('')
+  const [ account, setAccount ] = useState('')
+  const [ searchText, setSearchText ] = useState('')
+  const [ date, setDate ] = useState(null)
+  const [ filterName, setFilterName ] = useState('')
+
   //pagination
   const [ currentPage, setCurrentPage ] = useState(1)
   const [ loansPerPage, setLoansPerPage ] = useState(10)
@@ -18,8 +24,25 @@ export default function Loan() {
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Loans</h1>
+
+      <div className='flex my-1 justify-between gap-5'>
+          <div className='flex flex-col w-56'>
+            <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+              onChange={(event) => setStatus(event.target.value)}
+            >
+                <option value="">Status</option>
+                <option value="Approved">Approved</option>
+                <option value="Pending">Pending</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <div className='flex flex-col w-56'>
+            <input type="date" name="inputDate" onChange={(event) => setDate(event.target.value)} id="" placeholder='Old Password' className='rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text' />
+          </div>
+        </div>
+
       <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
-        <div className="w-full relative overflow-x-auto sm:rounded-lg">
+        <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
