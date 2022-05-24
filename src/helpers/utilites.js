@@ -5,6 +5,8 @@ export const filterByStatus = (data, criteria, criteriaCheck) => criteriaCheck ?
 
 export const searchByName = (data, searchText) => data.filter(member => member.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
 
+export const searchByName2 = (data, searchText) => data.filter(member => member.application_meta.applicants_name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+
 export const data = {
     maintainAspectRatio: true,
     responsive: true,

@@ -3,8 +3,11 @@ import { MdAdd } from "react-icons/md"
 import { filterByStatus } from "../../helpers/utilites"
 import { useState, useEffect } from "react"
 import { FaEllipsisV } from 'react-icons/fa'
-import { searchByName } from "../../helpers/utilites"
+import { searchByName2 } from "../../helpers/utilites"
 import { supabase } from "../../helpers/supabase"
+import { Pagination } from "../../components"
+import { ContextMenu } from "../../components"
+import { MemberModal } from "../../components"
 
 function Applications() {
 
@@ -13,25 +16,47 @@ function Applications() {
     document.title = "Member's Application - Bweyogere tuberebumu"
   }, [])
 
-  const [ deposits, setDeposits ] = useState([])
+  const [ applications, setApplications ] = useState([])
 
   const getApplications = async () => {
     const { error, data } = await supabase
     .from("applications")
     .select()
     .eq("_type", "membership")
-    setDeposits(data)
+    setApplications(data)
   }
 
-  console.log(deposits)
-
   const [ status, setStatus ] = useState('')
-  const members = filterByStatus(memberApplications, status)
-  const approvedMembers = memberApplications.filter(member => member.status === 'Approved')
-  const pendingMembers = memberApplications.filter(member => member.status === 'Pending')
-  const rejectedMembers = memberApplications.filter(member => member.status === 'Rejected')
+  const approvedMembers = applications.filter(member => member.status === 'Approved')
+  const pendingMembers = applications.filter(member => member.status === 'Pending')
+  const rejectedMembers = applications.filter(member => member.status === 'Rejected')
+
+
+  //pagination
+  const [ currentPage, setCurrentPage ] = useState(1)
+  const [ withdrawPerPage, setWithdrawPerPage ] = useState(10)
+  const indexOfLastPage = currentPage * withdrawPerPage
+  const indexOfFirstPage = indexOfLastPage - withdrawPerPage
+
+  const shownApplications = applications.slice(indexOfFirstPage, indexOfLastPage)
+
 
   const [ searchText, setSearchText ] = useState('')
+
+  //content
+  const [ activeIndex, setActiveIndex ] = useState(null)
+  const [memberModal, setMemberModal] = useState(false)
+  const [ deleteModal, setDeleteModal ] = useState(false)
+
+  const [ show, setShow ] = useState(false)
+  if(show === true){
+    window.onclick = function(event) {
+        if (!event.target.matches('.dialog')) {
+            setShow(false)
+        }
+    }
+  }
+
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Applications Details</h1>
@@ -50,7 +75,7 @@ function Applications() {
           </div>
       </div>
       <div className="my-2 flex justify-between px-1">
-          <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1" placeholder="Search" 
+          <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1 focus:outline-none focus:ring focus:ring-primary dark:bg-dark-bg-700" placeholder="Search" 
             onChange={(event) => setSearchText(event.target.value)}
           />
           <button className="w-3/12 bg-primary py-2 text-white rounded-md flex justify-center items-center"
@@ -61,7 +86,7 @@ function Applications() {
             <form action="" className='m-1'>
             <div className='flex justify-between gap-5'>
               <div className='flex flex-col w-56'>
-                <select name="status" id="" className="py-2 px-2 rounded bg-white"
+                <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
                   onChange={(event) => setStatus(event.target.value)}
                 >
                     <option value="">Status</option>
@@ -71,13 +96,12 @@ function Applications() {
                 </select>
               </div>
               <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Date</label>
-                <input type="date" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
+                <input type="date" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-700 dark:text-secondary-text' />
               </div>
             </div>
             </form>
         </div>
-      <div className="flex bg-white dark:bg-dark-bg-700 p-6 min-h-full">
+      <div className="bg-white dark:text-secondary-text dark:bg-dark-bg-700 p-6 min-h-full">
         <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
@@ -86,22 +110,47 @@ function Applications() {
               </tr>
             </thead>
             <tbody>
-              {deposits.map((deposit, index) => (
+              {searchByName2(shownApplications, searchText).map((deposit, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                  {/* <td className='px-6 py-3'>{member.date}</td><td className='px-6 py-3'>{member.name}</td><td className='px-6 py-3'>{member.id}</td><td className='px-6 py-3'>{member.amount}</td><td className='px-6 py-3'>{member.status}</td> */}
+                  {memberModal && activeIndex === index && <MemberModal member={activeIndex === index && deposit} setMemberModal={setMemberModal} />}
                   <td className='px-6 py-3'>{deposit.created_at.substring(0, 10)}</td><td className='px-6 py-3'>{deposit.application_meta.applicants_name}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'></td><td className='px-6 py-3'>{deposit.reviewed ? "Rejected" : "Pending"}</td>
                   <td className="p-2">
-                        <i
-                          onClick={() => {}}
-                        >
-                          <FaEllipsisV />
-                        </i>
+                        <div class="relative">
+                            <button class="block p-2 rounded-md dialog"
+                              onClick={(event) => {
+                                setActiveIndex(index)
+                                setShow(!show)
+                                event.stopPropagation()
+                              }}
+                            >
+                                <FaEllipsisV />
+                            </button>
+                            <ContextMenu 
+                              activeIndex={activeIndex} 
+                              show={show} setShow={setShow}
+                              index={index} 
+                              setMemberModal={setMemberModal} 
+                              deleteModal={deleteModal} setDeleteModal={setDeleteModal} 
+                              member={activeIndex === index ? deposit : null} 
+                            />
+                        </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        <div className="flex justify-between px-6 my-5">
+              <Pagination
+                pages={Math.ceil(applications.length/withdrawPerPage)}
+                setCurrentPage={setCurrentPage}
+                indexOfFirstPage={indexOfFirstPage}
+                indexOfLastPage={indexOfLastPage}
+                data={applications}
+                depositsPerPage={withdrawPerPage}
+                setDepositsPerPage={setWithdrawPerPage}
+              />
+            </div>
       </div>
     </div>
   )
