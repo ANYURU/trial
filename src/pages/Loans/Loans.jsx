@@ -8,9 +8,9 @@ export default function Loan() {
   }, [])
 
   const [ status, setStatus ] = useState('')
+  const [ date, setDate ] = useState(null)
   const [ account, setAccount ] = useState('')
   const [ searchText, setSearchText ] = useState('')
-  const [ date, setDate ] = useState(null)
   const [ filterName, setFilterName ] = useState('')
 
   //pagination

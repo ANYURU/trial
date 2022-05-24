@@ -10,6 +10,8 @@ export default function Deposit() {
   }, [])
 
   const [ deposits, setDeposits ] = useState([])
+  const [ status, setStatus ] = useState('')
+  const [ date, setDate ] = useState(null)
 
   const getApplications = async () => {
     const { error, data } = await supabase
@@ -29,7 +31,24 @@ export default function Deposit() {
   const shownDeposits = depositHistory.slice(indexOfFirstPage, indexOfLastPage)
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Deposit</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Deposits</h1>
+
+      <div className='flex my-1 justify-between gap-5'>
+          <div className='flex flex-col w-56'>
+            <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+              onChange={(event) => setStatus(event.target.value)}
+            >
+                <option value="">Status</option>
+                <option value="Approved">Approved</option>
+                <option value="Pending">Pending</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <div className='flex flex-col w-56'>
+            <input type="date" name="inputDate" onChange={(event) => setDate(event.target.value)} id="" placeholder='Old Password' className='rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text' />
+          </div>
+        </div>
+
       <div className="bg-white p-6 min-h-full dark:bg-dark-bg-700">
         <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>

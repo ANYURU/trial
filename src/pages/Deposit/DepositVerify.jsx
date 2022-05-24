@@ -30,8 +30,6 @@ export default function DepositVerify() {
     .catch(error => error)
   }
 
-  // console.log(imageURL)
-
   
   
 

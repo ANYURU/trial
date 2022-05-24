@@ -6,18 +6,29 @@ import { MdOutlineSearch } from 'react-icons/md'
 import { Pagination } from "../../components"
 
 export default function DepositAdmin() {
+  const [ deposits, setDeposits ] = useState([]) 
+
   useEffect(() => {
     getApplications()
     document.title = 'Deposit Applications - Bweyogere tuberebumu'
-  })
+  }, [deposits])
 
-  const [ deposits, setDeposits ] = useState([])
+  //pagination
+  const [ currentPage, setCurrentPage ] = useState(1)
+  const [ withdrawPerPage, setWithdrawPerPage ] = useState(10)
+  const indexOfLastPage = currentPage * withdrawPerPage
+  const indexOfFirstPage = indexOfLastPage - withdrawPerPage
+
+  
 
   const getApplications = async () => {
     const { error, data } = await supabase
     .from("applications")
     .select()
     .eq("_type", "deposit")
+    .order("created_at",  { ascending: false })
+    .range(indexOfFirstPage, indexOfLastPage)
+
     setDeposits(data)
   }
 
@@ -33,15 +44,11 @@ export default function DepositAdmin() {
   const [ date, setDate ] = useState(null)
   const [ filterName, setFilterName ] = useState('')
 
-  //pagination
-  const [ currentPage, setCurrentPage ] = useState(1)
-  const [ withdrawPerPage, setWithdrawPerPage ] = useState(10)
-  const indexOfLastPage = currentPage * withdrawPerPage
-  const indexOfFirstPage = indexOfLastPage - withdrawPerPage
+  
 
   let shownDeposits = deposits.slice(indexOfFirstPage, indexOfLastPage)
 
-  shownDeposits = deposits.filter(deposit => !account || deposit?.application_meta.account_type === account)
+  shownDeposits = shownDeposits.filter(deposit => !account || deposit?.application_meta.account_type === account)
 
   //context
   const [ show, setShow ] = useState(false)
@@ -52,6 +59,8 @@ export default function DepositAdmin() {
         }
     }
   }
+
+  console.log(deposits)
 
   
   return (
@@ -125,7 +134,9 @@ export default function DepositAdmin() {
         </div>
         </>
         :
-        <Loader />
+        <div className="w-full flex justify-center">
+          <Loader />
+        </div>
         }
         
       </div>
