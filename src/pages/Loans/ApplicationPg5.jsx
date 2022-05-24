@@ -21,15 +21,15 @@ function ApplicationPg5() {
             <div className='flex flex-wrap gap-5'>
                 <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Shares Account</label>
-                    <input type="text" name="" id="" placeholder='shares' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='shares' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
                 <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Saving Account</label>
-                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
                 <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Other collateral</label>
-                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
             </form>

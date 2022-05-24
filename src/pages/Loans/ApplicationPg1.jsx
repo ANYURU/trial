@@ -9,7 +9,7 @@ export default function ApplicationPg1({ profile, handleChange }) {
                 <div className='flex flex-wrap gap-5'>
                     <div className='flex flex-col w-56'>
                         <label htmlFor="position_in_sacco" className='text-sm'>Position in SACCO</label>
-                        <select name="position_in_sacco" defaultValue={profile?.user_role && profile?.user_role.roles.length ===1 ? 'member': ''} id="" className="ring-1 ring-black rounded px-2 py-2 bg-white"
+                        <select name="position_in_sacco" defaultValue={profile?.user_role && profile?.user_role.roles.length ===1 ? 'member': ''} id="" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600"
                             onChange={handleChange("position_in_sacco")}
                         >
                             <option value="">--Position--</option>
@@ -24,19 +24,19 @@ export default function ApplicationPg1({ profile, handleChange }) {
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Postal Address</label>
-                    <input type="text" name="postal_address" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1'
+                    <input type="text" name="postal_address" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600'
                         onChange={handleChange("postal_address")}
                     />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Land line number</label>
-                    <input type="text" name="landline_number" id="" placeholder='(222) 222 - 2222' className='ring-1 ring-black rounded px-2 py-1' 
+                    <input type="text" name="landline_number" id="" placeholder='(222) 222 - 2222' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' 
                         onChange={handleChange("landline_number")}
                     />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label htmlFor="" className=' text-sm'>Marital Status</label>
-                        <select name="marital_status" id="" defaultValue={profile?.marital_status && profile.marital_status} className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                        <select name="marital_status" id="" defaultValue={profile?.marital_status && profile.marital_status} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600">
                             <option value="">--Marital Status--</option>
                             <option value="single">Single</option>
                             <option value="married">Married</option>
@@ -46,7 +46,7 @@ export default function ApplicationPg1({ profile, handleChange }) {
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Number of dependents</label>
-                    <input type="text" name="no_of_dependents" id="" placeholder='No. of dependants' className='ring-1 ring-black rounded px-2 py-1' 
+                    <input type="text" name="no_of_dependents" id="" placeholder='No. of dependants' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' 
                         onChange={handleChange("no_of_dependents")}
                         required
                     />
@@ -60,19 +60,19 @@ export default function ApplicationPg1({ profile, handleChange }) {
                 <div className='flex flex-wrap gap-5'>
                     <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Town</label>
-                    <input type="text" name="" id="" placeholder='Enter your town' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter your town' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className='text-sm'>Estate</label>
-                    <input type="text" name="" id="" placeholder='Enter estate name' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter estate name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className='text-sm'>Street</label>
-                    <input type="text" name="" id="" placeholder='Enter street name' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter street name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className='text-sm'>House Number</label>
-                    <input type="text" name="" id="" placeholder='Enter house no.' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter house no.' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label htmlFor="" className='text-sm'>Ownership</label>
@@ -89,7 +89,7 @@ export default function ApplicationPg1({ profile, handleChange }) {
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className='text-sm'>Years Spent</label>
-                    <input type="text" name="" id="" placeholder='Years Spent' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Years Spent' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                 </div>
                 </form>
@@ -100,15 +100,15 @@ export default function ApplicationPg1({ profile, handleChange }) {
                 <div className='flex flex-wrap gap-5'>
                     <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Name</label>
-                    <input type="text" name="" id="" placeholder='Enter name' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Profession</label>
-                    <input type="text" name="" id="" placeholder='Enter profession' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter profession' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Contact</label>
-                    <input type="text" name="" id="" placeholder='Enter contact' defaultValue={profile.phone_number} className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter contact' defaultValue={profile.phone_number} className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                 </div>
                 </form>
@@ -119,15 +119,15 @@ export default function ApplicationPg1({ profile, handleChange }) {
                 <div className='flex flex-wrap gap-5'>
                     <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Name</label>
-                    <input type="text" name="" id="" placeholder='Enter name' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Profession</label>
-                    <input type="text" name="" id="" placeholder='Enter profession' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter profession' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Contact</label>
-                    <input type="text" name="" id="" placeholder='Enter contact' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter contact' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                 </div>
             </form>

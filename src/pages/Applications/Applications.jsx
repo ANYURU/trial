@@ -1,11 +1,30 @@
 import { memberApplications } from "../../helpers/mockData"
 import { MdAdd } from "react-icons/md"
 import { filterByStatus } from "../../helpers/utilites"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FaEllipsisV } from 'react-icons/fa'
 import { searchByName } from "../../helpers/utilites"
+import { supabase } from "../../helpers/supabase"
 
 function Applications() {
+
+  useEffect(() => {
+    getApplications()
+    document.title = "Member's Application - Bweyogere tuberebumu"
+  }, [])
+
+  const [ deposits, setDeposits ] = useState([])
+
+  const getApplications = async () => {
+    const { error, data } = await supabase
+    .from("applications")
+    .select()
+    .eq("_type", "membership")
+    setDeposits(data)
+  }
+
+  console.log(deposits)
+
   const [ status, setStatus ] = useState('')
   const members = filterByStatus(memberApplications, status)
   const approvedMembers = memberApplications.filter(member => member.status === 'Approved')
@@ -15,7 +34,7 @@ function Applications() {
   const [ searchText, setSearchText ] = useState('')
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>Applications Details</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Applications Details</h1>
       <div className="flex justify-between my-3">
           <div className="bg-green-400 w-4/12 flex flex-col justify-center items-center py-2 border-l-8 border-green-800">
               <h1 className="text-lg font-bold">{approvedMembers.length}</h1>
@@ -58,8 +77,8 @@ function Applications() {
             </div>
             </form>
         </div>
-      <div className="flex bg-white p-6 min-h-full">
-        <div className="w-full relative overflow-x-auto sm:rounded-lg">
+      <div className="flex bg-white dark:bg-dark-bg-700 p-6 min-h-full">
+        <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
@@ -67,9 +86,10 @@ function Applications() {
               </tr>
             </thead>
             <tbody>
-              {searchByName(members, searchText).map((member, index) => (
-                <tr className={`${index % 2 === 0 ? "bg-gray-50" : ""} hover:bg-gray-100`} key={index}>
-                  <td className='px-6 py-3'>{member.date}</td><td className='px-6 py-3'>{member.name}</td><td className='px-6 py-3'>{member.id}</td><td className='px-6 py-3'>{member.amount}</td><td className='px-6 py-3'>{member.status}</td>
+              {deposits.map((deposit, index) => (
+                <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
+                  {/* <td className='px-6 py-3'>{member.date}</td><td className='px-6 py-3'>{member.name}</td><td className='px-6 py-3'>{member.id}</td><td className='px-6 py-3'>{member.amount}</td><td className='px-6 py-3'>{member.status}</td> */}
+                  <td className='px-6 py-3'>{deposit.created_at.substring(0, 10)}</td><td className='px-6 py-3'>{deposit.application_meta.applicants_name}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'></td><td className='px-6 py-3'>{deposit.reviewed ? "Rejected" : "Pending"}</td>
                   <td className="p-2">
                         <i
                           onClick={() => {}}

@@ -4,7 +4,7 @@ function Shares() {
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Shares Account</h1>
-      <div className="flex bg-white p-6 min-h-full">
+      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
         <div className="flex gap-10">
           <p>Account Balance</p>
           <div className="flex font-bold">

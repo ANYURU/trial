@@ -56,8 +56,8 @@ function LoanRequest() {
         {({values, errors, touched, handleChange, handleBlur}) => {
           return (
             <Form>
-              <h1 className="mb-5 mt-2 font-bold uppercase">Loan Application</h1>
-              <div className="flex bg-white p-6 min-h-full">
+              <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Loan Application</h1>
+              <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
                 <div className='flex flex-grow flex-col min-h-full'>
                   {pageNumber === 1 &&
                     <ApplicationPg1 profile={profile} handleChange={handleChange} />

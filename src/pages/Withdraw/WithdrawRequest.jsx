@@ -20,15 +20,15 @@ function WithdrawRequest() {
         {({ values, errors, touched, handleChange, handleBlur }) => {
           return (
             <>
-              <h1 className='mb-5 mt-2 font-bold uppercase'>Withdraw Request</h1>
-        <div className="flex bg-white p-6 min-h-full">
+              <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Withdraw Request</h1>
+        <div className="flex bg-white dark:text-secondary-text dark:bg-dark-bg-700 p-6 min-h-full">
         <div className='flex flex-grow flex-col min-h-full'>
           <div className='mb-3'>
                 <Form className='m-2'>
                 <div className='flex flex-wrap gap-5 mb-3'>
                     <div className='flex flex-col w-56'>
                       <label htmlFor="" className='text-sm'>Please select an account</label>
-                      <select name="account" id="" onChange={handleChange("account")} className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                      <select name="account" id="" onChange={handleChange("account")} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600">
                         <option value="">--Select Account--</option>
                         <option value="savings">Savings</option>
                         <option value="shares">Shares</option>
@@ -38,13 +38,13 @@ function WithdrawRequest() {
                     </div>
                     <div className='flex flex-col w-56 '>
                       <label htmlFor="" className=' text-sm'>Enter amount to withdraw</label>
-                      <input type="text" name="amount" onChange={handleChange("amount")} id="" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1' />
+                      <input type="text" name="amount" onChange={handleChange("amount")} id="" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                 </div>
                 
             <div className='mb-3'>
                 <h1 className='font-semibold'>Particulars</h1>
-                <textarea name="particulars" onChange={handleChange("particulars")} id="" cols="30" rows="10" className='outline outline-1 p-2 rounded-md w-full'></textarea>
+                <textarea name="particulars" onChange={handleChange("particulars")} id="" cols="30" rows="10" className='outline outline-1 p-2 rounded-md w-full dark:bg-dark-bg-600'></textarea>
             </div>
           <div className="w-56">
             <Submit value='Request' />

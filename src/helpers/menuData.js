@@ -2,12 +2,13 @@ import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineBungalow, MdPeople
 import { IoMdCard } from 'react-icons/io'
 import { RiExchangeDollarLine } from 'react-icons/ri'
 import { SiHomeassistantcommunitystore } from 'react-icons/si'
+import { AiOutlineHome } from 'react-icons/ai'
 
 export const menuData = {
     member : [
         {
             label: 'Dashboard',
-            icon: <MdOutlineBungalow />,
+            icon: <AiOutlineHome />,
             link: 'dashboard'
         },
         {
@@ -79,7 +80,7 @@ export const menuData = {
     admin : [
         {
             label: 'Dashboard',
-            icon: <MdOutlineBungalow />,
+            icon: <AiOutlineHome />,
             link: 'dashboard'
         },
         {
