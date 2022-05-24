@@ -55,7 +55,7 @@ body {
 
 /* search input with icon */
 .searchInput {
-  position: relative;
+  /* position: relative; */
   background-color: #fff;
   border-radius: 8px;
   display: flex;
@@ -71,7 +71,8 @@ body {
 
 .search_icon{
   position: absolute;
-  right: 15px;
+  z-index: 0;
+  right: 20px;
   font-weight: bolder;
   font-size: 1.2rem;
   color: #9fa6b1;

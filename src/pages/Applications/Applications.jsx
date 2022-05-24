@@ -102,6 +102,8 @@ function Applications() {
             </form>
         </div>
       <div className="bg-white dark:text-secondary-text dark:bg-dark-bg-700 p-6 min-h-full">
+        {applications.length > 0 && 
+        <>
         <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
@@ -139,7 +141,7 @@ function Applications() {
               ))}
             </tbody>
           </table>
-        </div>
+        </div> 
         <div className="flex justify-between px-6 my-5">
               <Pagination
                 pages={Math.ceil(applications.length/withdrawPerPage)}
@@ -150,7 +152,9 @@ function Applications() {
                 depositsPerPage={withdrawPerPage}
                 setDepositsPerPage={setWithdrawPerPage}
               />
-            </div>
+        </div>
+        </>
+        }
       </div>
     </div>
   )
