@@ -1,4 +1,5 @@
 import { depositHistory } from "../../helpers/mockData"
+import { supabase } from "../../helpers/supabase"
 import { useState, useEffect } from "react"
 import { MdAdd } from "react-icons/md"
 import { searchByName, filterByStatus } from "../../helpers/utilites"
@@ -8,6 +9,7 @@ export default function Withdrawy() {
 
   useEffect(() => {
     document.title = 'Withdraw - Bweyogere tuberebumu'
+    getApplications()
   }, [])
 
   const [ status, setStatus ] = useState('')
@@ -17,6 +19,21 @@ export default function Withdrawy() {
   let loans = filterByStatus(depositHistory, "status", status)
 
   loans = filterByStatus(loans, "account", account)
+
+  const [ withdraw, setWithraw ] = useState([])
+
+  const getApplications = async () => {
+    const { error, data } = await supabase
+    .from("applications")
+    .select()
+    .eq("_type", "withdraw")
+    .order("created_at",  { ascending: false })
+    // .range(indexOfFirstPage, indexOfLastPage)
+
+    setWithraw(data)
+  }
+
+  console.log(withdraw)
 
   //pagination
   const [ currentPage, setCurrentPage ] = useState(1)
@@ -28,7 +45,7 @@ export default function Withdrawy() {
 
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Withdraw</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Withdraws</h1>
 
       <div className='my-3'>
             <form action="" className='m-1'>
@@ -61,7 +78,7 @@ export default function Withdrawy() {
             </form>
         </div>
       <div className="bg-white p-6 min-h-full dark:bg-dark-bg-700">
-        <div className="w-full relative overflow-x-auto sm:rounded-lg">
+        <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>

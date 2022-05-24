@@ -43,17 +43,17 @@ export default function App() {
                 <Route path="deposit/members/:id" element={<DepositVerify />} />
                 <Route path="deposit/members" element={<DepositAdmin />} />
 
+              <Route path="/withdraw" element={<Withdraw />} />
+                <Route path="withdraw/history" element={<WithdrawHistory />} />
+                <Route path="withdraw/request" element={<WithdrawRequest />} />
+                <Route path="withdraw/members/:id" element={<WithdrawVerify />} />
+                <Route path="withdraw/members" element={<WithdrawMembers />} />
+
               <Route path="accounts" element={<Accounts />} />
                 <Route path="accounts/savings" element={<Savings />} />
                 <Route path="accounts/mwana" element={<Mwana />} />
                 <Route path="accounts/fixed" element={<Fixed />} />
                 <Route path="accounts/shares" element={<Shares />} />
-
-              <Route path="/withdraw" element={<Withdraw />} />
-                <Route path="withdraw/history" element={<WithdrawHistory />} />
-                <Route path="withdraw/request" element={<WithdrawRequest />} />
-                <Route path="withdraw/verify" element={<WithdrawVerify />} />
-                <Route path="withdraw/members" element={<WithdrawMembers />} />
 
                 <Route path="members" element={<Members />} />
                 <Route path="members/applications" element={<Applications />} />

@@ -129,10 +129,6 @@ export const menuData = {
                 {
                     label: 'Member Withdraw',
                     link: 'withdraw/members'
-                },
-                {
-                    label: 'Verify',
-                    link: 'withdraw/verify'
                 }
             ]
         },

@@ -1,5 +1,5 @@
 import { Submit } from "../../components"
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useParams } from "react-router-dom"
 
 export default function WithdrawVerify() {
   const [ profile, setProfile ] = useOutletContext()

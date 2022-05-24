@@ -1,9 +1,12 @@
 import { withdrawHistory } from "../../helpers/mockData"
-import { useState } from "react"
+import { supabase } from "../../helpers/supabase"
+import { useState, useEffect } from "react"
 import { MdAdd } from "react-icons/md"
-import { searchByName, filterByStatus } from "../../helpers/utilites"
+import { searchByName2, filterByStatus } from "../../helpers/utilites"
 import { MdOutlineSearch } from 'react-icons/md'
 import Pagination from "../../components/Pagination"
+import { Loader } from "../../components"
+import { useNavigate } from "react-router-dom"
 
 export default function WithdrawMembers() {
   const [ status, setStatus ] = useState('')
@@ -12,7 +15,32 @@ export default function WithdrawMembers() {
   const [ date, setDate ] = useState(null)
   const [ filterName, setFilterName ] = useState('')
 
+  const navigate = useNavigate()
+
+  const [ withdraws, setWithraw ] = useState([])
+
+  const handleWithdraw = withdrawID => {
+    navigate(`/withdraw/members/${withdrawID}`)
+  }
+
+  useEffect(() => {
+    getApplications()
+  }, [withdraws])
+
   let loans = filterByStatus(withdrawHistory, "status", status)
+
+  const getApplications = async () => {
+    const { error, data } = await supabase
+    .from("applications")
+    .select()
+    .eq("_type", "withdraw")
+    .order("created_at",  { ascending: false })
+    // .range(indexOfFirstPage, indexOfLastPage)
+
+    setWithraw(data)
+  }
+
+  console.log(withdraws)
 
   const approvedMembers = loans.filter(member => member.status === 'Approved')
   const pendingMembers = loans.filter(member => member.status === 'Pending')
@@ -31,7 +59,7 @@ export default function WithdrawMembers() {
   const indexOfLastPage = currentPage * withdrawPerPage
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage
 
-  const shownWithdraw = loans.slice(indexOfFirstPage, indexOfLastPage)
+  const shownWithdraw = withdraws.slice(indexOfFirstPage, indexOfLastPage)
 
   return (
     <div className='h-full'>
@@ -86,7 +114,7 @@ export default function WithdrawMembers() {
             </form>
         </div>
       <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
-        { loans.length > 0 &&
+        { withdraws.length > 0 ?
         <>
         <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
@@ -96,9 +124,11 @@ export default function WithdrawMembers() {
               </tr>
             </thead>
             <tbody>
-              {searchByName(shownWithdraw, searchText).map((loan, index) => (
-                <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.transactionId}</td><td className='px-6 py-3'>{loan.name}</td><td className='px-6 py-3'>{loan.account}</td><td className='px-6 py-3'>{loan.amount}</td><td className='px-6 py-3'>{loan.depositMethod}</td><td className='px-6 py-3'>{loan.status}</td>
+              {shownWithdraw.map((withdraw, index) => (
+                <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}
+                  onClick={() => handleWithdraw(withdraw.application_id)}
+                >
+                  <td className='px-6 py-3'>{new Date(withdraw.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{withdraw.application_id}</td><td className='px-6 py-3'></td><td className='px-6 py-3'>{withdraw.application_meta.account_type}</td><td className='px-6 py-3'>{withdraw.application_meta.amount}</td><td className='px-6 py-3'></td><td className='px-6 py-3'>{withdraw.reviewed ? "Approved" : "Pending"}</td>
                 </tr>
               ))}
             </tbody>
@@ -106,16 +136,21 @@ export default function WithdrawMembers() {
         </div>
         <div className="flex justify-between px-6 my-5">
           <Pagination
-            pages={Math.ceil(withdrawHistory.length/withdrawPerPage)}
+            pages={Math.ceil(withdraws.length/withdrawPerPage)}
             setCurrentPage={setCurrentPage}
             indexOfFirstPage={indexOfFirstPage}
             indexOfLastPage={indexOfLastPage}
-            data={withdrawHistory}
+            data={withdraws}
             depositsPerPage={withdrawPerPage}
             setDepositsPerPage={setWithdrawPerPage}
           />
           </div>
-          </>}
+          </>
+          :
+          <div className="w-full flex">
+            <Loader />
+          </div>
+          }
       </div>
     </div>
   )
