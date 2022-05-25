@@ -138,6 +138,10 @@ export const menuData = {
             link: 'accounts',
             sublinks: [
                 {
+                    label: 'Savings',
+                    link: 'accounts/savings'
+                },
+                {
                     label: 'Shares',
                     link: 'accounts/shares'
                 },
@@ -149,10 +153,6 @@ export const menuData = {
                     label: 'Fixed',
                     link: 'accounts/fixed'
                 },
-                {
-                    label: 'Savings',
-                    link: 'accounts/savings'
-                }
             ]
         },
         {

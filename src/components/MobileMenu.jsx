@@ -2,7 +2,7 @@
 import { IoCloseSharp } from 'react-icons/io5'
 import { NavLink, } from 'react-router-dom'
 import { menuData } from '../helpers/menuData'
-import logo from '../assets/images/tube.png'
+import logo from '../assets/images/tube-no-bg.png'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import { useState } from 'react'
 
@@ -15,12 +15,12 @@ function MobileMenu({ setShowMenu }) {
 
   return (
     <>
-      <div className="bg-white dark:bg-dark-bg-700 h-screen w-11/12 top-0 left-0 bottom-0 shadow-sm ">
+      <div className="bg-white dark:bg-dark-bg-700 h-screen w-11/12 top-0 left-0 bottom-0 shadow-sm z-20">
         <div 
             className="flex justify-between px-3 items-center"
             onClick={() => setShowMenu(false)}
         >
-        <div className='bg-white flex justify-center items-center mb-6'>
+        <div className='bg-white dark:bg-dark-bg-700 flex justify-center items-center mb-6'>
             <img src={logo} alt="tube" width={110} />
         </div>
         </div>

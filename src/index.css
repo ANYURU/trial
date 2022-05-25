@@ -53,6 +53,14 @@ body {
   overflow-x: hidden;
 }
 
+.sm-container {
+  /* display: grid; */
+  width: 100%;
+  /* grid-template-columns: 260px 1fr; */
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
 
 
 .sidebar{

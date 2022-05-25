@@ -30,7 +30,7 @@ const PrivateRoute = () => {
                     <div className=''>
                         <Sidebar user={ profile } />
                     </div>
-                    <div className='h-screen relative content dark:bg-dark-bg'>
+                    <div className='h-screen relative content'>
                         <Navbar user={ profile } />
                         <div></div>
                         <div className='mx-4'>
@@ -41,11 +41,11 @@ const PrivateRoute = () => {
             </div>
         :
                 <div className={`${darkMode ? "dark" : ""}`}>
-                    <div className={`bg-back dark:bg-dark-bg h-screen`}>
+                    <div className={`sm-container bg-back dark:bg-dark-bg`}>
                         <div className="">
                             <MobileNav user={profile} />
                         </div>
-                        <div className='flex flex-col h-screen px-2 mt-20 dark:bg-dark-bg'>
+                        <div className='flex flex-col h-screen px-2 mt-20'>
                             <Outlet context={[profile]} />
                         </div>
                     </div>
