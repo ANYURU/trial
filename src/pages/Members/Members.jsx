@@ -40,7 +40,7 @@ function Members() {
   }
 
   return (
-    <div className="h-full">
+    <div className="h-full outline outline-red-200 overflow-hidden">
         <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Members</h1>
         <div className="my-2 flex justify-between px-1">
           <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1 dark:bg-dark-bg-600" placeholder="Search"
@@ -70,7 +70,7 @@ function Members() {
               </div>
             </form>
         </div>
-        <div className="bg-white p-6 min-h-full dark:bg-dark-bg-700">
+        <div className="bg-white outline flex-grow overflow-scroll p-6 dark:bg-dark-bg-700">
             <div className="w-full overflow-x-auto sm:rounded-lg">
               <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>

@@ -30,9 +30,10 @@ const PrivateRoute = () => {
                     <div className=''>
                         <Sidebar user={ profile } />
                     </div>
-                    <div className='h-screen relative flex flex-col content dark:bg-dark-bg'>
+                    <div className='h-screen relative content dark:bg-dark-bg'>
                         <Navbar user={ profile } />
-                        <div className='flex-grow mt-20 mx-4'>
+                        <div></div>
+                        <div className='mx-4'>
                             <Outlet context={[ profile, setProfile ]} />
                         </div>
                     </div>
