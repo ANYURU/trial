@@ -65,14 +65,14 @@ function EditModal({ setEditPop }) {
                 <div className='flex flex-col'>
                   <p>Name</p>
                   <div className='flex-grow flex'>
-                    <input type="text" name="fullname" id="fullname" placeholder='Enter full name' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary' onChange={handleChange} onBlur={handleBlur} value={values?.fullname}/>
+                    <input type="text" name="fullname" id="fullname" placeholder='Enter full name' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.fullname}/>
                     {touched?.name && errors?.name && <div className="error">{errors?.name}</div>}
                   </div>
                 </div>
                 <div className='flex flex-col'>
                   <p>Date of Birth</p>
                   <div className='flex-grow flex'>
-                    <input type="date" name="dob" id="dob" placeholder='DD/MM/YYYY' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary' onChange={handleChange} onBlur={handleBlur} value={values?.dob}/>
+                    <input type="date" name="dob" id="dob" placeholder='DD/MM/YYYY' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.dob}/>
                     {touched?.dob && errors?.dob && <div className="error">{errors?.dob}</div>}
                   </div>
                 </div>
@@ -94,21 +94,21 @@ function EditModal({ setEditPop }) {
                 <div className='flex flex-col lg:w-8/12 sm:w-10/12 md:w-8/12'>
                   <p className='w-6/12'>Email Address</p>
                   <div className='flex-grow flex'>
-                    <input type="text" name="email_address" id="email_address" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary'  onChange={handleChange} onBlur={handleBlur} value={values?.email_address}/>
+                    <input type="text" name="email_address" id="email_address" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600'  onChange={handleChange} onBlur={handleBlur} value={values?.email_address}/>
                     {touched?.email_address && errors?.email_address && <div className="error">{errors?.email_address}</div>}
                   </div>
                 </div>
                 <div className='flex flex-col'>
                   <p className='w-6/12'>Phone Number</p>
                   <div className='flex-grow flex'>
-                    <input type="text" name="phone_number" id="phone_number" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary' onChange={handleChange} onBlur={handleBlur} value={values?.phone_number}/>
+                    <input type="text" name="phone_number" id="phone_number" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.phone_number}/>
                     {touched?.phone_number && errors?.phone_number && <div className="error">{errors?.phone_number}</div>}
                   </div>
                 </div>
                 <div className='flex flex-col'>
                   <p>ID/ Passport Number</p>
                   <div className='flex-grow flex'>
-                    <input type="text" name="id_passport_number" id="id_passport_number" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary' onChange={handleChange} onBlur={handleBlur} value={values?.id_passport_number}/>
+                    <input type="text" name="id_passport_number" id="id_passport_number" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.id_passport_number}/>
                     {touched?.id_passport_number && errors?.id_passport_number && <div className="error">{errors?.id_passport_number}</div>}
                   </div>
                 </div>
@@ -118,14 +118,14 @@ function EditModal({ setEditPop }) {
                 <div className='flex flex-col'>
                   <p>Present Address</p>
                   <div className='flex-grow flex'>
-                    <input type="text" name="present_address" id="present_address" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary' onChange={handleChange} onBlur={handleBlur} value={values?.present_address}/>
+                    <input type="text" name="present_address" id="present_address" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.present_address}/>
                     {touched?.present_address && errors?.present_address && <div className="error">{errors?.present_address}</div>}
                   </div>
                 </div>
                 <div className='flex flex-col'>
                   <p>Marital Status</p>
                   <div className='flex-grow flex'>
-                    <input type="text" name="marital_status" id="marital_status" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary' onChange={handleChange} onBlur={handleBlur} value={values?.marital_status}/>
+                    <input type="text" name="marital_status" id="marital_status" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.marital_status}/>
                     {touched?.marital_status && errors?.marital_status && <div className="error">{errors?.marital_status}</div>}
                   </div>
                 </div>
@@ -135,14 +135,14 @@ function EditModal({ setEditPop }) {
                 <div className='flex flex-col'>
                   <p>Father's Name</p>
                   <div className='flex-grow flex'>
-                    <input type="text" name="fathers_name" id="fathers_name" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary' onChange={handleChange} onBlur={handleBlur} value={values?.fathers_name}/>
+                    <input type="text" name="fathers_name" id="fathers_name" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.fathers_name}/>
                     {touched?.fathers_name && errors?.fathers_name && <div className="error">{errors?.fathers_name}</div>}
                   </div>
                 </div>
                 <div className='flex flex-col'>
                   <p>Father's Address</p>
                   <div className='flex-grow flex'>
-                    <input type="text" name="fathers_address" id="fathers_address" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary' onChange={handleChange} onBlur={handleBlur} value={values?.fathers_address}/>
+                    <input type="text" name="fathers_address" id="fathers_address" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.fathers_address}/>
                     {touched?.fathers_address && errors?.fathers_address && <div className="error">{errors?.fathers_address}</div>}
                   </div>
                 </div>
@@ -165,7 +165,7 @@ function EditModal({ setEditPop }) {
                 <div className='flex flex-col'>
                   <p>Enter password to save changes</p>
                   <div className='flex-grow flex'>
-                    <input type="password" name="password" id="password" placeholder='Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary' onChange={handleChange} onBlur={handleBlur} value={values?.password} required/>
+                    <input type="password" name="password" id="password" placeholder='Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.password} required/>
                     {touched?.dob && errors?.password && <div className="error">{errors?.password}</div>}
                   </div>
                 </div>

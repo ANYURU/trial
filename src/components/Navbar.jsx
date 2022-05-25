@@ -20,7 +20,7 @@ function Navbar({ user }) {
   }
 
   return (
-    <div className={` dark:bg-dark-bg-700 fixed bg-white z-5 right-0 top-0 flex navbar ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2`}>
+    <div className={` dark:bg-dark-bg-700 fixed bg-white  z-5 right-0 top-0 flex navbar ${user?.fullname === undefined || user?.fullname === null ? 'justify-between' : 'justify-end'} items-center p-2`}>
           {(user?.fullname === undefined || user.fullname === null) && <div className='bg-accent-red p-2 flex justify-center items-center text-white rounded-md cursor-pointer'
           onClick={() => {
             navigate('/application')
@@ -53,7 +53,7 @@ function Navbar({ user }) {
                 </p>
               </div>
               { user?.avatar ? <img src={`${user?.avatar}`} alt="profile"/> :
-                <div className='w-10 h-10 bg-accent rounded-full mx-2 flex justify-center font-bold items-center overflow-hidden'>
+                <div className='w-10 h-10 bg-accent dark:bg-dark-bg-600 dark:text-secondary-text rounded-full mx-2 flex justify-center font-bold items-center overflow-hidden'>
                   {(user?.fullname !== undefined && user.fullname !== null) && ` ${user?.fullname.split('')[0]}`}
                 </div>
               }

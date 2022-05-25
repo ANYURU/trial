@@ -41,7 +41,6 @@ function Profile() {
 
   const handleChangePassword = (event, values) => {
     event.preventDefault()
-    console.log(values)
     if (values.new_password !== values.confirm_password){
       toast.error("Passwords don't match", { position: "top-center"})
     } else {
@@ -81,7 +80,7 @@ function Profile() {
                 {(profile?.fullname !== undefined && profile.fullname !== null) && ` ${profile?.fullname.split('')[0]}`}
               </span>
           }
-          <i className='text-white p-2 bg-primary rounded text-lg'
+          <i className='text-white p-2 bg-primary rounded text-lg cursor-pointer'
             onClick={() => setEditPop(true)}
           ><FaRegEdit /></i>
         </div>
@@ -134,7 +133,7 @@ function Profile() {
                   <input type="password" name="" id="confirm_password" onChange={handleChange("confirm_password")} placeholder='Confirm Password' className='ring-1 ring-black dark:ring-dark-bg-600 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 dark:bg-dark-bg-700' required/>
                 </div>
                 <div className="flex justify-end gap-3 mt-3">
-                  <input type="submit" value="Save" className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white"/>
+                  <input type="submit" value="Save" className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white cursor-pointer"/>
                 </div>
           </Form>
             )}}
@@ -158,7 +157,7 @@ function Profile() {
                 </div>
               </div>
               <div className='w-full flex justify-end'>
-                <input type="submit" className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
+                <input type="submit" className='text-white bg-accent-red px-4 py-1 rounded-md uppercase cursor-pointer'
                   value="Terminate"
                 />
                 {popUp &&
