@@ -16,8 +16,10 @@ export default function App() {
           <Route path="/verify" element={<Verification />} />
           <Route path="/set-password" element={<SetPassword />} />
           <Route path="/forgot-password" element={<ForgotPassword/>} />
-          <Route element={<PrivateRoute allowedRoles={[ "member", "admin" ]}/>}>
+          <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+          <Route element={<PrivateRoute allowedRoles={[ "member", "admin" ]}/>}>
             <Route path="/loans" element={<Loans />} />
             
               <Route path='loans/history' element={<LoanHistory />} />

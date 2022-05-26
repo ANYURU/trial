@@ -18,9 +18,11 @@ const PrivateRoute = ({ allowedRoles }) => {
         // Getting information that is required in all components.
         getProfile( user )
             .then( data => {
-                const { user_role: { roles  }} = data
-                setRoles( roles )
-                setProfile(data)
+                if( data ) {
+                    const { user_role: { roles  }} = data
+                    setRoles( roles )
+                    setProfile(data)
+                }
                 
             })
             .catch(error => console.log(error))
@@ -38,23 +40,32 @@ const PrivateRoute = ({ allowedRoles }) => {
                     <Navbar user={ profile } />
                         {
                             profile && (
-                                roles !== null ? (
-                                    roles.find( role => allowedRoles.includes(role)) 
-                                    ? 
-                                    <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
-                                        <Outlet context={[ profile, setProfile ]} />
-                                    </div>
+                                allowedRoles !== undefined ? (
+                                    roles !== null ? (
+                                        roles.find( role => allowedRoles.includes(role)) 
+                                        ? 
+                                        <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                                            <Outlet context={[ profile, setProfile ]} />
+                                            {console.log(roles)}
+                                            {console.log(allowedRoles)}
+                                        </div>
+                                        :
+                                        <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                                            <Navigate to="unauthorized" state={{ from: location }} replace/>
+                                        </div>    
+                                    ) 
                                     :
                                     <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
-                                        <Navigate to="unauthorized" state={{ from: location }} replace/>
-                                    </div>    
-                                ) 
+                                        <Loader />
+                                    </div>
+                                )
                                 :
                                 <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
-                                    <Loader />
+                                    {console.log(roles)}
+                                    {console.log(allowedRoles)}
+                                    <Outlet context={[ profile, setProfile ]}/>
                                 </div>
                                 
-                                // <Navigate to='/notauthorized' state={ { from: location } } replace/>
                             ) 
                         }
                 </div>
@@ -68,7 +79,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                 </div>
     ) : 
     <>
-        <Navigate to='/' />
+        <Navigate to='/' state={{ from: location }} replace/>
     </>
 }
 
