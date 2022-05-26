@@ -15,6 +15,8 @@ function Profile() {
     document.title = 'Profile - Bweyogere tuberebumu'
   }, [])
 
+  const [ loading, setLoading ] = useState(false)
+
   const [ popUp, setPopUp ] = useState(false)
   const [ editPop, setEditPop ] = useState(false)
   const [ profile, setProfile ] = useOutletContext()
@@ -173,7 +175,7 @@ function Profile() {
                   </ConfirmModal>
                 }
                 {editPop &&
-                  <EditModal setEditPop={setEditPop} />
+                  <EditModal  setEditPop={setEditPop} />
                 }
               </div>
             </div>

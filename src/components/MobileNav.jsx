@@ -7,6 +7,7 @@ import MobileMenu from './MobileMenu'
 import ProfileModal from './Modals/ProfileModal'
 import { DarkModeSwitch } from 'react-toggle-dark-mode';
 import { useAuth } from '../auth/AuthContext'
+import { IconContext } from 'react-icons/lib'
 
 function MobileNav({ user }) {
     
@@ -28,9 +29,11 @@ function MobileNav({ user }) {
             <div
                 onClick={() => {
                     setShowMenu(!showMenu)
-                }} className='mx-3 font-bold cursor-pointer'
+                }} className='mx-3 font-bold cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600 p-2 rounded-full'
             >
-                { !showMenu ? <GiHamburgerMenu className='font-bold'/> : <IoCloseSharp className='font-bold'/>}
+              <IconContext.Provider value={{ className: `font-bold text-2xl` }}>
+                { !showMenu ? <GiHamburgerMenu /> : <IoCloseSharp /> }
+              </IconContext.Provider>
             </div>
 
             <div className='mx-3'>

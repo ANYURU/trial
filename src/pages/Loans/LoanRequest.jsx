@@ -10,6 +10,8 @@ function LoanRequest() {
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ profile, setProfile ] = useOutletContext()
 
+  const navigate = useNavigate()
+
   const initialValues = {
     position_in_sacco: profile?.user_role && profile?.user_role.roles.length ===1 ? 'member': '',
     postal_address: '',
@@ -37,12 +39,12 @@ function LoanRequest() {
     employment_type: '',
     business_type: '',
     years_of_operation: '',
-    business_income: ''
-  }  
-  console.log(initialValues)
-
-  const { user } = useAuth()
-  const navigate = useNavigate()
+    business_income: '',
+    bank_settlement: '',
+    asset1: '',
+    asset2: '',
+    asset3: ''
+  }
   
   return (
     <div className='h-full'>
@@ -50,7 +52,9 @@ function LoanRequest() {
       <Formik
         initialValues={initialValues}
         onSubmit={async ( values ) => {
-          // console.log(values)
+          console.log(values)
+          // navigate("/")
+          setPageNumber(pageNumber + 1)
         }}
       >
         {({values, errors, touched, handleChange, handleBlur}) => {
@@ -63,7 +67,7 @@ function LoanRequest() {
                     <ApplicationPg1 profile={profile} handleChange={handleChange} />
                   }
                   {pageNumber === 2 &&
-                    <ApplicationPg2 />
+                    <ApplicationPg2 profile={profile} handleChange={handleChange} />
                   }
                   {pageNumber === 3 &&
                     <ApplicationPg3 />
@@ -80,26 +84,24 @@ function LoanRequest() {
                   <div className="flex-grow flex justify-between items-end">
                     {pageNumber !== 1 && pageNumber !== 6 &&
                     <div className=''>
-                      <input
-                        type="submit"
-                        value='Previous'
-                        className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                        onClick={() => {
-                          setPageNumber(pageNumber - 1)
-                        }}
-                      />
+                      <button
+                          type="button"
+                          className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+                          onClick={() => {
+                            setPageNumber(pageNumber - 1)
+                          }}
+                      >Previous</button>
                     </div>
                     }
                     {pageNumber !== 5 && pageNumber !== 6 &&
                       <div className='flex justify-end w-full'>
-                        <input
-                          type="submit"
-                          value='Next'
+                        <button
+                          type="button"
                           className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
                           onClick={() => {
                             setPageNumber(pageNumber + 1)
                           }}
-                        />
+                      >Next</button>
                       </div>
                     }
                     {pageNumber === 5 &&
@@ -108,9 +110,9 @@ function LoanRequest() {
                           type="submit"
                           value='Submit'
                           className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                          onClick={() => {
-                            setPageNumber(pageNumber + 1)
-                          }}
+                          // onClick={() => {
+                          //   setPageNumber(pageNumber + 1)
+                          // }}
                         />
                       </div>
                     }

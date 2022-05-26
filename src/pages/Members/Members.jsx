@@ -7,11 +7,14 @@ import { ContextMenu } from "../../components"
 import { MemberModal } from "../../components"
 import { Pagination } from "../../components"
 import { ConfirmModal } from "../../components"
+import { useNavigate } from "react-router-dom"
 
 function Members() {
   useEffect(() => {
     document.title = 'Members - Bweyogere tuberebumu'
   }, [])
+
+  const navigate = useNavigate()
 
   const [ status, setStatus ] = useState('')
   const members = filterByStatus(memberApplications, status)
@@ -47,7 +50,9 @@ function Members() {
             onChange={(event) => setSearchText(event.target.value)}
           />
           <button className="w-3/12 bg-primary py-2 text-white rounded-md flex justify-center items-center"
-            onClick={() => {}}
+            onClick={() => {
+              navigate('/application')
+            }}
           >Add Member <MdAdd /></button>
         </div>
         <div className='my-3'>
@@ -95,8 +100,8 @@ function Members() {
                       }
                       <td className='px-6 py-3'>{member.date}</td><td className='px-6 py-3'>{member.name}</td><td className='px-6 py-3'>{member.id}</td><td className='px-6 py-3'>{member.amount}</td><td className='px-6 py-3'>{member.status}</td>
                       <td className="p-2">
-                        <div class="relative">
-                            <button class="block p-2 rounded-md dialog"
+                        <div className="relative">
+                            <button className="block p-2 rounded-md dialog"
                               onClick={(event) => {
                                 setActiveIndex(index)
                                 setShow(!show)

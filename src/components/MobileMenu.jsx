@@ -1,5 +1,3 @@
-// import ReactDOM from "react-dom"
-import { IoCloseSharp } from 'react-icons/io5'
 import { NavLink, } from 'react-router-dom'
 import { menuData } from '../helpers/menuData'
 import logo from '../assets/images/tube-no-bg.png'
@@ -14,19 +12,11 @@ function MobileMenu({ setShowMenu }) {
     const lit = menuData.admin.filter(item => item.sublinks).map(item => item.sublinks)
 
   return (
-    <>
       <div className="bg-white dark:bg-dark-bg-700 h-screen w-11/12 top-0 left-0 bottom-0 shadow-sm z-20">
-        <div 
-            className="flex justify-between px-3 items-center"
-            onClick={() => setShowMenu(false)}
-        >
         <div className='bg-white dark:bg-dark-bg-700 flex justify-center items-center mb-6'>
             <img src={logo} alt="tube" width={110} />
         </div>
-        </div>
-        <div className='h-full'>
         {menuData.admin.map((item, index) => (
-            <>
             <NavLink
                 key={index}
                 to={`/${item.link}`}
@@ -41,29 +31,24 @@ function MobileMenu({ setShowMenu }) {
                     ? <MdKeyboardArrowUp onClick={() => setShow(!show)} />
                     : <MdKeyboardArrowDown onClick={() => {setShow(!show);setSelectedIndex(index)}} />)
                 }
+                {show && index === selectedIndex &&
+                    <div className='bg-accent dark:bg-dark-bg-600 mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer'>
+                        {
+                            lit[index-1].map((item, index) => (
+                                    <NavLink
+                                        key={index}
+                                        to={`${item.link}`}
+                                        className='flex px-2 py-1 rounded-md'
+                                    >
+                                        {item.label}
+                                    </NavLink>
+                            ))
+                        }
+                    </div>
+                }
             </NavLink>
-            {show && index === selectedIndex &&
-                <div className='bg-accent mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer'>
-                    {
-                        lit[index-1].map((item, i) => (
-                            <div>
-                                <NavLink
-                                    to={`${item.link}`}
-                                    className='flex px-2 py-1 rounded-md'
-                                >
-                                    {item.label}
-                                </NavLink>
-                            </div>
-                        ))
-                    }
-                </div>
-            }
-            </>
         ))}
-
-    </div>
       </div>
-    </>
   )
 }
 

@@ -9,7 +9,7 @@ import { useState } from 'react'
 import Loader from './Loader'
 
 function EditModal({ setEditPop }) {
-  const [ profile, setProfile ] = useOutletContext()
+  const [ profile ] = useOutletContext()
   const initialValues = {
     ...profile,
     password:''
@@ -35,20 +35,21 @@ function EditModal({ setEditPop }) {
                   .update({ name: name, dob: dob, gender: gender, email_address: email_address, phone_number: phone_number, id_passport_number: id_passport_number, present_address: present_address, marital_status: marital_status, fathers_address: fathers_address, fathers_name:fathers_name, avatar: avatar })
                   .eq('id', id)
                   .single()
-
+                    
                   if ( error ) {
                     setLoading(false)
                     toast.error(`${error?.message}`, {position: "top-center"})
                   } else {
-                    setLoading(false)
-                    setEditPop(false)
-                    setProfile({...profile, ...data})
+                    // setLoading(false)
+                    // setEditPop(false)
+                    // setProfile({...profile, ...data})
                   }
       
               } else {
                 setLoading(false)
                 toast.error(`Wrong password.`, {position: "top-center"})
               }
+              setLoading(false)
             })
             .catch(error => {
                 setLoading(false)

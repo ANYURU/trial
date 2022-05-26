@@ -30,11 +30,14 @@ export default function Sidebar({ user }) {
                         </IconContext.Provider>
                             <span className='font-semibold'>{item.label}</span>
                         </div>
-                        {index !== 0 && index < menuData[`${role}`].length - 1 && 
+                        <IconContext.Provider value={{ className: `font-bold text-lg dark:text-secondary-text` }}>
+                        {
+                        index !== 0 && index < menuData[`${role}`].length - 1 && 
                             (show && index === selectedIndex 
                             ? <MdKeyboardArrowUp onClick={() => setShow(!show)} />
                             : <MdKeyboardArrowDown onClick={() => {setShow(!show);setSelectedIndex(index)}} />)
                         }
+                        </IconContext.Provider>
                     </NavLink>
                     {show && index === selectedIndex &&
                         <div className='bg-accent dark:bg-dark-bg-600 mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer dark:text-secondary-text '>

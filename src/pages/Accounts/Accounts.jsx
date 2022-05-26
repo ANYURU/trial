@@ -22,8 +22,8 @@ function Accounts() {
                   <tr className='hover:bg-gray-100 dark:hover:bg-dark-bg-600'>
                     <td className='px-6 py-4'>Savings</td><td className="px-6 py-4">23,000</td><td className="px-6 py-4">2022-04-12</td><td className="px-6 py-4">Active</td>
                     <td className="px-5 py-4">
-                      <div class="relative">
-                          <button class="block p-2 rounded-md dialog">
+                      <div className="relative">
+                          <button className="block p-2 rounded-md dialog">
                               <FaEllipsisV />
                           </button>
                       </div>
@@ -32,8 +32,8 @@ function Accounts() {
                   <tr className='hover:bg-gray-100 dark:hover:bg-dark-bg-600'>
                     <td className='px-6 py-4'>Shares</td><td className="px-6 py-4">23,000</td><td className="px-6 py-4">2022-04-12</td><td className="px-6 py-4">Active</td>
                     <td className="px-5 py-4">
-                      <div class="relative">
-                          <button class="block p-2 rounded-md dialog">
+                      <div className="relative">
+                          <button className="block p-2 rounded-md dialog">
                               <FaEllipsisV />
                           </button>
                       </div>
@@ -42,8 +42,8 @@ function Accounts() {
                   <tr className='hover:bg-gray-100 dark:hover:bg-dark-bg-600'>
                     <td className='px-6 py-4'>Mwana</td><td className="px-6 py-4">23,000</td><td className="px-6 py-4">2022-04-12</td><td className="px-6 py-4">Active</td>
                     <td className="px-5 py-4">
-                      <div class="relative">
-                          <button class="block p-2 rounded-md dialog">
+                      <div className="relative">
+                          <button className="block p-2 rounded-md dialog">
                               <FaEllipsisV />
                           </button>
                       </div>
@@ -52,8 +52,8 @@ function Accounts() {
                   <tr className='hover:bg-gray-100 dark:hover:bg-dark-bg-600'>
                     <td className='px-6 py-4'>Fixed</td><td className="px-6 py-4">23,000</td><td className="px-6 py-4">2022-04-12</td><td className="px-6 py-4">Active</td>
                     <td className="px-5 py-4">
-                      <div class="relative">
-                          <button class="block p-2 rounded-md dialog">
+                      <div className="relative">
+                          <button className="block p-2 rounded-md dialog">
                               <FaEllipsisV />
                           </button>
                       </div>

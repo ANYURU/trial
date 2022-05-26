@@ -4,6 +4,7 @@ import { useMediaQuery } from '../hooks'
 import { useAuth } from '../auth/AuthContext'
 import { useEffect, useState } from 'react'
 import { getProfile } from '../helpers/getProfile'
+import { Loader } from '../components'
 
 
 const PrivateRoute = () => {
@@ -18,10 +19,11 @@ const PrivateRoute = () => {
                 setProfile(data)
             })
             .catch(error => console.log(error))
+
     }, [ user ])
 
 
-    return user ? (
+    return user?.role === "authenticated" ? (
         
         matches 
         ?

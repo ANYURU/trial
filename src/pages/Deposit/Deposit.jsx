@@ -33,7 +33,7 @@ export default function Deposit() {
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Deposits</h1>
 
-      <div className='flex my-1 justify-between gap-5'>
+      <div className='flex my-3 justify-between gap-5'>
           <div className='flex flex-col w-56'>
             <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
               onChange={(event) => setStatus(event.target.value)}
@@ -45,9 +45,9 @@ export default function Deposit() {
             </select>
           </div>
           <div className='flex flex-col w-56'>
-            <input type="date" name="inputDate" onChange={(event) => setDate(event.target.value)} id="" placeholder='Old Password' className='rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text' />
+            <input type="date" name="" onChange={(event) => setDate(event.target.value)} id="" placeholder='Old Password' className='py-2 px-2 rounded dark:bg-dark-bg-600 dark:text-secondary-text' />
           </div>
-        </div>
+      </div>
 
       <div className="bg-white p-6 min-h-full dark:bg-dark-bg-700">
         <div className="w-full overflow-x-auto sm:rounded-lg">

@@ -5,6 +5,7 @@ import { Accounts, Savings, Mwana, Fixed, Shares, DepositAdmin } from "../pages"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import { useState } from "react";
+import Unauthorized from "../pages/Unauthorized";
 
 
 export default function App() {
@@ -59,7 +60,7 @@ export default function App() {
                 <Route path="members/applications" element={<Applications />} />
                 <Route path="application" element={<MemberApplication />} />
 
-
+                <Route path='/unauthorized' element={<Unauthorized />} />
               <Route path="/profile" element={<Profile />} />
           </Route>
       </Routes>
