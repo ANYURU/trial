@@ -1,4 +1,3 @@
-import { Submit } from "../../components"
 import { useParams } from "react-router-dom"
 import { supabase } from "../../helpers/supabase"
 import { useState, useEffect } from "react"

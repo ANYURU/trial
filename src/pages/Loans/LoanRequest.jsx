@@ -13,7 +13,7 @@ function LoanRequest() {
   const navigate = useNavigate()
 
   const initialValues = {
-    position_in_sacco: profile?.user_role && profile?.user_role.roles.length ===1 ? 'member': '',
+    position_in_sacco: profile?.user_role && profile?.user_role.roles.length === 1 ? 'member': '',
     postal_address: '',
     landline_number: '',
     marital_status: '',
