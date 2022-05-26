@@ -1,17 +1,28 @@
 import { loanHistory } from "../../helpers/mockData"
 import { Pagination } from "../../components"
 import { useEffect, useState } from "react"
+import { supabase } from "../../helpers/supabase"
+import { ImFilesEmpty } from 'react-icons/im'
 
 export default function Loan() {
   useEffect(() => {
     document.title = 'Loans - Bweyogere tuberebumu'
+    getApplications()
   }, [])
 
+  const [ deposits, setDeposits] = useState([])
   const [ status, setStatus ] = useState('')
   const [ date, setDate ] = useState(null)
-  const [ account, setAccount ] = useState('')
-  const [ searchText, setSearchText ] = useState('')
-  const [ filterName, setFilterName ] = useState('')
+
+  const getApplications = async () => {
+    const { error, data } = await supabase
+    .from("applications")
+    .select()
+    .eq("_type", "loan")
+    setDeposits(data)
+  }
+
+  console.log(deposits)
 
   //pagination
   const [ currentPage, setCurrentPage ] = useState(1)
