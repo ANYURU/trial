@@ -16,9 +16,13 @@ export default function App() {
           <Route path="/verify" element={<Verification />} />
           <Route path="/set-password" element={<SetPassword />} />
           <Route path="/forgot-password" element={<ForgotPassword/>} />
+
+          {/* Accessed privately but doesnot have restricted access depending on the access role */}
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
+
+          {/* Accessed by both members and admins */}
           <Route element={<PrivateRoute allowedRoles={[ "member", "admin" ]}/>}>
             <Route path="/loans" element={<Loans />} />
             
@@ -49,6 +53,7 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
           </Route>
 
+          {/* Accessed by only administrators. */}
           <Route element={<PrivateRoute allowedRoles={[ "admin" ]}/>}>
             <Route path='loans/verify' element={<LoanVerify />} />
             <Route path="deposit/verify" element={<DepositVerify />} />

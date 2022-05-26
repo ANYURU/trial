@@ -45,9 +45,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                                         roles.find( role => allowedRoles.includes(role)) 
                                         ? 
                                         <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
-                                            <Outlet context={[ profile, setProfile ]} />
-                                            {console.log(roles)}
-                                            {console.log(allowedRoles)}
+                                            <Outlet context={[ profile, setProfile ]}/>
                                         </div>
                                         :
                                         <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
@@ -61,8 +59,6 @@ const PrivateRoute = ({ allowedRoles }) => {
                                 )
                                 :
                                 <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
-                                    {console.log(roles)}
-                                    {console.log(allowedRoles)}
                                     <Outlet context={[ profile, setProfile ]}/>
                                 </div>
                                 

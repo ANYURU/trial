@@ -60,3 +60,6 @@ code {
   width: calc(100vw - 260px);
 }
 
+.disabled-link {
+  pointer-events: none;
+}
