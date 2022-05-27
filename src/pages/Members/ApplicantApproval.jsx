@@ -23,8 +23,6 @@ export default function ApplicantApproval() {
     setApplication(data[0])
   }
 
-  console.log(application)
-
   
   
 

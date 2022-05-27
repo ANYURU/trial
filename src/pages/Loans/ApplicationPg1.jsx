@@ -1,6 +1,25 @@
-export default function ApplicationPg1({ profile, handleChange }) {
+import { Formik, Form }  from 'formik'
+import { supabase } from '../../helpers/supabase'
+import { useAuth } from '../../auth/AuthContext'
+import { toast, ToastContainer } from 'react-toastify'
+import { useOutletContext, useNavigate } from "react-router-dom"
+
+export default function ApplicationPg1({ profile, initialValues, setInitialValues }) {
+
+    const navigate = useNavigate()
+
+    return (
+      
+      <Formik
+        initialValues={initialValues}
+        onSubmit={async ( values ) => {
+            setInitialValues(values)
+        //   console.log(values)
+        }}
+      >
+        {({values, errors, touched, handleChange, handleBlur}) => {
   return (
-    <>
+    <Form>
         <div className='mb-3'>
             <h1 className='font-semibold'>Applicant's Personal Information</h1>
                 <div className='flex flex-wrap gap-5 m-2'>
@@ -129,6 +148,17 @@ export default function ApplicationPg1({ profile, handleChange }) {
                 </div>
             </div>
         </div>
-    </>
+        <div className='flex justify-end w-full'>
+            <input
+                type="submit"
+                value='Next'
+                className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+            />
+        </div>
+    </Form>
   )
+}}
+</Formik>
+
+)
 }

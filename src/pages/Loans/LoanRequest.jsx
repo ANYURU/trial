@@ -12,7 +12,7 @@ function LoanRequest() {
 
   const navigate = useNavigate()
 
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     position_in_sacco: profile?.user_role && profile?.user_role.roles.length === 1 ? 'member': '',
     postal_address: '',
     landline_number: '',
@@ -44,30 +44,33 @@ function LoanRequest() {
     asset1: '',
     asset2: '',
     asset3: ''
-  }
+  })
+
+  console.log(initialValues)
   
-  return (
-    <div className='h-full'>
-      <ToastContainer />
-      <Formik
-        initialValues={initialValues}
-        onSubmit={async ( values ) => {
-          console.log(values)
-          // navigate("/")
-          setPageNumber(pageNumber + 1)
-        }}
-      >
-        {({values, errors, touched, handleChange, handleBlur}) => {
+  // return (
+  //   <div className='h-full'>
+  //     <ToastContainer />
+  //     <Formik
+  //       initialValues={initialValues}
+  //       onSubmit={async ( values ) => {
+  //         console.log(values)
+  //         // navigate("/")
+  //         setPageNumber(pageNumber + 1)
+  //       }}
+  //     >
+  //       {({values, errors, touched, handleChange, handleBlur}) => {
           return (
-            <Form>
+            <>
+              <ToastContainer />
               <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Loan Application</h1>
               <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
                 <div className='flex flex-grow flex-col min-h-full'>
                   {pageNumber === 1 &&
-                    <ApplicationPg1 profile={profile} handleChange={handleChange} />
+                    <ApplicationPg1 profile={profile} initialValues={initialValues} setInitialValues={setInitialValues} />
                   }
                   {pageNumber === 2 &&
-                    <ApplicationPg2 profile={profile} handleChange={handleChange} />
+                    <ApplicationPg2 profile={profile} initialValues={initialValues} setInitialValues={setInitialValues} />
                   }
                   {pageNumber === 3 &&
                     <ApplicationPg3 />
@@ -93,7 +96,7 @@ function LoanRequest() {
                       >Previous</button>
                     </div>
                     }
-                    {pageNumber !== 5 && pageNumber !== 6 &&
+                    {/* {pageNumber !== 5 && pageNumber !== 6 &&
                       <div className='flex justify-end w-full'>
                         <button
                           type="button"
@@ -103,7 +106,7 @@ function LoanRequest() {
                           }}
                       >Next</button>
                       </div>
-                    }
+                    } */}
                     {pageNumber === 5 &&
                       <div className='flex justify-end w-full'>
                         <input
@@ -119,13 +122,13 @@ function LoanRequest() {
                   </div>
                 </div>
                       </div>
-            </Form>
+            </>
           )
-        }}
-      </Formik>
+      //   }}
+      // </Formik>
       
-    </div>
-  )
+    // </div>
+  // )
 }
 
 export default LoanRequest
