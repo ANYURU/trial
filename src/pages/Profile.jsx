@@ -8,6 +8,7 @@ import { toBase64 } from "../helpers/toBase64"
 import { toast, ToastContainer } from 'react-toastify'
 import EditModal from "../components/EditModal"
 import { Loader } from "../components"
+import { changeUserPasswordValidationSchema, selfTermination } from '../helpers/validator'
 
 function Profile() {
 

@@ -22,6 +22,9 @@ export default function SetPassword() {
     const { password } = values
 
     if ( location.state.type === "signup" ) {
+
+      console.log(phoneNo)
+      console.log(password)
       const { error } = await signUp({
         phone: phoneNo,
         password: password
@@ -29,6 +32,7 @@ export default function SetPassword() {
     
       if( error ) {
         toast.error(`${error?.message}`, {position: "top-center"})
+        console.log(error)
       } else {
         navigate('/dashboard') 
         localStorage.removeItem('phone_number')
@@ -40,9 +44,9 @@ export default function SetPassword() {
         .then( ( response ) => response.json() )
         .then( ( data ) => {
           if ( data?.Status === "Failure" ) {
-            toast.error(`${data?.Details}`, {position: "top-center"})
+            toast.error(`${data?.Details}`, { position: "top-center"})
           } else {
-            toast.success(`${data?.Details}`, {position: "top-center"})
+            toast.success(`${ data?.Details}`, { position: "top-center"})
             setDoneSetting(true)
           }
         })

@@ -8,9 +8,11 @@ import { IconContext } from 'react-icons/lib'
 
 export default function Sidebar({ user }) {
     const role = user?.user_role?.roles.includes("admin") ? "admin" : "member"
-    const [ show, setShow ] = useState(false)
-    const [ selectedIndex, setSelectedIndex ] = useState(null)
+    const [ show, setShow ] = useState(true)
+    const [ selectedIndex, setSelectedIndex ] = useState( null )
+    const [ disabled ] = useState( user?.user_role?.roles )
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
+
 
     return (
         <div className='h-full fixed  bg-white sidebar dark:bg-dark-bg-700'>
@@ -22,7 +24,7 @@ export default function Sidebar({ user }) {
                     <NavLink
                         key={item.link}
                         to={`/${item.link}`}
-                        className='flex justify-between mx-2 my-1 px-3 py-2 rounded-md dark:hover:bg-dark-bg-600 hover:bg-accent'
+                        className={ `flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-accent ${( disabled && item?.link !== 'dashboard' ) && `disabled-link`}` }
                     >
                         <div className='flex items-center dark:text-secondary-text'>
                         <IconContext.Provider value={{ className: `font-bold text-lg` }}>

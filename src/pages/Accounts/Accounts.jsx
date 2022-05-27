@@ -8,7 +8,7 @@ function Accounts() {
   }, [])
 
   return (
-    <div className=''>
+    <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Accounts</h1>
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
       <div className="w-full overflow-x-auto sm:rounded-lg">

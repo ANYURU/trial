@@ -1,4 +1,4 @@
-import { Outlet, Navigate} from 'react-router-dom'
+import { Outlet, Navigate, useLocation } from 'react-router-dom'
 import { Sidebar, Navbar, MobileNav } from '../components'
 import { useMediaQuery } from '../hooks'
 import { useAuth } from '../auth/AuthContext'
@@ -7,36 +7,66 @@ import { getProfile } from '../helpers/getProfile'
 import { Loader } from '../components'
 
 
-const PrivateRoute = () => {
+const PrivateRoute = ({ allowedRoles }) => {
     const matches = useMediaQuery('(min-width: 800px)')
     const { user, darkMode } = useAuth()
     const [ profile, setProfile ] = useState({})
+    const [ roles, setRoles ] = useState(null)
+    const location = useLocation()
 
     useEffect(() => {
         // Getting information that is required in all components.
         getProfile( user )
             .then( data => {
-                setProfile(data)
+                if( data ) {
+                    const { user_role: { roles  }} = data
+                    setRoles( roles )
+                    setProfile(data)
+                }
+                
             })
             .catch(error => console.log(error))
 
     }, [ user ])
-
 
     return user?.role === "authenticated" ? (
         
         matches 
         ?
             <div className={`${darkMode ? "dark" : ""}`}>
-                <div className={`top-container bg-back dark:bg-dark-bg  `}>
+                <div className={`flex min-h-screen overflow-y-auto bg-back dark:bg-dark-bg  `}>
                     <div className=''>
                         <Sidebar user={ profile } />
                     </div>
-                    <div className='h-screen relative content'>
+                    <div className='min-h-screen content'>
                         <Navbar user={ profile } />
                         <div></div>
                         <div className='mx-4'>
-                            <Outlet context={[ profile, setProfile ]} />
+                            {
+                                profile && (
+                                    allowedRoles !== undefined ? (
+                                        roles !== null ? (
+                                            roles.find( role => allowedRoles.includes(role)) 
+                                            ? 
+                                            <div className='h-full mx-5 mt-5'>
+                                                <Outlet context={[ profile, setProfile ]}/>
+                                            </div>
+                                            :
+                                            <div className='h-full mx-5 mt-5'>
+                                                <Navigate to="unauthorized" state={{ from: location }} replace/>
+                                            </div>    
+                                        ) 
+                                        :
+                                        <div className='h-full mx-5 mt-5'>
+                                            <Loader />
+                                        </div>
+                                    )
+                                    :
+                                    <div className='h-full mx-5 mt-5'>
+                                        <Outlet context={[ profile, setProfile ]}/>
+                                    </div>
+                                ) 
+                            }
                         </div>
                     </div>
                 </div>
@@ -52,10 +82,11 @@ const PrivateRoute = () => {
                         </div>
                     </div>
                 </div>
+
+                
     ) : 
     <>
-        {/* <Loader />  */}
-        <Navigate to='/' />
+        <Navigate to='/' state={{ from: location }} replace />
     </>
 }
 
