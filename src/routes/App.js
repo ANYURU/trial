@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import { useState } from "react";
 import Unauthorized from "../pages/Unauthorized";
+import { ApplicantApproval } from "../pages";
 
 
 export default function App() {
@@ -55,10 +56,6 @@ export default function App() {
               <Route path="withdraw/history" element={<WithdrawHistory />} />
               <Route path="withdraw/request" element={<WithdrawRequest />} />
 
-              <Route path="members" element={<Members />} />
-              <Route path="members/applications" element={<Applications />} />
-              <Route path="application" element={<MemberApplication />} />
-
 
             <Route path='/unauthorized' element={<Unauthorized />} /> 
             <Route path="/profile" element={<Profile />} />
@@ -72,6 +69,11 @@ export default function App() {
             <Route path="withdraw/members" element={<WithdrawMembers />} />
             <Route path="deposit/members/:id" element={<DepositVerify />} />
             <Route path="deposit/members" element={<DepositAdmin />} />
+
+            <Route path="members" element={<Members />} />
+            <Route path="members/applications" element={<Applications />} />
+            <Route path="members/applications/:id" element={<ApplicantApproval />} />
+            <Route path="application" element={<MemberApplication />} />
           </Route>
       </Routes>
     </Router>

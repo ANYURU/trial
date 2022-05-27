@@ -1,7 +1,6 @@
 import { NavLink, } from 'react-router-dom'
 import { menuData } from '../helpers/menuData'
-import logo from '../assets/images/tube.png'
-import logo2 from '../assets/images/tube-no-bg.png'
+import logo from '../assets/images/tube-no-bg.png'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import React, { useState } from 'react'
 import { IconContext } from 'react-icons/lib'
@@ -17,14 +16,14 @@ export default function Sidebar({ user }) {
     return (
         <div className='h-full fixed  bg-white sidebar dark:bg-dark-bg-700'>
             <div className='bg-white h-[110px] dark:bg-dark-bg-700 flex justify-center items-center mb-6'>
-                <img src={logo2} alt="tube" width={110} loading="lazy"/>
+                <img src={logo} alt="tube" width={110} loading="lazy"/>
             </div>
             {menuData[`${role}`].map((item, index) => (
                 <React.Fragment key={index}>
                     <NavLink
                         key={item.link}
                         to={`/${item.link}`}
-                        className={ `flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-accent ${( disabled && item?.link !== 'dashboard' ) && `disabled-link`}` }
+                        className={ `flex justify-between mx-2 px-3 py-2 mb-1 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600 ${( disabled && item?.link !== 'dashboard' ) && `disabled-link`}` }
                     >
                         <div className='flex items-center dark:text-secondary-text'>
                         <IconContext.Provider value={{ className: `font-bold text-lg` }}>

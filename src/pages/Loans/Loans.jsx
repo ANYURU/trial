@@ -22,8 +22,6 @@ export default function Loan() {
     setDeposits(data)
   }
 
-  console.log(deposits)
-
   //pagination
   const [ currentPage, setCurrentPage ] = useState(1)
   const [ loansPerPage, setLoansPerPage ] = useState(10)

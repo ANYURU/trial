@@ -1,4 +1,3 @@
-import { memberApplications } from "../../helpers/mockData"
 import { MdAdd } from "react-icons/md"
 import { filterByStatus } from "../../helpers/utilites"
 import { useState, useEffect } from "react"
@@ -8,15 +7,18 @@ import { supabase } from "../../helpers/supabase"
 import { Pagination } from "../../components"
 import { ContextMenu } from "../../components"
 import { MemberModal } from "../../components"
+import { useNavigate } from "react-router-dom"
 
 function Applications() {
 
   useEffect(() => {
     getApplications()
-    document.title = "Member's Application - Bweyogere tuberebumu"
+    document.title = "Membership Application - Bweyogere tuberebumu"
   }, [])
 
   const [ applications, setApplications ] = useState([])
+
+  const navigate = useNavigate()
 
   const getApplications = async () => {
     const { error, data } = await supabase
@@ -112,13 +114,15 @@ function Applications() {
               </tr>
             </thead>
             <tbody>
-              {searchByName2(shownApplications, searchText).map((deposit, index) => (
-                <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                  {memberModal && activeIndex === index && <MemberModal member={activeIndex === index && deposit} setMemberModal={setMemberModal} />}
-                  <td className='px-6 py-3'>{deposit.created_at.substring(0, 10)}</td><td className='px-6 py-3'>{deposit.application_meta.applicants_name}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'></td><td className='px-6 py-3'>{deposit.reviewed ? "Rejected" : "Pending"}</td>
+              {searchByName2(shownApplications, searchText).map((application, index) => (
+                <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`} key={index}
+                  onClick={() => navigate(`/members/applications/${application.application_id}`)}
+                >
+                  {memberModal && activeIndex === index && <MemberModal member={activeIndex === index && application} setMemberModal={setMemberModal} />}
+                  <td className='px-6 py-3'>{application.created_at.substring(0, 10)}</td><td className='px-6 py-3'>{application.application_meta.applicants_name}</td><td className='px-6 py-3'>{application.application_id}</td><td className='px-6 py-3'></td><td className='px-6 py-3'>{application.reviewed ? "Rejected" : "Pending"}</td>
                   <td className="p-2">
-                        <div class="relative">
-                            <button class="block p-2 rounded-md dialog"
+                        <div className="relative">
+                            <button className="block p-2 rounded-md dialog"
                               onClick={(event) => {
                                 setActiveIndex(index)
                                 setShow(!show)
@@ -133,7 +137,7 @@ function Applications() {
                               index={index} 
                               setMemberModal={setMemberModal} 
                               deleteModal={deleteModal} setDeleteModal={setDeleteModal} 
-                              member={activeIndex === index ? deposit : null} 
+                              member={activeIndex === index ? application : null} 
                             />
                         </div>
                   </td>

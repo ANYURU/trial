@@ -28,12 +28,10 @@ export default function Withdrawy() {
     .select()
     .eq("_type", "withdraw")
     .order("created_at",  { ascending: false })
-    // .range(indexOfFirstPage, indexOfLastPage)
+    .range(indexOfFirstPage, indexOfLastPage)
 
     setWithraw(data)
   }
-
-  console.log(withdraw)
 
   //pagination
   const [ currentPage, setCurrentPage ] = useState(1)

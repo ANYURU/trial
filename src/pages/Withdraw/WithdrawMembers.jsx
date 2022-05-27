@@ -40,8 +40,6 @@ export default function WithdrawMembers() {
     setWithraw(data)
   }
 
-  console.log(withdraws)
-
   const approvedMembers = loans.filter(member => member.status === 'Approved')
   const pendingMembers = loans.filter(member => member.status === 'Pending')
   const rejectedMembers = loans.filter(member => member.status === 'Rejected')

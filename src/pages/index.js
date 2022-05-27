@@ -41,6 +41,7 @@ import MemberApplication from './Applications/MemberApplication'
 
 // members
 import Members from './Members/Members'
+import ApplicantApproval from './Members/ApplicantApproval'
 
 
 // exports
@@ -50,6 +51,6 @@ export { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers}
 
 export { Accounts, Savings, Mwana, Fixed, Shares}
 
-export { Members, DepositVerify, LoanVerify, WithdrawVerify, Applications, MemberApplication }
+export { Members, DepositVerify, LoanVerify, WithdrawVerify, Applications, MemberApplication, ApplicantApproval }
 
 export { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, Deposit, Profile, DepositHistory, MakeDeposit }
