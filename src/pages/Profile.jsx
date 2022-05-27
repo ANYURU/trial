@@ -53,7 +53,7 @@ function Profile() {
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Member Status</p>
             <div className='flex-grow flex'>
-              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status}</p>
+              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{'pending' ??  profile?.member_status}</p>
             </div>
           </div>
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
