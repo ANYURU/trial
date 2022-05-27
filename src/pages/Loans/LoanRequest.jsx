@@ -67,10 +67,10 @@ function LoanRequest() {
               <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
                 <div className='flex flex-grow flex-col min-h-full'>
                   {pageNumber === 1 &&
-                    <ApplicationPg1 profile={profile} initialValues={initialValues} setInitialValues={setInitialValues} />
+                    <ApplicationPg1 profile={profile} initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
                   }
                   {pageNumber === 2 &&
-                    <ApplicationPg2 profile={profile} initialValues={initialValues} setInitialValues={setInitialValues} />
+                    <ApplicationPg2 profile={profile} initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
                   }
                   {pageNumber === 3 &&
                     <ApplicationPg3 />

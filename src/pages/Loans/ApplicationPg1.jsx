@@ -4,7 +4,7 @@ import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
 import { useOutletContext, useNavigate } from "react-router-dom"
 
-export default function ApplicationPg1({ profile, initialValues, setInitialValues }) {
+export default function ApplicationPg1({ profile, initialValues, setInitialValues, setPageNumber }) {
 
     const navigate = useNavigate()
 
@@ -14,6 +14,7 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
         initialValues={initialValues}
         onSubmit={async ( values ) => {
             setInitialValues(values)
+            setPageNumber(2)
         //   console.log(values)
         }}
       >

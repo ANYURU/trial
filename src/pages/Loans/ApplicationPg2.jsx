@@ -1,9 +1,26 @@
+import { Formik, Form }  from 'formik'
+import { supabase } from '../../helpers/supabase'
+import { useAuth } from '../../auth/AuthContext'
+import { toast, ToastContainer } from 'react-toastify'
+import { useOutletContext, useNavigate } from "react-router-dom"
 import { useState } from 'react'
 
-function ApplicationPg2({ profile, handleChange}) {
+function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumber }) {
     const [ employed, setEmployed ] = useState(true)
+
+    return (
+      
+        <Formik
+          initialValues={initialValues}
+          onSubmit={async ( values ) => {
+              setInitialValues(values)
+              setPageNumber(1)
+          //   console.log(values)
+          }}
+        >
+          {({values, errors, touched, handleChange, handleBlur}) => {
   return (
-    <>
+    <Form>
         <div className='mb-3'>
             <h1 className='font-semibold'>Employment Details</h1>
 
@@ -150,8 +167,24 @@ function ApplicationPg2({ profile, handleChange}) {
             </div>
             </form>
         </div>
-    </>
+        <div className='flex justify-between w-full'>
+            <input
+                type="submit"
+                value='Back'
+                className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+            />
+            <input
+                type="submit"
+                value='Next'
+                className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+            />
+        </div>
+    </Form>
   )
+}}
+</Formik>
+
+)
 }
 
 export default ApplicationPg2
