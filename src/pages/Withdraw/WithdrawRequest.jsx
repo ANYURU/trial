@@ -18,8 +18,8 @@ function WithdrawRequest() {
   return ( 
     <div className='h-full'>
       <ToastContainer />
-      <h1 className='mb-5 mt-2 font-bold uppercase'>Withdraw Request</h1>
-      <div className="flex bg-white p-6 min-h-full">
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Withdraw Request</h1>
+      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
         <Formik
           initialValues={initialValues}
           validationSchema={withdrawRequestValidationSchema}
@@ -64,7 +64,7 @@ function WithdrawRequest() {
                       <div className='flex flex-wrap gap-5'>
                           <div className='flex flex-col w-56'>
                             <label htmlFor="" className='text-sm'>Please select an account</label>
-                            <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-2 bg-white" value={values?.account_type} onChange={handleChange} onBlur={handleBlur}>
+                            <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600" value={values?.account_type} onChange={handleChange} onBlur={handleBlur}>
                               <option value="">--Select Account--</option>
                               <option value="savings">Savings</option>
                               <option value="shares">Shares</option>
@@ -75,7 +75,7 @@ function WithdrawRequest() {
                           </div>
                           <div className='flex flex-col w-56 '>
                             <label htmlFor="" className=' text-sm'>Enter amount to withdraw</label>
-                            <input type="text" name="amount" id="amount" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1' value={values?.amount} onChange={handleChange} onBlur={handleBlur}/>
+                            <input type="text" name="amount" id="amount" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' value={values?.amount} onChange={handleChange} onBlur={handleBlur}/>
                             {touched?.amount && errors?.amount && <div className='error text-red-600 text-xs'>{errors?.amount}</div>}
                           </div>
                       </div>
@@ -83,7 +83,7 @@ function WithdrawRequest() {
                   </div>
                   <div className='mb-3'>
                       <h1 className='font-semibold'>Practiculars</h1>
-                      <textarea name="particulars" id="particulars" cols="30" rows="10" className='outline outline-1 p-2 rounded-md w-full' value={values?.particulars} onChange={handleChange} onBlur={handleBlur}></textarea>
+                      <textarea name="particulars" id="particulars" cols="30" rows="10" className='outline outline-1 p-2 rounded-md w-full dark:bg-dark-bg-600' value={values?.particulars} onChange={handleChange} onBlur={handleBlur}></textarea>
                       {touched?.particulars && errors?.particulars && <div className='error text-red-600 text-xs'>{errors?.particulars}</div>}
                   </div>
                 <div className="w-56">

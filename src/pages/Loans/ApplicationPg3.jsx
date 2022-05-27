@@ -12,23 +12,23 @@ function ApplicationPg3() {
                 <div className='flex flex-wrap gap-5'>
                     <div className='flex flex-col w-56'>
                         <label htmlFor="" className='text-sm'>Name</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label htmlFor="" className=' text-sm'>Amount Advanced</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label htmlFor="" className=' text-sm'>Date Granted</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label htmlFor="" className=' text-sm'>Repayment Period</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Balance</label>
-                    <input type="text" name="" id="" placeholder='DD/MM/YYYY' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='DD/MM/YYYY' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                 </div>
             </form>
@@ -39,23 +39,23 @@ function ApplicationPg3() {
                 <div className='flex flex-wrap gap-5'>
                     <div className='flex flex-col w-56'>
                         <label htmlFor="" className='text-sm'>Name</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label htmlFor="" className=' text-sm'>Amount Advanced</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label htmlFor="" className=' text-sm'>Date Granted</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label htmlFor="" className=' text-sm'>Repayment Period</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Balance</label>
-                    <input type="text" name="" id="" placeholder='DD/MM/YYYY' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='DD/MM/YYYY' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                     </div>
                 </div>
             </form>
@@ -65,7 +65,7 @@ function ApplicationPg3() {
             <form action="" className='m-2'>
             <div className='flex flex-wrap gap-5'>
                 <div className='flex flex-col w-56'>
-                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                  <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
             </form>
@@ -92,7 +92,7 @@ function ApplicationPg3() {
             <form action="" className='m-2'>
             <div className='flex flex-wrap gap-5'>
                 <div className='flex flex-col w-56'>
-                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
             </form>

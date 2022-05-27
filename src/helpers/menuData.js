@@ -2,12 +2,13 @@ import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineBungalow, MdPeople
 import { IoMdCard } from 'react-icons/io'
 import { RiExchangeDollarLine } from 'react-icons/ri'
 import { SiHomeassistantcommunitystore } from 'react-icons/si'
+import { AiOutlineHome } from 'react-icons/ai'
 
 export const menuData = {
     member : [
         {
             label: 'Dashboard',
-            icon: <MdOutlineBungalow />,
+            icon: <AiOutlineHome />,
             link: 'dashboard'
         },
         {
@@ -79,7 +80,7 @@ export const menuData = {
     admin : [
         {
             label: 'Dashboard',
-            icon: <MdOutlineBungalow />,
+            icon: <AiOutlineHome />,
             link: 'dashboard'
         },
         {
@@ -96,8 +97,8 @@ export const menuData = {
                     link: 'loans/payment'
                 },
                 {
-                    label: 'Verify',
-                    link: 'loans/verify'
+                    label: 'Member Applications',
+                    link: 'loans/members'
                 }
             ]
         },
@@ -111,9 +112,9 @@ export const menuData = {
                     link: '/deposit/deposit'
                 },
                 {
-                    label: 'Verify',
-                    link: '/deposit/verify'
-                },
+                    label: 'Deposit Applications',
+                    link: '/deposit/members'
+                }
             ]
         },
         {
@@ -126,8 +127,8 @@ export const menuData = {
                     link: 'withdraw/request'
                 },
                 {
-                    label: 'Verify',
-                    link: 'withdraw/verify'
+                    label: 'Member Withdraw',
+                    link: 'withdraw/members'
                 }
             ]
         },
@@ -136,6 +137,10 @@ export const menuData = {
             icon: <MdCalendarViewWeek />,
             link: 'accounts',
             sublinks: [
+                {
+                    label: 'Savings',
+                    link: 'accounts/savings'
+                },
                 {
                     label: 'Shares',
                     link: 'accounts/shares'
@@ -148,10 +153,6 @@ export const menuData = {
                     label: 'Fixed',
                     link: 'accounts/fixed'
                 },
-                {
-                    label: 'Savings',
-                    link: 'accounts/savings'
-                }
             ]
         },
         {

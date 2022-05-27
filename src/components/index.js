@@ -10,8 +10,11 @@ import MobileMenu from "./MobileMenu";
 import VerificationCode from "./Form/VerfificationCode";
 import ConfirmPasswordField from "./Form/ConfirmPasswordField";
 import RegistrationModal from "./Modals/RegistrationModal";
+import MemberModal from "./Modals/MemberModal";
 import Nominee from "./Nominees";
 import ContextMenu from "./ContextMenu";
+import AccSummary from "./Dashboard/AccSummary";
+import Pagination from "./Pagination";
 
 
-export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu }
+export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu, MemberModal, AccSummary, Pagination }

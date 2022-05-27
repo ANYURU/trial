@@ -1,15 +1,23 @@
 import { FaRegEdit } from "react-icons/fa"
-// import profileImg from '../assets/images/abudi.png'
 import { ConfirmModal } from "../components"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useOutletContext } from "react-router-dom"
 import { Formik, Form } from 'formik'
 import { supabase } from "../helpers/supabase"
 import { toBase64 } from "../helpers/toBase64"
 import { toast, ToastContainer } from 'react-toastify'
+import EditModal from "../components/EditModal"
+import { Loader } from "../components"
 import { changeUserPasswordValidationSchema, selfTermination } from '../helpers/validator'
 
 function Profile() {
+
+  useEffect(() => {
+    document.title = 'Profile - Bweyogere tuberebumu'
+  }, [])
+
+  const [ loading, setLoading ] = useState(false)
+
   const [ popUp, setPopUp ] = useState(false)
   const [ editPop, setEditPop ] = useState(false)
   const [ profile, setProfile ] = useOutletContext()
@@ -19,348 +27,168 @@ function Profile() {
   }
   const { id } = supabase.auth.user()
 
+  const handleTermination = (event, values) => {
+    event.preventDefault()
+    supabase.rpc('check_password', { current_password: values.password, _user_id: id })
+        .then(async ({ data })  => {
+          if ( data ) {
+            setPopUp(true)
+          } else {
+            toast.error(`Wrong password.`, {position: "top-center"})
+          }})
+          .catch(error => {
+            console.log(`Error ${error}`)
+          })
+    document.terminationForm.reset()
+  }
+
+  const handleChangePassword = (event, values) => {
+    event.preventDefault()
+    if (values.new_password !== values.confirm_password){
+      toast.error("Passwords don't match", { position: "top-center"})
+    } else {
+      supabase.rpc('check_password', { current_password: values.old_password, _user_id: id })
+        .then(async ({ data })  => {
+          if ( data ) {
+            const { user, error } = await supabase.auth.update({password: values.new_password})
+            if (user){
+              toast.success(`Successfully updated password.`, {position: "top-center"})
+            } else if(error){
+              toast.error(`Error ${error}.`, {position: "top-center"})
+            }
+          } else {
+            toast.error(`Wrong password.`, {position: "top-center"})
+          }})
+          .catch(error => {
+            console.log(`Error ${error}`)
+          })
+    }
+    document.changePasswordForm.reset()
+  }
+
+
+
+
   return (
     <div className='h-full'>
       <ToastContainer />
-      <h1 className="mb-5 mt-2 font-bold uppercase">Profile</h1>
-      <div className="flex flex-col bg-white p-6 min-h-full">
-        <div className='flex justify-between items-center mb-2'>
-          <div className='w-16 h-16 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{backgroundImage: `url(${profile?.avatar})`}}>
-          </div>
-          <i className='text-white p-2 bg-primary rounded text-lg'
+      <h1 className="mb-5 mt-2 font-bold uppercase text dark:text-white">Profile</h1>
+      <div className="bg-white dark:bg-dark-bg-700 dark:text-secondary-text m-2 p-6 min-h-full">
+      { profile?.fullname ? 
+      <>
+        <h1 className='font-semibold mb-3'>Profile Details</h1>
+        <div className='flex justify-between items-start mb-5'>
+          { profile?.avatar ? <img src={`${profile?.avatar}`} className='h-16 w-16' alt="profile"/> :
+              <span className='h-16 w-16 bg-accent dark:bg-dark-bg-600 rounded-full flex justify-center font-bold items-center overflow-hidden'>
+                {(profile?.fullname !== undefined && profile.fullname !== null) && ` ${profile?.fullname.split('')[0]}`}
+              </span>
+          }
+          <i className='text-white p-2 bg-primary rounded text-lg cursor-pointer'
             onClick={() => setEditPop(true)}
           ><FaRegEdit /></i>
         </div>
-        <div className='mb-3'>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Name</p>
-            <div className='flex-grow flex'>
-              <p className='font-bold'>{profile?.fullname}</p>
+        <section className='mb-5'>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Name</p>
+            <p className='font-bold  col-span-3'>{profile?.fullname}</p>
+          </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Telephone Number</p>
+            <p className='font-bold  col-span-3'>{profile?.phone_number}</p>
+          </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Email</p>
+              <p className='font-bold  col-span-3'>{profile?.email_address}</p>
+          </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Member Status</p>
+            <div className=" col-span-3">
+              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md w-24`}>{profile?.member_status}</p>
             </div>
           </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Telephone Number</p>
-            <div className='flex-grow flex'>
-              <p className='font-bold'>{profile?.phone_number}</p>
-            </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Marital Status</p>
+            <p className='font-bold  col-span-3'>{profile?.marital_status}</p>
           </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Email</p>
-            <div className='flex-grow flex'>
-              <p className='font-bold'>{profile?.email_address}</p>
-            </div>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Position in the SACCO</p>
+            <p className='font-bold col-span-3'>{profile?.position_in_sacco}</p>
           </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Member Status</p>
-            <div className='flex-grow flex'>
-              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status}</p>
-            </div>
-          </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Marital Status</p>
-            <div className='flex-grow flex'>
-            <p className='font-bold'>{profile?.marital_status}</p>
-            </div>
-          </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Position in the SACCO</p>
-            <div className='flex-grow flex'>
-            <p className='font-bold'>{profile?.position_in_sacco}</p>
-            </div>
-          </div>
-        </div>
-        <div className='mb-3'>
-            <h1 className='font-semibold'>Applicant's Personal Information</h1>
-              <Formik
-                initialValues={{ current_password:'', new_password:'', confirm_password:'' }}
-                validationSchema={changeUserPasswordValidationSchema}
-                onSubmit={ async ( values ) => {
-                  const { current_password, new_password } = values
-                  supabase.rpc('change_user_password', { current_password: current_password, new_password: new_password})
-                    .then(async ({ error }) => {
-                      if ( error ) {
-                        toast.error(`${error.message}`, {position:'top-center'})
-                      } else {
-                        toast.success('Password successfully updated.', {position:'top-center'})
-                      }                     
-                    })
-                }}
-              >
-                {({ values, errors, touched, handleChange, handleBlur, isValid, dirty }) => {
-                  return (
-                    <Form className='m-2'>
-                      <div className='flex flex-col gap-5'>
-                        <div>
-                          <div className='flex flex-col w-56'>
-                            <label htmlFor="" className='text-sm'>Current Password</label>
-                            <input type="password" name="current_password" id="current_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.current_password}/>
-                          </div>
-                          {touched?.current_password && errors?.current_password && <div className="error text-red-600 text-xs">{errors?.current_password}</div>}
-                        </div>
-                        <div>
-                          <div className='flex flex-col w-56'>
-                            <label htmlFor="" className='text-sm'>New Password</label>
-                            <input type="password" name="new_password" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.new_password}/>
-                          </div>
-                          {touched?.new_password && errors?.new_password && <div className="error text-red-600 text-xs">{errors?.new_password}</div>}
-                        </div>
-                        <div className='flex justify-between align-middle'>
-                          <div>
-                            <div className='flex flex-col w-56' >
-                              <label htmlFor="" className='text-sm'>Confirm Password</label>
-                              <input type="password" name="confirm_password" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.confirm_password}/>
-                            </div>
-                            {touched?.confirm_password && errors?.confirm_password && <div className="error text-red-600 text-xs justify-start">{errors?.confirm_password}</div>}
-                          </div>
-                          <button 
-                            className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white h-8 self-end"
-                            disabled={!(isValid && dirty)}
-                            type='submit'
-                          >Save</button>
-                        </div>
-                      </div>
-                    </Form>
-                  )
-                }
-                }
-              </Formik>
-        </div>
-        <div className='mb-3'>
+        </section>
+        {/* handleChangePassword */}
+        <Formik
+          initialValues={{old_password: '', new_password: '', confirm_password: ''}}
+        >
+          {({ values, errors, touched, handleChange, handleBlur }) => {
+            return (
+          <Form className='mb-3' name="changePasswordForm" onSubmit={(event) => handleChangePassword(event, values)}>
+              <h1 className='font-semibold mb-3'>Password Reset</h1>
+                <div className='flex flex-col w-56 mb-5'>
+                  <label htmlFor="" className='text-sm'>Old Password</label>
+                  <input type="password" name="old_password" id="old_password" onChange={handleChange("old_password")} placeholder='Old Password' className='ring-1 ring-black dark:ring-dark-bg-600 dark:bg-dark-bg-700 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 ' required/>
+                </div>
+                <div className='flex flex-col w-56 mb-5'>
+                  <label htmlFor="" className='text-sm'>New Password</label>
+                  <input type="password" name="new_password" id="new_password" onChange={handleChange("new_password")} placeholder='New Password' className='ring-1 ring-black dark:ring-dark-bg-600 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 dark:bg-dark-bg-700' required/>
+                </div>
+                <div className='flex flex-col w-56 mb-5'>
+                  <label htmlFor="" className='text-sm'>Confirm Password</label>
+                  <input type="password" name="" id="confirm_password" onChange={handleChange("confirm_password")} placeholder='Confirm Password' className='ring-1 ring-black dark:ring-dark-bg-600 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 dark:bg-dark-bg-700' required/>
+                </div>
+                <div className="flex justify-end gap-3 mt-3">
+                  <input type="submit" value="Save" className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white cursor-pointer"/>
+                </div>
+          </Form>
+            )}}
+        </Formik>
+        {/* handleTermination */}
+        <Formik
+          initialValues={{password: ''}}
+        >
+          {({ values, errors, touched, handleChange, handleBlur }) => {
+            return (
+        <Form className='mb-3' name="terminationForm" onSubmit={(event) => handleTermination(event, values)}>
             <h1 className='font-semibold'>Danger Zone</h1>
-            <div className='m-2 outline outline-1 p-2 rounded-md'>
-            <h1>Self Termination</h1>
-            <p>Self termination implies that you no longer subscribe to and therefore sieze being a member of Bweyogerere Tuberebumu sacco. If you’re sure that you want to terminate your membership, click terminate to terminate to proceed.</p>
-              <Formik
-                initialValues={{'current_password':''}}
-                validationSchema={selfTermination}
-                onSubmit={ async (values, { resetForm }) => {
-                  const { current_password } = values
-                  console.log(current_password)
-                  supabase.rpc('check_password', { current_password, _user_id: id })
-                    .then(({data }) => {
-                      if( data ) {
-                        // call the self termination function
-                        setPopUp(true)
-                        resetForm({values:{'current_password':''}})
-                      } else {
-                        toast.error(`Wrong password`, {position:'top-center'});
-                      }
-                    })
-                }}
-              
-              >
-                {({ values, errors, touched, handleChange, handleBlur }) => {
-                  return (
-                    <Form>
-                      <div className='flex mt-1'>
-                        <div className='flex flex-col w-56 h-18'>
-                          <label htmlFor="" className='text-sm'>Current Password</label>
-                          <input type="password" name="current_password" id="current_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.current_password}/>
-                          { touched?.current_password && errors?.current_password && <div className='error text-red-600 text-xs'> { errors?.error } </div> }
-                        </div>
-                      </div>
-                      <div className='w-full flex justify-end'>
-                        <button 
-                          className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
-                          type='submit'
-                        >Terminate</button>
-                      </div>
-                    </Form>
-                  )
-
-                }}
-              </Formik>
-              {popUp &&
-                <ConfirmModal setPopUp={setPopUp}>
-                  <h1 className="font-bold">Are you sure you want to terminate your account?</h1>
-                  <p>If you terminate this account, you can’t recover it.</p>
-                  <div className="flex justify-end gap-3 mt-3">
-                    <Formik
-                      onSubmit={ async () => {
-                        supabase.rpc('self_terminate', {})
-                          .then(({ data }) => {
-                            console.log(data)
-                          })
-                          .catch(error => console.log(error))
-
-                      }}
-                    >
-                      {() => {
-                        return (
-                          <Form>
-                            <button 
-                              className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white"
-                              type='submit'
-                            >Terminate</button>
-                          </Form>  
-                        )
-                      }}
-                    </Formik>
-                    <button className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
-                      onClick={() => setPopUp(false)}
-                    >Cancel</button>
-                  </div>
-                </ConfirmModal>
-              }
-              {editPop &&
-                <ConfirmModal setPopUp={setEditPop}>
-                  <h1 className="font-bold">Edit</h1>
-                  <Formik
-                    initialValues={ initialValues }
-                    onSubmit = { async ( values ) => {
-                      const { password, name, dob, gender, email_address, phone_number, id_passport_number, present_address, marital_status, fathers_address, fathers_name, avatar } = values
-                      supabase.rpc('check_password', { current_password: password, _user_id: id })
-                        .then( async ({ data })  => {
-                          if ( data ) {
-                            // Do the logic that updates the values and resets the form.
-                            // console.log("Got it")
-                            const { error, data } = await supabase.from('members')
-                              .update({ name: name, dob: dob, gender: gender, email_address: email_address, phone_number: phone_number, id_passport_number: id_passport_number, present_address: present_address, marital_status: marital_status, fathers_address: fathers_address, fathers_name:fathers_name, avatar: avatar })
-                              .eq('id', id)
-                              .single()
-
-                            if ( error ) {
-                              toast.error(`${error?.message}`, {position: "top-center"})
-                            } else {
-                              setEditPop(false)
-                              setProfile({...profile, ...data})
-                            }
-                          } else {
-                            toast.error(`Wrong password.`, {position: "top-center"})
-                          }
-                        })
-                        .catch(error => {
-                            console.log(`Error ${error}`)
-                        })
-                    }}
-                  >
-                    {({ values, errors, touched, handleChange, handleBlur }) => {
-                      return (
-                        <Form>
-                          <div className='mb-3 flex flex-wrap gap-3'>
-                            <div className='flex flex-col'>
-                              <p>Name</p>
-                              <div className='flex-grow flex'>
-                                <input type="text" name="fullname" id="fullname" placeholder='Enter full name' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.fullname}/>
-                                {touched?.name && errors?.name && <div className="error">{errors?.name}</div>}
-                              </div>
-                            </div>
-                            <div className='flex flex-col'>
-                              <p>Date of Birth</p>
-                              <div className='flex-grow flex'>
-                                <input type="date" name="dob" id="dob" placeholder='DD/MM/YYYY' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.dob}/>
-                                {touched?.dob && errors?.dob && <div className="error">{errors?.dob}</div>}
-                              </div>
-                            </div>
-                            <div>
-                              <label htmlFor="">Gender</label>
-                              <div className="flex gap-3">
-                                <div className="flex gap-2">
-                                  <input type="radio" value='Male' name="gender" id="" onChange={handleChange} onBlur={handleBlur} checked={values?.gender === 'Male'}/>
-                                  <label htmlFor="">Male</label>
-                                </div>
-                                <div className="flex gap-2">
-                                  <input type="radio" value='Female' name="gender" id="" onChange={handleChange} onBlur={handleBlur} checked={values?.gender === "Female"}/>
-                                  <label htmlFor="">Female</label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className='mb-3 flex flex-wrap gap-3'>
-                            <div className='flex flex-col lg:w-8/12 sm:w-10/12 md:w-8/12'>
-                              <p className='w-6/12'>Email Address</p>
-                              <div className='flex-grow flex'>
-                                <input type="text" name="email_address" id="email_address" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.email_address}/>
-                                {touched?.email_address && errors?.email_address && <div className="error">{errors?.email_address}</div>}
-                              </div>
-                            </div>
-                            <div className='flex flex-col'>
-                              <p className='w-6/12'>Phone Number</p>
-                              <div className='flex-grow flex'>
-                                <input type="text" name="phone_number" id="phone_number" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.phone_number}/>
-                                {touched?.phone_number && errors?.phone_number && <div className="error">{errors?.phone_number}</div>}
-                              </div>
-                            </div>
-                            <div className='flex flex-col'>
-                              <p>ID/ Passport Number</p>
-                              <div className='flex-grow flex'>
-                                <input type="text" name="id_passport_number" id="id_passport_number" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.id_passport_number}/>
-                                {touched?.id_passport_number && errors?.id_passport_number && <div className="error">{errors?.id_passport_number}</div>}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='mb-3 flex flex-wrap gap-3'>
-                            <div className='flex flex-col'>
-                              <p>Present Address</p>
-                              <div className='flex-grow flex'>
-                                <input type="text" name="present_address" id="present_address" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.present_address}/>
-                                {touched?.present_address && errors?.present_address && <div className="error">{errors?.present_address}</div>}
-                              </div>
-                            </div>
-                            <div className='flex flex-col'>
-                              <p>Marital Status</p>
-                              <div className='flex-grow flex'>
-                                <input type="text" name="marital_status" id="marital_status" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.marital_status}/>
-                                {touched?.marital_status && errors?.marital_status && <div className="error">{errors?.marital_status}</div>}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='mb-3 flex flex-wrap gap-3'>
-                            <div className='flex flex-col'>
-                              <p>Father's Name</p>
-                              <div className='flex-grow flex'>
-                                <input type="text" name="fathers_name" id="fathers_name" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.fathers_name}/>
-                                {touched?.fathers_name && errors?.fathers_name && <div className="error">{errors?.fathers_name}</div>}
-                              </div>
-                            </div>
-                            <div className='flex flex-col'>
-                              <p>Father's Address</p>
-                              <div className='flex-grow flex'>
-                                <input type="text" name="fathers_address" id="fathers_address" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.fathers_address}/>
-                                {touched?.fathers_address && errors?.fathers_address && <div className="error">{errors?.fathers_address}</div>}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='mb-3 flex flex-wrap gap-3'>
-                            <div className='flex flex-col'>
-                              <p>Upload Photo</p>
-                              <div className='flex-grow flex'>
-                                <input type="file" name="avatar" id="avatar" placeholder='Avatar' className='ring-1 ring-black rounded px-2 py-1' onChange={async ( event ) => {
-                                  const file = event.target.files[0]
-                                  const fileString = await toBase64(file)
-                                  values.avatar = fileString
-                                }} />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='mb-3 flex flex-wrap gap-3'>
-                            <div className='flex flex-col'>
-                              <p>Enter password to save changes</p>
-                              <div className='flex-grow flex'>
-                                <input type="password" name="password" id="password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.password}/>
-                                {touched?.dob && errors?.password && <div className="error">{errors?.password}</div>}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex justify-end gap-3 mt-3">
-                            <button 
-                              className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white"
-                              type='submit'
-                            >Save</button>
-                          </div>
-                        </Form>
-                      )}}
-                  </Formik> 
-                </ConfirmModal>
-              }
+            <div className='my-2 outline outline-1 p-2 rounded-md'>
+              <h1>Self Termination</h1>
+              <p>Self termination implies that you no longer subscribe to and therefore sieze being a member of Bweyogerere Tuberebumu sacco. If you’re sure that you want to terminate your membership, click terminate to terminate to proceed.</p>
+              <br />
+              <div className='flex mt-1'>
+                <div className='flex flex-col w-56'>
+                  <label htmlFor="" className='text-sm'>Enter Password to confirm</label>
+                  <input type="password" name="password" id="" placeholder='Password' onChange={handleChange("password")} className='ring-1 ring-black dark:ring-dark-bg-600 dark:bg-dark-bg-700 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary' required />
+                </div>
+              </div>
+              <div className='w-full flex justify-end'>
+                <input type="submit" className='text-white bg-accent-red px-4 py-1 rounded-md uppercase cursor-pointer'
+                  value="Terminate"
+                />
+                {popUp &&
+                  <ConfirmModal setPopUp={setPopUp}>
+                    <h1 className="font-bold">Are you sure you want to terminate your account?</h1>
+                    <p>If you terminate this account, you can’t recover it.</p>
+                    <div className="flex justify-end gap-3 mt-3">
+                      <button className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
+                        onClick={() => setPopUp(false)}
+                      >Cancel</button>
+                      <button className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white">Terminate</button>
+                    </div>
+                  </ConfirmModal>
+                }
+                {editPop &&
+                  <EditModal  setEditPop={setEditPop} />
+                }
+              </div>
             </div>
-        </div>
-      </div>
+          </Form>)}}
+        </Formik>
+        </>
+        :
+          <div className="display flex justify-center">
+            <Loader />
+          </div>
+        }
+      </div> 
     </div>
   )
 }
