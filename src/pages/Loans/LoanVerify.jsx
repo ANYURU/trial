@@ -24,9 +24,14 @@ export default function DepositVerify() {
   }
 
   if (deposit){
-    downloadFile(deposit.application_meta.files[0].file_url.substring(9), "deposits")
-    .then((data) => setImageURL(data.avatar_url))
-    .catch(error => error)
+    try {
+      downloadFile(deposit.application_meta.files[0].file_url.substring(9), "deposits")
+      .then((data) => setImageURL(data.avatar_url))
+      // .catch(error => error.status)
+    }
+    catch (error) {
+      console.log("failed")
+    }
   }
 
   // console.log(imageURL)
@@ -52,12 +57,10 @@ export default function DepositVerify() {
           </div>
           <div className="flex gap-10 justify-end items-center mt-3">
           <button
-            type="submit"
             className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
             >Reject
           </button>
           <button
-            type="submit"
             className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
             >Approve
           </button>

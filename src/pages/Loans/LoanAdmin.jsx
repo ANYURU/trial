@@ -125,7 +125,9 @@ export default function LoanAdmin() {
         </div>
         </>
         :
-        <Loader />
+        <div className="w-full min-h-full flex justify-center items-center outline">
+          <Loader />
+        </div>
         }
         
       </div>

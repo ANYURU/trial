@@ -14,7 +14,7 @@ export default function Sidebar({ user }) {
 
     return (
         <div className='h-full fixed  bg-white sidebar dark:bg-dark-bg-700'>
-            <div className='bg-white dark:bg-dark-bg-700 flex justify-center items-center mb-6'>
+            <div className='bg-white h-[110px] dark:bg-dark-bg-700 flex justify-center items-center mb-6'>
                 <img src={logo2} alt="tube" width={110} loading="lazy"/>
             </div>
             {menuData[`${role}`].map((item, index) => (
