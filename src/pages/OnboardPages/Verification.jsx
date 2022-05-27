@@ -19,7 +19,6 @@ function Verification() {
     
     const phoneNumber = localStorage.getItem('phone_number')
     const verification_key = localStorage.getItem('verification_key')
-    console.log(verification_key)
     const { code } = values
     
     verifyOTP( phoneNumber, code, verification_key )

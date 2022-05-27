@@ -1,7 +1,6 @@
-import { useState } from "react"
 import { InputField } from "../../components/Form/CustomInputField"
 
-export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur }) {
+export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur, employed, setEmployed, Field }) {
     const { 
         fullname,
         dob, 
@@ -33,7 +32,8 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
             }
         },
     } = values
-    const [ employed, setEmployed ] = useState(true)
+
+    
 
     return (
         <>
@@ -56,20 +56,34 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
                 <h1 className='font-semibold'>Source Of Income</h1>
                 <div className='flex flex-wrap gap-5'>
                     <div className='flex flex-col w-56 '>
-                        <div className='flex justify-between'>
+                        <div className='flex justify-between' role='group'>
                             <div className='flex gap-1'>
-                                <input type="radio" name="income_sources[status]" value="Employed" onChange={(event) => {
-                                    event.target.checked && setEmployed(true) 
-                                    if(event.target.checked) values.income_sources.status = event.target.value
-                                }}/>
-                                <label htmlFor="" className='text-sm'>Employed</label>
+                                <input type="radio" name="income_sources[status]" value="Employed" id="employed"
+                                    onChange={(event) => {
+                                        if (event.target.checked){
+                                            setEmployed(true)    
+                                            values.income_sources.status = event.target.value
+                                            event.target.checked=true
+                                        } 
+                                    }}
+                                   defaultChecked={false}
+                                   checked={employed}
+                                />
+                                <label htmlFor="employed" className='text-sm'>Employed</label>
                             </div>
                             <div className='flex gap-1'>
-                                <input type="radio" name="income_sources[status]" value="Business" onChange={(event) => {
-                                    event.target.checked && setEmployed(false)
-                                    values.income_sources.status = event.target.value
-                                }} />
-                                <label htmlFor="" className='text-sm'>Business</label>
+                                <input type="radio" name="income_sources[status]" value="Business" id="business"
+                                    onChange={(event) => {
+                                        if (event.target.checked){
+                                            setEmployed(false)    
+                                            values.income_sources.status = event.target.value
+                                            event.target.checked=true
+                                        } 
+                                    }}
+                                    // defaultChecked={false}
+                                    checked={employed === false}   
+                                />
+                                <label htmlFor="business" className='text-sm'>Business</label>
                             </div>
                         </div>
                     </div>

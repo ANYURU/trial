@@ -60,34 +60,63 @@ function MemberApplication() {
     amount_in_words:'',
   }  
 
-  const { user } = useAuth()
+  const { user : { id: applicants_id } } = useAuth()
   const navigate = useNavigate()
+  const [ employed, setEmployed ] = useState(null)
   
   return (
     <>
       <ToastContainer />
       <Formik 
         initialValues={initialValues}
-        onSubmit={async ( values ) => {
-          const { data, error } = await supabase.from('profiles').update(values).eq('id', user.id).single()
-          if(error) {
-            console.log(error)
-          } else {
-            toast.success(`Sucessfully registered`, {position: "top-center"})
+        onSubmit={async ( values, { resetForm } ) => {
+          console.log(values)
+          const { fullname: applicants_name, ...rest } = values
+          try {
+            const { data, error } = await supabase
+              .from('applications')
+              .insert(
+                [
+                  {
+                    _type: "membership",
+                    created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                    updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                    reviewed: false,
+                    application_meta: {
+                      applicants_id,
+                      applicants_name,
+                      ...rest
+                    }
+                  }
+                ]
+              )
+              .single()
+
+            if (error) throw error
+            
+            resetForm({ values: initialValues })
+            toast.success(`Membership submitted for review`, {position:'top-center'})
+            
+            const { application_meta } = data
+            
             navigate('/dashboard')
-            setProfile(data)
-            console.log(data)
+            setProfile( application_meta )
+            console.log( application_meta )
+            
+          } catch ( error ) {
+            // handle the errors depending on error status codes & give appropriate messages to the users
+            toast.error(`${error?.message}`, {position:'top-center'})
           }
         }}
       >
-        {({values, errors, touched, handleChange, handleBlur}) => {
+        {({ values, errors, touched, handleChange, handleBlur }) => {
           return (
             <Form className='h-full'>
               <h1 className="mb-5 mt-2 font-bold uppercase">MemberShip Application</h1>
               <div className="flex bg-white p-6 min-h-full">
                   <div className='flex flex-grow flex-col min-h-full'>
                     {pageNumber === 1 &&
-                      <ApplicationPg1 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
+                      <ApplicationPg1 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} employed={employed} setEmployed={setEmployed}/>
                     }
                     {pageNumber === 2 &&
                       <ApplicationPg2 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
@@ -99,8 +128,10 @@ function MemberApplication() {
                             type="submit"
                             value='Next'
                             className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                            onClick={() => {
+                            onClick={(event) => {
+                              event.preventDefault()
                               setPageNumber(pageNumber + 1)
+                              console.log(values)
                             }}
                           />
                         </div>

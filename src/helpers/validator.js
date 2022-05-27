@@ -26,3 +26,38 @@ export const otpValidationSchema = Yup.object({
 export const verifyCodeSchema = Yup.object({
   code: Yup.string().min(6, 'Code must be 6-digits').max(6, 'Code must be 6-digit').required("Verification Code is required")
 })
+
+export const changeUserPasswordValidationSchema = Yup.object({
+  new_password: Yup.string().trim().min(8, 'Must be atleast 8 characters!').notOneOf([Yup.ref('current_password')], 'Must not be the same as current password!').required("Required!"),
+  confirm_password: Yup.string().trim().oneOf([Yup.ref('new_password')], 'Must be the same as New password!').notOneOf([Yup.ref('current_password')], 'Must not be the same as current password!').required("Required!"),
+  current_password: Yup.string().trim().min(8, 'Must be atleast 8 characters!').required('Required!')
+})
+
+export const selfTermination = Yup.object({
+  current_password: Yup.string().min(8, 'Must be atleast 8 characters!').required('Required!')
+})
+
+
+
+// creating a custom yup validation method
+Yup.addMethod(Yup.string, 'isNumber', function () {
+  return this.matches(/^[0-9]+$/, { 
+    message:'Must be a number', 
+    excludedEmptyStrings: true 
+  }).required("Required!")
+})
+
+export const depositRequestValidationSchema = Yup.object({
+  amount: Yup.string().isNumber(),
+  account_type: Yup.string().required('Required!'),
+  particulars: Yup.string(),
+  phone_number: Yup.string().required('Required!'),
+  evidence: Yup.string().required('Required!')
+})
+
+
+export const withdrawRequestValidationSchema = Yup.object({
+  amount: Yup.string().isNumber(),
+  account_type: Yup.string().required('Required!'),
+  particulars: Yup.string(),
+})

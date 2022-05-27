@@ -30,8 +30,7 @@ function Navbar({ user }) {
               : ' Newbie !!'}
               </p>
               <div>
-                <div className='w-10 h-10 bg-accent rounded-full mx-2 overflow-hidden'>
-                  { user?.avatar && <img src={`${user?.avatar}`} alt=""/>}
+                <div className='w-10 h-10 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{backgroundImage: `url(${user?.avatar})`}}>
                 </div>
                 <p className={`${user?.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user.member_status}</p>
               </div>

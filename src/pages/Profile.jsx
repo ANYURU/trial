@@ -1,5 +1,5 @@
 import { FaRegEdit } from "react-icons/fa"
-import profileImg from '../assets/images/abudi.png'
+// import profileImg from '../assets/images/abudi.png'
 import { ConfirmModal } from "../components"
 import { useState } from "react"
 import { useOutletContext } from "react-router-dom"
@@ -7,6 +7,7 @@ import { Formik, Form } from 'formik'
 import { supabase } from "../helpers/supabase"
 import { toBase64 } from "../helpers/toBase64"
 import { toast, ToastContainer } from 'react-toastify'
+import { changeUserPasswordValidationSchema, selfTermination } from '../helpers/validator'
 
 function Profile() {
   const [ popUp, setPopUp ] = useState(false)
@@ -18,15 +19,13 @@ function Profile() {
   }
   const { id } = supabase.auth.user()
 
-
   return (
     <div className='h-full'>
       <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase">Profile</h1>
       <div className="flex flex-col bg-white p-6 min-h-full">
         <div className='flex justify-between items-center mb-2'>
-          <div className='h-16 w-16'>
-            <img src={profile?.avatar ? profile.avatar : profileImg} width={100} height={100} className='rounded-full w-full h-full' alt="profile" />
+          <div className='w-16 h-16 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{backgroundImage: `url(${profile?.avatar})`}}>
           </div>
           <i className='text-white p-2 bg-primary rounded text-lg'
             onClick={() => setEditPop(true)}
@@ -72,47 +71,134 @@ function Profile() {
         </div>
         <div className='mb-3'>
             <h1 className='font-semibold'>Applicant's Personal Information</h1>
-            <form action="" className='m-2'>
-            <div className='flex flex-col gap-5'>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="text" name="old_password" id="old_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1'/>
-              </div>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>New Password</label>
-                <input type="text" name="new_password" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1'/>
-              </div>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Confirm Password</label>
-                <input type="text" name="" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1'/>
-              </div>
-            </div>
-            </form>
+              <Formik
+                initialValues={{ current_password:'', new_password:'', confirm_password:'' }}
+                validationSchema={changeUserPasswordValidationSchema}
+                onSubmit={ async ( values ) => {
+                  const { current_password, new_password } = values
+                  supabase.rpc('change_user_password', { current_password: current_password, new_password: new_password})
+                    .then(async ({ error }) => {
+                      if ( error ) {
+                        toast.error(`${error.message}`, {position:'top-center'})
+                      } else {
+                        toast.success('Password successfully updated.', {position:'top-center'})
+                      }                     
+                    })
+                }}
+              >
+                {({ values, errors, touched, handleChange, handleBlur, isValid, dirty }) => {
+                  return (
+                    <Form className='m-2'>
+                      <div className='flex flex-col gap-5'>
+                        <div>
+                          <div className='flex flex-col w-56'>
+                            <label htmlFor="" className='text-sm'>Current Password</label>
+                            <input type="password" name="current_password" id="current_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.current_password}/>
+                          </div>
+                          {touched?.current_password && errors?.current_password && <div className="error text-red-600 text-xs">{errors?.current_password}</div>}
+                        </div>
+                        <div>
+                          <div className='flex flex-col w-56'>
+                            <label htmlFor="" className='text-sm'>New Password</label>
+                            <input type="password" name="new_password" id="new_password" placeholder='New Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.new_password}/>
+                          </div>
+                          {touched?.new_password && errors?.new_password && <div className="error text-red-600 text-xs">{errors?.new_password}</div>}
+                        </div>
+                        <div className='flex justify-between align-middle'>
+                          <div>
+                            <div className='flex flex-col w-56' >
+                              <label htmlFor="" className='text-sm'>Confirm Password</label>
+                              <input type="password" name="confirm_password" id="confirm_password" placeholder='Confirm Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.confirm_password}/>
+                            </div>
+                            {touched?.confirm_password && errors?.confirm_password && <div className="error text-red-600 text-xs justify-start">{errors?.confirm_password}</div>}
+                          </div>
+                          <button 
+                            className="bg-primary px-3 py-1 outline outline-1 outline-primary rounded-md text-white h-8 self-end"
+                            disabled={!(isValid && dirty)}
+                            type='submit'
+                          >Save</button>
+                        </div>
+                      </div>
+                    </Form>
+                  )
+                }
+                }
+              </Formik>
         </div>
         <div className='mb-3'>
             <h1 className='font-semibold'>Danger Zone</h1>
             <div className='m-2 outline outline-1 p-2 rounded-md'>
             <h1>Self Termination</h1>
             <p>Self termination implies that you no longer subscribe to and therefore sieze being a member of Bweyogerere Tuberebumu sacco. If you’re sure that you want to terminate your membership, click terminate to terminate to proceed.</p>
-            <div className='flex mt-1'>
-              <div className='flex flex-col w-56'>
-                <label htmlFor="" className='text-sm'>Old Password</label>
-                <input type="text" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' />
-              </div>
-            </div>
-            <div className='w-full flex justify-end'>
-              <button className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
-                onClick={() => setPopUp(true)}
-              >Terminate</button>
+              <Formik
+                initialValues={{'current_password':''}}
+                validationSchema={selfTermination}
+                onSubmit={ async (values, { resetForm }) => {
+                  const { current_password } = values
+                  console.log(current_password)
+                  supabase.rpc('check_password', { current_password, _user_id: id })
+                    .then(({data }) => {
+                      if( data ) {
+                        // call the self termination function
+                        setPopUp(true)
+                        resetForm({values:{'current_password':''}})
+                      } else {
+                        toast.error(`Wrong password`, {position:'top-center'});
+                      }
+                    })
+                }}
+              
+              >
+                {({ values, errors, touched, handleChange, handleBlur }) => {
+                  return (
+                    <Form>
+                      <div className='flex mt-1'>
+                        <div className='flex flex-col w-56 h-18'>
+                          <label htmlFor="" className='text-sm'>Current Password</label>
+                          <input type="password" name="current_password" id="current_password" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values?.current_password}/>
+                          { touched?.current_password && errors?.current_password && <div className='error text-red-600 text-xs'> { errors?.error } </div> }
+                        </div>
+                      </div>
+                      <div className='w-full flex justify-end'>
+                        <button 
+                          className='text-white bg-accent-red px-4 py-1 rounded-md uppercase'
+                          type='submit'
+                        >Terminate</button>
+                      </div>
+                    </Form>
+                  )
+
+                }}
+              </Formik>
               {popUp &&
                 <ConfirmModal setPopUp={setPopUp}>
                   <h1 className="font-bold">Are you sure you want to terminate your account?</h1>
                   <p>If you terminate this account, you can’t recover it.</p>
                   <div className="flex justify-end gap-3 mt-3">
+                    <Formik
+                      onSubmit={ async () => {
+                        supabase.rpc('self_terminate', {})
+                          .then(({ data }) => {
+                            console.log(data)
+                          })
+                          .catch(error => console.log(error))
+
+                      }}
+                    >
+                      {() => {
+                        return (
+                          <Form>
+                            <button 
+                              className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white"
+                              type='submit'
+                            >Terminate</button>
+                          </Form>  
+                        )
+                      }}
+                    </Formik>
                     <button className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
                       onClick={() => setPopUp(false)}
                     >Cancel</button>
-                    <button className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white">Terminate</button>
                   </div>
                 </ConfirmModal>
               }
@@ -124,7 +210,7 @@ function Profile() {
                     onSubmit = { async ( values ) => {
                       const { password, name, dob, gender, email_address, phone_number, id_passport_number, present_address, marital_status, fathers_address, fathers_name, avatar } = values
                       supabase.rpc('check_password', { current_password: password, _user_id: id })
-                        .then(async ({ data })  => {
+                        .then( async ({ data })  => {
                           if ( data ) {
                             // Do the logic that updates the values and resets the form.
                             // console.log("Got it")
@@ -133,13 +219,12 @@ function Profile() {
                               .eq('id', id)
                               .single()
 
-                              if ( error ) {
-                                toast.error(`${error?.message}`, {position: "top-center"})
-                              } else {
-                                setEditPop(false)
-                                setProfile({...profile, ...data})
-                              }
-                  
+                            if ( error ) {
+                              toast.error(`${error?.message}`, {position: "top-center"})
+                            } else {
+                              setEditPop(false)
+                              setProfile({...profile, ...data})
+                            }
                           } else {
                             toast.error(`Wrong password.`, {position: "top-center"})
                           }
@@ -273,7 +358,6 @@ function Profile() {
                   </Formik> 
                 </ConfirmModal>
               }
-            </div>
             </div>
         </div>
       </div>
