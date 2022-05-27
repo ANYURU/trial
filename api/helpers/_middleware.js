@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const password = process.env.SECURITY_KEY
 
 // get the unique initailization vector
-const initailization_vector = Buffer.from(process.env.INITIALIZATION_VECTOR)
+const initailization_vector = Buffer.from(process.env.INITIALISATION_VECTOR)
 
 // To be used as salt in encryption and decryption
 const ivstring = initailization_vector.toString('hex').slice(0,16)

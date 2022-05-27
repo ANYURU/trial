@@ -66,7 +66,7 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
                                             event.target.checked=true
                                         } 
                                     }}
-                                   defaultChecked={false}
+                                   //defaultChecked={false}
                                    checked={employed}
                                 />
                                 <label htmlFor="employed" className='text-sm'>Employed</label>

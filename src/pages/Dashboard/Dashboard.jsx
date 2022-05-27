@@ -49,7 +49,7 @@ export default function Dashboard() {
   return (
     <div className={`flex flex-col ${matches && 'overflow-y-hidden'}`}>
       {/* Account Summaries */}
-      {profile?.fullname === null && <RegistrationModal />}
+      {!profile?.fullname && <RegistrationModal />}
       <div>
         <h1 className="mb-5 mt-2 font-bold uppercase">Dashboard</h1>
         <div>

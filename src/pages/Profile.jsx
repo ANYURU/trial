@@ -214,7 +214,7 @@ function Profile() {
                           if ( data ) {
                             // Do the logic that updates the values and resets the form.
                             // console.log("Got it")
-                            const { error, data } = await supabase.from('members')
+                            const { error, data } = await supabase.from('profiles')
                               .update({ name: name, dob: dob, gender: gender, email_address: email_address, phone_number: phone_number, id_passport_number: id_passport_number, present_address: present_address, marital_status: marital_status, fathers_address: fathers_address, fathers_name:fathers_name, avatar: avatar })
                               .eq('id', id)
                               .single()
@@ -224,6 +224,7 @@ function Profile() {
                             } else {
                               setEditPop(false)
                               setProfile({...profile, ...data})
+                              console.log(data)
                             }
                           } else {
                             toast.error(`Wrong password.`, {position: "top-center"})
