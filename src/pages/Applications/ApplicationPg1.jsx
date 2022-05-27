@@ -13,7 +13,6 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
         fathers_name, 
         fathers_address, 
         income_sources: { 
-            status,
             employed: {
                 employers_name,
                 employers_address,
@@ -67,7 +66,7 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
                                             event.target.checked=true
                                         } 
                                     }}
-                                //    defaultChecked={false}
+                                   defaultChecked={false}
                                    checked={employed}
                                 />
                                 <label htmlFor="employed" className='text-sm'>Employed</label>
