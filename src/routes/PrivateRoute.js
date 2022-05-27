@@ -12,6 +12,7 @@ const PrivateRoute = ({ allowedRoles }) => {
     const { user } = useAuth()
     const [ profile, setProfile ] = useState({})
     const [ roles, setRoles ] = useState(null)
+    const [ loading, setLoading ] = useState(true)
     const location = useLocation()
 
     useEffect(() => {
@@ -19,12 +20,13 @@ const PrivateRoute = ({ allowedRoles }) => {
         getProfile( user )
             .then( data => {
                 if( data ) {
-                    const { user_role: { roles  }} = data
+                    console.log(data)
+                    const { roles } = data
                     setRoles( roles )
                     setProfile(data)
-                }
-                
+                }   
             })
+            .then(() => setLoading( false ))
             .catch(error => console.log(error))
     }, [ user ])
 
@@ -45,7 +47,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                                         roles.find( role => allowedRoles.includes(role)) 
                                         ? 
                                         <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
-                                            <Outlet context={[ profile, setProfile ]}/>
+                                            {loading ? <Loader /> :<Outlet context={[ profile, setProfile ]}/>}
                                         </div>
                                         :
                                         <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
@@ -54,12 +56,12 @@ const PrivateRoute = ({ allowedRoles }) => {
                                     ) 
                                     :
                                     <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
-                                        <Loader />
+                                        {loading ? <Loader /> : <Outlet context={[ profile, setProfile ]}/>}    
                                     </div>
                                 )
                                 :
                                 <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
-                                    <Outlet context={[ profile, setProfile ]}/>
+                                    {loading ? <Loader /> : <Outlet context={[ profile, setProfile ]}/>}    
                                 </div>
                                 
                             ) 

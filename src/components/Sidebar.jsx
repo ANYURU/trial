@@ -5,10 +5,11 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import React, { useState } from 'react'
 
 export default function Sidebar({ user }) {
-    const role = user?.user_role?.roles.includes("admin") ? "admin" : "member"
+    console.log(user.roles)
+    const role = user?.roles && user?.roles.includes("admin") ? "admin" : "member"
     const [ show, setShow ] = useState(true)
     const [ selectedIndex, setSelectedIndex ] = useState( null )
-    const [ disabled ] = useState( user?.user_role?.roles )
+    const [ disabled ] = useState( !user.roles )
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
 
 
@@ -22,7 +23,7 @@ export default function Sidebar({ user }) {
                     <NavLink
                         key={item.link}
                         to={`/${item.link}`}
-                        className={ `flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-accent ${( disabled && item?.link !== 'dashboard' ) && `disabled-link`}` }
+                        className={ `flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-accent ${( disabled && (item?.link !== 'dashboard' && item?.link !== 'profile') ) && `disabled-link`}` }
                     >
                         <div className='flex items-center'>
                             <i className='mx-2'>{item.icon}</i>
