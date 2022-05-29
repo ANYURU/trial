@@ -1,8 +1,9 @@
 import { NavLink, } from 'react-router-dom'
 import { menuData } from '../helpers/menuData'
-import logo from '../assets/images/tube.png'
+import logo from '../assets/images/tube-no-bg.png'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import React, { useState } from 'react'
+import { IconContext } from 'react-icons/lib'
 
 export default function Sidebar({ user }) {
     // console.log(user.roles)
@@ -14,35 +15,40 @@ export default function Sidebar({ user }) {
 
 
     return (
-        <div className='h-full w-64'>
-            <div className='bg-white flex justify-center items-center mb-6'>
-                <img src={logo} alt="tube" width={110} />
+        <div className='h-full fixed  bg-white sidebar dark:bg-dark-bg-700'>
+            <div className='bg-white h-[110px] dark:bg-dark-bg-700 flex justify-center items-center mb-6'>
+                <img src={logo} alt="tube" width={110} loading="lazy"/>
             </div>
             {menuData[`${role}`].map((item, index) => (
                 <React.Fragment key={index}>
                     <NavLink
                         key={item.link}
                         to={`/${item.link}`}
-                        className={ `flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-accent ${( disabled && (item?.link !== 'dashboard' && item?.link !== 'profile') ) && `disabled-link`}` }
+                        className={ `flex justify-between mx-2 px-3 py-2 mb-1 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600 ${( disabled && item?.link !== 'dashboard' ) && `disabled-link`}` }
                     >
-                        <div className='flex items-center'>
+                        <div className='flex items-center dark:text-secondary-text'>
+                        <IconContext.Provider value={{ className: `font-bold text-lg` }}>
                             <i className='mx-2'>{item.icon}</i>
-                            {item.label}
+                        </IconContext.Provider>
+                            <span className='font-semibold'>{item.label}</span>
                         </div>
-                        {index !== 0 && index < menuData[`${role}`].length - 1 && 
+                        <IconContext.Provider value={{ className: `font-bold text-lg dark:text-secondary-text` }}>
+                        {
+                        index !== 0 && index < menuData[`${role}`].length - 1 && 
                             (show && index === selectedIndex 
                             ? <MdKeyboardArrowUp onClick={() => setShow(!show)} />
                             : <MdKeyboardArrowDown onClick={() => {setShow(!show);setSelectedIndex(index)}} />)
                         }
+                        </IconContext.Provider>
                     </NavLink>
                     {show && index === selectedIndex &&
-                        <div className='bg-accent mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer'>
+                        <div className='bg-accent dark:bg-dark-bg-600 mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer dark:text-secondary-text '>
                             {
                                 lit[index-1].map((item, index) => (
                                     <NavLink
                                         key={index}
                                         to={`${item.link}`}
-                                        className='flex px-2 py-1 rounded-md'
+                                        className='flex px-2 py-1 rounded-md hover:bg-gray-200 hover:dark:bg-dark-bg-700'
                                     >
                                         {item.label}
                                     </NavLink>

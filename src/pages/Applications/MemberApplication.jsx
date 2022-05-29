@@ -7,7 +7,6 @@ import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
 import { useOutletContext, useNavigate } from "react-router-dom"
 
-
 function MemberApplication() {
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ profile, setProfile ] = useOutletContext()
@@ -111,8 +110,8 @@ function MemberApplication() {
         {({ values, errors, touched, handleChange, handleBlur }) => {
           return (
             <Form className='h-full'>
-              <h1 className="mb-5 mt-2 font-bold uppercase">MemberShip Application</h1>
-              <div className="flex bg-white p-6 min-h-full">
+              <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">MemberShip Application</h1>
+              <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
                   <div className='flex flex-grow flex-col min-h-full'>
                     {pageNumber === 1 &&
                       <ApplicationPg1 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} employed={employed} setEmployed={setEmployed}/>
@@ -137,7 +136,6 @@ function MemberApplication() {
                       }
         
                       {pageNumber === 2 &&
-                      <div className=''>
                         <input
                           type="submit"
                           value='Previous'
@@ -147,7 +145,6 @@ function MemberApplication() {
                             setPageNumber(pageNumber - 1)
                           }}
                         />
-                      </div>
                       }
         
                       {pageNumber === 2 &&

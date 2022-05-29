@@ -1,8 +1,6 @@
-import ReactDOM from "react-dom"
-import { IoCloseSharp } from 'react-icons/io5'
 import { NavLink, } from 'react-router-dom'
 import { menuData } from '../helpers/menuData'
-import logo from '../assets/images/tube.png'
+import logo from '../assets/images/tube-no-bg.png'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import { useState } from 'react'
 
@@ -13,25 +11,16 @@ function MobileMenu({ setShowMenu }) {
 
     const lit = menuData.admin.filter(item => item.sublinks).map(item => item.sublinks)
 
-  return ReactDOM.createPortal(
-    <div className="bg-black bg-opacity-40 w-screen h-screen absolute top-0 left-0 right-0 bottom-0 flex justify-start items-center overflow-y-hidden">
-      <div className="bg-white h-screen w-11/12 top-0 left-0 bottom-0 shadow-sm">
-        <div 
-            className="flex justify-between px-3 items-center"
-            onClick={() => setShowMenu(false)}
-        >
-        <div className='bg-white flex justify-center items-center mb-6'>
+  return (
+      <div className="bg-white dark:bg-dark-bg-700 h-screen w-11/12 top-0 left-0 bottom-0 shadow-sm z-20">
+        <div className='bg-white dark:bg-dark-bg-700 flex justify-center items-center mb-6'>
             <img src={logo} alt="tube" width={110} />
         </div>
-          <IoCloseSharp />
-        </div>
-        <div className='h-full'>
         {menuData.admin.map((item, index) => (
-            <>
             <NavLink
                 key={index}
                 to={`/${item.link}`}
-                className='flex justify-between mx-2 px-3 py-2 rounded-lg hover:bg-accent'
+                className='flex justify-between mx-2 px-3 py-2 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600'
             >
                 <div className='flex items-center'>
                     <i className='mx-2'>{item.icon}</i>
@@ -42,30 +31,24 @@ function MobileMenu({ setShowMenu }) {
                     ? <MdKeyboardArrowUp onClick={() => setShow(!show)} />
                     : <MdKeyboardArrowDown onClick={() => {setShow(!show);setSelectedIndex(index)}} />)
                 }
+                {show && index === selectedIndex &&
+                    <div className='bg-accent dark:bg-dark-bg-600 mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer'>
+                        {
+                            lit[index-1].map((item, index) => (
+                                    <NavLink
+                                        key={index}
+                                        to={`${item.link}`}
+                                        className='flex px-2 py-1 rounded-md'
+                                    >
+                                        {item.label}
+                                    </NavLink>
+                            ))
+                        }
+                    </div>
+                }
             </NavLink>
-            {show && index === selectedIndex &&
-                <div className='bg-accent mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer'>
-                    {
-                        lit[index-1].map((item, i) => (
-                            <div>
-                                <NavLink
-                                    to={`${item.link}`}
-                                    className='flex px-2 py-1 rounded-md'
-                                >
-                                    {item.label}
-                                </NavLink>
-                            </div>
-                        ))
-                    }
-                </div>
-            }
-            </>
         ))}
-
-    </div>
       </div>
-    </div>,
-    document.getElementById('portal')
   )
 }
 

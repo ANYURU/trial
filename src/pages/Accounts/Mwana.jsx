@@ -3,14 +3,11 @@ import React from 'react'
 function Mwana() {
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>Mwana Account</h1>
-      <div className="flex bg-white p-6 min-h-full">
-        <div className="flex gap-10">
-          <p>Account Balance</p>
-          <div className="flex font-bold">
-            <p>0</p>
-            <span>ugx</span>
-          </div>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Mwana Account</h1>
+      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
+        <div className="flex flex-col justify-center items-center w-full">
+          <p className='text-md'>You don't have a Mwana account</p>
+          <button className='bg-primary rounded-md text-white px-3 py-1 w-56 mt-3'>Open Account</button>
         </div>
       </div>
     </div>

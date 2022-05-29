@@ -8,7 +8,7 @@ function ApplicationPg4() {
             <div className='flex flex-wrap gap-5 mb-5'>
                 <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Guarantor</label>
-                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 bg-white">
                         <option value="">--Guarantor--</option>
                         <option value="savings">Single</option>
                         <option value="shares">Married</option>
@@ -18,13 +18,13 @@ function ApplicationPg4() {
                 </div>
                 <div className='flex flex-col w-56'>
                     <label htmlFor="" className=' text-sm'>Financial Statement</label>
-                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
             <div className='flex flex-wrap gap-5 mb-5'>
                 <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Guarantor</label>
-                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 bg-white">
                         <option value="">--Guarantor--</option>
                         <option value="savings">Single</option>
                         <option value="shares">Married</option>
@@ -34,13 +34,13 @@ function ApplicationPg4() {
                 </div>
                 <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Financial Statement</label>
-                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
             <div className='flex flex-wrap gap-5 mb-5'>
                 <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Guarantor</label>
-                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 bg-white">
                         <option value="">--Guarantor--</option>
                         <option value="savings">Single</option>
                         <option value="shares">Married</option>
@@ -50,13 +50,13 @@ function ApplicationPg4() {
                 </div>
                 <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Financial Statement</label>
-                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
             <div className='flex flex-wrap gap-5 mb-5'>
                 <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Guarantor</label>
-                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 bg-white">
                         <option value="">--Guarantor--</option>
                         <option value="savings">Single</option>
                         <option value="shares">Married</option>
@@ -66,13 +66,13 @@ function ApplicationPg4() {
                 </div>
                 <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Financial Statement</label>
-                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
             <div className='flex flex-wrap gap-5 mb-5'>
                 <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Guarantor</label>
-                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 bg-white">
                         <option value="">--Guarantor--</option>
                         <option value="savings">Single</option>
                         <option value="shares">Married</option>
@@ -82,13 +82,13 @@ function ApplicationPg4() {
                 </div>
                 <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Financial Statement</label>
-                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
             <div className='flex flex-wrap gap-5 mb-5'>
                 <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Guarantor</label>
-                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white">
+                    <select name="" id="" className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 bg-white">
                         <option value="">--Guarantor--</option>
                         <option value="savings">Single</option>
                         <option value="shares">Married</option>
@@ -98,7 +98,7 @@ function ApplicationPg4() {
                 </div>
                 <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Financial Statement</label>
-                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="file" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
         </div>

@@ -5,17 +5,16 @@ import { supabase } from '../helpers/supabase';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // create state values for user data and loading
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
+  const theme = localStorage.getItem("darkMode") || false
+  const [ darkMode, setDarkMode ] = useState(JSON.parse(theme))
 
   useEffect(() => {
     // get session data if there is an active session
     const session = supabase.auth.session();
-
     setUser(session?.user ?? null);
     setLoading(false);
-
     // listen for changes to auth
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -30,12 +29,18 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  // create signUp, signIn, signOut functions
+  // create signUp, signIn, signOut functions, toggleDarkMode
   const value = {
     signUp: data => supabase.auth.signUp(data),
     signIn: data => supabase.auth.signIn(data),
     signOut: () => supabase.auth.signOut(),
-    user, setUser
+    toggleDarkMode: () => {
+      localStorage.setItem("darkMode", !darkMode)
+      setDarkMode(() => !darkMode)
+    },
+    user, setUser,
+    loading, setLoading,
+    darkMode
   };
 
   // use a provider to pass down the value

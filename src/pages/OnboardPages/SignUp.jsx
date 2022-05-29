@@ -61,7 +61,7 @@ export default function SignUp() {
               </div>
             </form>
           )}}
-    </Formik>
-  </div>
+      </Formik>
+    </div>
   )
 }

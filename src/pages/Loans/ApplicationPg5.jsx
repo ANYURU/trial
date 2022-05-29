@@ -1,5 +1,3 @@
-import React from 'react'
-
 function ApplicationPg5() {
   return (
     <>
@@ -21,15 +19,15 @@ function ApplicationPg5() {
             <div className='flex flex-wrap gap-5'>
                 <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Shares Account</label>
-                    <input type="text" name="" id="" placeholder='shares' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='shares' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
                 <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Saving Account</label>
-                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
                 <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Other collateral</label>
-                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1' />
+                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
             </form>
@@ -41,7 +39,7 @@ function ApplicationPg5() {
                 I hereby declare the foregoing particulars are true to the best of my knowledge and belief and I agree to abide by the By-laws of <b>Bweyogerere Tuberebumu Sacco</b>, loan policy.
                 I also understand that the basic rules applicable to this application are listed and understand the loan will be granted according to these rules.
                 <br />
-                <div className='ml-5'>
+                <span className='ml-5'>
                     1. I confirm that I have authorized <b>Bweyogerere Tuberebumu Sacco Society</b> to access my credit profile and that this profile can be delivered to their e-mail/postal address as indicated herein and authorize ...........................................................(BANK) to mail/deliver/send my credit report to the email/postal address indicated herein.
                     I release Bweyogerere Tuberebumu Sacco and its officers, employees and agents from all claims, actions or proceedings of whatsoever nature and howsoever arising, suffered or incurred in connection with......................................(Bank sending/delivering/mailing my credit report to the address that I have provided.
                     <br />
@@ -88,7 +86,7 @@ function ApplicationPg5() {
                     <br />21. The borrower shall be required to pay interest and not less than 50% of the Sacco money to be returned every month.
                     <br />22. Application must be received in the Sacco’s office on or before 10th of every month or last working day of 10th falls on a weekend or Public holiday. Attached shall be ; filled in loan application (picked from secretary or downloaded from Sacco facebook group; link from: https://www.facebook.com/groups/404767256339820/files/) , photocopies of member’s Sacco identification card, a statement of the member’s transaction with Sacco, and photocopy of filled in fields of the log book.
                     <br />23. All Sacco deposits to be made in any <b>DFCU Bank</b> Branch to the Sacco account number <b>01071113177640</b> in the names of Bweyogerere Tuberebumu Sacco.
-                </div>
+                </span>
                 </p>
             </div>
             <form action="" className='m-2'>
