@@ -78,7 +78,8 @@ function Profile() {
       <>
         <h1 className='font-semibold mb-3'>Profile Details</h1>
         <div className='flex justify-between items-start mb-5'>
-          { profile?.avatar ? <img src={`${profile?.avatar}`} className='h-16 w-16' alt="profile"/> :
+          { profile?.avatar ? <div className='w-16 h-16 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{backgroundImage: `url(${profile?.avatar})`}}>
+                </div> :
               <span className='h-16 w-16 bg-accent dark:bg-dark-bg-600 rounded-full flex justify-center font-bold items-center overflow-hidden'>
                 {(profile?.fullname !== undefined && profile.fullname !== null) && ` ${profile?.fullname.split('')[0]}`}
               </span>

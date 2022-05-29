@@ -24,7 +24,8 @@ export default function Sidebar({ user }) {
                     <NavLink
                         key={item.link}
                         to={`/${item.link}`}
-                        className={ `flex justify-between mx-2 px-3 py-2 mb-1 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600 ${( disabled && item?.link !== 'dashboard' ) && `disabled-link`}` }
+                        className={ `flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-accent ${( disabled && (item?.link !== 'dashboard' && item?.link !== 'profile') ) && `disabled-link`}` }
+
                     >
                         <div className='flex items-center dark:text-secondary-text'>
                         <IconContext.Provider value={{ className: `font-bold text-lg` }}>
