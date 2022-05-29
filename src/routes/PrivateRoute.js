@@ -17,11 +17,6 @@ const PrivateRoute = ({ allowedRoles }) => {
 
     useEffect(() => {
         // Getting information that is required in all components.
-        try {
-
-        } catch (error) {
-            
-        }
         getProfile( user )
             .then( data => {
                 if( data ) {
@@ -52,7 +47,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         {
                             profile && (
                                 allowedRoles !== undefined ? (
-                                    roles !== null ? (
+                                    roles ? (
                                         roles.find( role => allowedRoles.includes(role)) 
                                         ? 
                                         <div className='flex-grow mx-5 mt-5 overflow-y-auto'>

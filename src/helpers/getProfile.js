@@ -6,7 +6,7 @@ export const getProfile = async ( user ) => {
             const { data, error } = await supabase.from('_member_profiles').select().eq('id', user.id).single();
             if(error) {
                 return { error: error }
-            } else if(data) {
+            } else if( data ) {
                  return data;
             } 
 

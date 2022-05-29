@@ -4,11 +4,9 @@ import { useState, useEffect } from "react"
 import { useOutletContext } from "react-router-dom"
 import { Formik, Form } from 'formik'
 import { supabase } from "../helpers/supabase"
-import { toBase64 } from "../helpers/toBase64"
 import { toast, ToastContainer } from 'react-toastify'
 import EditModal from "../components/EditModal"
 import { Loader } from "../components"
-import { changeUserPasswordValidationSchema, selfTermination } from '../helpers/validator'
 
 function Profile() {
 
@@ -104,7 +102,7 @@ function Profile() {
           <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Member Status</p>
             <div className='flex-grow flex'>
-              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{'pending' ??  profile?.member_status}</p>
+              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status ?? 'pending'}</p>
             </div>
           </div>
           <div className='grid grid-cols-5 gap-2 mb-2'>
