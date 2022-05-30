@@ -6,10 +6,12 @@ import React, { useState } from 'react'
 import { IconContext } from 'react-icons/lib'
 
 export default function Sidebar({ user }) {
-    const role = user?.user_role?.roles.includes("admin") ? "admin" : "member"
+    console.log(user.roles)
+    const role = !user ? "member" : (user?.roles && user?.roles.includes("admin") ? "admin" : "member" )
+    console.log(role)
     const [ show, setShow ] = useState(true)
     const [ selectedIndex, setSelectedIndex ] = useState( null )
-    const [ disabled ] = useState( user?.user_role?.roles )
+    const [ disabled ] = useState( !(user || user?.roles) )
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
 
 
@@ -23,7 +25,8 @@ export default function Sidebar({ user }) {
                     <NavLink
                         key={item.link}
                         to={`/${item.link}`}
-                        className={ `flex justify-between mx-2 px-3 py-2 mb-1 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600 ${( disabled && item?.link !== 'dashboard' ) && `disabled-link`}` }
+                        className={ `flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-accent ${( disabled && (item?.link !== 'dashboard' && item?.link !== 'profile') ) && `disabled-link`}` }
+
                     >
                         <div className='flex items-center dark:text-secondary-text'>
                         <IconContext.Provider value={{ className: `font-bold text-lg` }}>

@@ -3,13 +3,17 @@ import { supabase } from "../../helpers/supabase"
 import { useState, useEffect } from "react"
 import { Loader } from "../../components"
 import { downloadFile } from "../../helpers/utilites"
+import { memberApplications } from "../../helpers/mockData"
+import { useAuth } from "../../auth/AuthContext"
+import { toast, ToastContainer} from 'react-toastify'
 
 export default function ApplicantApproval() {
   const { id } = useParams()
+  const { user: { id: current_users_id }} = useAuth()
 
   useEffect(() => {
     getApplication()
-  })
+  }, [])
 
   const [ application, setApplication ] = useState(null)
   const [ imageURL, setImageURL ] = useState('')
@@ -21,13 +25,24 @@ export default function ApplicantApproval() {
     .eq("_type", "membership")
     .eq("application_id", id)
     setApplication(data[0])
+
   }
 
-  console.log(application)
 
-  
-  
 
+  const approveMember = async () => {
+    console.log("here")
+    const { application_meta : { applicants_id }} = application
+    try {
+      const { data, error } = await supabase.rpc('approve_member', { members_id: applicants_id, application: id })
+      if (error ) throw error
+      console.log(data)
+    } catch ( error ) {
+      toast.success(`Member has been approved.`, {position: "top-center"})
+      console.log(error)
+    }
+  }
+  
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Approve Member Application</h1>
@@ -99,6 +114,8 @@ export default function ApplicantApproval() {
             </button>
             <button
               className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
+              disabled={application.reviewed}
+              onClick={approveMember}
               >Approve
             </button>
             </div>

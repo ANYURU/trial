@@ -48,9 +48,11 @@ function Navbar({ user }) {
                     <p className={`text-sm ${user?.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user?.member_status ? user.member_status : 'status'}
                   </p>
                 </div>
-                { user?.avatar ? <img src={`${user?.avatar}`} alt="profile"/> :
+                { user?.avatar ? <div className='w-10 h-10 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{backgroundImage: `url(${user?.avatar})`}}>
+                </div> 
+                : 
                   <div className='w-10 h-10 bg-accent dark:bg-dark-bg-600 dark:text-secondary-text rounded-full mx-2 flex justify-center font-bold items-center overflow-hidden'>
-                    {(user?.fullname !== undefined && user.fullname !== null) && ` ${user?.fullname.split('')[0]}`}
+                   {(user?.fullname !== undefined && user.fullname !== null) && ` ${user?.fullname.split('')[0]}`}
                   </div>
                 }
                 <i className='dark:text-white'>

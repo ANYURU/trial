@@ -25,10 +25,10 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                 <div className='flex flex-wrap gap-5 m-2'>
                     <div className='flex flex-col w-56'>
                         <label htmlFor="position_in_sacco" className='text-sm'>Position in SACCO</label>
-                        <select name="position_in_sacco" defaultValue={profile?.user_role && profile?.user_role.roles.length ===1 ? 'member': ''} id="" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary"
+                        <select name="position_in_sacco" defaultValue={profile?.roles && profile?.roles.length === 1 ? 'member': ''} id="" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary"
                             onChange={handleChange("position_in_sacco")} required
                         >
-                            {profile?.user_role && profile?.user_role.roles.length === 1 ? 
+                            {profile?.roles && profile?.roles.length === 1 ? 
                                 <option value="member">Member</option>
                                 : 
                                 <>

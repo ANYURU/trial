@@ -97,9 +97,8 @@ function MemberApplication() {
             toast.success(`Membership submitted for review`, {position:'top-center'})
             
             const { application_meta } = data
-            
-            navigate('/dashboard')
             setProfile( application_meta )
+            navigate('/dashboard')
             console.log( application_meta )
             
           } catch ( error ) {

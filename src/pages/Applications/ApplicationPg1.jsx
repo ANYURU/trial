@@ -1,6 +1,6 @@
 import { InputField } from "../../components/Form/CustomInputField"
 
-export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur, employed, setEmployed, Field }) {
+export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur, employed, setEmployed }) {
     const { 
         fullname,
         dob, 
@@ -66,7 +66,7 @@ export default function ApplicationPg1({ values, errors, touched, handleChange, 
                                             event.target.checked=true
                                         } 
                                     }}
-                                   defaultChecked={false}
+                                   //defaultChecked={false}
                                    checked={employed}
                                 />
                                 <label htmlFor="employed" className='text-sm'>Employed</label>

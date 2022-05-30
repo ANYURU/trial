@@ -12,6 +12,7 @@ const PrivateRoute = ({ allowedRoles }) => {
     const { user, darkMode } = useAuth()
     const [ profile, setProfile ] = useState({})
     const [ roles, setRoles ] = useState(null)
+    const [ loading, setLoading ] = useState(true)
     const location = useLocation()
 
     useEffect(() => {
@@ -19,12 +20,13 @@ const PrivateRoute = ({ allowedRoles }) => {
         getProfile( user )
             .then( data => {
                 if( data ) {
-                    const { user_role: { roles  }} = data
+                    // console.log(data)
+                    const { roles } = data
                     setRoles( roles )
                     setProfile(data)
-                }
-                
+                }   
             })
+            .then(() => setLoading( false ))
             .catch(error => console.log(error))
 
     }, [ user ])
@@ -42,46 +44,47 @@ const PrivateRoute = ({ allowedRoles }) => {
                         <Navbar user={ profile } />
                         <div></div>
                         <div className='mx-4'>
-                            {
-                                profile && (
-                                    allowedRoles !== undefined ? (
-                                        roles !== null ? (
-                                            roles.find( role => allowedRoles.includes(role)) 
-                                            ? 
-                                            <div className='h-full mx-5 mt-5'>
-                                                <Outlet context={[ profile, setProfile ]}/>
-                                            </div>
-                                            :
-                                            <div className='h-full mx-5 mt-5'>
-                                                <Navigate to="unauthorized" state={{ from: location }} replace/>
-                                            </div>    
-                                        ) 
-                                        :
-                                        <div className='h-full mx-5 mt-5'>
-                                            <Loader />
+                        {
+                            profile && (
+                                allowedRoles !== undefined ? (
+                                    roles ? (
+                                        roles.find( role => allowedRoles.includes(role)) 
+                                        ? 
+                                        <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                                            {loading ? <Loader /> :<Outlet context={[ profile, setProfile ]}/>}
                                         </div>
-                                    )
+                                        :
+                                        <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                                            <Navigate to="unauthorized" state={{ from: location }} replace/>
+                                        </div>    
+                                    ) 
                                     :
-                                    <div className='h-full mx-5 mt-5'>
-                                        <Outlet context={[ profile, setProfile ]}/>
+                                    <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                                        {loading ? <Loader /> : <Outlet context={[ profile, setProfile ]}/>}    
                                     </div>
-                                ) 
-                            }
-                        </div>
+                                )
+                                :
+                                <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                                    {loading ? <Loader /> : <Outlet context={[ profile, setProfile ]}/>}    
+                                </div>
+                                
+                            ) 
+                        }
+                    </div>
+                </div>
+            </div>    
+        </div>
+        :
+            <div className={`${darkMode ? "dark" : ""}`}>
+                <div className={`sm-container bg-back dark:bg-dark-bg`}>
+                    <div className="">
+                        <MobileNav user={profile} />
+                    </div>
+                    <div className='flex flex-col h-screen px-2 mt-20'>
+                        <Outlet context={[profile]} />
                     </div>
                 </div>
             </div>
-        :
-                <div className={`${darkMode ? "dark" : ""}`}>
-                    <div className={`sm-container bg-back dark:bg-dark-bg`}>
-                        <div className="">
-                            <MobileNav user={profile} />
-                        </div>
-                        <div className='flex flex-col h-screen px-2 mt-20'>
-                            <Outlet context={[profile]} />
-                        </div>
-                    </div>
-                </div>
 
                 
     ) : 
