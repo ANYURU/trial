@@ -39,7 +39,7 @@ export default function ApplicantApproval() {
         throw error
       } else {
         toast.success(`Member has been approved.`, {position: "top-center"}) 
-        navigate(-1)
+        // navigate(-1)
       }
         
 
