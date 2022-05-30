@@ -13,49 +13,48 @@ export default function ApplicationPg5({ profile, initialValues, setInitialValue
         onSubmit={async ( values ) => {
             setInitialValues(values)
             setPageNumber(6)
+            console.log(values)
         }}
       >
         {({values, errors, touched, handleChange, handleBlur}) => {
 
   return (
     <Form>
-        <div className='mb-3'>
+        <div className='mb-5'>
             <h1 className='font-semibold'>DECLARATION OF THE BORROWER</h1>
-            <p>I declare the information given herein is true to the best of my knowledge and belief I further authorize Bweyogerere Tuberebumu Sacco to verify the information given herein and make reference from any person(s) and /or institution herein</p>
-            <form action="" className='m-2'>
+            <p>I declare the information given herein is true to the best of my knowledge. I further authorize Bweyogerere Tuberebumu Sacco to verify the information given herein and make reference from any person(s) and or institution herein</p>
+
             <div className='flex flex-col w-56 '>
                 <div className='flex gap-1'>
-                    <input type="checkbox" id="" name="accept" value="accept" />
-                    <label htmlFor="" className='text-sm'>Accept</label>
+                    <input type="checkbox" name="accept" value="accept" required />
+                    <label className='text-sm'>Accept</label>
                 </div>
             </div>
-            </form>
         </div>
-        <div className='mb-3'>
+        <div className='mb-5'>
             <h1 className='font-semibold'>Security Offered for the Loan</h1>
-            <form action="" className='m-2'>
             <div className='flex flex-wrap gap-5'>
                 <div className='flex flex-col w-56'>
-                    <label htmlFor="" className='text-sm'>Shares Account</label>
+                    <label className='text-sm'>Shares Account</label>
                     <input type="text" name="" id="" placeholder='shares' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
                 <div className='flex flex-col w-56 '>
-                    <label htmlFor="" className=' text-sm'>Saving Account</label>
+                    <label className=' text-sm'>Saving Account</label>
                     <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
                 <div className='flex flex-col w-56 '>
-                    <label htmlFor="" className=' text-sm'>Other collateral</label>
+                    <label className=' text-sm'>Other collateral</label>
                     <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
             </div>
-            </form>
         </div>
-        <div className='mb-3'>
+        <div className='mb-5'>
             <h1 className='font-semibold'>DELIVERING FINANCIAL FREEDOM</h1>
             <div className='outline outline-1 rounded my-2 p-3 max-h-52 overflow-auto'>
                 <p>
                 I hereby declare the foregoing particulars are true to the best of my knowledge and belief and I agree to abide by the By-laws of <b>Bweyogerere Tuberebumu Sacco</b>, loan policy.
                 I also understand that the basic rules applicable to this application are listed and understand the loan will be granted according to these rules.
+                <br />
                 <br />
                 <span className='ml-5'>
                     1. I confirm that I have authorized <b>Bweyogerere Tuberebumu Sacco Society</b> to access my credit profile and that this profile can be delivered to their e-mail/postal address as indicated herein and authorize ...........................................................(BANK) to mail/deliver/send my credit report to the email/postal address indicated herein.
@@ -110,8 +109,8 @@ export default function ApplicationPg5({ profile, initialValues, setInitialValue
             <form action="" className='m-2'>
             <div className='flex flex-col w-56 '>
                 <div className='flex gap-1'>
-                    <input type="checkbox" id="" name="accept" value="accept" />
-                    <label htmlFor="" className='text-sm'>Accept</label>
+                    <input type="checkbox" id="" name="accept" value="accept" required />
+                    <label className='text-sm'>Accept</label>
                 </div>
             </div>
             </form>
