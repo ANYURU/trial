@@ -14,8 +14,7 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
           initialValues={initialValues}
           onSubmit={async ( values ) => {
               setInitialValues(values)
-              setPageNumber(1)
-          //   console.log(values)
+              setPageNumber(3)
           }}
         >
           {({values, errors, touched, handleChange, handleBlur}) => {
@@ -168,11 +167,11 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
             </form>
         </div>
         <div className='flex justify-between w-full'>
-            <input
-                type="submit"
-                value='Back'
+            <button
+                type="button"
                 className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-            />
+                onClick={() => setPageNumber(1)}
+            >Back</button>
             <input
                 type="submit"
                 value='Next'

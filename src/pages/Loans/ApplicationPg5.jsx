@@ -1,6 +1,24 @@
-function ApplicationPg5() {
+import { Formik, Form }  from 'formik'
+import { supabase } from '../../helpers/supabase'
+import { useAuth } from '../../auth/AuthContext'
+import { toast, ToastContainer } from 'react-toastify'
+import { useOutletContext, useNavigate } from "react-router-dom"
+import { useState } from 'react'
+
+export default function ApplicationPg5({ profile, initialValues, setInitialValues, setPageNumber }) {
+
+    return (
+        <Formik
+        initialValues={initialValues}
+        onSubmit={async ( values ) => {
+            setInitialValues(values)
+            setPageNumber(6)
+        }}
+      >
+        {({values, errors, touched, handleChange, handleBlur}) => {
+
   return (
-    <>
+    <Form>
         <div className='mb-3'>
             <h1 className='font-semibold'>DECLARATION OF THE BORROWER</h1>
             <p>I declare the information given herein is true to the best of my knowledge and belief I further authorize Bweyogerere Tuberebumu Sacco to verify the information given herein and make reference from any person(s) and /or institution herein</p>
@@ -98,8 +116,23 @@ function ApplicationPg5() {
             </div>
             </form>
         </div>
-    </>
-  )
+        <div className='flex justify-between w-full'>
+            <button
+                type="button"
+                className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+                onClick={() => setPageNumber(4)}
+            >Back</button>
+            <input
+                type="submit"
+                value='Verify'
+                className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+                // onClick={() => {
+                //   setPageNumber(pageNumber + 1)
+                // }}
+            />
+        </div>
+    </Form>
+  )}}
+  </Formik>
+    )
 }
-
-export default ApplicationPg5
