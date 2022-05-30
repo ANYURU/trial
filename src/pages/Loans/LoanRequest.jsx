@@ -43,7 +43,11 @@ function LoanRequest() {
     bank_settlement: '',
     asset1: '',
     asset2: '',
-    asset3: ''
+    asset3: '',
+    loan_purpose: '',
+    amount: '',
+    amount_in_words: '',
+    months: '',
   })
 
 return (

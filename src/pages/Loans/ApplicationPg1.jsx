@@ -17,7 +17,6 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
         onSubmit={async ( values ) => {
             setInitialValues(values)
             setPageNumber(2)
-            console.log(values)
         }}
         validationSchema={loan1ValidationSchema}
       >
