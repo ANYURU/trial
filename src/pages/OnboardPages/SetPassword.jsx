@@ -25,10 +25,12 @@ export default function SetPassword() {
 
       console.log(phoneNo)
       console.log(password)
-      const { error } = await signUp({
+      const { error, data } = await signUp({
         phone: phoneNo,
         password: password
       })
+
+      // console.log(data)
     
       if( error ) {
         toast.error(`${error?.message}`, {position: "top-center"})

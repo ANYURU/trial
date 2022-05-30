@@ -4,11 +4,9 @@ import { useState, useEffect } from "react"
 import { useOutletContext } from "react-router-dom"
 import { Formik, Form } from 'formik'
 import { supabase } from "../helpers/supabase"
-import { toBase64 } from "../helpers/toBase64"
 import { toast, ToastContainer } from 'react-toastify'
 import EditModal from "../components/EditModal"
 import { Loader } from "../components"
-import { changeUserPasswordValidationSchema, selfTermination } from '../helpers/validator'
 
 function Profile() {
 
@@ -78,7 +76,8 @@ function Profile() {
       <>
         <h1 className='font-semibold mb-3'>Profile Details</h1>
         <div className='flex justify-between items-start mb-5'>
-          { profile?.avatar ? <img src={`${profile?.avatar}`} className='h-16 w-16' alt="profile"/> :
+          { profile?.avatar ? <div className='w-16 h-16 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{backgroundImage: `url(${profile?.avatar})`}}>
+                </div> :
               <span className='h-16 w-16 bg-accent dark:bg-dark-bg-600 rounded-full flex justify-center font-bold items-center overflow-hidden'>
                 {(profile?.fullname !== undefined && profile.fullname !== null) && ` ${profile?.fullname.split('')[0]}`}
               </span>
@@ -100,10 +99,10 @@ function Profile() {
             <p className=' col-span-2'>Email</p>
               <p className='font-bold  col-span-3'>{profile?.email_address}</p>
           </div>
-          <div className='grid grid-cols-5 gap-2 mb-2'>
-            <p className=' col-span-2'>Member Status</p>
-            <div className=" col-span-3">
-              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md w-24`}>{profile?.member_status}</p>
+          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
+            <p className='w-6/12'>Member Status</p>
+            <div className='flex-grow flex'>
+              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status ?? 'pending'}</p>
             </div>
           </div>
           <div className='grid grid-cols-5 gap-2 mb-2'>
