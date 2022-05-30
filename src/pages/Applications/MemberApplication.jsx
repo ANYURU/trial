@@ -120,7 +120,7 @@ function MemberApplication() {
                     {pageNumber === 2 &&
                       <ApplicationPg2 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
                     }
-                    <div className="flex-grow flex justify-between items-end">
+                    <div className="flex justify-end w-full">
                     {pageNumber === 1 && 
                         <div className='flex justify-end w-full'>
                           <input
