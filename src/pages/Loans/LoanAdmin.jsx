@@ -18,6 +18,7 @@ export default function LoanAdmin() {
     .from("applications")
     .select()
     .eq("_type", "deposit")
+    .order("created_at",  { ascending: false })
     setDeposits(data)
   }
 
@@ -39,9 +40,9 @@ export default function LoanAdmin() {
   const indexOfLastPage = currentPage * withdrawPerPage
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage
 
-  let shownDeposits = deposits.slice(indexOfFirstPage, indexOfLastPage)
+  let shownLoans = deposits.slice(indexOfFirstPage, indexOfLastPage)
 
-  shownDeposits = deposits.filter(deposit => !account || deposit?.application_meta.account_type === account)
+  shownLoans = shownLoans.filter(deposit => !account || deposit?.application_meta.account_type === account)
 
   //context
   const [ show, setShow ] = useState(false)
@@ -98,15 +99,18 @@ export default function LoanAdmin() {
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Deposit Method</th><th className='px-6 py-4'>Status</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th>
               </tr>
             </thead>
             <tbody>
-              {shownDeposits.map((deposit, index) => (
+              {shownLoans.map((deposit, index) => (
                 <tr className={`cursor-pointer ${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}
                   onClick={() => handleDeposit(deposit.application_id)}
                 >
-                    <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit?.application_meta.account_type}</td><td className='px-6 py-3'>{deposit?.application_meta.amount}</td><td className='px-6 py-3'>{deposit.depositMethod}</td><td className='px-6 py-3'>{deposit.reviewed ? "Approved" : "Pending"}</td>
+                    <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit?.application_meta.account_type}</td><td className='px-6 py-3'>{deposit?.application_meta.amount}</td>
+                    <td className='px-6 py-3'>
+                      {deposit.reviewed ? "Approved" : "Pending"}
+                    </td>
                 </tr>
               ))}
             </tbody>
