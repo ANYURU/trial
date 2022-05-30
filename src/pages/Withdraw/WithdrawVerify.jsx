@@ -21,7 +21,7 @@ export default function WithdrawVerify() {
     setWithdraw(data[0])
   }
 
-  const approveTransaction = async () => {
+  const approveWithdrawTransaction = async () => {
     const { application_meta : { applicants_id }} = withdraw
     
     try {
@@ -44,7 +44,7 @@ export default function WithdrawVerify() {
   }
 
 
-  const rejectTransaction = async() => {
+  const rejectWithdrawTransaction = async() => {
     try {
       const { data, error } = await supabase.rpc( 'reject_application', { application: id })
       if( error ) {
@@ -80,13 +80,13 @@ export default function WithdrawVerify() {
           <button
             type="submit"
             className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            onClick={rejectTransaction}
+            onClick={rejectWithdrawTransaction}
             >Reject
           </button>
           <button
             type="submit"
             className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            onClick={approveTransaction}
+            onClick={approveWithdrawTransaction}
             >Approve
           </button>
           </div>

@@ -48,7 +48,20 @@ export default function ApplicantApproval() {
       console.log(error)
     }
 
+  }
 
+  const rejectMemberApplication = async() => {
+    try {
+      const { data, error } = await supabase.rpc( 'reject_application', { application: id })
+      if( error ) {
+        throw error
+      } else {
+        console.log(data)
+        // handle the alerts and navigation
+      }
+    } catch(error) {
+      console.log(error)
+    }
   }
   
   return (
@@ -74,6 +87,7 @@ export default function ApplicantApproval() {
           <div className="flex gap-10 justify-end items-center mt-3">
           <button
             className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
+            onClick={rejectMemberApplication}
             >Reject
           </button>
           <button
