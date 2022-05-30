@@ -91,15 +91,28 @@ function MemberApplication() {
               )
               .single()
 
-            if (error) throw error
+            if (error) { 
+              throw error 
+            } else {
+              resetForm({ values: initialValues })
+              toast.success(`Membership submitted for review`, {position:'top-center'})
+              
+              const { data, error } = await supabase
+                .from('_member_profiles')
+                .select()
+                .eq('id', applicants_id)
+                .single();
+
+              if( error ) {
+                throw error
+              } else {
+                setProfile(data)
+                navigate('/dashboard')
+
+              }
+             
+            }
             
-            resetForm({ values: initialValues })
-            toast.success(`Membership submitted for review`, {position:'top-center'})
-            
-            const { application_meta } = data
-            setProfile( application_meta )
-            navigate('/dashboard')
-            console.log( application_meta )
             
           } catch ( error ) {
             // handle the errors depending on error status codes & give appropriate messages to the users

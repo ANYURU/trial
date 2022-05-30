@@ -1,6 +1,7 @@
 import { useOutletContext, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { supabase } from "../../helpers/supabase"
+import { toast, ToastContainer } from "react-toastify"
 
 export default function WithdrawVerify() {
   const { id } = useParams()
@@ -9,7 +10,7 @@ export default function WithdrawVerify() {
 
   useEffect(() => {
     getApplication()
-  })
+  }, [])
 
   const getApplication = async () => {
     const { error, data } = await supabase
@@ -20,8 +21,44 @@ export default function WithdrawVerify() {
     setWithdraw(data[0])
   }
 
+  const approveTransaction = async () => {
+    const { application_meta : { applicants_id }} = withdraw
+    
+    try {
+      const { data, error } = await supabase.rpc( 'approve_transaction', { members_id: applicants_id, application: id })
+      if ( error ) {
+        throw error
+      } else {
+        console.log(data)
+        toast.success(`Transaction has been approved.`, { position:"top-center" })
+      }
+
+    } catch (error) {
+      toast.error(`${error?.message}`, { position:"top-center"})
+      console.log(error)
+
+    }
+
+  }
+
+
+  const rejectTransaction = async() => {
+    try {
+      const { data, error } = await supabase.rpc( 'reject_transaction', { application: id })
+      if( error ) {
+        throw error
+      } else {
+        console.log(data)
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className='h-full'>
+      <ToastContainer />
+      {console.log(withdraw)}
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Verify Withdraw</h1>
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
       <div className='flex flex-grow flex-col min-h-full'>
@@ -45,6 +82,7 @@ export default function WithdrawVerify() {
           <button
             type="submit"
             className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
+            onClick={approveTransaction}
             >Approve
           </button>
           </div>

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 import { supabase } from "../../helpers/supabase"
 import { useState, useEffect } from "react"
 import { Loader } from "../../components"
@@ -6,6 +6,7 @@ import { downloadFile } from "../../helpers/utilites"
 import { memberApplications } from "../../helpers/mockData"
 import { useAuth } from "../../auth/AuthContext"
 import { toast, ToastContainer} from 'react-toastify'
+import { useNavigate } from "react-router-dom"
 
 export default function ApplicantApproval() {
   const { id } = useParams()
@@ -16,6 +17,7 @@ export default function ApplicantApproval() {
   }, [])
 
   const [ application, setApplication ] = useState(null)
+  const navigate = useNavigate()
   const [ imageURL, setImageURL ] = useState('')
 
   const getApplication = async () => {
@@ -28,19 +30,25 @@ export default function ApplicantApproval() {
 
   }
 
-
-
   const approveMember = async () => {
     console.log("here")
     const { application_meta : { applicants_id }} = application
     try {
       const { data, error } = await supabase.rpc('approve_member', { members_id: applicants_id, application: id })
-      if (error ) throw error
-      console.log(data)
+      if (error ) {
+        throw error
+      } else {
+        toast.success(`Member has been approved.`, {position: "top-center"}) 
+        navigate(-1)
+      }
+        
+
     } catch ( error ) {
-      toast.success(`Member has been approved.`, {position: "top-center"})
+      toast.error(`${error?.message}`, {position: "top-center"})
       console.log(error)
     }
+
+
   }
   
   return (
