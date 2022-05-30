@@ -48,6 +48,7 @@ function LoanRequest() {
     amount: '',
     amount_in_words: '',
     months: '',
+    securities: []
   })
 
 return (
