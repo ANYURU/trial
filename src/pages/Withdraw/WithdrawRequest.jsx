@@ -4,10 +4,14 @@ import { supabase } from '../../helpers/supabase'
 import { useAuth } from "../../auth/AuthContext"
 import { toast, ToastContainer } from 'react-toastify'
 import { withdrawRequestValidationSchema } from '../../helpers/validator'
+import { useOutletContext } from 'react-router-dom'
 
 
 function WithdrawRequest() {
-  const { user: { id: applicants_id, fullname: applicants_name } } = useAuth()
+  const { user: { id: applicants_id } } = useAuth()
+  const [ { fullname: applicants_name } ] = useOutletContext()
+  
+  console.log(applicants_name)
   const initialValues = {
     account_type: '',
     amount:'',
