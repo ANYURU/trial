@@ -6,11 +6,12 @@ import React, { useState } from 'react'
 import { IconContext } from 'react-icons/lib'
 
 export default function Sidebar({ user }) {
-    // console.log(user)
-    const role = !user ? (user?.roles && user?.roles.includes("admin") ? "admin" : "member" ): "member"
+    console.log(user.roles)
+    const role = !user ? "member" : (user?.roles && user?.roles.includes("admin") ? "admin" : "member" )
+    console.log(role)
     const [ show, setShow ] = useState(true)
     const [ selectedIndex, setSelectedIndex ] = useState( null )
-    const [ disabled ] = useState( !user || !user?.roles )
+    const [ disabled ] = useState( !(user || user?.roles) )
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
 
 

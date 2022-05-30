@@ -1,6 +1,6 @@
 import { InputField } from "../../components/Form/CustomInputField"
 
-export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur, employed, setEmployed, Field }) {
+export default function ApplicationPg1({ values, errors, touched, handleChange, handleBlur, employed, setEmployed }) {
     const { 
         fullname,
         dob, 
