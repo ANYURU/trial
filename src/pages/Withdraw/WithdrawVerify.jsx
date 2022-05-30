@@ -29,6 +29,7 @@ export default function WithdrawVerify() {
       if ( error ) {
         throw error
       } else {
+        // handle the alerts and navigation
         console.log(data)
         toast.success(`Transaction has been approved.`, { position:"top-center" })
       }
@@ -36,6 +37,7 @@ export default function WithdrawVerify() {
     } catch (error) {
       toast.error(`${error?.message}`, { position:"top-center"})
       console.log(error)
+     
 
     }
 
@@ -44,11 +46,12 @@ export default function WithdrawVerify() {
 
   const rejectTransaction = async() => {
     try {
-      const { data, error } = await supabase.rpc( 'reject_transaction', { application: id })
+      const { data, error } = await supabase.rpc( 'reject_application', { application: id })
       if( error ) {
         throw error
       } else {
         console.log(data)
+        // handle the alerts and navigation
       }
     } catch(error) {
       console.log(error)
