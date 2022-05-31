@@ -27,8 +27,7 @@ function MakeDeposit() {
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
           const { account_type, amount, phone_number, particulars, evidence } = values
-          console.log(typeof(amount))
-          console.log(evidence)
+          
           try {
             const { Key: url } = await uploadFile(evidence, 'deposits')
             const { error, data } = await supabase

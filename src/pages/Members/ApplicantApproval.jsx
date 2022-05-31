@@ -1,4 +1,4 @@
-import { Navigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { supabase } from "../../helpers/supabase"
 import { useState, useEffect } from "react"
 import { Loader } from "../../components"
@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom"
 
 export default function ApplicantApproval() {
   const { id } = useParams()
-  const { user: { id: current_users_id }} = useAuth()
 
   useEffect(() => {
     getApplication()
