@@ -5,10 +5,12 @@ import { supabase } from '../../helpers/supabase'
 import { useAuth } from "../../auth/AuthContext"
 import { toast, ToastContainer } from 'react-toastify'
 import { depositRequestValidationSchema } from '../../helpers/validator'
+import { useOutletContext } from 'react-router-dom'
 
 function MakeDeposit() {
-  const { user: { id: applicants_id, fullname:applicants_name } } = useAuth()
-
+  const { user: { id: applicants_id } } = useAuth()
+  const [{ fullname: applicants_name}] = useOutletContext()
+  console.log(applicants_name)
   const initialValues = {
     account_type: '',
     amount: '',
@@ -25,6 +27,7 @@ function MakeDeposit() {
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
           const { account_type, amount, phone_number, particulars, evidence } = values
+          console.log(typeof(amount))
           console.log(evidence)
           try {
             const { Key: url } = await uploadFile(evidence, 'deposits')
