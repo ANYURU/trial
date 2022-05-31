@@ -123,15 +123,15 @@ function Profile() {
           <Form className='mb-3' name="changePasswordForm" onSubmit={(event) => handleChangePassword(event, values)}>
               <h1 className='font-semibold mb-3'>Password Reset</h1>
                 <div className='flex flex-col w-56 mb-5'>
-                  <label htmlFor="" className='text-sm'>Old Password</label>
+                  <label className='text-sm'>Old Password</label>
                   <input type="password" name="old_password" id="old_password" onChange={handleChange("old_password")} placeholder='Old Password' className='ring-1 ring-black dark:ring-dark-bg-600 dark:bg-dark-bg-700 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 ' required/>
                 </div>
                 <div className='flex flex-col w-56 mb-5'>
-                  <label htmlFor="" className='text-sm'>New Password</label>
+                  <label className='text-sm'>New Password</label>
                   <input type="password" name="new_password" id="new_password" onChange={handleChange("new_password")} placeholder='New Password' className='ring-1 ring-black dark:ring-dark-bg-600 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 dark:bg-dark-bg-700' required/>
                 </div>
                 <div className='flex flex-col w-56 mb-5'>
-                  <label htmlFor="" className='text-sm'>Confirm Password</label>
+                  <label className='text-sm'>Confirm Password</label>
                   <input type="password" name="" id="confirm_password" onChange={handleChange("confirm_password")} placeholder='Confirm Password' className='ring-1 ring-black dark:ring-dark-bg-600 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 dark:bg-dark-bg-700' required/>
                 </div>
                 <div className="flex justify-end gap-3 mt-3">
@@ -154,7 +154,7 @@ function Profile() {
               <br />
               <div className='flex mt-1'>
                 <div className='flex flex-col w-56'>
-                  <label htmlFor="" className='text-sm'>Enter Password to confirm</label>
+                  <label className='text-sm'>Enter Password to confirm</label>
                   <input type="password" name="password" id="" placeholder='Password' onChange={handleChange("password")} className='ring-1 ring-black dark:ring-dark-bg-600 dark:bg-dark-bg-700 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary' required />
                 </div>
               </div>
