@@ -63,7 +63,7 @@ function WithdrawRequest() {
                 <div className='mb-3'>
                       <div className='flex flex-wrap gap-5'>
                           <div className='flex flex-col w-56'>
-                            <label htmlFor="" className='text-sm'>Please select an account</label>
+                            <label className='text-sm'>Please select an account</label>
                             <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600" value={values?.account_type} onChange={handleChange} onBlur={handleBlur}>
                               <option value="">--Select Account--</option>
                               <option value="savings">Savings</option>

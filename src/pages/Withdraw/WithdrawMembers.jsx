@@ -128,7 +128,7 @@ export default function WithdrawMembers() {
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}
                   onClick={() => handleWithdraw(withdraw.application_id)}
                 >
-                  <td className='px-6 py-3'>{new Date(withdraw.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{withdraw.application_id}</td><td className='px-6 py-3'></td><td className='px-6 py-3'>{withdraw.application_meta.account_type}</td><td className='px-6 py-3'>{withdraw.application_meta.amount}</td><td className='px-6 py-3'></td>
+                  <td className='px-6 py-3'>{new Date(withdraw.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{withdraw.application_id}</td><td className='px-6 py-3'>{withdraw.application_meta.applicants_name}</td><td className='px-6 py-3'>{withdraw.application_meta.account_type}</td><td className='px-6 py-3'>{withdraw.application_meta.amount}</td><td className='px-6 py-3'></td>
                   <td className={`px-6 py-3`}>
                       <span className={` py-1 px-2 rounded-xl text-white ${withdraw.reviewed ? "bg-red-400" : "bg-yellow-400"}`}>
                       {withdraw.reviewed ? "Rejected" : "Pending"}
