@@ -3,7 +3,7 @@ import { Formik,  Form } from 'formik'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from "../../auth/AuthContext"
 import { toast, ToastContainer } from 'react-toastify'
-import { withdrawRequestValidationSchema } from '../../helpers/validator'
+import { nonEvidencedRequestValidationSchema as withdrawRequestValidationSchema } from '../../helpers/validator'
 import { useOutletContext } from 'react-router-dom'
 
 

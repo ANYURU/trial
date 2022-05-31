@@ -4,7 +4,7 @@ import { uploadFile } from '../../helpers/uploadFile'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from "../../auth/AuthContext"
 import { toast, ToastContainer } from 'react-toastify'
-import { depositRequestValidationSchema } from '../../helpers/validator'
+import { evidencedRequestValidationSchema as depositRequestValidationSchema } from '../../helpers/validator'
 import { useOutletContext } from 'react-router-dom'
 
 function MakeDeposit() {
