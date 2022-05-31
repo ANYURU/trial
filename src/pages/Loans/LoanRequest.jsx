@@ -4,7 +4,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import { useOutletContext } from "react-router-dom"
 
 function LoanRequest() {
-  const [ pageNumber, setPageNumber ] = useState(1)
+  const [ pageNumber, setPageNumber ] = useState(4)
   const [ profile ] = useOutletContext()
 
   const [initialValues, setInitialValues] = useState({
@@ -61,6 +61,18 @@ function LoanRequest() {
         date_granted: '',
         repayment_period: '',
         balance: ''
+      }
+    ],
+    guarantors: [
+      {
+        name: '',
+        financial_statement: '',
+        contact: ''
+      },
+      {
+        name: '',
+        financial_statement: '',
+        contact: ''
       }
     ]
   })

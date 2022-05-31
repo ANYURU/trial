@@ -28,11 +28,9 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
             <FieldArray
                 name='bank_loans'
                 render={(fieldArryProps) => {
-                    const { push, remove, form } = fieldArryProps
-                    const { bank_loans } = values
 
                     return <div>
-                        {bank_loans.map((bank, index) => (
+                        {values.bank_loans.map((bank, index) => (
                             <>
             <div className='m-2 flex gap-2' key={index}>
                 <div className='flex justify-center items-center'>
