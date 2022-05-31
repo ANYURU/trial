@@ -1,18 +1,15 @@
 import { ApplicationPg1, ApplicationPg2, ApplicationPg3, ApplicationPg4, ApplicationPg5, ApplicationVerify } from "."
 import { useState } from "react"
-import { Formik, Form }  from 'formik'
-import { supabase } from '../../helpers/supabase'
-import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
-import { useOutletContext, useNavigate } from "react-router-dom"
+import { useOutletContext } from "react-router-dom"
 
 function LoanRequest() {
   const [ pageNumber, setPageNumber ] = useState(1)
-  const [ profile, setProfile ] = useOutletContext()
+  const [ profile ] = useOutletContext()
 
-  const navigate = useNavigate()
-
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
+    applicant_name: profile.fullname,
+    applicant_id: profile.id,
     position_in_sacco: profile?.user_role && profile?.user_role.roles.length === 1 ? 'member': '',
     postal_address: '',
     landline_number: '',
@@ -30,7 +27,7 @@ function LoanRequest() {
     spouse_name: '',
     spouse_profession: '',
     spouse_contact: '',
-    employment_type: '',
+    employment: '',
     employer: '',
     employer_postal_address: '',
     employer_no: '',
@@ -43,89 +40,80 @@ function LoanRequest() {
     bank_settlement: '',
     asset1: '',
     asset2: '',
-    asset3: ''
-  }
-  
-  return (
-    <div className='h-full'>
+    asset3: '',
+    loan_type: '',
+    loan_purpose: '',
+    amount: '',
+    amount_in_words: '',
+    months: '',
+    securities: [],
+    bank_loans: [
+      {
+        name: '',
+        amount_advanced: '',
+        date_granted: '',
+        repayment_period: '',
+        balance: ''
+      },
+      {
+        name: '',
+        amount_advanced: '',
+        date_granted: '',
+        repayment_period: '',
+        balance: ''
+      }
+    ],
+    guarantors: [
+      {
+        name: '',
+        financial_statement: '',
+        contact: ''
+      },
+      {
+        name: '',
+        financial_statement: '',
+        contact: ''
+      }
+    ],
+    securities_offered: [
+      {
+        shares: '',
+        savings: '',
+        others: ''
+      }
+    ]
+  })
+
+  console.log(initialValues)
+
+return (
+    <>
       <ToastContainer />
-      <Formik
-        initialValues={initialValues}
-        onSubmit={async ( values ) => {
-          console.log(values)
-          // navigate("/")
-          setPageNumber(pageNumber + 1)
-        }}
-      >
-        {({values, errors, touched, handleChange, handleBlur}) => {
-          return (
-            <Form>
-              <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Loan Application</h1>
-              <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
-                <div className='flex flex-grow flex-col min-h-full'>
-                  {pageNumber === 1 &&
-                    <ApplicationPg1 profile={profile} handleChange={handleChange} />
-                  }
-                  {pageNumber === 2 &&
-                    <ApplicationPg2 profile={profile} handleChange={handleChange} />
-                  }
-                  {pageNumber === 3 &&
-                    <ApplicationPg3 />
-                  }
-                  {pageNumber === 4 &&
-                    <ApplicationPg4 />
-                  }
-                  {pageNumber === 5 &&
-                    <ApplicationPg5 />
-                  }
-                  {pageNumber === 6 &&
-                    <ApplicationVerify />
-                  }
-                  <div className="flex-grow flex justify-between items-end">
-                    {pageNumber !== 1 && pageNumber !== 6 &&
-                    <div className=''>
-                      <button
-                          type="button"
-                          className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                          onClick={() => {
-                            setPageNumber(pageNumber - 1)
-                          }}
-                      >Previous</button>
-                    </div>
-                    }
-                    {pageNumber !== 5 && pageNumber !== 6 &&
-                      <div className='flex justify-end w-full'>
-                        <button
-                          type="button"
-                          className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                          onClick={() => {
-                            setPageNumber(pageNumber + 1)
-                          }}
-                      >Next</button>
-                      </div>
-                    }
-                    {pageNumber === 5 &&
-                      <div className='flex justify-end w-full'>
-                        <input
-                          type="submit"
-                          value='Submit'
-                          className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                          // onClick={() => {
-                          //   setPageNumber(pageNumber + 1)
-                          // }}
-                        />
-                      </div>
-                    }
-                  </div>
-                </div>
-                      </div>
-            </Form>
-          )
-        }}
-      </Formik>
-      
-    </div>
-  )
+      <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Loan Request</h1>
+      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
+        <div className='flex flex-grow flex-col min-h-full'>
+          {pageNumber === 1 &&
+            <ApplicationPg1 profile={profile} initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
+          }
+          {pageNumber === 2 &&
+            <ApplicationPg2 profile={profile} initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
+          }
+          {pageNumber === 3 &&
+            <ApplicationPg3 initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
+          }
+          {pageNumber === 4 &&
+            <ApplicationPg4 initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
+          }
+          {pageNumber === 5 &&
+            <ApplicationPg5 initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} fullname={profile.fullname} />
+          }
+          {pageNumber === 6 &&
+            <ApplicationVerify initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
+          }
+        </div>
+      </div>
+    </>
+)
 }
 
 export default LoanRequest

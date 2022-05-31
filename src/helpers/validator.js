@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
 export const validationSchema = Yup.object({
   phoneNo: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
   password: Yup.string().trim().min(8, 'Password must be atleast 8 characters').required("Password is required"),
@@ -60,4 +61,30 @@ export const withdrawRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
   account_type: Yup.string().required('Required!'),
   particulars: Yup.string(),
+})
+
+
+export const loan1ValidationSchema = Yup.object({
+  landline_number: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
+  kin_contact: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
+  spouse_contact: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
+  no_of_dependents: Yup.string().required("No. of dependents is required"),
+  town: Yup.string().required("Town is required")
+})
+
+export const loan2ValidationSchema = Yup.object({
+  landline_number: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
+  employer_no: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
+  spouse_contact: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
+  no_of_dependents: Yup.string().required("No. of dependents is required"),
+  employer: Yup.string().required("employer's name is required"),
+  asset1: Yup.string().required("asset is required"),
+  asset2: Yup.string().required("asset 2 is required"),
+  // business_type: Yup.string().required("required"),
+  // years_of_operation: Yup.string().required("required"),
+  // business_income: Yup.string().required("required"),
+  loan_purpose: Yup.string().required("required"),
+  amount: Yup.string().required("Amount is required"),
+  amount_in_words: Yup.string().required("required"),
+  months: Yup.string().required("required"),
 })

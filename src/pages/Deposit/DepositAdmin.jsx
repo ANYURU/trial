@@ -60,8 +60,6 @@ export default function DepositAdmin() {
     }
   }
 
-  console.log(deposits)
-
   
   return (
     <div className='h-full'>

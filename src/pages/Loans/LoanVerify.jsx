@@ -7,12 +7,14 @@ import { downloadFile } from "../../helpers/utilites"
 export default function DepositVerify() {
   const { id } = useParams()
 
-  useEffect(() => {
-    getApplication()
-  })
+  
 
   const [ deposit, setDeposit ] = useState(null)
   const [ imageURL, setImageURL ] = useState('')
+
+  useEffect(() => {
+    getApplication()
+  }, [ deposit ])
 
   const getApplication = async () => {
     const { error, data } = await supabase
@@ -27,7 +29,7 @@ export default function DepositVerify() {
     try {
       downloadFile(deposit.application_meta.files[0].file_url.substring(9), "deposits")
       .then((data) => setImageURL(data.avatar_url))
-      // .catch(error => error.status)
+      .catch(error => console.log("failed"))
     }
     catch (error) {
       console.log("failed")

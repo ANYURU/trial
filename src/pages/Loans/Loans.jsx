@@ -68,16 +68,16 @@ export default function Loan() {
           </table>
         </div>
         <div className="flex justify-between px-6 my-5">
-              <Pagination
-                pages={Math.ceil(loanHistory.length/loansPerPage)}
-                setCurrentPage={setCurrentPage}
-                indexOfFirstPage={indexOfFirstPage}
-                indexOfLastPage={indexOfLastPage}
-                data={loanHistory}
-                depositsPerPage={loansPerPage}
-                setDepositsPerPage={setLoansPerPage}
-              />
-            </div>
+          <Pagination
+            pages={Math.ceil(loanHistory.length/loansPerPage)}
+            setCurrentPage={setCurrentPage}
+            indexOfFirstPage={indexOfFirstPage}
+            indexOfLastPage={indexOfLastPage}
+            data={loanHistory}
+            depositsPerPage={loansPerPage}
+            setDepositsPerPage={setLoansPerPage}
+          />
+        </div>
       </div>
     </div>
   )

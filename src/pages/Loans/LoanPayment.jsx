@@ -25,12 +25,12 @@ function LoanPayment() {
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
       <div className='flex flex-grow flex-col min-h-full'>
         <div className='mb-3'>
-            <form action="" className='m-2'>
+            <div className='m-2'>
               <div className='flex flex-wrap gap-5'>
                   <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Please select an account</label>
                     <select name="account" id="" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600"
-                      onChange={handleChange("account")}
+                      onChange={handleChange("account")} required
                     >
                       <option value="">--Select Account--</option>
                       <option value="savings">Savings</option>
@@ -42,41 +42,41 @@ function LoanPayment() {
                   <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Enter Amount</label>
                     <input type="text" name="amount" id="" placeholder='Enter Amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' 
-                    onChange={handleChange("amount")}
+                    onChange={handleChange("amount")} required
                     />
                   </div>
               </div>
-            </form>
+            </div>
         </div>
         <div className='mb-3'>
-            <form action="" className='m-2'>
+            <div className='m-2'>
               <div className='flex flex-wrap gap-5'>
                   <div className='flex flex-col w-56'>
                     <label htmlFor="" className='text-sm'>Enter Phone Number</label>
                     <input type="text" name="phone_number" id="" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' 
-                      onChange={handleChange("phone_number")}
+                      onChange={handleChange("phone_number")} required
                     />
                   </div>
                   <div className='flex flex-col w-56 '>
                     <label htmlFor="" className=' text-sm'>Upload Receipt</label>
                     <input type="file" name="receipt" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600'
-                      onChange={handleChange("receipt")} 
+                      onChange={handleChange("receipt")} required 
                     />
                   </div>
               </div>
-            </form>
+            </div>
         </div>
           <div className='mb-3'>
               <h1 className='font-semibold'>Particulars</h1>
               <textarea name="particulars" id="" cols="30" rows="10" className='outline outline-1 p-2 rounded-md w-full dark:bg-dark-bg-700'
-                onChange={handleChange("particulars")}
+                onChange={handleChange("particulars")} required
               ></textarea>
           </div>
         <div className="w-56">
           <input
             type="submit"
             value="Make Payment"
-            className='bg-lightblue inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2 w-full mt-1'
+            className='bg-primary inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2 w-full mt-1'
           />
         </div>
       </div>
