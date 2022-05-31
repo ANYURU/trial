@@ -4,8 +4,9 @@ import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
 import { useOutletContext, useNavigate } from "react-router-dom"
 import { useState } from 'react'
+import { InputField } from '../../components/Form/CustomInputField'
 
-export default function ApplicationPg5({ profile, initialValues, setInitialValues, setPageNumber }) {
+export default function ApplicationPg5({ fullname, initialValues, setInitialValues, setPageNumber }) {
 
     return (
         <Formik
@@ -13,7 +14,6 @@ export default function ApplicationPg5({ profile, initialValues, setInitialValue
         onSubmit={async ( values ) => {
             setInitialValues(values)
             setPageNumber(6)
-            console.log(values)
         }}
       >
         {({values, errors, touched, handleChange, handleBlur}) => {
@@ -22,32 +22,26 @@ export default function ApplicationPg5({ profile, initialValues, setInitialValue
     <Form>
         <div className='mb-5'>
             <h1 className='font-semibold'>DECLARATION OF THE BORROWER</h1>
-            <p>I declare the information given herein is true to the best of my knowledge. I further authorize Bweyogerere Tuberebumu Sacco to verify the information given herein and make reference from any person(s) and or institution herein</p>
+            <p>I <span className='font-bold'> &nbsp; {fullname} &nbsp; </span> declare the information given herein is true to the best of my knowledge. I further authorize Bweyogerere Tuberebumu Sacco to verify the information given herein and make reference from any person(s) and or institution herein</p>
 
-            <div className='flex flex-col w-56 '>
-                <div className='flex gap-1'>
-                    <input type="checkbox" name="accept" value="accept" required />
-                    <label className='text-sm'>Accept</label>
-                </div>
+            <div className='flex gap-1'>
+                <input type="checkbox" id='declaration' name="declare" value="declare" required />
+                <label className='text-sm' htmlFor='declaration'>Accept</label>
             </div>
         </div>
+
         <div className='mb-5'>
             <h1 className='font-semibold'>Security Offered for the Loan</h1>
             <div className='flex flex-wrap gap-5'>
-                <div className='flex flex-col w-56'>
-                    <label className='text-sm'>Shares Account</label>
-                    <input type="text" name="" id="" placeholder='shares' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                    <label className=' text-sm'>Saving Account</label>
-                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                    <label className=' text-sm'>Other collateral</label>
-                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                </div>
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="securities_offered[0].shares" label="Shares" placeholder="Enter shares" />
+
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="securities_offered[0].savings" label="Savings" placeholder="Enter savings" />
+
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="securities_offered[0].other" label="other" placeholder="Enter savings" />
+
             </div>
         </div>
+        
         <div className='mb-5'>
             <h1 className='font-semibold'>DELIVERING FINANCIAL FREEDOM</h1>
             <div className='outline outline-1 rounded my-2 p-3 max-h-52 overflow-auto'>
@@ -106,14 +100,13 @@ export default function ApplicationPg5({ profile, initialValues, setInitialValue
                 </span>
                 </p>
             </div>
-            <form action="" className='m-2'>
-            <div className='flex flex-col w-56 '>
+
+            <div className='flex flex-col w-56 m-2 '>
                 <div className='flex gap-1'>
-                    <input type="checkbox" id="" name="accept" value="accept" required />
-                    <label className='text-sm'>Accept</label>
+                    <input type="checkbox" id="accept_terms" name="accept" value="accept" required />
+                    <label className='text-sm' htmlFor='accept_terms'>Accept</label>
                 </div>
             </div>
-            </form>
         </div>
         <div className='flex justify-between w-full'>
             <button

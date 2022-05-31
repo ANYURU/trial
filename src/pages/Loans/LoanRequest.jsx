@@ -4,7 +4,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import { useOutletContext } from "react-router-dom"
 
 function LoanRequest() {
-  const [ pageNumber, setPageNumber ] = useState(4)
+  const [ pageNumber, setPageNumber ] = useState(5)
   const [ profile ] = useOutletContext()
 
   const [initialValues, setInitialValues] = useState({
@@ -74,6 +74,13 @@ function LoanRequest() {
         financial_statement: '',
         contact: ''
       }
+    ],
+    securities_offered: [
+      {
+        shares: '',
+        savings: '',
+        others: ''
+      }
     ]
   })
 
@@ -98,7 +105,7 @@ return (
             <ApplicationPg4 initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
           }
           {pageNumber === 5 &&
-            <ApplicationPg5 initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
+            <ApplicationPg5 initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} fullname={profile.fullname} />
           }
           {pageNumber === 6 &&
             <ApplicationVerify initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />
