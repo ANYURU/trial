@@ -54,7 +54,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                                             {loading ? <Loader /> :<Outlet context={[ profile, setProfile ]}/>}
                                         </div>
                                         :
-                                        <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                                        <div className='flex-grow mt-5 overflow-y-auto'>
                                             <Navigate to="unauthorized" state={{ from: location }} replace/>
                                         </div>    
                                     ) 

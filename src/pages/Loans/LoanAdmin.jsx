@@ -53,9 +53,6 @@ export default function LoanAdmin() {
         }
     }
   }
-
-  console.log(deposits)
-
   
   return (
     <div className='h-full'>

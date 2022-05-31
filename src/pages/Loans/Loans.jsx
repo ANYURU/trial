@@ -55,13 +55,18 @@ export default function Loan() {
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Amount to Pay</th><th className='px-6 py-4'>Amount Paid</th><th className='px-6 py-4'>Principal</th><th className='px-6 py-4'>Interest</th><th className='px-6 py-4'>Status</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Amount to Pay</th><th className='px-6 py-4'>Amount Paid</th><th className='px-6 py-4'>Principal</th><th className='px-6 py-4'>Interest (%)</th><th className='px-6 py-4'>Status</th>
               </tr>
             </thead>
             <tbody>
               {loans.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest}</td><td className='px-6 py-3'>{loan.status}</td>
+                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest}</td>
+                  <td className={`px-6 py-3`}>
+                    <span className={` py-1 px-2 rounded-xl text-white ${loan.status === "pending" ? "bg-yellow-400" : loan.status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
+                    {loan.status}
+                    </span>
+                  </td>
                 </tr>
               ))}
             </tbody>

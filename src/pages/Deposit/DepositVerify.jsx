@@ -4,15 +4,20 @@ import { supabase } from "../../helpers/supabase"
 import { useState, useEffect } from "react"
 import { Loader } from "../../components"
 import { downloadFile } from "../../helpers/utilites"
+import { useOutletContext } from "react-router-dom"
 
 export default function DepositVerify() {
   const { id } = useParams()
+  const [ deposit, setDeposit ] = useState(null)
 
   useEffect(() => {
     getApplication()
+    // console.log(deposit)
   })
 
-  const [ deposit, setDeposit ] = useState(null)
+  const [ profile ] = useOutletContext()
+
+  
   const [ imageURL, setImageURL ] = useState('')
 
   const getApplication = async () => {
@@ -30,8 +35,7 @@ export default function DepositVerify() {
     .catch(error => error)
   }
 
-  
-  
+  // console.log(deposit)
 
   return (
     <div className='h-full'>
@@ -41,26 +45,30 @@ export default function DepositVerify() {
            <div className='mb-3'>
               {/* <h1 className='font-semibold'>{profile?.fullname}'s withdraw Request Details</h1> */}
               <div className="outline outline-1 outline-gray-100 p-3">
-                <div className="my-6">MemberID: {deposit.applicants_id}</div>
-                <div className="">Application ID: {id}</div>
-                <div className="my-6">Amount: {deposit.application_meta && deposit?.application_meta.amount}</div>
+                <div className="my-6">Applicant ID: <span className="font-semibold">{deposit.application_meta.applicants_id}</span></div>
+                <div className="my-6">Application ID: <span className="font-semibold">{deposit.application_id}</span></div>
+                <div className="my-6">Account: <span className="font-semibold">{deposit.application_meta.account_type}</span></div>
+                <div className="my-6">Amount: <span className="font-semibold">{deposit.application_meta.amount}</span></div>
+
                 <div className="my-6">Method of Withdraw: Bank</div>
                 <div className="my-6">Account/Mobile Number: {deposit.application_meta &&  deposit?.application_meta.phone_number}</div>
                 <img src={imageURL} width={200} className="rounded" alt="receipt" loading="lazy"/>
               </div>
           </div>
+          {deposit.application_meta.applicants_id !== profile.id &&
           <div className="flex gap-10 justify-end items-center mt-3">
-          <button
-            type="submit"
-            className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            >Reject
-          </button>
-          <button
-            type="submit"
-            className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            >Approve
-          </button>
+            <button
+              type="submit"
+              className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
+              >Reject
+            </button>
+            <button
+              type="submit"
+              className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
+              >Approve
+            </button>
           </div>
+          }
       </div>
       :
       <Loader />

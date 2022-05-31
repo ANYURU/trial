@@ -112,7 +112,7 @@ function MakeDeposit() {
                     </div>
                 </div>
                   <div className='mb-3'>
-                      <h1 className='font-semibold'>Practiculars</h1>
+                      <h1 className='font-semibold'>Particulars</h1>
                       <textarea name="particulars" id="particulars" cols="30" rows="10" className='outline outline-1 rounded-md w-full p-2' onChange={handleChange} onBlur={handleBlur} value={values.particulars}></textarea>
                   </div>
                 <div className="w-56">

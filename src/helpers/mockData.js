@@ -5,7 +5,7 @@ export const loanHistory = [
         amountPaid: 5000,
         principal: 20000,
         interest: 5,
-        status: 'Pending'
+        status: 'pending'
     },
     {
         date: '12-04-2022',
@@ -13,7 +13,7 @@ export const loanHistory = [
         amountPaid: 4000,
         principal: 100000,
         interest: 5,
-        status: 'Paid'
+        status: 'paid'
     },
     {
         date: '01-04-2022',
@@ -21,7 +21,7 @@ export const loanHistory = [
         amountPaid: 5000,
         principal: 20000,
         interest: 5,
-        status: 'Pending'
+        status: 'pending'
     },
     {
         date: '07-06-2021',
@@ -29,7 +29,7 @@ export const loanHistory = [
         amountPaid: 4000,
         principal: 100000,
         interest: 5,
-        status: 'Paid'
+        status: 'due'
     }
 ]
 

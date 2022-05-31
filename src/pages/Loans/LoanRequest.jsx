@@ -84,8 +84,6 @@ function LoanRequest() {
     ]
   })
 
-  console.log(initialValues)
-
 return (
     <>
       <ToastContainer />
