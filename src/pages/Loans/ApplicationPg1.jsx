@@ -28,7 +28,7 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                 <div className='flex flex-wrap gap-5 m-2'>
                     <div className='flex flex-col w-56'>
                         <label htmlFor="position_in_sacco" className='text-sm'>Position in SACCO</label>
-                        <select name="position_in_sacco" defaultValue={profile?.roles && profile?.roles.length === 1 ? 'member': ''} id="" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary"
+                        <select name="position_in_sacco" defaultValue={profile?.roles && profile?.roles.length === 1 ? 'member': initialValues.position_in_sacco} id="" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary"
                             onChange={handleChange("position_in_sacco")} required
                         >
                             {profile?.roles && profile?.roles.length === 1 ? 
@@ -46,16 +46,9 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                             }
                         </select>
                     </div>
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="postal_address"  label="Postal Address" placeholder="Enter Postal Address"/>
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="postal_address" defaultValue={initialValues.postal_address}  label="Postal Address" placeholder="Enter Postal Address"/>
 
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="landline_number"  label="Landline Number" placeholder="Enter number"/>
-
-                    {/* <div className='flex flex-col w-56 '>
-                    <label className=' text-sm'>Land line number</label>
-                    <input type="text" name="landline_number" placeholder='(222) 222 - 2222' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' 
-                        onChange={handleChange("landline_number")} required
-                    />
-                    </div> */}
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="landline_number"  label="Landline Number" defaultValue={initialValues.landline_number}  placeholder="Enter number"/>
 
                     <div className='flex flex-col w-56 '>
                         <label className=' text-sm'>Marital Status</label>
@@ -68,7 +61,7 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                         </select>
                     </div>
 
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="no_of_dependents"  label="Number of dependents" placeholder="Enter number"/>
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="no_of_dependents"  label="Number of dependents" placeholder="Enter number" defaultValue={initialValues.no_of_dependents}  />
 
                 </div>
         </div>
@@ -76,19 +69,19 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                 <h1 className='font-semibold'>Physical Address</h1>
                 <div className='flex flex-wrap gap-5 m-2'>
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="town"  label="Town" placeholder="Enter town"/>
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="town"  label="Town" placeholder="Enter town" defaultValue={initialValues.town} />
 
                     <div className='flex flex-col w-56 '>
                     <label className='text-sm'>Estate</label>
-                    <input type="text" name="estate" id="" placeholder='Enter estate name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("estate")} />
+                    <input type="text" name="estate" id="" placeholder='Enter estate name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("estate")} defaultValue={initialValues.estate}  />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label className='text-sm'>Street</label>
-                    <input type="text" name="street" id="" placeholder='Enter street name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("street")} />
+                    <input type="text" name="street" id="" placeholder='Enter street name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("street")} defaultValue={initialValues.street}  />
                     </div>
                     <div className='flex flex-col w-56 '>
                     <label className='text-sm'>House Number</label>
-                    <input type="text" name="house_no" id="" placeholder='Enter house no.' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("house_no")} />
+                    <input type="text" name="house_no" id="" placeholder='Enter house no.' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("house_no")} defaultValue={initialValues.house_no}  />
                     </div>
                     <div className='flex flex-col w-56 '>
                         <label className='text-sm'>Ownership</label>
@@ -103,44 +96,36 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                             </div>
                         </div>
                     </div>
-                    <div className='flex flex-col w-56 '>
-                    <label className='text-sm'>Years Spent</label>
-                    <input type="text" name="years_spent" id="" placeholder='Years Spent' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary'onChange={handleChange("years_spent")} />
-                    </div>
+
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="years_spent"  label="Years Spent" placeholder="Enter years" defaultValue={initialValues.years_spent}  />
+
                 </div>
             </div>
+
             <div className='mb-3'>
                 <h1 className='font-semibold'>Next of Kin</h1>
                 <div className='flex flex-wrap gap-5 m-2'>
-                    <div className='flex flex-col w-56'>
-                    <label className='text-sm'>Name</label>
-                    <input type="text" name="kin_name" id="" placeholder='Enter name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("kin_name")} required />
-                    </div>
-                    <div className='flex flex-col w-56 '>
-                    <label className=' text-sm'>Profession</label>
-                    <input type="text" name="kin_profession" id="" placeholder='Enter profession' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("kin_profession")}/>
-                    </div>
 
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="kin_contact"  label="Contact" placeholder="Enter number"/>
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="kin_name"  label="Name" placeholder="Enter name" defaultValue={initialValues.kin_name}  />
+                    
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="kin_profession"  label="Profession" placeholder="Enter profession" defaultValue={initialValues.kin_profession}  />
+
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="kin_contact"  label="Contact" placeholder="Enter number" defaultValue={initialValues.kin_contact}  />
 
                 </div>
             </div>
-            <div className='mb-3'>
-                <h1 className='font-semibold'>Spouse</h1>
-                <div className='m-2 flex flex-wrap gap-5'>
-                    <div className='flex flex-col w-56'>
-                    <label className='text-sm'>Name</label>
-                    <input type="text" name="spouse_name" id="" placeholder='Enter name' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("spouse-name")} required />
-                    </div>
-                    <div className='flex flex-col w-56 '>
-                    <label className=' text-sm'>Profession</label>
-                    <input type="text" name="spouse_profession" id="" placeholder='Enter profession' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary' onChange={handleChange("spouse_profession")} />
-                    </div>
 
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="spouse_contact"  label="Contact" placeholder="Enter number"/>
+        <div className='mb-3'>
+            <h1 className='font-semibold'>Spouse</h1>
+            <div className='flex flex-wrap gap-5 m-2'>
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="spouse_name"  label="Name" placeholder="Enter name" defaultValue={initialValues.spouse_name} />
+                
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="spouse_profession"  label="Profession" placeholder="Enter profession" defaultValue={initialValues.spouse_profession} />
 
-                </div>
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="spouse_contact"  label="Contact" placeholder="Enter number" defaultValue={initialValues.spouse_contact} />
+            </div>
         </div>
+
         <div className='flex justify-end w-full'>
             <input
                 type="submit"

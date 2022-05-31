@@ -31,19 +31,19 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
                 <label className='text-sm font-bold'>Type</label>
                 <div className='flex justify-between'>
                     <div className='flex gap-1'>
-                        <input type="radio" id="" name="employment" value="Owned" onChange={() => {
+                        <input type="radio" id='employed' name="employment" value="employed" defaultChecked={initialValues.employed} onChange={() => {
                             setEmployed(true)
                             handleChange("employment")
                             }} />
-                        <label className='text-sm'>Employed</label>
+                        <label className='text-sm' htmlFor='employed'>Employed</label>
                     </div>
                     <div className='flex gap-1'>
-                        <input type="radio" id="" name="employment" value="Rented" onChange={() =>{
+                        <input type="radio" id='business' name="employment" value="business" defaultChecked={initialValues.business} onChange={() =>{
                             setEmployed(false)
                             handleChange("employment")
                         }
                         }  />
-                        <label className='text-sm'>Self Employed</label>
+                        <label className='text-sm' htmlFor='business'>Self Employed</label>
                     </div>
                 </div>
             </div>
@@ -54,22 +54,23 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
 
             <div className='flex flex-wrap gap-5'>
                 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer"  label="Employer" placeholder="Enter employer" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer"  label="Employer" placeholder="Enter employer" defaultValue={initialValues.employer} />
 
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer_postal_address"  label="Employer Postal Address" placeholder="Enter postal address" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer_postal_address"  label="Employer Postal Address" placeholder="Enter postal address" defaultValue={initialValues.employer_postal_address} />
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer_no"  label="Telephone Number" placeholder="Enter number" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer_no"  label="Telephone Number" placeholder="Enter number" defaultValue={initialValues.employer_no} />
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer_designation"  label="Employer designation" placeholder="Enter designation" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer_designation"  label="Employer designation" placeholder="Enter designation" defaultValue={initialValues.employer_designation} />
 
                 <div className='flex flex-col w-56 '>
                   <label className=' text-sm'>Retirement Date</label>
-                  <input type="date" name="retirement_date" onChange={handleChange("retirement_date")} className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
+                  <input type="date" name="retirement_date" onChange={handleChange("retirement_date")} className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' defaultValue={initialValues.retirement_date} />
                 </div>
                 <div className='flex flex-col w-56 '>
-                  <label className=' text-sm'>Employment Type</label>
-                  <input type="text" name="employment_type" onChange={handleChange("employment_type")} id="" placeholder='Employment type' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
+
+                  <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employment_type"  label="Employment Type" placeholder="Enter employment type" defaultValue={initialValues.employment_type} />
+
                 </div>
             </div>
                 </>
@@ -102,11 +103,11 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
             <div className='m-2'>
             <div className='flex flex-wrap gap-5'>
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="asset1"  label="First asset*" placeholder="Enter asset 1" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="asset1"  label="First asset*" placeholder="Enter asset 1" defaultValue={initialValues.asset1} />
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="asset2"  label="Second asset*" placeholder="Enter asset 2" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="asset2"  label="Second asset*" placeholder="Enter asset 2" defaultValue={initialValues.asset2} />
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="asset3"  label="Third asset" placeholder="Enter asset 3" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="asset3"  label="Third asset" placeholder="Enter asset 3" defaultValue={initialValues.asset3} />
 
             </div>
             </div>
@@ -120,30 +121,30 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
                     <label className='text-sm font-bold'>Type</label>
                     <div className='flex justify-between'>
                         <div className='flex gap-1'>
-                            <input type="radio" id="" name="ownership" value="Owned" />
-                            <label className='text-sm'>Normal</label>
+                            <input type="radio" id="normal" name="loan_type" value="normal"  onChange={handleChange("loan_type")} />
+                            <label className='text-sm' htmlFor='normal'>Normal</label>
                         </div>
                         <div className='flex gap-1'>
-                            <input type="radio" id="" name="ownership" value="Rented" />
-                            <label className='text-sm'>Extended</label>
+                            <input type="radio" id="extended" name="loan_type" value="extended" onChange={handleChange("loan_type")} />
+                            <label className='text-sm' htmlFor='extended'>Extended</label>
                         </div>
                     </div>
                 </div>
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="loan_purpose"  label="Purpose of loan" placeholder="Enter loan purpose" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="loan_purpose"  label="Purpose of loan" placeholder="Enter loan purpose" defaultValue={initialValues.loan_purpose} />
 
                 <div className='flex flex-col w-56 '>
                 <label className=' text-sm'>Supporting files</label>
                 <input type="file" name="supporting_files" className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount"  label="Amount in figures" placeholder="Enter loan amount" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount"  label="Amount in figures" placeholder="Enter loan amount" defaultValue={initialValues.amount} />
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount_in_words"  label="Amount in words" placeholder="Enter amount" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount_in_words"  label="Amount in words" placeholder="Enter amount" defaultValue={initialValues.amount_in_words} />
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="months"  label="Months" placeholder="Enter months" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="months"  label="Months" placeholder="Enter months" defaultValue={initialValues.months} />
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="repayment_method"  label="Repayment Method" placeholder="Enter method" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="repayment_method"  label="Repayment Method" placeholder="Enter method" defaultValue={initialValues.repayment_method} />
 
             </div>
             </div>

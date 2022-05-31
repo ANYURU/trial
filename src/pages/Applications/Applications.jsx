@@ -10,7 +10,7 @@ import { MemberModal } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { Loader } from "../../components"
 
-function Applications() {
+export default function Applications() {
 
   useEffect(() => {
     getApplications()
@@ -65,7 +65,7 @@ function Applications() {
 
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Applications Details</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Membership Applications</h1>
       <div className="flex justify-between my-3">
           <div className="bg-green-400 w-4/12 flex flex-col justify-center items-center py-2 border-l-8 border-green-800">
               <h1 className="text-lg font-bold">{approvedMembers.length}</h1>
@@ -126,7 +126,7 @@ function Applications() {
                     <span className={` py-1 px-2 rounded-xl text-white ${application.reviewed ? "bg-red-400" : "bg-yellow-400"}`}>
                     {application.reviewed ? "Rejected" : "Pending"}
                     </span>
-                    </td>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -151,5 +151,3 @@ function Applications() {
     </div>
   )
 }
-
-export default Applications

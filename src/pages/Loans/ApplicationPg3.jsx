@@ -1,4 +1,4 @@
-import { Formik, Field, Form }  from 'formik'
+import { Formik, Field, Form, FieldArray }  from 'formik'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
@@ -18,7 +18,6 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
     onSubmit={async ( values ) => {
         setInitialValues(values)
         setPageNumber(4)
-        console.log(values)
     }}
   >
     {({values, errors, touched, handleChange, handleBlur}) => {
@@ -26,63 +25,46 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
     <Form>
         <div className='mb-3'>
             <h1 className='font-semibold'>Loan in other banks or financial institutions</h1>
-            <div className='m-2 flex gap-2'>
+            <FieldArray
+                name='bank_loans'
+                render={(fieldArryProps) => {
+                    const { push, remove, form } = fieldArryProps
+                    const { bank_loans } = values
+
+                    return <div>
+                        {bank_loans.map((bank, index) => (
+                            <>
+            <div className='m-2 flex gap-2' key={index}>
                 <div className='flex justify-center items-center'>
-                    <h1 className='font-bold'>01</h1>
+                    <h1 className='font-bold'>0{index + 1}</h1>
                 </div>
                 <div className='flex flex-wrap gap-5'>
-                    <div className='flex flex-col w-56'>
-                        <label className='text-sm'>Name</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                    </div>
-                    <div className='flex flex-col w-56 '>
-                        <label className=' text-sm'>Amount Advanced</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                    </div>
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`bank_loans[${index}].name`} defaultValue={initialValues.bank_loans[index].name}  label="Name" placeholder="Enter bank name" />
+
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} defaultValue={initialValues.bank_loans[index].amount_advanced} reference={`bank_loans[${index}].amount_advanced`}  label="Amount Advanced" placeholder="Enter amount" />
+
                     <div className='flex flex-col w-56 '>
                         <label className=' text-sm'>Date Granted</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
+                        <input type="date" defaultValue={initialValues.bank_loans[index].date_granted} className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' name={`bank_loans[${index}].date_granted`} />
                     </div>
-                    <div className='flex flex-col w-56 '>
-                        <label className=' text-sm'>Repayment Period</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                    </div>
-                    <div className='flex flex-col w-56 '>
-                    <label className=' text-sm'>Balance</label>
-                    <input type="text" name="" id="" placeholder='DD/MM/YYYY' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                    </div>
+
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`bank_loans[${index}].repayment_period`} defaultValue={initialValues.bank_loans[index].repayment_period}  label="Repayment Period" placeholder="Enter period" />
+
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`bank_loans[${index}].balance`}  label="Balance" placeholder="Enter balance" defaultValue={initialValues.bank_loans[index].balance} />
                 </div>
             </div>
-            <hr />
-            <div className='m-2 flex gap-2'>
-                <div className='flex justify-center items-center'>
-                    <h1 className='font-bold'>02</h1>
-                </div>
-                <div className='flex flex-wrap gap-5'>
-                    <div className='flex flex-col w-56'>
-                        <label className='text-sm'>Name</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
+                            <hr />
+                            </>
+                            ))
+                        }
                     </div>
-                    <div className='flex flex-col w-56 '>
-                        <label className=' text-sm'>Amount Advanced</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                    </div>
-                    <div className='flex flex-col w-56 '>
-                        <label className=' text-sm'>Date Granted</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                    </div>
-                    <div className='flex flex-col w-56 '>
-                        <label className=' text-sm'>Repayment Period</label>
-                        <input type="text" name="" id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                    </div>
-                    <div className='flex flex-col w-56 '>
-                    <label className=' text-sm'>Balance</label>
-                    <input type="text" name="" id="" placeholder='DD/MM/YYYY' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                    </div>
-                </div>
-            </div>
+                }}
+            >
+            </FieldArray>
+            
+            
         </div>
-        <hr />
+
         <div className='mb-3'>
             <h1 className='font-semibold'>Additional Files</h1>
             <div className='m-2'>
@@ -99,15 +81,15 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
 
             {/* <div id="checkbox-group">Checked</div> */}
             <div role="group" aria-labelledby="checkbox-group">
-                <label>
+                <label className='block'>
                 <Field type="checkbox" name="securities" value="salary" />
                 Salary
                 </label>
-                <label>
+                <label className='block'>
                 <Field type="checkbox" name="securities" value="shares" />
                 Share
                 </label>
-                <label>
+                <label className='block'>
                 <Field type="checkbox" name="securities" value="guarantors" />
                 Guarantors
                 </label>

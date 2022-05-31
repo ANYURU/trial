@@ -1,18 +1,15 @@
 import { ApplicationPg1, ApplicationPg2, ApplicationPg3, ApplicationPg4, ApplicationPg5, ApplicationVerify } from "."
 import { useState } from "react"
-import { Formik, Form }  from 'formik'
-import { supabase } from '../../helpers/supabase'
-import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
-import { useOutletContext, useNavigate } from "react-router-dom"
+import { useOutletContext } from "react-router-dom"
 
 function LoanRequest() {
   const [ pageNumber, setPageNumber ] = useState(1)
-  const [ profile, setProfile ] = useOutletContext()
-
-  const navigate = useNavigate()
+  const [ profile ] = useOutletContext()
 
   const [initialValues, setInitialValues] = useState({
+    applicant_name: profile.fullname,
+    applicant_id: profile.id,
     position_in_sacco: profile?.user_role && profile?.user_role.roles.length === 1 ? 'member': '',
     postal_address: '',
     landline_number: '',
@@ -30,7 +27,7 @@ function LoanRequest() {
     spouse_name: '',
     spouse_profession: '',
     spouse_contact: '',
-    employment_type: '',
+    employment: '',
     employer: '',
     employer_postal_address: '',
     employer_no: '',
@@ -44,17 +41,36 @@ function LoanRequest() {
     asset1: '',
     asset2: '',
     asset3: '',
+    loan_type: '',
     loan_purpose: '',
     amount: '',
     amount_in_words: '',
     months: '',
-    securities: []
+    securities: [],
+    bank_loans: [
+      {
+        name: '',
+        amount_advanced: '',
+        date_granted: '',
+        repayment_period: '',
+        balance: ''
+      },
+      {
+        name: '',
+        amount_advanced: '',
+        date_granted: '',
+        repayment_period: '',
+        balance: ''
+      }
+    ]
   })
+
+  console.log(initialValues)
 
 return (
     <>
       <ToastContainer />
-      <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Loan Application</h1>
+      <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Loan Request</h1>
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
         <div className='flex flex-grow flex-col min-h-full'>
           {pageNumber === 1 &&

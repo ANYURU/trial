@@ -6,9 +6,8 @@ import React, { useState } from 'react'
 import { IconContext } from 'react-icons/lib'
 
 export default function Sidebar({ user }) {
-    console.log(user.roles)
     const role = !user ? "member" : (user?.roles && user?.roles.includes("admin") ? "admin" : "member" )
-    console.log(role)
+
     const [ show, setShow ] = useState(true)
     const [ selectedIndex, setSelectedIndex ] = useState( null )
     const [ disabled ] = useState( !(user || user?.roles) )
@@ -25,7 +24,7 @@ export default function Sidebar({ user }) {
                     <NavLink
                         key={item.link}
                         to={`/${item.link}`}
-                        className={ `flex justify-between mx-2 px-3 py-1 rounded-lg hover:bg-accent ${( disabled && (item?.link !== 'dashboard' && item?.link !== 'profile') ) && `disabled-link`}` }
+                        className={ `flex justify-between mx-2 my-1 px-3 py-1 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600 ${( disabled && (item?.link !== 'dashboard' && item?.link !== 'profile') ) && `disabled-link`}` }
 
                     >
                         <div className='flex items-center dark:text-secondary-text'>

@@ -54,10 +54,12 @@ export default function LoanAdmin() {
     }
   }
 
+  console.log(deposits)
+
   
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Member's Loan Applications</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Loan Applications</h1>
         <div className="my-2 flex justify-between searchInput">
             <input type="text" className="px-2 py-2 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text" placeholder="Search by name..."
               onChange={(event) => setSearchText(event.target.value)}
@@ -108,8 +110,10 @@ export default function LoanAdmin() {
                   onClick={() => handleDeposit(deposit.application_id)}
                 >
                     <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit?.application_meta.account_type}</td><td className='px-6 py-3'>{deposit?.application_meta.amount}</td>
-                    <td className='px-6 py-3'>
-                      {deposit.reviewed ? "Approved" : "Pending"}
+                    <td className={`px-6 py-3`}>
+                      <span className={` py-1 px-2 rounded-xl text-white ${deposit.reviewed ? "bg-red-400" : "bg-yellow-400"}`}>
+                      {deposit.reviewed ? "Rejected" : "Pending"}
+                      </span>
                     </td>
                 </tr>
               ))}
