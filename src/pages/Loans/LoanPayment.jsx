@@ -11,7 +11,7 @@ function LoanPayment() {
   // Will be used later
   // const { id: loan_id } = useParams()
   const { user: { id: applicants_id }} = useAuth()
-  const [{fullname: applicants_name }] = useOutletContext()
+  const [{ fullname: applicants_name }] = useOutletContext()
 
   const initialValues = {
     account_type: '',
