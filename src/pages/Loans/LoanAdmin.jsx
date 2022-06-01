@@ -9,7 +9,7 @@ export default function LoanAdmin() {
   useEffect(() => {
     getApplications()
     document.title = 'Loan Applications - Bweyogere tuberebumu'
-  })
+  }, [])
 
   const [ deposits, setDeposits ] = useState([])
 
