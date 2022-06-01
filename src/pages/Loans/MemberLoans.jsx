@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "../../helpers/supabase"
 import { FaEllipsisV } from 'react-icons/fa'
 
-export default function Loan() {
+export default function MemberLoans() {
   useEffect(() => {
     document.title = 'Loans - Bweyogere tuberebumu'
     getApplications()
@@ -30,7 +30,6 @@ export default function Loan() {
 
   const loan = loanHistory.slice(indexOfFirstPage, indexOfLastPage)
 
-
   const [ activeIndex, setActiveIndex ] = useState(null)
   const [ show, setShow ] = useState(false)
   if(show === true){
@@ -51,9 +50,9 @@ export default function Loan() {
               onChange={(event) => setStatus(event.target.value)}
             >
                 <option value="">Status</option>
-                <option value="paid">Approved</option>
+                <option value="paid">Paid</option>
                 <option value="pending">Pending</option>
-                <option value="due">Rejected</option>
+                <option value="due">Due</option>
             </select>
           </div>
           <div className='flex flex-col w-56'>
@@ -66,20 +65,20 @@ export default function Loan() {
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Amount to Pay</th><th className='px-6 py-4'>Amount Paid</th><th className='px-6 py-4'>Principal</th><th className='px-6 py-4'>Interest (%)</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Action</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>ID</th><th className='px-6 py-4'>Name</th><th className='px-6 py-4'>Amount to Pay</th><th className='px-6 py-4'>Amount Paid</th><th className='px-6 py-4'>Principal</th><th className='px-6 py-4'>Interest (%)</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Action</th>
               </tr>
             </thead>
             <tbody>
               {loan.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest_rate}</td>
+                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.ID}</td><td className='px-6 py-3'>{loan.applicants_name}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest_rate}</td>
                   <td className={`px-6 py-3`}>
                     <span className={` py-1 px-2 rounded-xl text-white ${loan.status === "pending" ? "bg-yellow-400" : loan.status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
                     {loan.status}
                     </span>
                   </td>
 
-                  <td className="px-6 py-3">
+                  <td className="p-2">
                     <div className="relative">
                         <button className="block p-2 rounded-md dialog"
                           onClick={(event) => {
@@ -93,7 +92,7 @@ export default function Loan() {
                         {/* <ContextMenu activeIndex={activeIndex} show={show} index={index} setShow={setShow} setMemberModal={setMemberModal} deleteModal={deleteModal} setDeleteModal={setDeleteModal} member={activeIndex === index ? member : null} /> */}
                     </div>
                   </td>
-
+                  
                 </tr>
               ))}
             </tbody>
