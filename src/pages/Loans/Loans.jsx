@@ -3,6 +3,7 @@ import { Pagination } from "../../components"
 import { useEffect, useState } from "react"
 import { supabase } from "../../helpers/supabase"
 import { FaEllipsisV } from 'react-icons/fa'
+import { LoansContext } from "../../components"
 
 export default function Loan() {
   useEffect(() => {
@@ -90,7 +91,7 @@ export default function Loan() {
                         >
                             <FaEllipsisV />
                         </button>
-                        {/* <ContextMenu activeIndex={activeIndex} show={show} index={index} setShow={setShow} setMemberModal={setMemberModal} deleteModal={deleteModal} setDeleteModal={setDeleteModal} member={activeIndex === index ? member : null} /> */}
+                        <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} />
                     </div>
                   </td>
 
