@@ -8,12 +8,14 @@ import { toast, ToastContainer } from "react-toastify"
 export default function DepositVerify() {
   const { id } = useParams()
 
-  useEffect(() => {
-    getApplication()
-  })
+  
 
   const [ loan, setLoan ] = useState(null)
   const [ imageURL, setImageURL ] = useState('')
+
+  useEffect(() => {
+    getApplication()
+  }, [ loan ])
 
   const getApplication = async () => {
     const { error, data } = await supabase
@@ -28,7 +30,7 @@ export default function DepositVerify() {
     try {
       downloadFile(loan.application_meta.files[0].file_url.substring(9), "loans")
       .then((data) => setImageURL(data.avatar_url))
-      // .catch(error => error.status)
+      .catch(error => console.log("failed"))
     }
     catch (error) {
       console.log("failed")

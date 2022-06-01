@@ -1,43 +1,54 @@
-function ApplicationPg5() {
+import { Formik, Form }  from 'formik'
+import { supabase } from '../../helpers/supabase'
+import { useAuth } from '../../auth/AuthContext'
+import { toast, ToastContainer } from 'react-toastify'
+import { useOutletContext, useNavigate } from "react-router-dom"
+import { useState } from 'react'
+import { InputField } from '../../components/Form/CustomInputField'
+
+export default function ApplicationPg5({ fullname, initialValues, setInitialValues, setPageNumber }) {
+
+    return (
+        <Formik
+        initialValues={initialValues}
+        onSubmit={async ( values ) => {
+            setInitialValues(values)
+            setPageNumber(6)
+        }}
+      >
+        {({values, errors, touched, handleChange, handleBlur}) => {
+
   return (
-    <>
-        <div className='mb-3'>
+    <Form>
+        <div className='mb-5'>
             <h1 className='font-semibold'>DECLARATION OF THE BORROWER</h1>
-            <p>I declare the information given herein is true to the best of my knowledge and belief I further authorize Bweyogerere Tuberebumu Sacco to verify the information given herein and make reference from any person(s) and /or institution herein</p>
-            <form action="" className='m-2'>
-            <div className='flex flex-col w-56 '>
-                <div className='flex gap-1'>
-                    <input type="checkbox" id="" name="accept" value="accept" />
-                    <label htmlFor="" className='text-sm'>Accept</label>
-                </div>
+            <p>I <span className='font-bold'> &nbsp; {fullname} &nbsp; </span> declare the information given herein is true to the best of my knowledge. I further authorize Bweyogerere Tuberebumu Sacco to verify the information given herein and make reference from any person(s) and or institution herein</p>
+
+            <div className='flex gap-1'>
+                <input type="checkbox" id='declaration' name="declare" value="declare" required />
+                <label className='text-sm' htmlFor='declaration'>Accept</label>
             </div>
-            </form>
         </div>
-        <div className='mb-3'>
+
+        <div className='mb-5'>
             <h1 className='font-semibold'>Security Offered for the Loan</h1>
-            <form action="" className='m-2'>
             <div className='flex flex-wrap gap-5'>
-                <div className='flex flex-col w-56'>
-                    <label htmlFor="" className='text-sm'>Shares Account</label>
-                    <input type="text" name="" id="" placeholder='shares' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                    <label htmlFor="" className=' text-sm'>Saving Account</label>
-                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                </div>
-                <div className='flex flex-col w-56 '>
-                    <label htmlFor="" className=' text-sm'>Other collateral</label>
-                    <input type="text" name="" id="" placeholder='amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
-                </div>
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="securities_offered[0].shares" label="Shares" placeholder="Enter shares" />
+
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="securities_offered[0].savings" label="Savings" placeholder="Enter savings" />
+
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="securities_offered[0].other" label="other" placeholder="Enter savings" />
+
             </div>
-            </form>
         </div>
-        <div className='mb-3'>
+        
+        <div className='mb-5'>
             <h1 className='font-semibold'>DELIVERING FINANCIAL FREEDOM</h1>
             <div className='outline outline-1 rounded my-2 p-3 max-h-52 overflow-auto'>
                 <p>
                 I hereby declare the foregoing particulars are true to the best of my knowledge and belief and I agree to abide by the By-laws of <b>Bweyogerere Tuberebumu Sacco</b>, loan policy.
                 I also understand that the basic rules applicable to this application are listed and understand the loan will be granted according to these rules.
+                <br />
                 <br />
                 <span className='ml-5'>
                     1. I confirm that I have authorized <b>Bweyogerere Tuberebumu Sacco Society</b> to access my credit profile and that this profile can be delivered to their e-mail/postal address as indicated herein and authorize ...........................................................(BANK) to mail/deliver/send my credit report to the email/postal address indicated herein.
@@ -89,17 +100,31 @@ function ApplicationPg5() {
                 </span>
                 </p>
             </div>
-            <form action="" className='m-2'>
-            <div className='flex flex-col w-56 '>
+
+            <div className='flex flex-col w-56 m-2 '>
                 <div className='flex gap-1'>
-                    <input type="checkbox" id="" name="accept" value="accept" />
-                    <label htmlFor="" className='text-sm'>Accept</label>
+                    <input type="checkbox" id="accept_terms" name="accept" value="accept" required />
+                    <label className='text-sm' htmlFor='accept_terms'>Accept</label>
                 </div>
             </div>
-            </form>
         </div>
-    </>
-  )
+        <div className='flex justify-between w-full'>
+            <button
+                type="button"
+                className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+                onClick={() => setPageNumber(4)}
+            >Back</button>
+            <input
+                type="submit"
+                value='Verify'
+                className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
+                // onClick={() => {
+                //   setPageNumber(pageNumber + 1)
+                // }}
+            />
+        </div>
+    </Form>
+  )}}
+  </Formik>
+    )
 }
-
-export default ApplicationPg5
