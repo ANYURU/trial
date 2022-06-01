@@ -116,12 +116,12 @@ export default function DepositAdmin() {
                     <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit.application_meta.applicants_name}</td><td className='px-6 py-3'>{deposit?.application_meta.account_type}</td><td className='px-6 py-3'>{deposit?.application_meta.amount}</td>
 
                     <td className={`px-6 py-3`}>
-                    <span className={` py-1 px-2 rounded-xl text-white ${deposit.reviewed ? deposit.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
-                    {deposit.reviewed ?
-                      deposit.application_meta.review_status === "approved" ? "Approved" : "Rejected"
-                    : "Pending"}
-                    </span>
-                  </td>
+                      <span className={` py-1 px-2 rounded-xl text-white ${deposit.reviewed ? deposit.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
+                      {deposit.reviewed ?
+                        deposit.application_meta.review_status === "approved" ? "Approved" : "Rejected"
+                      : "Pending"}
+                      </span>
+                    </td>
                 </tr>
               ))}
             </tbody>

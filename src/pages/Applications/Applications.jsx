@@ -33,9 +33,9 @@ export default function Applications() {
   }
 
   const [ status, setStatus ] = useState("")
-  const approvedMembers = applications.filter(application => application.reviewed)
+  const approvedMembers = applications.filter(application => application.application_meta.review_status)
   const pendingMembers = applications.filter(application => !application.reviewed)
-  const rejectedMembers = applications.filter(application => application.reviewed)
+  const rejectedMembers = applications.length - (approvedMembers.length + pendingMembers.length)
 
 
   //pagination
@@ -44,8 +44,10 @@ export default function Applications() {
   const indexOfLastPage = currentPage * applicationsPerPage
   const indexOfFirstPage = indexOfLastPage - applicationsPerPage
 
-  const shownApplications = applications.slice(indexOfFirstPage, indexOfLastPage)
-                            .filter(application => status === "false" ? !application.reviewed : status === "" ? application : application.reviewed)
+  const filteredApplications = applications.filter(application => status === "" ? application : status === 'pending' ? !application.reviewed : status === "approved" ? application.application_meta.review_status === status : application.reviewed && application.application_meta.review_status !== "approved" )
+
+  const shownApplications = filteredApplications.slice(indexOfFirstPage, indexOfLastPage)
+                            
 
   const [ searchText, setSearchText ] = useState('')
 
@@ -63,6 +65,8 @@ export default function Applications() {
     }
   }
 
+  console.log(applications)
+
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Membership Applications</h1>
@@ -76,7 +80,7 @@ export default function Applications() {
               <p className="uppercase">Pending</p>
           </div>
           <div className="bg-red-400 w-4/12 flex flex-col justify-center items-center py-2 border-l-8 border-red-800">
-              <h1 className="text-lg font-bold">{rejectedMembers.length}</h1>
+              <h1 className="text-lg font-bold">{rejectedMembers}</h1>
               <p className="uppercase">Rejected</p>
           </div>
       </div>
@@ -93,9 +97,9 @@ export default function Applications() {
                   onChange={(event) => setStatus(event.target.value)}
                 >
                     <option value="">Status</option>
-                    <option value={true}>Approved</option>
-                    <option value={false}>Pending</option>
-                    <option value={true}>Rejected</option>
+                    <option value={"approved"}>Approved</option>
+                    <option value={"pending"}>Pending</option>
+                    <option value={"rejected"}>Rejected</option>
                 </select>
               </div>
               <div className='flex flex-col w-56'>
@@ -122,11 +126,15 @@ export default function Applications() {
                   {memberModal && activeIndex === index && <MemberModal member={activeIndex === index && application} setMemberModal={setMemberModal} />}
                   <td className='px-6 py-3'>{application.created_at.substring(0, 10)}</td><td className='px-6 py-3'>{application.application_meta.applicants_name}</td><td className='px-6 py-3'>{application.application_id}</td>
                   <td className='px-6 py-3'>{application.application_meta.proposed_monthly_contributions}</td>
+
                   <td className={`px-6 py-3`}>
-                    <span className={` py-1 px-2 rounded-xl text-white ${application.reviewed ? "bg-red-400" : "bg-yellow-400"}`}>
-                    {application.reviewed ? "Rejected" : "Pending"}
-                    </span>
-                  </td>
+                      <span className={` py-1 px-2 rounded-xl text-white ${application.reviewed ? application.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
+                      {application.reviewed ?
+                        application.application_meta.review_status === "approved" ? "Approved" : "Rejected"
+                      : "Pending"}
+                      </span>
+                    </td>
+
                 </tr>
               ))}
             </tbody>
@@ -134,11 +142,11 @@ export default function Applications() {
         </div> 
         <div className="flex justify-between px-6 my-5">
               <Pagination
-                pages={Math.ceil(applications.length/applicationsPerPage)}
+                pages={Math.ceil(filteredApplications.length/applicationsPerPage)}
                 setCurrentPage={setCurrentPage}
                 indexOfFirstPage={indexOfFirstPage}
                 indexOfLastPage={indexOfLastPage}
-                data={applications}
+                data={filteredApplications}
                 depositsPerPage={applicationsPerPage}
                 setDepositsPerPage={setApplicationsPerPage}
               />

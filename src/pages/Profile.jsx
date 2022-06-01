@@ -14,11 +14,9 @@ function Profile() {
     document.title = 'Profile - Bweyogere tuberebumu'
   }, [])
 
-  const [ loading, setLoading ] = useState(false)
-
   const [ popUp, setPopUp ] = useState(false)
   const [ editPop, setEditPop ] = useState(false)
-  const [ profile, setProfile ] = useOutletContext()
+  const [ profile ] = useOutletContext()
   const initialValues = {
     ...profile,
     password:''
@@ -99,12 +97,16 @@ function Profile() {
             <p className=' col-span-2'>Email</p>
               <p className='font-bold  col-span-3'>{profile?.email_address}</p>
           </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Member Status</p>
+            <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status ?? 'pending'}</p>
+          </div>
+          {/* <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Member Status</p>
             <div className='flex-grow flex'>
               <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status ?? 'pending'}</p>
             </div>
-          </div>
+          </div> */}
           <div className='grid grid-cols-5 gap-2 mb-2'>
             <p className=' col-span-2'>Marital Status</p>
             <p className='font-bold  col-span-3'>{profile?.marital_status}</p>

@@ -1,6 +1,6 @@
 import { memberApplications } from "../../helpers/mockData"
 import { MdAdd } from "react-icons/md"
-import { filterByStatus, searchByName } from "../../helpers/utilites"
+// import { filterByStatus, searchByName } from "../../helpers/utilites"
 import { useState, useEffect } from "react"
 import { FaEllipsisV } from 'react-icons/fa'
 import { ContextMenu } from "../../components"
@@ -26,14 +26,13 @@ function Members() {
     setMembers(data.filter(member => member.roles))
   }
 
-
   // console.log(members)
 
 
 
   const navigate = useNavigate()
 
-  const [ status, setStatus ] = useState('')
+  const [ status, setStatus ] = useState(null)
   // const members = filterByStatus(memberApplications, status)
 
   const [ activeIndex, setActiveIndex ] = useState(null)
@@ -49,7 +48,13 @@ function Members() {
   const indexOfLastPage = currentPage * withdrawPerPage
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage
 
-  const shownMembers = members.slice(indexOfFirstPage, indexOfLastPage)
+  // const searchByName = () => data.filter(member => member.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+
+  // let shownMembers = members.slice(indexOfFirstPage, indexOfLastPage)
+
+  const filteredMembers = members.filter(member => member.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1).filter(member => !status || member.member_status === status)
+
+  const shownMembers = filteredMembers.slice(indexOfFirstPage, indexOfLastPage)
 
   if(show === true){
     window.onclick = function(event) {
@@ -79,10 +84,9 @@ function Members() {
                   <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
                     onChange={(event) => setStatus(event.target.value)}
                   >
-                      <option value="">Status</option>
-                      <option value="Approved">Approved</option>
-                      <option value="Pending">Pending</option>
-                      <option value="Rejected">Rejected</option>
+                      <option value={""}>Select Status</option>
+                      <option value="active">Active</option>
+                      <option value="dormant">Dormant</option>
                   </select>
                 </div>
                 <div className='flex flex-col w-56 dark:text-secondary-text'>
@@ -98,11 +102,11 @@ function Members() {
               <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
                   <tr>
-                    <th className='px-6 py-4'>Member's Name</th><th className='px-6 py-4'>ID</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th><th>Actions</th>
+                    <th className='px-6 py-4'>ID</th><th className='px-6 py-4'>Name</th><th className='px-6 py-4'>Phone Number</th><th className='px-6 py-4'>Status</th><th>Actions</th>
                   </tr>
                 </thead>
                   <tbody>
-                    {members.map((member, index) => (
+                    {shownMembers.map((member, index) => (
                       <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
                         {memberModal && activeIndex === index && <MemberModal member={activeIndex === index && member} setMemberModal={setMemberModal} />}
                         
@@ -117,10 +121,16 @@ function Members() {
                               </div>
                           </ConfirmModal>
                         }
+                        <td className='px-6 py-3'>{member.id}</td>
                         <td className='px-6 py-3'>{member.fullname}</td>
-                        <td className='px-6 py-3'>{member.id}</td>
-                        <td className='px-6 py-3'>{member.id}</td>
-                        <td className='px-6 py-3'>{member.member_status}</td>
+                        <td className='px-6 py-3'>{member.phone_number}</td>
+
+                        <td className={`px-6 py-3`}>
+                          <span className={` py-1 px-2 rounded-xl text-white ${member.member_status === "active" ? "bg-green-400" : "bg-red-400"}`}>
+                          {member.member_status}
+                          </span>
+                        </td>
+
                         <td className="p-2">
                         <div className="relative">
                             <button className="block p-2 rounded-md dialog"
@@ -166,11 +176,11 @@ function Members() {
             </div>
             <div className="flex justify-between px-6 my-5">
               <Pagination
-                pages={Math.ceil(members.length/withdrawPerPage)}
+                pages={Math.ceil(filteredMembers.length/withdrawPerPage)}
                 setCurrentPage={setCurrentPage}
                 indexOfFirstPage={indexOfFirstPage}
                 indexOfLastPage={indexOfLastPage}
-                data={members}
+                data={filteredMembers}
                 depositsPerPage={withdrawPerPage}
                 setDepositsPerPage={setWithdrawPerPage}
               />
