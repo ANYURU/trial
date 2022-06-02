@@ -45,25 +45,24 @@ function Savings() {
             <div className="flex gap-10">
               <p>Account Number</p>
               <div className="flex font-bold">
-                <p>{savings.account_id}</p>
+                <p>{savings?.account_id}</p>
               </div>
             </div>
             <div className="flex gap-10">
               <p>Status</p>
               <div className="flex font-bold">
-                <p>{savings.account_status}</p>
+                <p>{savings?.account_status}</p>
               </div>
             </div>
             <div className="flex gap-10">
               <p>Account Balance</p>
               <div className="flex font-bold">
-                <p>{savings.balance}</p>
+                <p>{savings?.balance}</p>
                 <span>ugx</span>
               </div>
             </div>
           </>
         }
-
       </div>
     </div>
   )
