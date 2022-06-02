@@ -50,7 +50,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                                     roles ? (
                                         roles.find( role => allowedRoles.includes(role)) 
                                         ? 
-                                        <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
+                                        <div className='flex-grow mx-5 mt-5 overflow-y-auto h-full'>
                                             {loading ? <Loader /> :<Outlet context={[ profile, setProfile ]}/>}
                                         </div>
                                         :

@@ -65,8 +65,6 @@ export default function Applications() {
     }
   }
 
-  console.log(applications)
-
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Membership Applications</h1>
@@ -108,7 +106,7 @@ export default function Applications() {
             </div>
             </div>
         </div>
-      <div className="bg-white dark:text-secondary-text dark:bg-dark-bg-700 p-6 min-h-full">
+      <div className="bg-white dark:text-secondary-text dark:bg-dark-bg-700 m-1 overflow-scroll p-6 h-full">
         {applications.length > 0 ? 
         <>
         <div className="w-full overflow-x-auto sm:rounded-lg">

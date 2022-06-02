@@ -1,13 +1,9 @@
 import { Formik, Form }  from 'formik'
-import { supabase } from '../../helpers/supabase'
-import { useAuth } from '../../auth/AuthContext'
-import { toast, ToastContainer } from 'react-toastify'
-import { useOutletContext, useNavigate } from "react-router-dom"
 import { useState } from 'react'
 import { InputField } from '../../components/Form/CustomInputField'
-import { loan2ValidationSchema } from '../../helpers/validator'
+import { loan2ValidationSchema, loan3ValidationSchema } from '../../helpers/validator'
 
-function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumber }) {
+function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
     const [ employed, setEmployed ] = useState(true)
 
     return (
@@ -17,9 +13,8 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
           onSubmit={async ( values ) => {
               setInitialValues(values)
               setPageNumber(3)
-              console.log(values)
           }}
-          validationSchema={loan2ValidationSchema}
+          validationSchema={employed === true ? loan2ValidationSchema : loan3ValidationSchema}
         >
           {({values, errors, touched, handleChange, handleBlur}) => {
   return (
@@ -31,14 +26,14 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
                 <label className='text-sm font-bold'>Type</label>
                 <div className='flex justify-between'>
                     <div className='flex gap-1'>
-                        <input type="radio" id='employed' name="employment" value="employed" defaultChecked={initialValues.employed} onChange={() => {
+                        <input type="radio" id='employed' name="employment" value="employed"  onChange={() => {
                             setEmployed(true)
                             handleChange("employment")
                             }} />
                         <label className='text-sm' htmlFor='employed'>Employed</label>
                     </div>
                     <div className='flex gap-1'>
-                        <input type="radio" id='business' name="employment" value="business" defaultChecked={initialValues.business} onChange={() =>{
+                        <input type="radio" id='business' name="employment" value="business" defaultChecked={initialValues.business_type} onChange={() =>{
                             setEmployed(false)
                             handleChange("employment")
                         }
@@ -48,7 +43,7 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
                 </div>
             </div>
             {employed
-            ?
+            &&
                 <>
                     <p className='text-inputblue my-2'>*To be filled by employed applicants</p>
 
@@ -74,16 +69,16 @@ function ApplicationPg2({ profile, initialValues, setInitialValues, setPageNumbe
                 </div>
             </div>
                 </>
-            :
-            <>
+          }
+            { !employed && <>
             <p className='text-inputblue my-2'>*To be filled by self-employed applicants</p>
             <div className='flex flex-wrap gap-5'>
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="business_type"  label="Business Type*" placeholder="Enter business type" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="business_type" defaultValue={initialValues.business_type}  label="Business Type*" placeholder="Enter business type" />
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="years_of_operation"  label="Years of Operation*" placeholder="Enter years" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="years_of_operation" defaultValue={initialValues.years_of_operation}  label="Years of Operation*" placeholder="Enter years" />
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="business_income"  label="Business Income(UGX)*" placeholder="Enter income" />
+                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="business_income" defaultValue={initialValues.business_income}  label="Business Income(UGX)*" placeholder="Enter income" />
 
                 <div className='flex flex-col w-56 '>
                 <label className=' text-sm'>Six months bank settlement</label>

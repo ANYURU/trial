@@ -1,6 +1,4 @@
-import { memberApplications } from "../../helpers/mockData"
 import { MdAdd } from "react-icons/md"
-// import { filterByStatus, searchByName } from "../../helpers/utilites"
 import { useState, useEffect } from "react"
 import { FaEllipsisV } from 'react-icons/fa'
 import { ContextMenu } from "../../components"
@@ -11,13 +9,14 @@ import { useNavigate } from "react-router-dom"
 import { supabase } from "../../helpers/supabase"
 import { Loader } from "../../components"
 
-function Members() {
+export default function Members() {
   useEffect(() => {
     getMembers()
     document.title = 'Members - Bweyogere tuberebumu'
   }, [])
 
   const [ members, setMembers ] = useState([])
+  const navigate = useNavigate()
 
   const getMembers = async () => {
     const { error, data } = await supabase
@@ -26,15 +25,7 @@ function Members() {
     setMembers(data.filter(member => member.roles))
   }
 
-  // console.log(members)
-
-
-
-  const navigate = useNavigate()
-
   const [ status, setStatus ] = useState(null)
-  // const members = filterByStatus(memberApplications, status)
-
   const [ activeIndex, setActiveIndex ] = useState(null)
   const [ show, setShow ] = useState(false)
 
@@ -48,12 +39,7 @@ function Members() {
   const indexOfLastPage = currentPage * withdrawPerPage
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage
 
-  // const searchByName = () => data.filter(member => member.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
-
-  // let shownMembers = members.slice(indexOfFirstPage, indexOfLastPage)
-
   const filteredMembers = members.filter(member => member.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1).filter(member => !status || member.member_status === status)
-
   const shownMembers = filteredMembers.slice(indexOfFirstPage, indexOfLastPage)
 
   if(show === true){
@@ -68,35 +54,30 @@ function Members() {
     <div className="h-full overflow-hidden">
         <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Members</h1>
         <div className="my-2 flex justify-between px-1">
-          <input type="text" name="" id="" className="w-8/12 rounded-md px-2 py-2 sm:py-1 dark:bg-dark-bg-600" placeholder="Search"
-            onChange={(event) => setSearchText(event.target.value)}
-          />
+          <input type="text" className="w-8/12 rounded-md px-2 py-2 sm:py-1 dark:bg-dark-bg-600" placeholder="Search"onChange={(event) => setSearchText(event.target.value)}/>
           <button className="w-3/12 bg-primary py-2 text-white rounded-md flex justify-center items-center"
             onClick={() => {
               navigate('/application')
             }}
-          >Add Member <MdAdd /></button>
+          ><MdAdd /> New Member </button>
         </div>
-        <div className='my-3'>
-            <form action="" className='m-1'>
-              <div className='flex justify-between gap-5'>
-                <div className='flex flex-col w-56'>
-                  <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
-                    onChange={(event) => setStatus(event.target.value)}
-                  >
-                      <option value={""}>Select Status</option>
-                      <option value="active">Active</option>
-                      <option value="dormant">Dormant</option>
-                  </select>
-                </div>
-                <div className='flex flex-col w-56 dark:text-secondary-text'>
-                  <label htmlFor="" className='text-sm '>Date</label>
-                  <input type="date" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-700' />
-                </div>
-              </div>
-            </form>
+        
+        <div className='flex justify-between my-3 m-1'>
+          <div className='flex flex-col w-56'>
+            <select name="status" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
+              onChange={(event) => setStatus(event.target.value)}
+            >
+                <option value="">Select Status</option>
+                <option value="active">Active</option>
+                <option value="dormant">Dormant</option>
+            </select>
+          </div>
+          <div className='flex flex-col w-56 dark:text-secondary-text'>
+            <input type="date" placeholder='Old Password' className=' rounded px-2 py-2 dark:bg-dark-bg-700' />
+          </div>
         </div>
-        <div className="bg-white flex-grow overflow-scroll p-6 dark:bg-dark-bg-700 min-h-full">
+        
+        <div className="bg-white flex-grow m-1 h-full overflow-scroll p-6 dark:bg-dark-bg-700">
             {members.length > 0 ? <>
             <div className="w-full overflow-x-auto sm:rounded-lg">
               <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
@@ -148,30 +129,6 @@ function Members() {
                       </tr>
                     ))}
                   </tbody>
-                {/* <tbody>
-                  {searchByName(shownMembers, searchText).map((member, index) => (
-                    <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                      
-                      
-                      <td className='px-6 py-3'>{member.date}</td><td className='px-6 py-3'>{member.name}</td><td className='px-6 py-3'>{member.id}</td><td className='px-6 py-3'>{member.amount}</td><td className='px-6 py-3'>{member.status}</td>
-                      <td className="p-2">
-                        <div className="relative">
-                            <button className="block p-2 rounded-md dialog"
-                              onClick={(event) => {
-                                setActiveIndex(index)
-                                setShow(!show)
-                                event.stopPropagation()
-                              }}
-                            >
-                                <FaEllipsisV />
-                            </button>
-                            <ContextMenu activeIndex={activeIndex} show={show} index={index} setShow={setShow} setMemberModal={setMemberModal} deleteModal={deleteModal} setDeleteModal={setDeleteModal} member={activeIndex === index ? member : null} />
-                        </div>
-                      </td>
-                      
-                    </tr>
-                  ))}
-                </tbody> */}
               </table>
             </div>
             <div className="flex justify-between px-6 my-5">
@@ -193,5 +150,3 @@ function Members() {
     </div>
   )
 }
-
-export default Members
