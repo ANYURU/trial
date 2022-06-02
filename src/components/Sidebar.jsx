@@ -7,10 +7,12 @@ import { IconContext } from 'react-icons/lib'
 
 export default function Sidebar({ user }) {
     const role = !user ? "member" : (user?.roles && user?.roles.includes("admin") ? "admin" : "member" )
+    console.log(user)
 
     const [ show, setShow ] = useState(true)
     const [ selectedIndex, setSelectedIndex ] = useState( null )
-    const [ disabled ] = useState( !(user || user?.roles) )
+    const [ disabled ] = useState( user && user?.roles === null ? true : false )
+    console.log(disabled)
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
 
 
