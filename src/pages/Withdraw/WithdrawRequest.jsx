@@ -4,6 +4,7 @@ import { supabase } from '../../helpers/supabase'
 import { useAuth } from "../../auth/AuthContext"
 import { toast, ToastContainer } from 'react-toastify'
 import { withdrawRequestValidationSchema } from '../../helpers/validator'
+import { InputField } from "../../components/Form/CustomInputField"
 
 
 function WithdrawRequest() {
@@ -60,11 +61,10 @@ function WithdrawRequest() {
             return (
               <Form className='flex flex-grow flex-col min-h-full'>
                 <div className='mb-3'>
-                      <div className='m-2'>
                       <div className='flex flex-wrap gap-5'>
                           <div className='flex flex-col w-56'>
-                            <label htmlFor="" className='text-sm'>Please select an account</label>
-                            <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600" value={values?.account_type} onChange={handleChange} onBlur={handleBlur}>
+                            <label className='text-sm'>Please select an account</label>
+                            <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600" value={values?.account_type} onChange={handleChange} onBlur={handleBlur}>
                               <option value="">--Select Account--</option>
                               <option value="savings">Savings</option>
                               <option value="shares">Shares</option>
@@ -73,16 +73,17 @@ function WithdrawRequest() {
                             </select>
                             {touched?.account_type && errors?.account_type && <div className='error text-red-600 text-xs'>{errors?.account_type}</div>}
                           </div>
-                          <div className='flex flex-col w-56 '>
-                            <label htmlFor="" className=' text-sm'>Enter amount to withdraw</label>
-                            <input type="text" name="amount" id="amount" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' value={values?.amount} onChange={handleChange} onBlur={handleBlur}/>
-                            {touched?.amount && errors?.amount && <div className='error text-red-600 text-xs'>{errors?.amount}</div>}
-                          </div>
-                      </div>
+
+                          <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount"  label="Enter amount to withdraw"  placeholder="Enter amount"/>
+
                       </div>
                   </div>
-                  <div className='mb-3'>
-                      <h1 className='font-semibold'>Practiculars</h1>
+
+                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="cashout_method"  label="Cashout Method"  placeholder="Enter method"/>
+
+
+                  <div className='my-3'>
+                      <h1 className='font-semibold'>Particulars</h1>
                       <textarea name="particulars" id="particulars" cols="30" rows="10" className='outline outline-1 p-2 rounded-md w-full dark:bg-dark-bg-600' value={values?.particulars} onChange={handleChange} onBlur={handleBlur}></textarea>
                       {touched?.particulars && errors?.particulars && <div className='error text-red-600 text-xs'>{errors?.particulars}</div>}
                   </div>

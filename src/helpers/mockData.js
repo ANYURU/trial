@@ -1,35 +1,43 @@
 export const loanHistory = [
     {
-        date: '11-04-2022',
+        date: '2022-04-11',
         amountToPay: 20000,
         amountPaid: 5000,
         principal: 20000,
-        interest: 5,
-        status: 'Pending'
+        interest_rate: 5,
+        status: 'pending',
+        applicants_name: 'Charles Kasasira',
+        ID: '089374'
     },
     {
-        date: '12-04-2022',
+        date: '2022-04-12',
         amountToPay: 64000,
         amountPaid: 4000,
         principal: 100000,
-        interest: 5,
-        status: 'Paid'
+        interest_rate: 4,
+        status: 'paid',
+        applicants_name: 'David Anyuru',
+        ID: '089374'
     },
     {
-        date: '01-04-2022',
+        date: '2022-04-01',
         amountToPay: 20000,
         amountPaid: 5000,
         principal: 20000,
-        interest: 5,
-        status: 'Pending'
+        interest_rate: 8,
+        status: 'pending',
+        applicants_name: 'Joanita Nakyito',
+        ID: '089374'
     },
     {
-        date: '07-06-2021',
+        date: '2021-06-02',
         amountToPay: 64000,
         amountPaid: 4000,
         principal: 100000,
-        interest: 5,
-        status: 'Paid'
+        interest_rate: 5,
+        status: 'due',
+        applicants_name: 'Abudi Mutamba',
+        ID: '089234'
     }
 ]
 
