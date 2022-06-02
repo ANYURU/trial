@@ -2,19 +2,18 @@ import { NavLink, } from 'react-router-dom'
 import { menuData } from '../helpers/menuData'
 import logo from '../assets/images/tube-no-bg.png'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { IconContext } from 'react-icons/lib'
 
 export default function Sidebar({ user }) {
     const role = !user ? "member" : (user?.roles && user?.roles.includes("admin") ? "admin" : "member" )
-    console.log(user)
-
     const [ show, setShow ] = useState(true)
     const [ selectedIndex, setSelectedIndex ] = useState( null )
-    const [ disabled ] = useState( user && user?.roles === null ? true : false )
-    console.log(disabled)
+    const [ disabled, setDisabled ] = useState(true)
+    
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
 
+    useEffect(() => {user?.roles?.length > 0 && setDisabled(false)}, [user])
 
     return (
         <div className='h-full fixed  bg-white sidebar dark:bg-dark-bg-700'>
