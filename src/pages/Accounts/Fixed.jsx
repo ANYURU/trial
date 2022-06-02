@@ -2,7 +2,6 @@ import { supabase } from '../../helpers/supabase'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-
 function Fixed() {
 
   useEffect(() => {
@@ -16,7 +15,11 @@ function Fixed() {
       toast.success(`Account successfully opened`, { position: "top-center" })
       console.log(data)
     } catch (error) {
-      toast.error(`${error?.message}`, { position: "top-center" })
+      if(error?.code === "23505") {
+        toast.error(`You already have an account.`, { position:'top-center'})
+      } else {
+        toast.error(`${error?.message}`, { position: "top-center" })
+      }
     } 
   }
 

@@ -5,9 +5,8 @@ import { useNavigate, useOutletContext } from 'react-router-dom'
 
 
 function Mwana() {
-
-  const [ profile ] = useOutletContext()
-  console.log(profile)
+//   const [ profile ] = useOutletContext()
+//   console.log(profile)
  
 
   // const navigate = useNavigate()
