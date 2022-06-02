@@ -17,12 +17,7 @@ function Mwana() {
       toast.success(`Account successfully opened`, { position: "top-center" })
       console.log(data)
     } catch (error) {
-      if(error?.code === "23505") {
-        toast.error(`You already have an account.`, { position:'top-center'})
-      } else {
-        toast.error(`${error?.message}`, { position: "top-center" })
-      }
-      
+      toast.error(`${error?.message}`, { position: "top-center" })
       // navigate(-1)
     } 
   }

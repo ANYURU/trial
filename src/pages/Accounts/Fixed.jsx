@@ -10,16 +10,12 @@ function Fixed() {
 
   const create_account = async () => {
     try {
-      const {data, error} = await supabase.rpc('create_fixed_deposit_account', {})
+      const { error } = await supabase.rpc('create_fixed_deposit_account', {})
       if(error) throw error
       toast.success(`Account successfully opened`, { position: "top-center" })
-      console.log(data)
+
     } catch (error) {
-      if(error?.code === "23505") {
-        toast.error(`You already have an account.`, { position:'top-center'})
-      } else {
-        toast.error(`${error?.message}`, { position: "top-center" })
-      }
+      toast.error(`${error?.message}`, { position: "top-center" })
     } 
   }
 
