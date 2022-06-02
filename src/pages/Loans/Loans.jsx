@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "../../helpers/supabase"
 import { FaEllipsisV } from 'react-icons/fa'
 import { LoansContext } from "../../components"
+import { LoanModal } from "../../components"
 
 export default function Loan() {
   useEffect(() => {
@@ -12,6 +13,7 @@ export default function Loan() {
   }, [])
 
   const [ loans, setLoans] = useState([])
+  const [ loanModal, setLoanModal ] = useState(false)
   const [ status, setStatus ] = useState('')
   const [ date, setDate ] = useState(null)
 
@@ -46,6 +48,7 @@ export default function Loan() {
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Loans</h1>
 
+
       <div className='flex my-1 justify-between gap-5'>
           <div className='flex flex-col w-56'>
             <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
@@ -73,6 +76,7 @@ export default function Loan() {
             <tbody>
               {loan.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
+                  {loanModal && <LoanModal setLoanModal={setLoanModal} loan={loan} />}
                   <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest_rate}</td>
                   <td className={`px-6 py-3`}>
                     <span className={` py-1 px-2 rounded-xl text-white ${loan.status === "pending" ? "bg-yellow-400" : loan.status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
@@ -91,7 +95,7 @@ export default function Loan() {
                         >
                             <FaEllipsisV />
                         </button>
-                        <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} />
+                        <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} />
                     </div>
                   </td>
 

@@ -7,7 +7,7 @@ import { Pagination } from "../../components"
 import { ConfirmModal } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../../helpers/supabase"
-import { Loader } from "../../components"
+import { Loader, NothingShown } from "../../components"
 
 export default function Members() {
   useEffect(() => {
@@ -22,7 +22,9 @@ export default function Members() {
     const { error, data } = await supabase
     .from("_member_profiles")
     .select()
-    setMembers(data.filter(member => member.roles))
+
+    const dataArray = data.filter(member => member.roles)
+    dataArray.length === 0 ? setMembers(null) : setMembers(dataArray)
   }
 
   const [ status, setStatus ] = useState(null)
@@ -39,8 +41,8 @@ export default function Members() {
   const indexOfLastPage = currentPage * withdrawPerPage
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage
 
-  const filteredMembers = members.filter(member => member.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1).filter(member => !status || member.member_status === status)
-  const shownMembers = filteredMembers.slice(indexOfFirstPage, indexOfLastPage)
+  const filteredMembers = members && members.filter(member => member.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1).filter(member => !status || member.member_status === status)
+  const shownMembers = members && filteredMembers.slice(indexOfFirstPage, indexOfLastPage)
 
   if(show === true){
     window.onclick = function(event) {
@@ -49,6 +51,8 @@ export default function Members() {
         }
     }
   }
+
+  console.log(members)
 
   return (
     <div className="h-full overflow-hidden">
@@ -78,7 +82,7 @@ export default function Members() {
         </div>
         
         <div className="bg-white flex-grow m-1 h-full overflow-scroll p-6 dark:bg-dark-bg-700">
-            {members.length > 0 ? <>
+            {members && members.length > 0 ? <>
             <div className="w-full overflow-x-auto sm:rounded-lg">
               <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
@@ -143,6 +147,10 @@ export default function Members() {
               />
             </div>
             </>
+            : 
+            members === null 
+            ?
+                <NothingShown />
             :
                 <Loader />
               }
