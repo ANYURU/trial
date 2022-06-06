@@ -25,20 +25,15 @@ export default function WithdrawVerify() {
     const { application_meta : { applicants_id }} = withdraw
     
     try {
-      const { data, error } = await supabase.rpc( 'approve_transaction', { members_id: applicants_id, application: id })
+      const { error, data } = await supabase.rpc( 'approve_transaction', { members_id: applicants_id, application: id })
+      
       if ( error ) {
-        throw error
+        toast.error(`${error?.message}`, { position:"top-center"})
       } else {
-        // handle the alerts and navigation
-        console.log(data)
         toast.success(`Transaction has been approved.`, { position:"top-center" })
       }
-
     } catch (error) {
-      toast.error(`${error?.message}`, { position:"top-center"})
-      console.log(error)
-     
-
+      toast.error(`Try again later`, { position:"top-center"})
     }
 
   }

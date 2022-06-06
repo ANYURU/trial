@@ -18,7 +18,7 @@ function MakeDeposit() {
     particulars: '',
     evidence: ''
   }
-  
+   // This is me male for the first time that am supposed to make the world a better place for everyone living and staying in it. It looks crazy but its actually not crasy for the first time the world world had to remember that all kinds of animals living in the world have to survive for the great world and then we leave the rest to the world that doesn't believe in the world work and the work o
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Deposit</h1>

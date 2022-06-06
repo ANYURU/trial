@@ -55,6 +55,7 @@ function WithdrawRequest() {
               toast.success(`Request submitted for review.`, {position: 'top-center'})
               resetForm({ values: initialValues })
             } catch (error) {
+              console.log(error)
               toast.error(`${error?.message}`, {position: 'top-center'})
             }
 
