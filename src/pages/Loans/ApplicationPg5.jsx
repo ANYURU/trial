@@ -2,19 +2,28 @@ import { Formik, Form }  from 'formik'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
-import { useOutletContext, useNavigate } from "react-router-dom"
+import { useOutletContext } from "react-router-dom"
 import { useState } from 'react'
 import { InputField } from '../../components/Form/CustomInputField'
+import { getOTP } from '../../helpers/getotp'
+
 
 export default function ApplicationPg5({ fullname, initialValues, setInitialValues, setPageNumber }) {
-
+    const [{ phone_number }] = useOutletContext()
     return (
         <Formik
         initialValues={initialValues}
         onSubmit={async ( values ) => {
             setInitialValues(values)
             setPageNumber(6)
-            console.log(values)
+            await getOTP(phone_number, "IDENTITY VERIFICATION")
+                .then(response => response.json())
+                .then(data => {
+                    localStorage.setItem('loans_application_verification_key', data?.Details)
+                    return
+                })
+                .catch(error => console.log(error))
+            return 
         }}
       >
         {({values, errors, touched, handleChange, handleBlur}) => {

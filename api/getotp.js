@@ -43,6 +43,10 @@ export default async (req, res) => {
                 const message = require('./helpers/_phone2FA')
                 phone_message = message(otp)
             }
+            else if( type == "IDENTITY VERIFICATION") {
+                const message = require('./helpers/_identityVerification')
+                phone_message = messagge(otp)
+            }
             else {
                 const response = {"Status": "Failure", "Details": "Incorrect Type Provided"}
                 return res.status(400).send(response)
