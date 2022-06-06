@@ -1,5 +1,5 @@
 import { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, Deposit, Profile, DepositHistory, MakeDeposit } from "../pages";
-import { Loans, LoanHistory, LoanPayment, LoanRequest, LoanVerify, LoanAdmin } from "../pages";
+import { Loans, LoanHistory, LoanPayment, LoanRequest, LoanVerify, LoanAdmin, MemberLoans } from "../pages";
 import { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers, DepositVerify, WithdrawVerify, Members, Applications, MemberApplication } from "../pages";
 import { Accounts, Savings, Mwana, Fixed, Shares, DepositAdmin } from "../pages";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -64,7 +64,8 @@ export default function App() {
           {/* Accessed by only administrators. */}
           <Route element={<PrivateRoute allowedRoles={[ "admin" ]}/>}>
             <Route path='loans/members/:id' element={<LoanVerify />} />
-            <Route path="loans/members" element={<LoanAdmin />} />
+            <Route path="loans/members" element={<MemberLoans />} />
+            <Route path="loans/applications" element={<LoanAdmin />} />
             <Route path="withdraw/members/:id" element={<WithdrawVerify />} />
             <Route path="withdraw/members" element={<WithdrawMembers />} />
             <Route path="deposit/members/:id" element={<DepositVerify />} />

@@ -14,11 +14,9 @@ function Profile() {
     document.title = 'Profile - Bweyogere tuberebumu'
   }, [])
 
-  const [ loading, setLoading ] = useState(false)
-
   const [ popUp, setPopUp ] = useState(false)
   const [ editPop, setEditPop ] = useState(false)
-  const [ profile, setProfile ] = useOutletContext()
+  const [ profile ] = useOutletContext()
   const initialValues = {
     ...profile,
     password:''
@@ -99,12 +97,16 @@ function Profile() {
             <p className=' col-span-2'>Email</p>
               <p className='font-bold  col-span-3'>{profile?.email_address}</p>
           </div>
-          <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
+          <div className='grid grid-cols-5 gap-2 mb-2'>
+            <p className=' col-span-2'>Member Status</p>
+            <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status ?? 'pending'}</p>
+          </div>
+          {/* <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
             <p className='w-6/12'>Member Status</p>
             <div className='flex-grow flex'>
               <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status ?? 'pending'}</p>
             </div>
-          </div>
+          </div> */}
           <div className='grid grid-cols-5 gap-2 mb-2'>
             <p className=' col-span-2'>Marital Status</p>
             <p className='font-bold  col-span-3'>{profile?.marital_status}</p>
@@ -123,15 +125,15 @@ function Profile() {
           <Form className='mb-3' name="changePasswordForm" onSubmit={(event) => handleChangePassword(event, values)}>
               <h1 className='font-semibold mb-3'>Password Reset</h1>
                 <div className='flex flex-col w-56 mb-5'>
-                  <label htmlFor="" className='text-sm'>Old Password</label>
+                  <label className='text-sm'>Old Password</label>
                   <input type="password" name="old_password" id="old_password" onChange={handleChange("old_password")} placeholder='Old Password' className='ring-1 ring-black dark:ring-dark-bg-600 dark:bg-dark-bg-700 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 ' required/>
                 </div>
                 <div className='flex flex-col w-56 mb-5'>
-                  <label htmlFor="" className='text-sm'>New Password</label>
+                  <label className='text-sm'>New Password</label>
                   <input type="password" name="new_password" id="new_password" onChange={handleChange("new_password")} placeholder='New Password' className='ring-1 ring-black dark:ring-dark-bg-600 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 dark:bg-dark-bg-700' required/>
                 </div>
                 <div className='flex flex-col w-56 mb-5'>
-                  <label htmlFor="" className='text-sm'>Confirm Password</label>
+                  <label className='text-sm'>Confirm Password</label>
                   <input type="password" name="" id="confirm_password" onChange={handleChange("confirm_password")} placeholder='Confirm Password' className='ring-1 ring-black dark:ring-dark-bg-600 rounded focus:outline-none focus:ring-2 focus:ring-primary px-2 py-1 dark:bg-dark-bg-700' required/>
                 </div>
                 <div className="flex justify-end gap-3 mt-3">
@@ -154,7 +156,7 @@ function Profile() {
               <br />
               <div className='flex mt-1'>
                 <div className='flex flex-col w-56'>
-                  <label htmlFor="" className='text-sm'>Enter Password to confirm</label>
+                  <label className='text-sm'>Enter Password to confirm</label>
                   <input type="password" name="password" id="" placeholder='Password' onChange={handleChange("password")} className='ring-1 ring-black dark:ring-dark-bg-600 dark:bg-dark-bg-700 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary' required />
                 </div>
               </div>

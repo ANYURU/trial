@@ -14,6 +14,7 @@ export default function ApplicationPg5({ fullname, initialValues, setInitialValu
         onSubmit={async ( values ) => {
             setInitialValues(values)
             setPageNumber(6)
+            console.log(values)
         }}
       >
         {({values, errors, touched, handleChange, handleBlur}) => {

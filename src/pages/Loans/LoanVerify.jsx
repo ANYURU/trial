@@ -15,7 +15,7 @@ export default function DepositVerify() {
 
   useEffect(() => {
     getApplication()
-  }, [ loan ])
+  }, [ ])
 
   const getApplication = async () => {
     const { error, data } = await supabase
@@ -87,11 +87,12 @@ export default function DepositVerify() {
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
       {loan  ? <div className='flex flex-grow flex-col min-h-full'>
            <div className='mb-3'>
-              {/* <h1 className='font-semibold'>{profile?.fullname}'s withdraw Request Details</h1> */}
+              <h1 className='font-semibold'>{loan.application_meta.applicants_name}'s withdraw Request Details</h1>
               <div className="outline outline-1 outline-gray-100 p-3">
-                <div className="my-6">MemberID: {loan.applicants_id}</div>
-                <div className="">Application ID: {id}</div>
-                <div className="my-6">Amount: {loan.application_meta && loan?.application_meta.amount}</div>
+                <div className="my-6">Application ID: <span className="font-semibold">{loan.application_id}</span></div>
+                <div className="my-6">Applicant ID: <span className="font-semibold">{loan.application_meta.applicants_id}</span></div>
+                <div className="my-6">Account: <span className="font-semibold">{loan.application_meta.account_type}</span></div>
+                <div className="my-6">Amount: <span className="font-semibold">{loan.application_meta.amount}</span></div>
                 <div className="my-6">Method of Withdraw: Bank</div>
                 <div className="my-6">Account/Mobile Number: {loan.application_meta &&  loan?.application_meta.phone_number}</div>
                 <img src={imageURL} width={200} className="rounded" alt="receipt" loading="lazy"/>

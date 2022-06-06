@@ -58,7 +58,7 @@ export default function Login() {
             {({values, errors, touched, isValid, dirty, handleChange, handleBlur}) => {
               return (
                 <Form onSubmit={(event) => handleSubmit(event, values)} className='w-11/12 p-10 sm:w-8/12 md:w-6/12 lg:w-4/12 bg-white dark:bg-dark-bg-700 dark:text-secondary-text shadow-myShadow flex justify-center items-center flex-col rounded-lg'>
-                  <img src={logo} alt='SACCO logo' width={150} loading="lazy" />
+                  <img src={logo} alt='SACCO logo' width={150} />
                   <h1 className='block text-center font-bold text-2xl uppercase dark:text-white'>login</h1>
                   <PhoneTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
                   <PasswordTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />

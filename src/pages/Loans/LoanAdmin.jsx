@@ -11,7 +11,7 @@ export default function LoanAdmin() {
     document.title = 'Loan Applications - Bweyogere tuberebumu'
   }, [])
 
-  const [ deposits, setDeposits ] = useState([])
+  const [ loans, setLoans ] = useState([])
 
   const getApplications = async () => {
     const { error, data } = await supabase
@@ -19,7 +19,7 @@ export default function LoanAdmin() {
     .select()
     .eq("_type", "deposit")
     .order("created_at",  { ascending: false })
-    setDeposits(data)
+    setLoans(data)
   }
 
   const navigate = useNavigate()
@@ -40,7 +40,9 @@ export default function LoanAdmin() {
   const indexOfLastPage = currentPage * withdrawPerPage
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage
 
-  let shownLoans = deposits.slice(indexOfFirstPage, indexOfLastPage)
+  let shownLoans = !loans || loans.slice(indexOfFirstPage, indexOfLastPage)
+
+  // const filteredLoans = loans.filter(member => member.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
 
   shownLoans = shownLoans.filter(deposit => !account || deposit?.application_meta.account_type === account)
 
@@ -53,9 +55,6 @@ export default function LoanAdmin() {
         }
     }
   }
-
-  console.log(deposits)
-
   
   return (
     <div className='h-full'>
@@ -95,13 +94,13 @@ export default function LoanAdmin() {
         </div>
 
       <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
-        {deposits !== null && deposits.length > 0 ? 
+        {loans !== null && loans.length > 0 ? 
         <>
         <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Name</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -109,10 +108,13 @@ export default function LoanAdmin() {
                 <tr className={`cursor-pointer ${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}
                   onClick={() => handleDeposit(deposit.application_id)}
                 >
-                    <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit?.application_meta.account_type}</td><td className='px-6 py-3'>{deposit?.application_meta.amount}</td>
+                    <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit?.application_meta.applicants_name}</td><td className='px-6 py-3'>{deposit?.application_meta.account_type}</td><td className='px-6 py-3'>{deposit?.application_meta.amount}</td>
+
                     <td className={`px-6 py-3`}>
-                      <span className={` py-1 px-2 rounded-xl text-white ${deposit.reviewed ? "bg-red-400" : "bg-yellow-400"}`}>
-                      {deposit.reviewed ? "Rejected" : "Pending"}
+                      <span className={` py-1 px-2 rounded-xl text-white ${deposit.reviewed ? deposit.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
+                      {deposit.reviewed ?
+                        deposit.application_meta.review_status === "approved" ? "Approved" : "Rejected"
+                      : "Pending"}
                       </span>
                     </td>
                 </tr>
@@ -122,13 +124,13 @@ export default function LoanAdmin() {
         </div>
         <div className="flex justify-between px-6 my-5">
           <Pagination
-            pages={Math.ceil(deposits.length/withdrawPerPage)}
+            pages={Math.ceil(loans.length/withdrawPerPage)}
             setCurrentPage={setCurrentPage}
             indexOfFirstPage={indexOfFirstPage}
             indexOfLastPage={indexOfLastPage}
-            data={deposits}
-            depositsPerPage={withdrawPerPage}
-            setDepositsPerPage={setWithdrawPerPage}
+            data={loans}
+            loansPerPage={withdrawPerPage}
+            setLoansPerPage={setWithdrawPerPage}
           />
         </div>
         </>

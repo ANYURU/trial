@@ -93,12 +93,12 @@ export const menuData = {
                     link: 'loans/request'
                 },
                 {
-                    label: 'Payment',
-                    link: 'loans/payment'
+                    label: 'Member Loans',
+                    link: 'loans/members'
                 },
                 {
                     label: 'Member Applications',
-                    link: 'loans/members'
+                    link: 'loans/applications'
                 }
             ]
         },
