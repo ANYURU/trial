@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { FaEllipsisV } from 'react-icons/fa'
 import { supabase } from '../../helpers/supabase'
 import { Loader } from '../../components'
+import moment from 'moment'
 
 function Accounts() {
   const [ accounts, setAccounts ] = useState({})
@@ -50,7 +51,7 @@ function Accounts() {
                 accounts?.savings !== null 
                 &&
                 <tr className='hover:bg-gray-100 dark:hover:bg-dark-bg-600'>
-                  <td className='px-6 py-4'>Savings</td><td className="px-6 py-4">{accounts?.savings?.balance}</td><td className="px-6 py-4">2022-04-12</td><td className="px-6 py-4">Active</td>
+                  <td className='px-6 py-4'>Savings</td><td className="px-6 py-4">{accounts?.savings?.balance}</td><td className="px-6 py-4">{moment(accounts?.savings?.created_at).format('DD-MM-YYYY')}</td><td className="px-6 py-4">Active</td>
                   <td className="px-5 py-4">
                     <div className="relative">
                         <button className="block p-2 rounded-md dialog">
@@ -64,7 +65,7 @@ function Accounts() {
                 accounts?.shares !== null
                 &&
                 <tr className='hover:bg-gray-100 dark:hover:bg-dark-bg-600'>
-                  <td className='px-6 py-4'>Shares</td><td className="px-6 py-4">{accounts?.shares?.balance}</td><td className="px-6 py-4">2022-04-12</td><td className="px-6 py-4">Active</td>
+                  <td className='px-6 py-4'>Shares</td><td className="px-6 py-4">{accounts?.shares?.balance}</td><td className="px-6 py-4">{moment(accounts?.shares?.created_at).format('DD-MM-YYYY')}</td><td className="px-6 py-4">Active</td>
                   <td className="px-5 py-4">
                     <div className="relative">
                         <button className="block p-2 rounded-md dialog">
@@ -77,7 +78,7 @@ function Accounts() {
               {
                 accounts?.mwana &&
                 <tr className='hover:bg-gray-100 dark:hover:bg-dark-bg-600'>
-                  <td className='px-6 py-4'>Mwana</td><td className="px-6 py-4">{accounts?.mwana?.balance}</td><td className="px-6 py-4">2022-04-12</td><td className="px-6 py-4">Active</td>
+                  <td className='px-6 py-4'>Mwana</td><td className="px-6 py-4">{accounts?.mwana?.balance}</td><td className="px-6 py-4">{moment(accounts?.mwana?.created_at).format('DD-MM-YYYY')}</td><td className="px-6 py-4">Active</td>
                   <td className="px-5 py-4">
                     <div className="relative">
                         <button className="block p-2 rounded-md dialog">
@@ -90,7 +91,7 @@ function Accounts() {
               {
                 accounts?.fixed &&
                 <tr className='hover:bg-gray-100 dark:hover:bg-dark-bg-600'>
-                  <td className='px-6 py-4'>Fixed</td><td className="px-6 py-4">{accounts?.fixed?.balance}</td><td className="px-6 py-4">2022-04-12</td><td className="px-6 py-4">Active</td>
+                  <td className='px-6 py-4'>Fixed</td><td className="px-6 py-4">{accounts?.fixed?.balance}</td><td className="px-6 py-4">{moment(accounts?.fixed?.created_at).format('DD-MM-YYYY')}</td><td className="px-6 py-4">Active</td>
                   <td className="px-5 py-4">
                     <div className="relative">
                         <button className="block p-2 rounded-md dialog">
