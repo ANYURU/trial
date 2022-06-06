@@ -1,9 +1,10 @@
 import { depositHistory } from "../../helpers/mockData"
-import { Pagination } from "../../components"
+import { Pagination, Loader } from "../../components"
 import { useState, useEffect } from "react"
 import { supabase } from "../../helpers/supabase"
 import { useOutletContext } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import { FaEllipsisV } from 'react-icons/fa'
 
 export default function Deposit() {
   useEffect(() => {
@@ -37,6 +38,8 @@ export default function Deposit() {
   const indexOfFirstPage = indexOfLastPage - depositsPerPage
 
   const shownDeposits = depositHistory.slice(indexOfFirstPage, indexOfLastPage)
+
+  const [ show, setShow ] = useState(false)
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Deposits</h1>
@@ -58,11 +61,13 @@ export default function Deposit() {
       </div>
 
       <div className="bg-white p-6 min-h-full dark:bg-dark-bg-700">
+      {deposits !== null && deposits.length > 0 ?
+        <>
         <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -76,6 +81,21 @@ export default function Deposit() {
                       deposit.application_meta.review_status === "approved" ? "Approved" : "Rejected"
                     : "Pending"}
                     </span>
+                  </td>
+
+                  <td className="px-6 py-2">
+                  <div className="relative">
+                          <button className="block p-2 rounded-md dialog"
+                            onClick={(event) => {
+                              // setActiveIndex(index)
+                              setShow(!show)
+                              event.stopPropagation()
+                            }}
+                          >
+                              <FaEllipsisV />
+                          </button>
+                          {/* <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} /> */}
+                      </div>
                   </td>
 
                 </tr>
@@ -93,7 +113,13 @@ export default function Deposit() {
             depositsPerPage={depositsPerPage}
             setDepositsPerPage={setDepositsPerPage}
           />
-          </div>
+        </div>
+        </>
+        :
+        <div className="w-full flex justify-center">
+          <Loader />
+        </div>
+      }
       </div>
     </div>
   )

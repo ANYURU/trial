@@ -1,9 +1,10 @@
 import { supabase } from "../../helpers/supabase"
-import { useEffect, useState, useParams } from "react"
+import { useEffect, useState } from "react"
 import { Loader } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { MdOutlineSearch } from 'react-icons/md'
 import { Pagination } from "../../components"
+import { FaEllipsisV } from 'react-icons/fa'
 
 export default function DepositAdmin() {
   const [ deposits, setDeposits ] = useState([]) 
@@ -11,15 +12,13 @@ export default function DepositAdmin() {
   useEffect(() => {
     getApplications()
     document.title = 'Deposit Applications - Bweyogere tuberebumu'
-  }, [deposits])
+  }, [])
 
   //pagination
   const [ currentPage, setCurrentPage ] = useState(1)
   const [ withdrawPerPage, setWithdrawPerPage ] = useState(10)
   const indexOfLastPage = currentPage * withdrawPerPage
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage
-
-  
 
   const getApplications = async () => {
     const { error, data } = await supabase
@@ -44,6 +43,16 @@ export default function DepositAdmin() {
   const [ date, setDate ] = useState(null)
   const [ filterName, setFilterName ] = useState('')
 
+
+  const approvedDeposits = deposits.filter(deposit => deposit.application_meta.review_status === 'approved')
+  const pendingDeposits = deposits.filter(deposit => !deposit.reviewed)
+  const rejectedDeposits = deposits.filter(deposit => deposit.reviewed && deposit.application_meta.review_status !== 'approved')
+
+  const approved = Math.round((approvedDeposits.length/deposits.length) * 100)
+  const pending = Math.round((pendingDeposits.length/deposits.length) * 100)
+  const rejected = Math.round((rejectedDeposits.length/deposits.length) * 100)
+
+
   
 
   let shownDeposits = deposits.slice(indexOfFirstPage, indexOfLastPage)
@@ -64,6 +73,21 @@ export default function DepositAdmin() {
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Member Deposits</h1>
+
+      <div className=" dark:text-secondary-text rounded">
+          <div className="w-full h-7 rounded flex overflow-hidden">
+            <div className="h-7 inline-block bg-green-400" style={{width: `${approved}%`}}></div>
+            <div className="h-7 inline-block bg-yellow-400" style={{width: `${pending}%`}}></div>
+            <div className="h-7 inline-block bg-red-400" style={{width: `${rejected}%`}}></div>
+          </div>
+          <div className="flex justify-between px-2 items-center py-2">
+            <div className="flex items-center gap-1 text-sm"><div className="w-2 h-2 bg-green-400 inline-block rounded-full"></div> Approved: {approvedDeposits.length} ({approved}%)</div>
+            <div className="flex items-center gap-1 text-sm"><div className="w-2 h-2 bg-yellow-400 inline-block rounded-full"></div> Pending: {pendingDeposits.length} ({pending}%)</div>
+            <div className="flex items-center gap-1 text-sm"><div className="w-2 h-2 bg-red-400 inline-block rounded-full"></div> Reject: {rejectedDeposits.length} ({rejected}%)</div>
+          </div>
+        </div>
+
+
         <div className="my-2 flex justify-between searchInput">
             <input type="text" className="px-2 py-2 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text" placeholder="Search by name..."
               onChange={(event) => setSearchText(event.target.value)}
@@ -77,9 +101,9 @@ export default function DepositAdmin() {
               onChange={(event) => {setFilterName(event.target.name);setStatus(event.target.value)}}
             >
                 <option value="">Status</option>
-                <option value="Approved">Approved</option>
-                <option value="Pending">Pending</option>
-                <option value="Rejected">Rejected</option>
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+                <option value="rejected">Rejected</option>
             </select>
           </div>
           <div className='flex flex-col w-56'>
@@ -105,7 +129,7 @@ export default function DepositAdmin() {
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className="px-6 py-4">Name</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className="px-6 py-4">Name</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -121,6 +145,21 @@ export default function DepositAdmin() {
                         deposit.application_meta.review_status === "approved" ? "Approved" : "Rejected"
                       : "Pending"}
                       </span>
+                    </td>
+
+                    <td className="px-6 py-3">
+                      <div className="relative">
+                          <button className="block p-2 rounded-md dialog"
+                            onClick={(event) => {
+                              // setActiveIndex(index)
+                              setShow(!show)
+                              event.stopPropagation()
+                            }}
+                          >
+                              <FaEllipsisV />
+                          </button>
+                          {/* <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} /> */}
+                      </div>
                     </td>
                 </tr>
               ))}
