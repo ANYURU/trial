@@ -65,16 +65,16 @@ export default function WithdrawMembers() {
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Members Withdraw History</h1>
 
-        <div className="bg-white dark:bg-dark-bg-700 dark:text-secondary-text rounded">
+        <div className=" dark:text-secondary-text rounded">
           <div className="w-full h-7 rounded flex overflow-hidden">
             <div className="h-7 inline-block bg-green-400" style={{width: `${approved}%`}}></div>
             <div className="h-7 inline-block bg-yellow-400" style={{width: `${pending}%`}}></div>
             <div className="h-7 inline-block bg-red-400" style={{width: `${rejected}%`}}></div>
           </div>
           <div className="flex justify-between px-2 items-center py-2">
-            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-green-400 inline-block rounded-full"></div> Approved: {approvedMembers.length}</div>
-            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-yellow-400 inline-block rounded-full"></div> Pending: {pendingMembers.length}</div>
-            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-red-400 inline-block rounded-full"></div> Reject: {rejectedMembers.length}</div>
+            <div className="flex items-center gap-1 text-sm"><div className="w-2 h-2 bg-green-400 inline-block rounded-full"></div> Approved: {approvedMembers.length} ({approved}%)</div>
+            <div className="flex items-center gap-1 text-sm"><div className="w-2 h-2 bg-yellow-400 inline-block rounded-full"></div> Pending: {pendingMembers.length} ({pending}%)</div>
+            <div className="flex items-center gap-1 text-sm"><div className="w-2 h-2 bg-red-400 inline-block rounded-full"></div> Reject: {rejectedMembers.length} ({rejected}%)</div>
           </div>
         </div>
       <div className='my-3'>

@@ -42,7 +42,7 @@ export default function MemberLoans() {
 
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Loans</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Member's Loans</h1>
 
       <div className='flex my-1 justify-between gap-5'>
           <div className='flex flex-col w-56'>
