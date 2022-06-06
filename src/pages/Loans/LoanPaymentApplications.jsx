@@ -4,6 +4,7 @@ import { Loader } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { MdOutlineSearch } from 'react-icons/md'
 import { Pagination } from "../../components"
+import { FaEllipsisV } from 'react-icons/fa'
 
 export default function LoanPaymentApplications() {
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function LoanPaymentApplications() {
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Name</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Name</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -116,6 +117,21 @@ export default function LoanPaymentApplications() {
                         deposit.application_meta.review_status === "approved" ? "Approved" : "Rejected"
                       : "Pending"}
                       </span>
+                    </td>
+
+                    <td className="px-6 py-3">
+                      <div className="relative">
+                            <button className="block p-2 rounded-md dialog"
+                              onClick={(event) => {
+                                // setActiveIndex(index)
+                                setShow(!show)
+                                event.stopPropagation()
+                              }}
+                            >
+                                <FaEllipsisV />
+                            </button>
+                            {/* <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} /> */}
+                        </div>
                     </td>
                 </tr>
               ))}

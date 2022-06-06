@@ -7,7 +7,7 @@ export const loanHistory = [
         interest_rate: 5,
         status: 'pending',
         applicants_name: 'Charles Kasasira',
-        ID: '089374'
+        ID: '089375'
     },
     {
         date: '2022-04-12',
@@ -17,7 +17,7 @@ export const loanHistory = [
         interest_rate: 4,
         status: 'paid',
         applicants_name: 'David Anyuru',
-        ID: '089374'
+        ID: '059374'
     },
     {
         date: '2022-04-01',
@@ -27,7 +27,7 @@ export const loanHistory = [
         interest_rate: 8,
         status: 'pending',
         applicants_name: 'Joanita Nakyito',
-        ID: '089374'
+        ID: '11089374'
     },
     {
         date: '2021-06-02',
@@ -37,7 +37,7 @@ export const loanHistory = [
         interest_rate: 5,
         status: 'due',
         applicants_name: 'Abudi Mutamba',
-        ID: '089234'
+        ID: '343089234'
     }
 ]
 

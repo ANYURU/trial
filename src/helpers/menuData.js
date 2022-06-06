@@ -20,10 +20,6 @@ export const menuData = {
                     label: 'Request',
                     link: 'loans/request'
                 },
-                {
-                    label: 'Payment',
-                    link: 'loans/payment'
-                }
             ]
         },
         {

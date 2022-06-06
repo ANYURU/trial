@@ -3,6 +3,8 @@ import { Pagination } from "../../components"
 import { useEffect, useState } from "react"
 import { supabase } from "../../helpers/supabase"
 import { FaEllipsisV } from 'react-icons/fa'
+import { LoansContext } from "../../components"
+import { LoanModal } from "../../components"
 
 export default function MemberLoans() {
   useEffect(() => {
@@ -10,7 +12,10 @@ export default function MemberLoans() {
     getApplications()
   }, [])
 
+  const [ searchText, setSearchText ] = useState('')
+
   const [ loans, setLoans] = useState([])
+  const [ loanModal, setLoanModal ] = useState(false)
   const [ status, setStatus ] = useState('')
   const [ date, setDate ] = useState(null)
 
@@ -44,6 +49,13 @@ export default function MemberLoans() {
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Member's Loans</h1>
 
+      <div className="my-2 flex justify-between searchInput">
+            <input type="text" className="px-2 py-2 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text" placeholder="Search by name..."
+              onChange={(event) => setSearchText(event.target.value)}
+            />
+            {/* <MdOutlineSearch className="search_icon" /> */}
+        </div>
+
       <div className='flex my-1 justify-between gap-5'>
           <div className='flex flex-col w-56'>
             <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
@@ -71,6 +83,7 @@ export default function MemberLoans() {
             <tbody>
               {loan.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
+                  {loanModal && activeIndex === index && <LoanModal setLoanModal={setLoanModal} loan={loan} />}
                   <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.ID}</td><td className='px-6 py-3'>{loan.applicants_name}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest_rate}</td>
                   <td className={`px-6 py-3`}>
                     <span className={` py-1 px-2 rounded-xl text-white ${loan.status === "pending" ? "bg-yellow-400" : loan.status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
@@ -89,7 +102,7 @@ export default function MemberLoans() {
                         >
                             <FaEllipsisV />
                         </button>
-                        {/* <ContextMenu activeIndex={activeIndex} show={show} index={index} setShow={setShow} setMemberModal={setMemberModal} deleteModal={deleteModal} setDeleteModal={setDeleteModal} member={activeIndex === index ? member : null} /> */}
+                        <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} />
                     </div>
                   </td>
                   

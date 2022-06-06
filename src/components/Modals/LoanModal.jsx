@@ -8,7 +8,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
 
     const { darkMode } = useAuth()
 
-    // console.log(member)
+    console.log(loan)
 
   const navigate = useNavigate()
   return ReactDOM.createPortal(
@@ -16,15 +16,32 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
       <div className="bg-white dark:bg-dark-bg dark:text-secondary-text p-10 rounded-md shadow-md flex flex-col items-center" ref={passed}>
         {/* {children} */}
         <div className="flex justify-between items-center w-full mb-2">
-            <h1>{loan.principal}</h1>
-            <div className="dark:hover:bg-dark-bg-600 hover:bg-accent p-2 rounded-full">
-                <IconContext.Provider value={{ className: 'cursor-pointer ' }}>
-                    <IoCloseSharp
-                        onClick={() => setLoanModal(false)}
-                    />
-                </IconContext.Provider>
+            <h1 className="font-bold font-lg">Loan Details ({loan.date})</h1>
+            <div className="dark:hover:bg-dark-bg-600 hover:bg-accent p-2 rounded-full cursor-pointer" onClick={() => setLoanModal(false)}>
+                    <IoCloseSharp />
             </div>
         </div>
+
+          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+              <p className="col-span-2">Principal:</p>
+              <p className="font-bold col-span-3">{loan.principal}</p>
+          </div>
+
+          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+              <p className="col-span-2">Amount Paid:</p>
+              <p className="font-bold col-span-3">{loan.amountPaid}</p>
+          </div>
+
+          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+              <p className="col-span-2">Interest Rate:</p>
+              <p className="font-bold col-span-3">{loan.interest_rate}%</p>
+          </div>
+
+          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+              <p className="col-span-2">Amount to pay:</p>
+              <p className="font-bold col-span-3">{loan.amountToPay}</p>
+          </div>
+
 
       </div>
     </div>,
