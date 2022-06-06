@@ -7,5 +7,6 @@ import ApplicationVerify from "./ApplicationVerify";
 import LoanAdmin from "./LoanAdmin";
 import LoanRequest from "./LoanRequest";
 import LoanHistory from './LoanHistory'
+import LoanPaymentApplications from "./LoanPaymentApplications";
 
-export { ApplicationPg1, ApplicationPg2, ApplicationPg3, ApplicationPg4, ApplicationPg5, ApplicationVerify, LoanAdmin}
+export { ApplicationPg1, ApplicationPg2, ApplicationPg3, ApplicationPg4, ApplicationPg5, ApplicationVerify, LoanAdmin, LoanPaymentApplications}
