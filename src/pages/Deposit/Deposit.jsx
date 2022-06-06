@@ -84,7 +84,7 @@ export default function Deposit() {
                   </td>
 
                   <td className="px-6 py-2">
-                  <div className="relative">
+                      <div className="relative">
                           <button className="block p-2 rounded-md dialog"
                             onClick={(event) => {
                               // setActiveIndex(index)
