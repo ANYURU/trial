@@ -11,7 +11,7 @@ export default function LoansContext({ index, activeIndex, show, id, setLoanModa
           <li 
               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
               onClick={() => {
-                navigate(`/loans/members/${id}`)
+                navigate(`/loans/payment/${id}`)
               }}
           ><MdPayments /> Payment</li>
           <li 

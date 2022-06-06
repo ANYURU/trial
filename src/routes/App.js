@@ -39,7 +39,7 @@ export default function App() {
           <Route element={<PrivateRoute allowedRoles={[ "member", "admin" ]}/>}>
             <Route path="/loans" element={<Loans />} />
               <Route path='loans/history' element={<LoanHistory />} />
-              <Route path='loans/Payment' element={<LoanPayment />} />
+              <Route path='loans/Payment/:id' element={<LoanPayment />} />
               <Route path='loans/request' element={<LoanRequest />} />
 
             <Route path="deposit" element={<Deposit />} />
