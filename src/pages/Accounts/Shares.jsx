@@ -3,6 +3,7 @@ import { supabase } from "../../helpers/supabase"
 import { useAuth } from "../../auth/AuthContext"
 import { Loader } from "../../components"
 
+
 function Shares() {
   const { user:{ id }} = useAuth()
   const [ shares, setShares ] = useState({})

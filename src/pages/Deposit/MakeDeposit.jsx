@@ -18,7 +18,7 @@ function MakeDeposit() {
     particulars: '',
     evidence: ''
   }
-   
+  
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase'>Deposit</h1>

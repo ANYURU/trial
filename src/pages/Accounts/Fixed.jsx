@@ -15,7 +15,7 @@ function Fixed() {
       toast.success(`Account successfully opened`, { position: "top-center" })
 
     } catch (error) {
-      toast.error(`${error?.code === "" ? 'You already have an account.' : 'Please try again later.'}`, { position:'top-center'}) 
+      toast.error(`${error?.code === "23505" ? 'You already have an account.' : 'Please try again later.'}`, { position:'top-center'}) 
       
     } 
   }
