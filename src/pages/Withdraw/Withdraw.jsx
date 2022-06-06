@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { MdAdd } from "react-icons/md"
 import { searchByName, filterByStatus } from "../../helpers/utilites"
 import { Pagination } from "../../components"
+import { FaEllipsisV } from 'react-icons/fa'
 
 export default function Withdrawy() {
 
@@ -17,6 +18,8 @@ export default function Withdrawy() {
   const [ filterName, setFilterName ] = useState('')
 
   let loans = filterByStatus(depositHistory, "status", status)
+
+  const [ show, setShow ] = useState(false)
 
   loans = filterByStatus(loans, "account", account)
 
@@ -77,13 +80,34 @@ export default function Withdrawy() {
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Cashout Method</th><th className='px-6 py-4'>Status</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Cashout Method</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Action</th>
               </tr>
             </thead>
             <tbody>
               {shownWithdraw.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.transactionId}</td><td className='px-6 py-3'>{loan.account}</td><td className='px-6 py-3'>{loan.amount}</td><td className='px-6 py-3'>{loan.depositMethod}</td><td className='px-6 py-3'>{loan.status}</td>
+                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.transactionId}</td><td className='px-6 py-3'>{loan.account}</td><td className='px-6 py-3'>{loan.amount}</td><td className='px-6 py-3'>{loan.depositMethod}</td>
+                  
+                  <td className='px-6 py-3'>
+                    <span className={` py-1 px-2 rounded-xl text-white ${loan.status === "Approved" ? "bg-green-400" : loan.status === "Rejected" ? "bg-red-400" : "bg-yellow-400"}`}>
+                    {loan.status}
+                    </span>
+                  </td>
+
+                  <td className="px-6 py-3">
+                        <div className="relative">
+                          <button className="block p-2 rounded-md dialog"
+                            onClick={(event) => {
+                              // setActiveIndex(index)
+                              setShow(!show)
+                              event.stopPropagation()
+                            }}
+                          >
+                              <FaEllipsisV />
+                          </button>
+                          {/* <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} /> */}
+                        </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
