@@ -92,7 +92,7 @@ function WithdrawRequest() {
                       {touched?.particulars && errors?.particulars && <div className='error text-red-600 text-xs'>{errors?.particulars}</div>}
                   </div>
                 <div className="w-56">
-                  <Submit value='Request' disabled={!(dirty && isValid)}/>
+                  <Submit value='Make Withdraw' disabled={!(dirty && isValid)}/>
                 </div>
               </Form>  
             )
