@@ -1,9 +1,6 @@
 import { Formik, Form }  from 'formik'
-import { supabase } from '../../helpers/supabase'
-import { useAuth } from '../../auth/AuthContext'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { useOutletContext } from "react-router-dom"
-import { useState } from 'react'
 import { InputField } from '../../components/Form/CustomInputField'
 import { getOTP } from '../../helpers/getotp'
 
@@ -14,6 +11,7 @@ export default function ApplicationPg5({ fullname, initialValues, setInitialValu
         <Formik
         initialValues={initialValues}
         onSubmit={async ( values ) => {
+            console.log(values)
             setInitialValues(values)
             setPageNumber(6)
             await getOTP(phone_number, "IDENTITY VERIFICATION")
@@ -23,7 +21,7 @@ export default function ApplicationPg5({ fullname, initialValues, setInitialValu
                     return
                 })
                 .catch(error => console.log(error))
-            return 
+            return
         }}
       >
         {({values, errors, touched, handleChange, handleBlur}) => {

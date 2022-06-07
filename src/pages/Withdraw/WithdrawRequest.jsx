@@ -12,7 +12,6 @@ function WithdrawRequest() {
   const { user: { id: applicants_id } } = useAuth()
   const [ { fullname: applicants_name } ] = useOutletContext()
   
-  console.log(applicants_name)
   const initialValues = {
     account_type: '',
     amount:'',
