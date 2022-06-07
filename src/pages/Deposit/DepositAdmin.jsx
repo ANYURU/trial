@@ -2,9 +2,10 @@ import { supabase } from "../../helpers/supabase"
 import { useEffect, useState } from "react"
 import { Loader } from "../../components"
 import { useNavigate } from "react-router-dom"
-import { MdOutlineSearch } from 'react-icons/md'
+import { MdOutlineSearch, MdInfo} from 'react-icons/md'
 import { Pagination } from "../../components"
 import { FaEllipsisV } from 'react-icons/fa'
+import { AiFillCheckSquare } from 'react-icons/ai'
 
 export default function DepositAdmin() {
   const [ deposits, setDeposits ] = useState([]) 
@@ -61,6 +62,7 @@ export default function DepositAdmin() {
 
   //context
   const [ show, setShow ] = useState(false)
+  const [ activeIndex, setActiveIndex ] = useState(false)
   if(show === true){
     window.onclick = function(event) {
         if (!event.target.matches('.dialog')) {
@@ -135,7 +137,6 @@ export default function DepositAdmin() {
             <tbody>
               {shownDeposits.map((deposit, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`} key={index}
-                  onClick={() => handleDeposit(deposit.application_id)}
                 >
                     <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit.application_meta.applicants_name}</td><td className='px-6 py-3'>{deposit?.application_meta.account_type}</td><td className='px-6 py-3'>{deposit?.application_meta.amount}</td>
 
@@ -151,14 +152,28 @@ export default function DepositAdmin() {
                       <div className="relative">
                           <button className="block p-2 rounded-md dialog"
                             onClick={(event) => {
-                              // setActiveIndex(index)
+                              setActiveIndex(index)
                               setShow(!show)
                               event.stopPropagation()
                             }}
                           >
                               <FaEllipsisV />
                           </button>
-                          {/* <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} /> */}
+                          <ul className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${index === activeIndex && show ? '' : 'hidden'}`}>
+                              <li 
+                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                                onClick={() => {
+                                  // setLoanModal(true)
+                                  handleDeposit(deposit.application_id)
+                                }}
+                              ><AiFillCheckSquare /> Verify</li>
+                              <li 
+                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                                onClick={() => {
+                                  // setLoanModal(true)
+                                }}
+                              ><MdInfo /> Details</li>
+                          </ul>
                       </div>
                     </td>
                 </tr>

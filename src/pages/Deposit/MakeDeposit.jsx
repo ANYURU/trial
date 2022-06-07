@@ -21,8 +21,8 @@ function MakeDeposit() {
    // This is me male for the first time that am supposed to make the world a better place for everyone living and staying in it. It looks crazy but its actually not crasy for the first time the world world had to remember that all kinds of animals living in the world have to survive for the great world and then we leave the rest to the world that doesn't believe in the world work and the work o
   return (
     <div className='h-full'>
-      <h1 className='mb-5 mt-2 font-bold uppercase'>Deposit</h1>
-      <div className="flex bg-white p-6 min-h-full">
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Deposit</h1>
+      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full w-full justify-center">
       <Formik
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
@@ -71,14 +71,14 @@ function MakeDeposit() {
         {({ values, errors, touched, handleChange, handleBlur, isValid, dirty}) => {
           return (
             <Form>
-              <div className='flex flex-grow flex-col min-h-full'>
+              <div className='flex flex-grow flex-col min-h-full w-full'>
                 <ToastContainer />
                 <div className='mb-3'>
                     <div className='m-2'>
                       <div className='flex flex-wrap gap-5 h-16'>
                           <div className='flex flex-col w-56'>
-                            <label htmlFor="" className='text-sm'>Please select an account</label>
-                            <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-2 bg-white" onChange={handleChange} onBlur={handleBlur} value={values.account_type}>
+                            <label className='text-sm'>Please select an account</label>
+                            <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 dark:text-secondary-text" onChange={handleChange} onBlur={handleBlur} value={values.account_type}>
                               <option value="">--Select Account--</option>
                               <option value="savings">Savings</option>
                               <option value="shares">Shares</option>
@@ -88,8 +88,8 @@ function MakeDeposit() {
                             {touched?.account_type && errors?.account_type && <div className="error text-red-600 text-xs">{errors?.account_type}</div>}
                           </div>
                           <div className='flex flex-col w-56 '>
-                            <label htmlFor="" className=' text-sm'>Enter Amount</label>
-                            <input type="number" name="amount" id="amount" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values.amount}/>
+                            <label className=' text-sm'>Enter Amount</label>
+                            <input type="number" name="amount" id="amount" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values.amount}/>
                             {touched?.amount && errors?.amount && <div className="error text-red-600 text-xs">{errors?.amount}</div>}
                           </div>
                       </div>
@@ -99,13 +99,13 @@ function MakeDeposit() {
                     <div className='m-2'>
                       <div className='flex flex-wrap gap-5 h-20'>
                           <div className='flex flex-col w-56'>
-                            <label htmlFor="" className='text-sm'>Enter Phone Number</label>
-                            <input type="text" name="phone_number" id="phone_number" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1' onChange={handleChange} onBlur={handleBlur} value={values.phone_number}/>
+                            <label className='text-sm'>Enter Phone Number</label>
+                            <input type="text" name="phone_number" id="phone_number" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values.phone_number}/>
                             {touched?.phone_number && errors?.phone_number && <div className="error text-red-600 text-xs">{errors?.phone_number}</div>}
                           </div>
                           <div className='flex flex-col w-56 '>
-                            <label htmlFor="" className=' text-sm'>Upload Receipt</label>
-                            <input type="file" name="evidence" id="evidence" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1' onChange={(event) => {
+                            <label className=' text-sm'>Upload Receipt</label>
+                            <input type="file" name="evidence" id="evidence" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' onChange={(event) => {
                               values.evidence = event.currentTarget.files[0]
                             }} onBlur={handleBlur}/>
                             {touched?.evidence && errors?.evidence && <div className="error text-red-600 text-xs">{errors?.evidence}</div>} 
@@ -113,12 +113,16 @@ function MakeDeposit() {
                       </div>
                     </div>
                 </div>
-                  <div className='mb-3'>
-                      <h1 className='font-semibold'>Particulars</h1>
-                      <textarea name="particulars" id="particulars" cols="30" rows="10" className='outline outline-1 rounded-md w-full p-2' onChange={handleChange} onBlur={handleBlur} value={values.particulars}></textarea>
+
+                <div className='mb-3'>
+                    <h1 className='font-semibold'>Particulars</h1>
+                    <textarea name="particulars" id="particulars" cols="30" rows="10" className='outline outline-1 rounded-md w-full p-2 dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values.particulars}></textarea>
+                </div>
+
+                <div className="flex justify-end w-full">
+                  <div className="w-56">
+                    <Submit value='Make Deposit' disabled={!(isValid && dirty)}/>
                   </div>
-                <div className="w-56">
-                  <Submit value='Request' disabled={!(isValid && dirty)}/>
                 </div>
               </div>
             </Form>
