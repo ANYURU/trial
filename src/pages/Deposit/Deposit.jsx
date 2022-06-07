@@ -57,7 +57,6 @@ export default function Deposit() {
 
   const filteredDeposits = deposits.filter(application => status === "" ? application : status === 'pending' ? !application.reviewed : status === "approved" ? application.application_meta.review_status === status : application.reviewed && application.application_meta.review_status !== "approved" ).filter(deposit => !account || deposit.application_meta.account_type === account)
 
-  console.log(filteredDeposits)
 
   return (
     <div className='h-full'>

@@ -20,6 +20,8 @@ export default function WithdrawVerify() {
     setWithdraw(data[0])
   }
 
+  console.log(withdraw)
+
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Verify Withdraw</h1>
@@ -36,18 +38,25 @@ export default function WithdrawVerify() {
                 <div>{withdraw && withdraw.application_meta.particulars}</div>
               </div>
           </div>
-          <div className="flex gap-10 justify-end items-center mt-3">
-          <button
-            type="submit"
-            className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            >Reject
-          </button>
-          <button
-            type="submit"
-            className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            >Approve
-          </button>
+          {withdraw && !withdraw.reviewed && 
+            <div className="flex gap-10 justify-end items-center mt-3">
+            <button
+              type="submit"
+              className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
+              >Reject
+            </button>
+            <button
+              type="submit"
+              className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
+              >Approve
+            </button>
+            </div>
+          }
+          {withdraw && withdraw.reviewed &&
+          <div className="flex justify-end items-center mt-3">
+            Reviewed by: {withdraw.application_meta.reviewed_by}
           </div>
+          }
       </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
 import { depositHistory } from "../../helpers/mockData"
 import { supabase } from "../../helpers/supabase"
 import { useState, useEffect } from "react"
-import { MdAdd } from "react-icons/md"
-import { searchByName, filterByStatus } from "../../helpers/utilites"
+import { filterByStatus } from "../../helpers/utilites"
 import { Pagination } from "../../components"
 import { FaEllipsisV } from 'react-icons/fa'
+import { MdInfo } from "react-icons/md"
 
 export default function Withdrawy() {
 
@@ -43,6 +43,16 @@ export default function Withdrawy() {
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage
 
   const shownWithdraw = loans.slice(indexOfFirstPage, indexOfLastPage)
+
+  const [ activeIndex, setActiveIndex ] = useState(false)
+
+  if(show === true){
+    window.onclick = function(event) {
+        if (!event.target.matches('.dialog')) {
+            setShow(false)
+        }
+    }
+  }
 
   return (
     <div className='h-full'>
@@ -85,7 +95,7 @@ export default function Withdrawy() {
             </thead>
             <tbody>
               {shownWithdraw.map((loan, index) => (
-                <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
+                <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`} key={index}>
                   <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.transactionId}</td><td className='px-6 py-3'>{loan.account}</td><td className='px-6 py-3'>{loan.amount}</td><td className='px-6 py-3'>{loan.depositMethod}</td>
                   
                   <td className='px-6 py-3'>
@@ -98,14 +108,22 @@ export default function Withdrawy() {
                         <div className="relative">
                           <button className="block p-2 rounded-md dialog"
                             onClick={(event) => {
-                              // setActiveIndex(index)
+                              setActiveIndex(index)
                               setShow(!show)
                               event.stopPropagation()
                             }}
                           >
                               <FaEllipsisV />
                           </button>
-                          {/* <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} /> */}
+
+                          <ul className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${index === activeIndex && show ? '' : 'hidden'}`}>
+                              <li 
+                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                                onClick={() => {
+                                  // setLoanModal(true)
+                                }}
+                              ><MdInfo /> Details</li>
+                          </ul>
                         </div>
                   </td>
                 </tr>
