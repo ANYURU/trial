@@ -13,9 +13,6 @@ export default function Sidebar({ user }) {
     const [ disabled ] = useState( !(user || user?.roles) )
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
 
-    console.log("selected ", selectedIndex)
-    console.log("show ", show)
-
 
     return (
         <div className='h-full fixed  bg-white sidebar dark:bg-dark-bg-700'>
