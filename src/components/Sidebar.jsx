@@ -14,6 +14,9 @@ export default function Sidebar({ user }) {
     const lit = menuData[`${role}`].filter(item => item.sublinks).map(item => item.sublinks)
 
     useEffect(() => {user?.roles?.length > 0 && setDisabled(false)}, [user])
+    console.log("selected ", selectedIndex)
+    console.log("show ", show)
+
 
     return (
         <div className='h-full fixed  bg-white sidebar dark:bg-dark-bg-700'>
@@ -26,7 +29,7 @@ export default function Sidebar({ user }) {
                         key={item.link}
                         to={`/${item.link}`}
                         className={ `flex justify-between mx-2 my-1 px-3 py-1 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600 ${( disabled && (item?.link !== 'dashboard' && item?.link !== 'profile') ) && `disabled-link`}` }
-
+                        onClick={() => {setSelectedIndex(index)}}
                     >
                         <div className='flex items-center dark:text-secondary-text'>
                         <IconContext.Provider value={{ className: `font-bold text-lg` }}>
@@ -35,15 +38,19 @@ export default function Sidebar({ user }) {
                             <span className='font-semibold'>{item.label}</span>
                         </div>
                         <IconContext.Provider value={{ className: `font-bold text-lg dark:text-secondary-text` }}>
+                            <i
+                                
+                            >
                         {
                         index !== 0 && index < menuData[`${role}`].length - 1 && 
                             (show && index === selectedIndex 
-                            ? <MdKeyboardArrowUp onClick={() => setShow(!show)} />
-                            : <MdKeyboardArrowDown onClick={() => {setShow(!show);setSelectedIndex(index)}} />)
+                            ? <MdKeyboardArrowUp />
+                            : <MdKeyboardArrowDown />)
                         }
+                        </i>
                         </IconContext.Provider>
                     </NavLink>
-                    {show && index === selectedIndex &&
+                    {show && index === selectedIndex && index > 0 && index < menuData[`${role}`].length - 1 &&
                         <div className='bg-accent dark:bg-dark-bg-600 mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer dark:text-secondary-text '>
                             {
                                 lit[index-1].map((item, index) => (

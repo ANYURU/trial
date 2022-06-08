@@ -5,6 +5,7 @@ import { verifyOTP } from '../../helpers/verifyotp'
 import { toast } from 'react-toastify'
 import { supabase } from "../../helpers/supabase"
 import { useAuth } from "../../auth/AuthContext"
+import { OTPBox } from "../../components"
 
 function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
   
@@ -128,24 +129,23 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
 
   }
 
-  const [ otp, setOtp ] = useState('')
+  const [ otp, setOtp ] = useState(["", "", "", "", "", ""])
   return (
-    <div className='flex flex-col justify-center items-center h-full w-full'>
+    <div className='flex flex-col justify-center items-center h-full w-full outline'>
         <h1 className='font-bold'>Verify your identity to confirm your submission</h1>
         <p className='text-sm'>An OTP has been sent to your phone number. Please enter a valid OTP to confirm submission.</p>
         <div className="flex flex-col justify-center items-center mt-5 p-5">
-          <input type="text" name="" placeholder='Enter OTP' className='ring-1 ring-black rounded px-2 py-1 mt-2 dark:bg-dark-bg-600 w-full'
+          {/* <input type="text" name="" placeholder='Enter OTP' className='ring-1 ring-black rounded px-2 py-1 mt-2 dark:bg-dark-bg-600 w-full'
           onChange={(event) => setOtp(event.target.value)}
-           />
-          {/* Send otp */}
-          <button 
-            className=' bg-primary rounded-sm border-0 px-4 py-1 mt-2 text-white w-full'
-            type="button" 
-            disabled={ otp?.length < 6 }
-            onClick={ async () => {
-              if ( otp ) {
-                console.log(initialValues)
-                handleSubmit(otp)
+           /> */}
+           <OTPBox otp={otp} setOtp={setOtp} />
+          <button type="button" className=' bg-primary rounded-sm border-0 px-4 py-1 mt-2 text-white w-full'
+            onClick={() => {
+              if(otp){
+                // console.log(initialValues)
+                // alert("Your loan application has been sent.")
+                // setPageNumber(1)
+                console.log(otp.join(""))
               }
             }}
           >
