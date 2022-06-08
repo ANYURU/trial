@@ -1,11 +1,21 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { FaEllipsisV } from 'react-icons/fa'
+import { supabase } from '../../helpers/supabase'
 
 function Accounts() {
   useEffect(() => {
     document.title = 'Accounts - Bweyogere tuberebumu'
+    getApplications()
   }, [])
+
+
+  const getApplications = async () => {
+    const { error, data } = await supabase
+    .from("accounts")
+    .select()
+      console.log("data", data)
+  }
 
   return (
     <div className='h-full'>
