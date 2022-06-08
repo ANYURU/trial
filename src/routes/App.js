@@ -13,6 +13,14 @@ import { ApplicantApproval } from "../pages";
 export default function App() {
   const [ loading, setLoading ] = useState(true)
   const preloader = document.getElementById("preloader");
+
+  const html = document.querySelector("html");
+      if(localStorage.getItem("darkMode") === "true"){
+        html.classList.add("darkClass")
+      } else {
+        html.classList.remove("darkClass")
+      }
+
   if (preloader) {
     setTimeout(() => {
       preloader.style.display = "none";
