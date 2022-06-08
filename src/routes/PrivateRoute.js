@@ -13,7 +13,6 @@ const PrivateRoute = ({ allowedRoles }) => {
   const [roles, setRoles] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-
   const [showSidebar, setShowSidebar] = useState(true);
 
   useEffect(() => {
@@ -21,7 +20,6 @@ const PrivateRoute = ({ allowedRoles }) => {
     getProfile(user)
       .then((data) => {
         if (data) {
-          // console.log(data)
           const { roles } = data;
           setRoles(roles);
           setProfile(data);
@@ -35,16 +33,10 @@ const PrivateRoute = ({ allowedRoles }) => {
     matches ? (
       <div className={`${darkMode ? "dark" : ""}`}>
         <div
-          className={`flex flex-col min-h-screen w-screen outline outline-green-700 overflow-y-auto bg-back dark:bg-dark-bg  `}
+          className={`flex flex-col min-h-screen  w-screen outline outline-green-700 overflow-y-auto bg-back dark:bg-dark-bg`}
         >
           <Navbar user={profile} showSidebar={showSidebar} />
-          {/* <div className=''>
-                        <Sidebar user={ profile } showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-                    </div> */}
-          <div
-            className={`min-h-screen w-screen outline-red-600 `}
-          >
-            {/* <Navbar user={ profile } showSidebar={showSidebar} /> */}
+          <div className={`min-h-screen w-screen outline-red-600`}>
             <div className="mt-[65px]">
               <Sidebar
                 user={profile}
@@ -52,7 +44,6 @@ const PrivateRoute = ({ allowedRoles }) => {
                 setShowSidebar={setShowSidebar}
               />
             </div>
-            {/* <div></div> */}
             <div className={`${showSidebar ? "ml-[265px]" : "ml-[85px]"}`}>
               {profile &&
                 (allowedRoles !== undefined ? (
