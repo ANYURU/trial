@@ -11,6 +11,8 @@ function Navbar({ user, showSidebar }) {
   const { darkMode, toggleDarkMode } = useAuth()
   const navigate = useNavigate()
 
+  
+
   if(show){
     window.onclick = event => {
         if (!event.target.matches('.dialog')) {
