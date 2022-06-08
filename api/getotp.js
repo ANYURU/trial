@@ -15,6 +15,7 @@ export default async (req, res) => {
     try {
         const { phone_number, type } = req.body
         let phone_message
+        console.log(phone_number, type)
         
         if ( !phone_number ) {
             const response={"Status":"Failure","Details":"Phone Number not provided"}
@@ -41,6 +42,10 @@ export default async (req, res) => {
             }
             else if( type == "2FA") {
                 const message = require('./helpers/_phone2FA')
+                phone_message = message(otp)
+            }
+            else if( type == "IDENTITY VERIFICATION") {
+                const message = require('./helpers/_identityVerification')
                 phone_message = message(otp)
             }
             else {

@@ -3,12 +3,15 @@ import { Formik,  Form } from 'formik'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from "../../auth/AuthContext"
 import { toast, ToastContainer } from 'react-toastify'
-import { withdrawRequestValidationSchema } from '../../helpers/validator'
+import { nonEvidencedRequestValidationSchema as withdrawRequestValidationSchema } from '../../helpers/validator'
 import { InputField } from "../../components/Form/CustomInputField"
+import { useOutletContext } from 'react-router-dom'
 
 
 function WithdrawRequest() {
-  const { user: { id: applicants_id, fullname: applicants_name } } = useAuth()
+  const { user: { id: applicants_id } } = useAuth()
+  const [ { fullname: applicants_name } ] = useOutletContext()
+  
   const initialValues = {
     account_type: '',
     amount:'',
@@ -33,7 +36,7 @@ function WithdrawRequest() {
                 .insert(
                   [
                     {
-                      type: "withdraw",
+                      _type: "withdraw",
                       created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                       updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
                       reviewed: false,
@@ -52,6 +55,7 @@ function WithdrawRequest() {
               toast.success(`Request submitted for review.`, {position: 'top-center'})
               resetForm({ values: initialValues })
             } catch (error) {
+              console.log(error)
               toast.error(`${error?.message}`, {position: 'top-center'})
             }
 

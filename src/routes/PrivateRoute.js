@@ -5,6 +5,7 @@ import { useAuth } from '../auth/AuthContext'
 import { useEffect, useState } from 'react'
 import { getProfile } from '../helpers/getProfile'
 import { Loader } from '../components'
+import { ToastContainer } from 'react-toastify'
 
 
 const PrivateRoute = ({ allowedRoles }) => {
@@ -44,6 +45,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         <Navbar user={ profile } />
                         <div></div>
                         <div className='mx-4'>
+                        <ToastContainer />
                         {
                             profile && (
                                 allowedRoles !== undefined ? (
