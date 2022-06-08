@@ -2,8 +2,6 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { FaEllipsisV } from 'react-icons/fa'
 import { supabase } from '../../helpers/supabase'
-import { Loader } from '../../components'
-import moment from 'moment'
 
 function Accounts() {
   const [ accounts, setAccounts ] = useState({})
@@ -11,24 +9,16 @@ function Accounts() {
 
   useEffect(() => {
     document.title = 'Accounts - Bweyogere tuberebumu'
-    get_account_information()
-      .then((data) => {
-        if ( data ) {
-          setAccounts(data)
-          setLoading(false)
-          console.log(data)
-        }
-      })
-      .catch(error => console.log(error)) 
+    getApplications()
   }, [])
 
-  const get_account_information = async () => {
-    const { data, error } = await supabase.rpc('get_accounts_information', {})
-    if ( error ) throw error
-    return data   
+
+  const getApplications = async () => {
+    const { error, data } = await supabase
+    .from("accounts")
+    .select()
+      console.log("data", data)
   }
-
-
 
   return (
     <div className='h-full'>
