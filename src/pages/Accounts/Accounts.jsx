@@ -11,15 +11,21 @@ function Accounts() {
 
   useEffect(() => {
     document.title = 'Accounts - Bweyogere tuberebumu'
-    getApplications()
+    get_account_information()
+      .then((data) => {
+        if ( data ) {
+          setAccounts(data)
+          setLoading(false)
+          console.log(data)
+        }
+      })
+      .catch(error => console.log(error)) 
   }, [])
 
-
-  const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("accounts")
-    .select()
-      console.log("data", data)
+  const get_account_information = async () => {
+    const { data, error } = await supabase.rpc('get_accounts_information', {})
+    if ( error ) throw error
+    return data   
   }
 
   return (
