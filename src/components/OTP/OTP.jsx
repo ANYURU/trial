@@ -6,7 +6,7 @@ const OTPBox = ({ otp, setOtp}) => {
     const handleChange = (element, index) => {
         if (isNaN(element.value)) return false;
 
-        setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
+        setOtp([...otp.map((digit, idx) => (idx === index ? element.value : digit))]);
 
         //Focus next input
         if (element.nextSibling) {

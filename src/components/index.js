@@ -20,5 +20,6 @@ import NothingShown from "./NothingShown";
 import LoanModal from "./Modals/LoanModal";
 import OTPBox from "./OTP/OTP";
 import Stepper from "./Stepper";
+import Spinner from "./Loaders/Spinner";
 
-export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu, MemberModal, AccSummary, Pagination, LoansContext, NothingShown, LoanModal, OTPBox, Stepper }
+export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu, MemberModal, AccSummary, Pagination, LoansContext, NothingShown, LoanModal, OTPBox, Stepper, Spinner }

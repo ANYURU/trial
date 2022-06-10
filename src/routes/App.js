@@ -2,7 +2,7 @@ import { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, De
 import { Loans, LoanHistory, LoanPayment, LoanRequest, LoanVerify, LoanAdmin, MemberLoans, LoanPaymentApplications } from "../pages";
 import { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers, DepositVerify, WithdrawVerify, Members, Applications, MemberApplication } from "../pages";
 import { Accounts, Savings, Mwana, Fixed, Shares, DepositAdmin } from "../pages";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import { useState } from "react";
 import Unauthorized from "../pages/Unauthorized";
@@ -35,7 +35,7 @@ export default function App() {
     <Router>
       <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/verify" element={<Verification />} />
           <Route path="/set-password" element={<SetPassword />} />
@@ -44,6 +44,23 @@ export default function App() {
           {/* Accessed privately but doesnot have restricted access depending on the access role */}
           <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+
+          {/* Accessed by only administrators. */}
+          <Route element={<PrivateRoute allowedRoles={[ "admin" ]}/>}>
+            <Route path='loans/members/:id' element={<LoanVerify />} />
+            <Route path="loans/members" element={<MemberLoans />} />
+            <Route path="loans/members-requests" element={<LoanAdmin />} />
+            <Route path="loans/applications" element={<LoanPaymentApplications />} />
+            <Route path="withdraw/members/:id" element={<WithdrawVerify />} />
+            <Route path="withdraw/members" element={<WithdrawMembers />} />
+            <Route path="deposit/members/:id" element={<DepositVerify />} />
+            <Route path="deposit/members" element={<DepositAdmin />} />
+
+            <Route path="members" element={<Members />} />
+            <Route path="members/applications" element={<Applications />} />
+            <Route path="members/applications/:id" element={<ApplicantApproval />} />
+            <Route path="application" element={<MemberApplication />} />
           </Route>
 
           {/* Accessed by both members and admins */}
@@ -70,24 +87,9 @@ export default function App() {
 
             <Route path='/unauthorized' element={<Unauthorized />} /> 
             <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />}/>
           </Route>
 
-          {/* Accessed by only administrators. */}
-          <Route element={<PrivateRoute allowedRoles={[ "admin" ]}/>}>
-            <Route path='loans/members/:id' element={<LoanVerify />} />
-            <Route path="loans/members" element={<MemberLoans />} />
-            <Route path="loans/members-requests" element={<LoanAdmin />} />
-            <Route path="loans/applications" element={<LoanPaymentApplications />} />
-            <Route path="withdraw/members/:id" element={<WithdrawVerify />} />
-            <Route path="withdraw/members" element={<WithdrawMembers />} />
-            <Route path="deposit/members/:id" element={<DepositVerify />} />
-            <Route path="deposit/members" element={<DepositAdmin />} />
-
-            <Route path="members" element={<Members />} />
-            <Route path="members/applications" element={<Applications />} />
-            <Route path="members/applications/:id" element={<ApplicantApproval />} />
-            <Route path="application" element={<MemberApplication />} />
-          </Route>
       </Routes>
     </Router>
   )

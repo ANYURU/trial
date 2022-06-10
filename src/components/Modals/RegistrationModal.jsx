@@ -11,7 +11,7 @@ export default function RegistrationModal({ passed, setPopUp, children }) {
   return ReactDOM.createPortal(
     <div className={`bg-black bg-opacity-40 w-screen h-screen absolute top-0 left-0 right-0 bottom-0 flex justify-center z-20 items-center ${darkMode ? "dark" : ""}`}>
       <div
-        className="bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-10 rounded-md shadow-md flex flex-col justify-center items-center"
+        className="bg-white dark:bg-dark-bg-700 dark:text-secondary-text mx-4 p-10 rounded-md shadow-md flex flex-col justify-center items-center"
         ref={passed}
       >
         {/* {children} */}
