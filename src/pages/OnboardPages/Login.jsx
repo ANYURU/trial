@@ -45,14 +45,7 @@ export default function Login() {
   }
 
   return (
-    <div className={`${darkMode ? "dark" : ""}`}>
-      {loading 
-      ?
-       <div className="w-screen h-screen">
-         <Loader />
-       </div>
-      :
-      <div className={`inline-flex justify-center items-center w-screen dark:bg-dark-bg  h-screen font-montserrat`}>
+      <div className={`inline-flex justify-center items-center w-screen  h-screen font-montserrat ${darkMode ? "dark" : ""}`}>
           <ToastContainer/>
           <Formik initialValues={{ phoneNo: '', password: ''}} validationSchema={validationSchema}>
             {({values, errors, touched, isValid, dirty, handleChange, handleBlur}) => {
@@ -72,7 +65,5 @@ export default function Login() {
             }}
           </Formik>
       </div>
-      }
-    </div>
   )
 }

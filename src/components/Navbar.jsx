@@ -49,9 +49,9 @@ function Navbar({ user, showSidebar }) {
                   <p className='mb-0 cursor-pointer dark:text-white'>Hello
                   {(user?.fullname !== undefined && user.fullname !== null)
                   ? ` ${user?.fullname.split(' ')[0]}`
-                  : ' Newbie !!'}
+                  : ' You'}
                   </p>
-                    <p className={`text-sm ${user?.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user?.member_status ? user.member_status : 'status'}
+                    <p className={`text-sm ${user?.member_status === 'active' ? 'text-green-600' : 'text-accent-red'}`}>{user?.member_status ? user.member_status : 'Not registered'}
                   </p>
                 </div>
                 { user?.avatar ? <div className='w-10 h-10 bg-accent rounded-full mx-2 overflow-hidden bg-cover' style={{backgroundImage: `url(${user?.avatar})`}}>

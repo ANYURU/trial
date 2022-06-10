@@ -36,7 +36,7 @@ const PrivateRoute = ({ allowedRoles }) => {
           className={`flex flex-col min-h-screen  w-screen outline outline-green-700 overflow-y-auto bg-back dark:bg-dark-bg`}
         >
           <Navbar user={profile} showSidebar={showSidebar} />
-          <div className={`min-h-screen w-screen outline-red-600`}>
+          <div className={`min-h-screen w-screen flex flex-col`}>
             <div className="mt-[65px]">
               <Sidebar
                 user={profile}
@@ -44,7 +44,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                 setShowSidebar={setShowSidebar}
               />
             </div>
-            <div className={`${showSidebar ? "ml-[265px]" : "ml-[85px]"}`}>
+            <div className={`${showSidebar ? "ml-[265px]" : "ml-[85px]"} flex-grow`}>
               {profile &&
                 (allowedRoles !== undefined ? (
                   roles ? (

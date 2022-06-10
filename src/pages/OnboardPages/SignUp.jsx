@@ -1,14 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
-import logo from '../../assets/images/tube.png'
+import logo from '../../assets/images/tube-no-bg.png'
 import { validationSubmitSchema } from "../../helpers/validator";
 import { Formik } from "formik";
 import { PhoneTextField, Submit } from "../../components";
 import { getOTP } from "../../helpers/getotp";
 import { supabase } from "../../helpers/supabase";
 import { toast, ToastContainer } from "react-toastify";
+import { useAuth } from "../../auth/AuthContext";
 
 export default function SignUp() {
   const navigate = useNavigate()
+
+  const { darkMode } = useAuth()
+
+  console.log(darkMode)
   
   const handleSubmit = async ( event, values ) => {
     event.preventDefault()
@@ -39,15 +44,15 @@ export default function SignUp() {
   }
 
   return (
-    <div className=" inline-flex justify-center items-center w-screen h-screen font-montserrat">
+    <div className={`inline-flex justify-center items-center w-screen h-screen font-montserrat ${darkMode ? "dark" : ""}`}>
       <ToastContainer />
       <Formik initialValues={{phoneNo: ''}} validationSchema={validationSubmitSchema} >
         {({values, errors, touched, handleChange, handleBlur}) => {
           return (
-            <form onSubmit={(event) => handleSubmit(event, values)}  className='w-11/12 p-10 sm:w-8/12 md:w-6/12 lg:w-4/12 bg-white shadow-myShadow flex justify-center items-center flex-col rounded-lg'>
+            <form onSubmit={(event) => handleSubmit(event, values)}  className='w-11/12 p-10 sm:w-8/12 md:w-6/12 lg:w-4/12 bg-white dark:bg-dark-bg-700 dark:text-secondary-text shadow-myShadow flex justify-center items-center flex-col rounded-lg'>
               <img src={logo} alt='SACCO logo' width={150} />
               <h2 className='block text-center font-bold'>Enter phone number to Register</h2>
-              <PhoneTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
+              <PhoneTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} required/>
               <Submit value="Submit" disabled={Object.keys(errors).length === 0 ? false : true}/>
 
               <div className='flex justify-between w-full mt-3'>
