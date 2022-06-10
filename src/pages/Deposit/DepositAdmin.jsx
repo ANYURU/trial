@@ -1,6 +1,6 @@
 import { supabase } from "../../helpers/supabase"
 import { useEffect, useState } from "react"
-import { Loader } from "../../components"
+import { Spinner } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { MdOutlineSearch, MdInfo} from 'react-icons/md'
 import { Pagination } from "../../components"
@@ -195,7 +195,7 @@ export default function DepositAdmin() {
         </>
         :
         <div className="w-full flex justify-center">
-          <Loader />
+          <Spinner />
         </div>
         }
         

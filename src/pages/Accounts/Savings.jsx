@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { supabase } from "../../helpers/supabase"
 import { useAuth } from "../../auth/AuthContext"
-import { Loader } from "../../components"
+import { Spinner } from "../../components"
 
 function Savings() {
 
@@ -39,7 +39,7 @@ function Savings() {
         {
           loading
           ?
-          <Loader />
+          <Spinner />
           :
           <>
             <div className="flex gap-10">

@@ -5,7 +5,7 @@ import { MdInfo } from "react-icons/md"
 import { searchByName2, filterByStatus } from "../../helpers/utilites"
 import { MdOutlineSearch } from 'react-icons/md'
 import Pagination from "../../components/Pagination"
-import { Loader } from "../../components"
+import { Spinner } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { FaEllipsisV } from 'react-icons/fa'
 import { NothingShown } from "../../components"
@@ -194,7 +194,7 @@ export default function WithdrawMembers() {
           :
           withdraws.length === 0 && withdraws !== null ?
           <div className="w-full flex">
-          <Loader />
+          <Spinner />
         </div>
         :
             <NothingShown />

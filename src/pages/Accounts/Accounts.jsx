@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { supabase } from "../../helpers/supabase";
-import { Loader } from "../../components";
+import { Spinner } from "../../components";
 import moment from "moment";
 
 function Accounts() {
@@ -35,7 +35,7 @@ function Accounts() {
       </h1>
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 h-full">
         {loading ? (
-          <Loader />
+          <Spinner />
         ) : (
           <div className="w-full overflow-x-auto sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

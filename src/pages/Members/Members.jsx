@@ -7,7 +7,7 @@ import { Pagination } from "../../components"
 import { ConfirmModal } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../../helpers/supabase"
-import { Loader, NothingShown } from "../../components"
+import { Spinner, NothingShown } from "../../components"
 
 export default function Members() {
   useEffect(() => {
@@ -152,7 +152,7 @@ export default function Members() {
             ?
                 <NothingShown />
             :
-                <Loader />
+                <Spinner />
               }
           </div>
     </div>

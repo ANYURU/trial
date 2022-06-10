@@ -2,7 +2,7 @@ import { Submit } from "../../components"
 import { useParams } from "react-router-dom"
 import { supabase } from "../../helpers/supabase"
 import { useState, useEffect } from "react"
-import { Loader } from "../../components"
+import { Spinner } from "../../components"
 import { downloadFile } from "../../helpers/utilites"
 import { toast, ToastContainer }  from 'react-toastify'
 import { useOutletContext } from "react-router-dom"
@@ -107,7 +107,7 @@ export default function DepositVerify() {
           }
       </div>
       :
-      <Loader />
+      <Spinner />
       }
       </div>
     </div>

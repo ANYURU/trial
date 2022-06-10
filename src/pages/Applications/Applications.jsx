@@ -8,7 +8,7 @@ import { Pagination } from "../../components"
 import { ContextMenu } from "../../components"
 import { MemberModal } from "../../components"
 import { useNavigate } from "react-router-dom"
-import { Loader } from "../../components"
+import { Spinner } from "../../components"
 
 export default function Applications() {
 
@@ -153,7 +153,7 @@ export default function Applications() {
         </div>
         </>
         :
-                <Loader />
+                <Spinner />
         }
       </div>
     </div>

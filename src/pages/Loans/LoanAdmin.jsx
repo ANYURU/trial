@@ -1,6 +1,6 @@
 import { supabase } from "../../helpers/supabase"
 import { useEffect, useState, useParams } from "react"
-import { Loader } from "../../components"
+import { Spinner } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { MdOutlineSearch } from 'react-icons/md'
 import { Pagination } from "../../components"
@@ -179,7 +179,7 @@ export default function LoanAdmin() {
         </div>
         </>
         :
-          <Loader />
+          <Spinner />
         }
         
       </div>

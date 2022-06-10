@@ -1,5 +1,5 @@
 import { depositHistory } from "../../helpers/mockData"
-import { Pagination, Loader } from "../../components"
+import { Pagination, Spinner } from "../../components"
 import { useState, useEffect } from "react"
 import { supabase } from "../../helpers/supabase"
 import { useOutletContext } from "react-router-dom"
@@ -158,7 +158,7 @@ export default function Deposit() {
         </>
         :
         <div className="w-full flex justify-center">
-          <Loader />
+          <Spinner />
         </div>
       }
       </div>
