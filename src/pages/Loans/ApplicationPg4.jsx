@@ -16,7 +16,7 @@ export default function ApplicationPg4({ initialValues, setInitialValues, setPag
             setPageNumber(5)
         }}
       >
-        {({values, errors, touched, handleChange, handleBlur}) => {
+        {({values, errors, touched, handleChange, handleBlur, setFieldValue}) => {
   return (
     <Form>
         <div className='mb-3'>
@@ -35,7 +35,11 @@ export default function ApplicationPg4({ initialValues, setInitialValues, setPag
 
                             <div className='flex flex-col w-56'>
                                 <label className=' text-sm'>Financial Statement</label>
-                                <input type="file" name="financial_statement" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
+                                <input type="file" name="financial_statement" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' 
+                                    onChange={event => {
+                                        setFieldValue(event.target.name, event.target.files[0])
+                                    }}
+                                />
                             </div>
                         </div>
                             ))}

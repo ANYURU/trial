@@ -16,6 +16,8 @@ const PrivateRoute = ({ allowedRoles }) => {
     const [ loading, setLoading ] = useState(true)
     const location = useLocation()
 
+    console.log(allowedRoles)
+
     useEffect(() => {
         // Getting information that is required in all components.
         getProfile( user )
@@ -25,6 +27,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                     const { roles } = data
                     setRoles( roles )
                     setProfile(data)
+                    console.log(roles)
                 }   
             })
             .then(() => setLoading( false ))
@@ -47,7 +50,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         <div className='mx-4'>
                         <ToastContainer />
                         {
-                            profile && (
+                            profile && (                               
                                 allowedRoles !== undefined ? (
                                     roles ? (
                                         roles.find( role => allowedRoles.includes(role)) 
@@ -58,7 +61,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                                         :
                                         <div className='flex-grow mt-5 overflow-y-auto'>
                                             <Navigate to="unauthorized" state={{ from: location }} replace/>
-                                        </div>    
+                                        </div>                                           
                                     ) 
                                     :
                                     <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
@@ -68,8 +71,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                                 :
                                 <div className='flex-grow mx-5 mt-5 overflow-y-auto'>
                                     {loading ? <Loader /> : <Outlet context={[ profile, setProfile ]}/>}    
-                                </div>
-                                
+                                </div>                              
                             ) 
                         }
                     </div>

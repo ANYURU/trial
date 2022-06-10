@@ -16,7 +16,7 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
           }}
           validationSchema={employed === true ? loan2ValidationSchema : loan3ValidationSchema}
         >
-          {({values, errors, touched, handleChange, handleBlur}) => {
+          {({values, errors, touched, handleChange, handleBlur, setFieldValue}) => {
   return (
     <Form>
         <div className='mb-3'>
@@ -82,12 +82,18 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
 
                 <div className='flex flex-col w-56 '>
                 <label className=' text-sm'>Six months bank settlement</label>
-                <input type="file" name="bank_settlement" onChange={handleChange("bank_settlement")} id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
+                <input type="file" name="bank_settlement" onChange={event => {
+                    setFieldValue(event.target.name, event.target.files[0])
+                }} id="" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
                 </div>
 
                 <div className='flex flex-col w-56 '>
                   <label className=' text-sm'>One year cash flow forecast*</label>
-                  <input type="file" name="" className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
+                  <input type="file" name="a_years_cashflow" className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' 
+                    onChange={event => {
+                        setFieldValue(event.target.name, event.target.files[0])
+                    }}
+                  />
                 </div>
             </div>
             </>
@@ -130,7 +136,11 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
 
                 <div className='flex flex-col w-56 '>
                 <label className=' text-sm'>Supporting files</label>
-                <input type="file" name="supporting_files" className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
+                <input type="file" name="supporting_files" className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600'
+                    onChange={event => {
+                        setFieldValue(event.target.name, event.target.files[0])
+                    }}
+                />
                 </div>
 
                 <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount"  label="Amount in figures" placeholder="Enter loan amount" defaultValue={initialValues.amount} />

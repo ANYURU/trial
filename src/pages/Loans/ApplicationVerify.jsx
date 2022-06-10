@@ -41,7 +41,6 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     business_type: '',
     years_of_operation: '',
     business_income: '',
-    bank_settlement: '',
     asset1: '',
     asset2: '',
     asset3: '',
@@ -85,7 +84,11 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
         savings: '',
         others: ''
       }
-    ]
+    ],
+    a_years_cashflow:"",
+    supporting_files:"",
+    additional_files:"",
+    bank_settlement:""
   }
 
   const handleSubmit = async (one_time_password) => {
@@ -108,6 +111,9 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
                   application_meta: {
                     applicants_id,
                     applicants_name,
+                    files: [
+                      
+                    ],
                     ...initialValues
                   }
                 }
@@ -145,7 +151,7 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
             onClick={ async () => {
               if ( otp ) {
                 console.log(initialValues)
-                handleSubmit(otp)
+                // handleSubmit(otp)
               }
             }}
           >

@@ -1,6 +1,5 @@
 import { ApplicationPg1, ApplicationPg2, ApplicationPg3, ApplicationPg4, ApplicationPg5, ApplicationVerify } from "."
 import { useState } from "react"
-import { toast, ToastContainer } from 'react-toastify'
 import { useOutletContext } from "react-router-dom"
 
 function LoanRequest() {
@@ -37,7 +36,6 @@ function LoanRequest() {
     business_type: '',
     years_of_operation: '',
     business_income: '',
-    bank_settlement: '',
     asset1: '',
     asset2: '',
     asset3: '',
@@ -81,12 +79,15 @@ function LoanRequest() {
         savings: '',
         others: ''
       }
-    ]
+    ],
+    a_years_cashflow:"",
+    supporting_files:"",
+    additional_files:"",
+    bank_settlement:""
   })
 
 return (
     <>
-      <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Loan Request</h1>
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
         <div className='flex flex-grow flex-col min-h-full'>

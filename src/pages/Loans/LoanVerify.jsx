@@ -8,8 +8,6 @@ import { toast, ToastContainer } from "react-toastify"
 export default function DepositVerify() {
   const { id } = useParams()
 
-  
-
   const [ loan, setLoan ] = useState(null)
   const [ imageURL, setImageURL ] = useState('')
 
@@ -38,29 +36,27 @@ export default function DepositVerify() {
   }
 
 
-  const approveLoanPaymentTransaction = async () => {
+  const approveLoanRequest = async () => {
     const { application_meta : { applicants_id }} = loan
     
     try {
-      const { data, error } = await supabase.rpc( 'approve_transaction', { members_id: applicants_id, application: id })
+      const { data, error } = await supabase.rpc('approve_loan', { members_id: applicants_id, application: id })
       if ( error ) {
         throw error
       } else {
         // handle the alerts and navigation
+        console.log(data)
         toast.success(`Transaction has been approved.`, { position:"top-center" })
       }
-
     } catch (error) {
       toast.error(`${error?.message}`, { position:"top-center"})
       console.log(error)
-     
-
     }
 
   }
 
 
-  const rejectLoanPaymentTransaction = async() => {
+  const rejectLoanRequest = async() => {
     try {
       const { data, error } = await supabase.rpc( 'reject_application', { application: id })
       if( error ) {
@@ -73,13 +69,8 @@ export default function DepositVerify() {
       console.log(error)
     }
   }
-
-
+  
   // console.log(imageURL)
-
-  
-  
-
   return (
     <div className='h-full'>
       <ToastContainer /> 
@@ -87,7 +78,7 @@ export default function DepositVerify() {
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
       {loan  ? <div className='flex flex-grow flex-col min-h-full'>
            <div className='mb-3'>
-              <h1 className='font-semibold'>{loan.application_meta.applicants_name}'s withdraw Request Details</h1>
+              <h1 className='font-semibold'>{loan.application_meta.applicants_name}'s Loan Request Details</h1>
               <div className="outline outline-1 outline-gray-100 p-3">
                 <div className="my-6">Application ID: <span className="font-semibold">{loan.application_id}</span></div>
                 <div className="my-6">Applicant ID: <span className="font-semibold">{loan.application_meta.applicants_id}</span></div>
@@ -101,12 +92,12 @@ export default function DepositVerify() {
           <div className="flex gap-10 justify-end items-center mt-3">
           <button
             className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            onClick={rejectLoanPaymentTransaction}
+            onClick={rejectLoanRequest}
            >Reject
           </button>
           <button
             className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            onClick={approveLoanPaymentTransaction}
+            onClick={approveLoanRequest}
             >Approve
           </button>
           </div>

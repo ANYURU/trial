@@ -17,15 +17,17 @@ export default function LoanAdmin() {
     const { error, data } = await supabase
     .from("applications")
     .select()
-    .eq("_type", "deposit")
+    .eq("_type", "loan")
     .order("created_at",  { ascending: false })
+
+    console.log(data)
     setLoans(data)
   }
 
   const navigate = useNavigate()
 
-  const handleDeposit = depositID => {
-    navigate(`/loans/members/${depositID}`)
+  const handleLoan = loanID => {
+    navigate(`/loans/members/${loanID}`)
   }
 
   const [ status, setStatus ] = useState('')
@@ -44,7 +46,7 @@ export default function LoanAdmin() {
 
   // const filteredLoans = loans.filter(member => member.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
 
-  shownLoans = shownLoans.filter(deposit => !account || deposit?.application_meta.account_type === account)
+  shownLoans = shownLoans.filter(loan => !account || loan?.application_meta.account_type === account)
 
   //context
   const [ show, setShow ] = useState(false)
@@ -104,16 +106,16 @@ export default function LoanAdmin() {
               </tr>
             </thead>
             <tbody>
-              {shownLoans.map((deposit, index) => (
+              {shownLoans.map((loan, index) => (
                 <tr className={`cursor-pointer ${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}
-                  onClick={() => handleDeposit(deposit.application_id)}
+                  onClick={() => handleLoan(loan.application_id)}
                 >
-                    <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit?.application_meta.applicants_name}</td><td className='px-6 py-3'>{deposit?.application_meta.account_type}</td><td className='px-6 py-3'>{deposit?.application_meta.amount}</td>
+                    <td className='px-6 py-3'>{new Date(loan.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{loan.application_id}</td><td className='px-6 py-3'>{loan?.application_meta.applicants_name}</td><td className='px-6 py-3'>{loan?.application_meta.account_type}</td><td className='px-6 py-3'>{loan?.application_meta.amount}</td>
 
                     <td className={`px-6 py-3`}>
-                      <span className={` py-1 px-2 rounded-xl text-white ${deposit.reviewed ? deposit.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
-                      {deposit.reviewed ?
-                        deposit.application_meta.review_status === "approved" ? "Approved" : "Rejected"
+                      <span className={` py-1 px-2 rounded-xl text-white ${loan.reviewed ? loan.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
+                      {loan.reviewed ?
+                        loan.application_meta.review_status === "approved" ? "Approved" : "Rejected"
                       : "Pending"}
                       </span>
                     </td>

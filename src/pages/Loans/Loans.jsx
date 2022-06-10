@@ -22,6 +22,8 @@ export default function Loan() {
     .from("applications")
     .select()
     .eq("_type", "loan")
+
+    console.log(data)
     setLoans(data)
   }
 
