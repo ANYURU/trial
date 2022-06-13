@@ -11,5 +11,9 @@ body{
   align-items: center;
 }
 
+.darkClass body{
+  background-color: #121212;
+}
+
 
 

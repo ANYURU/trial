@@ -52,6 +52,7 @@ export default function WithdrawVerify() {
       console.log(error)
     }
   }
+  console.log(withdraw)
 
   return (
     <div className='h-full'>
@@ -84,9 +85,28 @@ export default function WithdrawVerify() {
             onClick={approveWithdrawTransaction}
             >Approve
           </button>
+          {withdraw && !withdraw.reviewed && 
+            <div className="flex gap-10 justify-end items-center mt-3">
+            <button
+              type="submit"
+              className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
+              >Reject
+            </button>
+            <button
+              type="submit"
+              className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
+              >Approve
+            </button>
+            </div>
+          }
+          {withdraw && withdraw.reviewed &&
+          <div className="flex justify-end items-center mt-3">
+            Reviewed by: {withdraw.application_meta.reviewed_by}
           </div>
+          }
       </div>
       </div>
+    </div>
     </div>
   )
 }

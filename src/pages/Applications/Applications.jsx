@@ -90,6 +90,7 @@ export default function Applications() {
       <div className='my-3'>
             <div className='m-1'>
             <div className='flex justify-between gap-5'>
+
               <div className='flex flex-col w-56'>
                 <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
                   onChange={(event) => setStatus(event.target.value)}
@@ -100,6 +101,7 @@ export default function Applications() {
                     <option value={"rejected"}>Rejected</option>
                 </select>
               </div>
+              
               <div className='flex flex-col w-56'>
                 <input type="date" name="" id="" placeholder='Old Password' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-700 dark:text-secondary-text' />
               </div>

@@ -56,10 +56,10 @@ export default function Loan() {
             <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
               onChange={(event) => setStatus(event.target.value)}
             >
-                <option value="">Status</option>
-                <option value="paid">Approved</option>
+                <option value="">Select Status</option>
+                <option value="paid">Paid</option>
                 <option value="pending">Pending</option>
-                <option value="due">Rejected</option>
+                <option value="due">Due</option>
             </select>
           </div>
           <div className='flex flex-col w-56'>
@@ -78,7 +78,7 @@ export default function Loan() {
             <tbody>
               {loan.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                  {loanModal && <LoanModal setLoanModal={setLoanModal} loan={loan} />}
+                  {loanModal && activeIndex === index && <LoanModal setLoanModal={setLoanModal} loan={loan} id={loan.ID} />}
                   <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest_rate}</td>
                   <td className={`px-6 py-3`}>
                     <span className={` py-1 px-2 rounded-xl text-white ${loan.status === "pending" ? "bg-yellow-400" : loan.status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>

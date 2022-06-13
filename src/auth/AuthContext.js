@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect, createContext } from 'react';
-import { supabase } from '../helpers/supabase';
+import { useContext, useState, useEffect, createContext } from "react";
+import { supabase } from "../helpers/supabase";
 
 // create a context for authentication
 const AuthContext = createContext();
@@ -7,8 +7,8 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
-  const theme = localStorage.getItem("darkMode") || false
-  const [ darkMode, setDarkMode ] = useState(JSON.parse(theme))
+  const theme = localStorage.getItem("darkMode") || false;
+  const [darkMode, setDarkMode] = useState(JSON.parse(theme));
 
   useEffect(() => {
     // get session data if there is an active session
@@ -29,18 +29,27 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
+  const html = document.querySelector("html");
+  if (darkMode || localStorage.getItem("darkMode") === true) {
+    html.classList.add("darkClass");
+  } else {
+    html.classList.remove("darkClass");
+  }
+
   // create signUp, signIn, signOut functions, toggleDarkMode
   const value = {
-    signUp: data => supabase.auth.signUp(data),
-    signIn: data => supabase.auth.signIn(data),
+    signUp: (data) => supabase.auth.signUp(data),
+    signIn: (data) => supabase.auth.signIn(data),
     signOut: () => supabase.auth.signOut(),
     toggleDarkMode: () => {
-      localStorage.setItem("darkMode", !darkMode)
-      setDarkMode(() => !darkMode)
+      localStorage.setItem("darkMode", !darkMode);
+      setDarkMode(() => !darkMode);
     },
-    user, setUser,
-    loading, setLoading,
-    darkMode
+    user,
+    setUser,
+    loading,
+    setLoading,
+    darkMode,
   };
 
   // use a provider to pass down the value

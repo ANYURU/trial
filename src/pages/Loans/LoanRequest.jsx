@@ -1,6 +1,7 @@
 import { ApplicationPg1, ApplicationPg2, ApplicationPg3, ApplicationPg4, ApplicationPg5, ApplicationVerify } from "."
 import { useState } from "react"
 import { useOutletContext } from "react-router-dom"
+import { Stepper } from '../../components'
 
 function LoanRequest() {
   const [ pageNumber, setPageNumber ] = useState(1)
@@ -89,7 +90,10 @@ function LoanRequest() {
 return (
     <>
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Loan Request</h1>
-      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
+      <div className="flex flex-col bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
+
+        <Stepper pageNumber={pageNumber} />
+
         <div className='flex flex-grow flex-col min-h-full'>
           {pageNumber === 1 &&
             <ApplicationPg1 profile={profile} initialValues={initialValues} setInitialValues={setInitialValues} setPageNumber={setPageNumber} />

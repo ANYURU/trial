@@ -71,7 +71,7 @@ function WithdrawRequest() {
                             <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600" value={values?.account_type} onChange={handleChange} onBlur={handleBlur}>
                               <option value="">--Select Account--</option>
                               <option value="savings">Savings</option>
-                              <option value="shares">Shares</option>
+                              {/* <option value="shares">Shares</option> */}
                               <option value="fixed">Fixed</option>
                               <option value="mwana">Mwana</option>
                             </select>
@@ -92,7 +92,7 @@ function WithdrawRequest() {
                       {touched?.particulars && errors?.particulars && <div className='error text-red-600 text-xs'>{errors?.particulars}</div>}
                   </div>
                 <div className="w-56">
-                  <Submit value='Request' disabled={!(dirty && isValid)}/>
+                  <Submit value='Make Withdraw' disabled={!(dirty && isValid)}/>
                 </div>
               </Form>  
             )

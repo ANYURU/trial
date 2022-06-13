@@ -28,8 +28,6 @@ function Accounts() {
     return data   
   }
 
-
-
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Accounts</h1>

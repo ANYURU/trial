@@ -4,11 +4,14 @@ import { MdKeyboardArrowDown } from 'react-icons/md'
 import { useAuth } from '../auth/AuthContext'
 import { DarkModeSwitch } from 'react-toggle-dark-mode';
 import ProfileModal from './Modals/ProfileModal'
+import logo from "../assets/images/tube-no-bg.png";
 
-function Navbar({ user }) {
+function Navbar({ user, showSidebar }) {
   const [ show, setShow ] = useState(false)
   const { darkMode, toggleDarkMode } = useAuth()
   const navigate = useNavigate()
+
+  
 
   if(show){
     window.onclick = event => {
@@ -19,7 +22,10 @@ function Navbar({ user }) {
   }
 
   return (
-    <div className={` dark:bg-dark-bg-700 fixed z-20 bg-white right-0 top-0 flex navbar ${!user?.fullname ? 'justify-between' : 'justify-end'} items-center p-2`}>
+    <div className={` dark:bg-dark-bg-700 z-20 bg-white fixed top-0 right-0 h-[65px] flex border-b-2 border-b-accent dark:border-b-dark-bg-600 navbar justify-between items-center p-2`}>
+          <div className='pl-4'>
+            <img src={logo} alt="tube" width={50} loading="lazy" />
+          </div>
           {(!user?.fullname) && <div className='bg-accent-red p-2 flex justify-center items-center text-white rounded-md cursor-pointer'
           onClick={() => {
             navigate('/application')

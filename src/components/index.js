@@ -18,5 +18,7 @@ import Pagination from "./Pagination";
 import LoansContext from "./LoansContext";
 import NothingShown from "./NothingShown";
 import LoanModal from "./Modals/LoanModal";
+import OTPBox from "./OTP/OTP";
+import Stepper from "./Stepper";
 
-export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu, MemberModal, AccSummary, Pagination, LoansContext, NothingShown, LoanModal }
+export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu, MemberModal, AccSummary, Pagination, LoansContext, NothingShown, LoanModal, OTPBox, Stepper }

@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { useOutletContext } from 'react-router-dom'
 import { getOTP } from '../../helpers/getotp'
@@ -6,6 +7,7 @@ import { toast } from 'react-toastify'
 import { supabase } from "../../helpers/supabase"
 import { useAuth } from "../../auth/AuthContext"
 import { uploadFile } from "../../helpers/uploadFile"
+import { OTPBox } from "../../components"
 
 function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
   
@@ -243,15 +245,16 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
 
   }
 
-  const [ otp, setOtp ] = useState('')
+  const [ otp, setOtp ] = useState(["", "", "", "", "", ""])
   return (
     <div className='flex flex-col justify-center items-center h-full w-full'>
         <h1 className='font-bold'>Verify your identity to confirm your submission</h1>
         <p className='text-sm'>An OTP has been sent to your phone number. Please enter a valid OTP to confirm submission.</p>
         <div className="flex flex-col justify-center items-center mt-5 p-5">
-          <input type="text" name="" placeholder='Enter OTP' className='ring-1 ring-black rounded px-2 py-1 mt-2 dark:bg-dark-bg-600 w-full'
+          {/* <input type="text" name="" placeholder='Enter OTP' className='ring-1 ring-black rounded px-2 py-1 mt-2 dark:bg-dark-bg-600 w-full'
           onChange={(event) => setOtp(event.target.value)}
-           />
+           /> */}
+           <OTPBox otp={otp} setOtp={setOtp} />
           {/* Send otp */}
           <button 
             className=' bg-primary rounded-sm border-0 px-4 py-1 mt-2 text-white w-full'

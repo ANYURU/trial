@@ -1,5 +1,5 @@
 import { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, Deposit, Profile, DepositHistory, MakeDeposit } from "../pages";
-import { Loans, LoanHistory, LoanPayment, LoanRequest, LoanVerify, LoanAdmin, MemberLoans } from "../pages";
+import { Loans, LoanHistory, LoanPayment, LoanRequest, LoanVerify, LoanAdmin, MemberLoans, LoanPaymentApplications } from "../pages";
 import { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers, DepositVerify, WithdrawVerify, Members, Applications, MemberApplication } from "../pages";
 import { Accounts, Savings, Mwana, Fixed, Shares, DepositAdmin } from "../pages";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -9,15 +9,26 @@ import Unauthorized from "../pages/Unauthorized";
 import { ApplicantApproval } from "../pages";
 
 
+
 export default function App() {
   const [ loading, setLoading ] = useState(true)
   const preloader = document.getElementById("preloader");
+
+  const html = document.querySelector("html");
+      if(localStorage.getItem("darkMode") === "true"){
+        html.classList.add("darkClass")
+      } else {
+        html.classList.remove("darkClass")
+      }
+
   if (preloader) {
     setTimeout(() => {
       preloader.style.display = "none";
       setLoading(false);
     }, 1000);
   }
+
+  
 
   return (
     !loading &&
@@ -39,7 +50,7 @@ export default function App() {
           <Route element={<PrivateRoute allowedRoles={[ "member", "admin" ]}/>}>
             <Route path="/loans" element={<Loans />} />
               <Route path='loans/history' element={<LoanHistory />} />
-              <Route path='loans/Payment' element={<LoanPayment />} />
+              <Route path='loans/Payment/:id' element={<LoanPayment />} />
               <Route path='loans/request' element={<LoanRequest />} />
 
             <Route path="deposit" element={<Deposit />} />
@@ -65,7 +76,8 @@ export default function App() {
           <Route element={<PrivateRoute allowedRoles={[ "admin" ]}/>}>
             <Route path='loans/members/:id' element={<LoanVerify />} />
             <Route path="loans/members" element={<MemberLoans />} />
-            <Route path="loans/applications" element={<LoanAdmin />} />
+            <Route path="loans/members-requests" element={<LoanAdmin />} />
+            <Route path="loans/applications" element={<LoanPaymentApplications />} />
             <Route path="withdraw/members/:id" element={<WithdrawVerify />} />
             <Route path="withdraw/members" element={<WithdrawMembers />} />
             <Route path="deposit/members/:id" element={<DepositVerify />} />
