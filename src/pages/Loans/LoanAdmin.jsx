@@ -108,10 +108,9 @@ export default function LoanAdmin() {
             <tbody>
               {shownLoans.map((loan, index) => (
                 <tr className={`cursor-pointer ${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}
-                  onClick={() => handleLoan(loan.application_id)}
+                  onClick={() =>{ handleLoan(loan.application_id); console.log(loan)}}
                 >
                     <td className='px-6 py-3'>{new Date(loan.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{loan.application_id}</td><td className='px-6 py-3'>{loan?.application_meta.applicants_name}</td><td className='px-6 py-3'>{loan?.application_meta.account_type}</td><td className='px-6 py-3'>{loan?.application_meta.amount}</td>
-
                     <td className={`px-6 py-3`}>
                       <span className={` py-1 px-2 rounded-xl text-white ${loan.reviewed ? loan.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
                       {loan.reviewed ?

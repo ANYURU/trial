@@ -39,6 +39,7 @@ export default function ApplicationPg4({ initialValues, setInitialValues, setPag
                                     onChange={event => {
                                         setFieldValue(event.target.name, event.target.files[0])
                                     }}
+                                    // value={initialValues.guarantors[index].financial_statement}
                                 />
                             </div>
                         </div>

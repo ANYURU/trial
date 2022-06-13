@@ -112,6 +112,12 @@ function MemberApplication() {
               }
              
             }
+
+
+            // supabase.
+            //   from('applications')
+            //   .on('INSERT', payload => console.log('Application received', payload))
+            //   .subscribe()
             
             
           } catch ( error ) {
