@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { MdOutlineSearch } from "react-icons/md";
 import { Pagination } from "../../components";
 import { FaEllipsisV } from "react-icons/fa";
+import { AiFillCheckSquare } from "react-icons/ai";
+import { MdInfo } from "react-icons/md";
 
 export default function LoanPaymentApplications() {
   useEffect(() => {
@@ -16,18 +18,17 @@ export default function LoanPaymentApplications() {
 
   const getApplications = async () => {
     const { error, data } = await supabase
-      // .from("applications")
-      .from("application")
+      .from("applications")
       .select()
-      // .eq("_type", "payment")
+      .eq("_type", "payment")
       .order("created_at", { ascending: false });
     setLoans(data);
   };
 
   const navigate = useNavigate();
 
-  const handleDeposit = (depositID) => {
-    navigate(`/loans/members/${depositID}`);
+  const handleDeposit = (id) => {
+    navigate(`/loans/verify-payment/${id}`);
   };
 
   const [status, setStatus] = useState("");
@@ -42,26 +43,27 @@ export default function LoanPaymentApplications() {
   const indexOfLastPage = currentPage * withdrawPerPage;
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage;
 
-  let shownLoans = loans || loans.slice(indexOfFirstPage, indexOfLastPage);
+  let shownLoans = !loans || loans.slice(indexOfFirstPage, indexOfLastPage);
 
   // const filteredLoans = loans.filter(member => member.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
 
-  console.log(loans)
-
-  shownLoans = !loans || shownLoans
-    .filter(
-      (deposit) =>
-        !account || deposit?.application_meta.account_type === account
-    )
-    .filter(
-      (loan) =>
-        !status ||
-        (status === "pending"
-          ? !loan.reviewed
-          : status === "approved"
-          ? loan.application_meta.review_status === "approved"
-          : loan.reviewed && loan.application_meta.review_status !== "approved")
-    );
+  shownLoans =
+    !loans ||
+    shownLoans
+      .filter(
+        (deposit) =>
+          !account || deposit?.application_meta.account_type === account
+      )
+      .filter(
+        (loan) =>
+          !status ||
+          (status === "pending"
+            ? !loan.reviewed
+            : status === "approved"
+            ? loan.application_meta.review_status === "approved"
+            : loan.reviewed &&
+              loan.application_meta.review_status !== "approved")
+      );
 
   //context
   const [show, setShow] = useState(false);
@@ -73,8 +75,10 @@ export default function LoanPaymentApplications() {
     };
   }
 
+  const [activeIndex, setActiveIndex] = useState(false);
+
   return (
-    <div className="h-full">
+    <div className="h-full mx-1">
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Loan Payment Applications
       </h1>
@@ -142,7 +146,7 @@ export default function LoanPaymentApplications() {
                     <th className="px-6 py-4">Transaction ID</th>
                     <th className="px-6 py-4">Name</th>
                     <th className="px-6 py-4">Account</th>
-                    <th className="px-6 py-4">Amount</th>
+                    <th className="px-6 py-4">Amount Paid</th>
                     <th className="px-6 py-4">Status</th>
                     <th className="px-6 py-4">Action</th>
                   </tr>
@@ -154,7 +158,6 @@ export default function LoanPaymentApplications() {
                         index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
                       } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
                       key={index}
-                      onClick={() => handleDeposit(deposit.application_id)}
                     >
                       <td className="px-6 py-3">
                         {
@@ -199,14 +202,36 @@ export default function LoanPaymentApplications() {
                           <button
                             className="block p-2 rounded-md dialog"
                             onClick={(event) => {
-                              // setActiveIndex(index)
+                              setActiveIndex(index);
                               setShow(!show);
                               event.stopPropagation();
                             }}
                           >
                             <FaEllipsisV />
                           </button>
-                          {/* <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} /> */}
+                          <ul
+                            className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
+                              index === activeIndex && show ? "" : "hidden"
+                            }`}
+                          >
+                            <li
+                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                              onClick={() => {
+                                // setLoanModal(true)
+                                handleDeposit(deposit.application_id);
+                              }}
+                            >
+                              <AiFillCheckSquare /> Verify
+                            </li>
+                            <li
+                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                              onClick={() => {
+                                // setLoanModal(true)
+                              }}
+                            >
+                              <MdInfo /> Details
+                            </li>
+                          </ul>
                         </div>
                       </td>
                     </tr>
