@@ -73,15 +73,11 @@ function MobileNav({ user }) {
             
           </div>
 
-          {/* {showMenu && */}
-            {/* <div className='{bg-black bg-opacity-40 top-10 right-0 bottom-0 w-screen h-screen z-10 fixed'> */}
               <div className={` w-screen h-screen z-20 fixed top-[60px] right-0 bottom-0 flex justify-start items-center overflow-y-hidden ease-in-out duration-300 opacity-100
                ${showMenu ? "left-0 " : "-left-full"}`}>
                   <MobileMenu setShowMenu={setShowMenu} user={ user }/>
               </div>
               {showMenu && <div className="w-screen h-screen bg-black opacity-20 fixed top-[60px] left-0 z-10"></div>}
-            {/* </div> */}
-          {/* } */}
       </div>
   )
 }

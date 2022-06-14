@@ -4,13 +4,19 @@ import { useEffect, useState } from "react"
 import { supabase } from "../../helpers/supabase"
 import { FaEllipsisV } from 'react-icons/fa'
 import { LoansContext } from "../../components"
-import { LoanModal } from "../../components"
+import { LoanModal, Spinner } from "../../components"
+import { useAuth } from "../../auth/AuthContext"
 
-export default function Loan() {
+export default function MemberLoans() {
   useEffect(() => {
     document.title = 'Loans - Bweyogere tuberebumu'
     getApplications()
   }, [])
+
+  const { user: { id }} = useAuth()
+
+
+  const [ searchText, setSearchText ] = useState('')
 
   const [ loans, setLoans] = useState([])
   const [ loanModal, setLoanModal ] = useState(false)
@@ -18,10 +24,10 @@ export default function Loan() {
   const [ date, setDate ] = useState(null)
 
   const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("applications")
+    const { data } = await supabase
+    .from("loans")
     .select()
-    .eq("_type", "loan")
+    .eq("member_id", id)
     setLoans(data)
   }
 
@@ -31,8 +37,9 @@ export default function Loan() {
   const indexOfLastPage = currentPage * loansPerPage
   const indexOfFirstPage = indexOfLastPage - loansPerPage
 
-  const loan = loanHistory.slice(indexOfFirstPage, indexOfLastPage)
+  let shownloans = loans.slice(indexOfFirstPage, indexOfLastPage)
 
+  shownloans = shownloans.filter(loan => !status || loan.loan_status === status)
 
   const [ activeIndex, setActiveIndex ] = useState(null)
   const [ show, setShow ] = useState(false)
@@ -48,13 +55,12 @@ export default function Loan() {
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Loans</h1>
 
-
       <div className='flex my-1 justify-between gap-5'>
           <div className='flex flex-col w-56'>
             <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
               onChange={(event) => setStatus(event.target.value)}
             >
-                <option value="">Select Status</option>
+                <option value="">Status</option>
                 <option value="paid">Paid</option>
                 <option value="pending">Pending</option>
                 <option value="due">Due</option>
@@ -66,6 +72,9 @@ export default function Loan() {
         </div>
 
       <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
+        {loans.length > 0
+        ?
+        <>
         <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
@@ -74,17 +83,17 @@ export default function Loan() {
               </tr>
             </thead>
             <tbody>
-              {loan.map((loan, index) => (
+              {shownloans.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                  {loanModal && activeIndex === index && <LoanModal setLoanModal={setLoanModal} loan={loan} id={loan.ID} />}
-                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest_rate}</td>
+                  {loanModal && activeIndex === index && <LoanModal setLoanModal={setLoanModal} loan={loan} />}
+                  <td className='px-6 py-3'>{loan.created_at.substring(0, 10)}</td><td className='px-6 py-3'>{loan.outstanding_balance + 0.05 * loan.outstanding_balance}</td><td className='px-6 py-3'>{loan.total_repayment_amount}</td><td className='px-6 py-3'>{loan.outstanding_balance}</td><td className='px-6 py-3'>5</td>
                   <td className={`px-6 py-3`}>
-                    <span className={` py-1 px-2 rounded-xl text-white ${loan.status === "pending" ? "bg-yellow-400" : loan.status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
-                    {loan.status}
+                    <span className={` py-1 px-2 rounded-xl text-white ${loan.loan_status === "pending" ? "bg-yellow-400" : loan.loan_status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
+                    {loan.loan_status}
                     </span>
                   </td>
 
-                  <td className="px-6 py-3">
+                  <td className="p-2">
                     <div className="relative">
                         <button className="block p-2 rounded-md dialog"
                           onClick={(event) => {
@@ -95,10 +104,10 @@ export default function Loan() {
                         >
                             <FaEllipsisV />
                         </button>
-                        <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} />
+                        <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.id} setLoanModal={setLoanModal} />
                     </div>
                   </td>
-
+                  
                 </tr>
               ))}
             </tbody>
@@ -110,11 +119,15 @@ export default function Loan() {
             setCurrentPage={setCurrentPage}
             indexOfFirstPage={indexOfFirstPage}
             indexOfLastPage={indexOfLastPage}
-            data={loanHistory}
-            loansPerPage={loansPerPage}
-            setLoansPerPage={setLoansPerPage}
+            data={loans}
+            DepositsPerPage={loansPerPage}
+            setDepositsPerPage={setLoansPerPage}
           />
         </div>
+        </>
+        :
+          <Spinner />
+        }
       </div>
     </div>
   )

@@ -6,7 +6,7 @@ import { Formik, Form } from 'formik'
 import { supabase } from "../helpers/supabase"
 import { toast, ToastContainer } from 'react-toastify'
 import EditModal from "../components/EditModal"
-import { Loader } from "../components"
+import { Spinner } from "../components"
 
 function Profile() {
 
@@ -17,10 +17,6 @@ function Profile() {
   const [ popUp, setPopUp ] = useState(false)
   const [ editPop, setEditPop ] = useState(false)
   const [ profile ] = useOutletContext()
-  const initialValues = {
-    ...profile,
-    password:''
-  }
   const { id } = supabase.auth.user()
 
   const handleTermination = (event, values) => {
@@ -69,7 +65,7 @@ function Profile() {
     <div className='h-full'>
       <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase text dark:text-white">Profile</h1>
-      <div className="bg-white dark:bg-dark-bg-700 dark:text-secondary-text m-2 p-6 min-h-full">
+      <div className="bg-white overflow-x-hidden dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
       { profile?.fullname ? 
       <>
         <h1 className='font-semibold mb-3'>Profile Details</h1>
@@ -99,14 +95,13 @@ function Profile() {
           </div>
           <div className='grid grid-cols-5 gap-2 mb-2'>
             <p className=' col-span-2'>Member Status</p>
-            <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status ?? 'pending'}</p>
-          </div>
-          {/* <div className='flex justify-between lg:w-8/12 sm:w-10/12 md:w-8/12'>
-            <p className='w-6/12'>Member Status</p>
-            <div className='flex-grow flex'>
-              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white px-3 py-1 rounded-md`}>{profile?.member_status ?? 'pending'}</p>
+            <div className=" col-span-3 flex justify-start">
+              <p className={`${profile?.member_status === 'active' ? 'bg-green-600' : 'bg-accent-red'} font-bold text-white rounded-sm flex px-3`}>
+                {profile?.member_status ?? 'pending'}
+              </p>
             </div>
-          </div> */}
+          </div>
+
           <div className='grid grid-cols-5 gap-2 mb-2'>
             <p className=' col-span-2'>Marital Status</p>
             <p className='font-bold  col-span-3'>{profile?.marital_status}</p>
@@ -161,7 +156,7 @@ function Profile() {
                 </div>
               </div>
               <div className='w-full flex justify-end'>
-                <input type="submit" className='text-white bg-accent-red px-4 py-1 rounded-md uppercase cursor-pointer'
+                <input type="submit" className='text-white bg-accent-red px-4 py-1 my-2 rounded-md uppercase cursor-pointer'
                   value="Terminate"
                 />
                 {popUp &&
@@ -186,7 +181,7 @@ function Profile() {
         </>
         :
           <div className="display flex justify-center">
-            <Loader />
+            <Spinner />
           </div>
         }
       </div> 

@@ -4,16 +4,18 @@ import { useMediaQuery } from "../hooks";
 import { useAuth } from "../auth/AuthContext";
 import { useEffect, useState } from "react";
 import { getProfile } from "../helpers/getProfile";
-import { Loader } from "../components";
+import { Spinner } from "../components";
 
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
+
+  const [showSidebar, setShowSidebar] = useState(true);
+
   const { user, darkMode } = useAuth();
   const [profile, setProfile] = useState({});
   const [roles, setRoles] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const [showSidebar, setShowSidebar] = useState(true);
 
   useEffect(() => {
     // Getting information that is required in all components.
@@ -51,7 +53,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                     roles.find((role) => allowedRoles.includes(role)) ? (
                       <div className="flex-grow mx-5 overflow-y-auto h-full">
                         {loading ? (
-                          <Loader />
+                          <Spinner />
                         ) : (
                           <Outlet context={[profile, setProfile]} />
                         )}
@@ -68,7 +70,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                   ) : (
                     <div className="flex-grow mx-5 mt-5 overflow-y-auto">
                       {loading ? (
-                        <Loader />
+                        <Spinner />
                       ) : (
                         <Outlet context={[profile, setProfile]} />
                       )}
@@ -77,7 +79,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                 ) : (
                   <div className="flex-grow mx-5 mt-5 overflow-y-auto">
                     {loading ? (
-                      <Loader />
+                      <Spinner />
                     ) : (
                       <Outlet context={[profile, setProfile]} />
                     )}

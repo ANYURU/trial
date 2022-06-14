@@ -4,7 +4,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md'
 import { useAuth } from '../auth/AuthContext'
 import { DarkModeSwitch } from 'react-toggle-dark-mode';
 import ProfileModal from './Modals/ProfileModal'
-import logo from "../assets/images/tube-no-bg.png";
+import logo from "../assets/images/tube.svg";
 
 function Navbar({ user, showSidebar }) {
   const [ show, setShow ] = useState(false)

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "../../helpers/supabase"
 import { FaEllipsisV } from 'react-icons/fa'
 import { LoansContext } from "../../components"
-import { LoanModal } from "../../components"
+import { LoanModal, Spinner } from "../../components"
 
 export default function MemberLoans() {
   useEffect(() => {
@@ -21,9 +21,8 @@ export default function MemberLoans() {
 
   const getApplications = async () => {
     const { error, data } = await supabase
-    .from("applications")
+    .from("loans")
     .select()
-    .eq("_type", "loan")
     setLoans(data)
   }
 
@@ -33,7 +32,7 @@ export default function MemberLoans() {
   const indexOfLastPage = currentPage * loansPerPage
   const indexOfFirstPage = indexOfLastPage - loansPerPage
 
-  const loan = loanHistory.slice(indexOfFirstPage, indexOfLastPage)
+  const shownloans = loans.slice(indexOfFirstPage, indexOfLastPage)
 
   const [ activeIndex, setActiveIndex ] = useState(null)
   const [ show, setShow ] = useState(false)
@@ -73,6 +72,9 @@ export default function MemberLoans() {
         </div>
 
       <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
+        {loans.length > 0
+        ?
+        <>
         <div className="w-full overflow-x-auto sm:rounded-lg">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
@@ -81,13 +83,13 @@ export default function MemberLoans() {
               </tr>
             </thead>
             <tbody>
-              {loan.map((loan, index) => (
+              {shownloans.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
                   {loanModal && activeIndex === index && <LoanModal setLoanModal={setLoanModal} loan={loan} />}
-                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.ID}</td><td className='px-6 py-3'>{loan.applicants_name}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest_rate}</td>
+                  <td className='px-6 py-3'>{loan.created_at.substring(0, 10)}</td><td className='px-6 py-3'>{loan.id}</td><td className='px-6 py-3'>{loan.loan_meta.applicants_name}</td><td className='px-6 py-3'>{loan.outstanding_balance + 0.05 * loan.outstanding_balance}</td><td className='px-6 py-3'>{loan.total_repayment_amount}</td><td className='px-6 py-3'>{loan.outstanding_balance}</td><td className='px-6 py-3'>5</td>
                   <td className={`px-6 py-3`}>
-                    <span className={` py-1 px-2 rounded-xl text-white ${loan.status === "pending" ? "bg-yellow-400" : loan.status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
-                    {loan.status}
+                    <span className={` py-1 px-2 rounded-xl text-white ${loan.loan_status === "pending" ? "bg-yellow-400" : loan.loan_status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
+                    {loan.loan_status}
                     </span>
                   </td>
 
@@ -102,7 +104,7 @@ export default function MemberLoans() {
                         >
                             <FaEllipsisV />
                         </button>
-                        <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} />
+                        <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.id} setLoanModal={setLoanModal} />
                     </div>
                   </td>
                   
@@ -122,6 +124,10 @@ export default function MemberLoans() {
             setLoansPerPage={setLoansPerPage}
           />
         </div>
+        </>
+        :
+          <Spinner />
+        }
       </div>
     </div>
   )

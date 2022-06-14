@@ -8,8 +8,6 @@ export default function MemberModal({ passed, setMemberModal, member }) {
 
     const { darkMode } = useAuth()
 
-    console.log(member)
-
   const navigate = useNavigate()
   return ReactDOM.createPortal(
     <div className={`bg-black bg-opacity-40 z-20 w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center ${darkMode ? "dark" : ""} `}>

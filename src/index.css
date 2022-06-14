@@ -64,12 +64,12 @@ body {
 
 
 .sidebar{
-  width: 260px;
+  /* width: 260px; */
   box-shadow: 1px 0 2px -1px rgba(0, 0, 0, 0.1);
 }
 
 .minibar{
-  width: 80px;
+  /* width: 80px; */
   box-shadow: 1px 0 2px -1px rgba(0, 0, 0, 0.1);
 }
 
