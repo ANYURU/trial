@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { menuData } from "../helpers/menuData";
 import logo from "../assets/images/tube-no-bg.png";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { IconContext } from "react-icons/lib";
 
 function MobileMenu({ user, setShowMenu }) {
@@ -27,7 +27,7 @@ function MobileMenu({ user, setShowMenu }) {
         <img src={logo} alt="tube" width={110} />
       </div>
       {menuData.admin.map((item, index) => (
-        <>
+        <Fragment key={index}>
           <NavLink
             key={index}
             to={`/${item.link}`}
@@ -83,7 +83,7 @@ function MobileMenu({ user, setShowMenu }) {
                 ))}
               </div>
             )}
-        </>
+        </Fragment>
       ))}
     </div>
   );

@@ -7,6 +7,7 @@ import PrivateRoute from "./PrivateRoute";
 import { useState } from "react";
 import Unauthorized from "../pages/Unauthorized";
 import { ApplicantApproval } from "../pages";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 
 
@@ -33,6 +34,7 @@ export default function App() {
   return (
     !loading &&
     <Router>
+      <ErrorBoundary >
       <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Navigate to="/" replace />} />
@@ -48,7 +50,7 @@ export default function App() {
 
           {/* Accessed by only administrators. */}
           <Route element={<PrivateRoute allowedRoles={[ "admin" ]}/>}>
-            <Route path='loans/members/:id' element={<LoanVerify />} />
+            <Route path='loans/members-requests/:id' element={<LoanVerify />} />
             <Route path="loans/members" element={<MemberLoans />} />
             <Route path="loans/members-requests" element={<LoanAdmin />} />
             <Route path="loans/applications" element={<LoanPaymentApplications />} />
@@ -91,6 +93,7 @@ export default function App() {
           </Route>
 
       </Routes>
+      </ErrorBoundary>
     </Router>
   )
 }

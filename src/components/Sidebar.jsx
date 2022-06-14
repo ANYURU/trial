@@ -64,15 +64,20 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
                     className: `font-bold text-lg dark:text-secondary-text`,
                 }}
                 >
-                <i>
                     {index !== 0 &&
                     index < menuData[`${role}`].length - 1 &&
-                    (show && index === selectedIndex ? (
-                        <MdKeyboardArrowUp />
-                    ) : (
+                    // (show && index === selectedIndex && 
+                    //   ? (
+                    //     <MdKeyboardArrowUp />
+                    // ) : (
+                    //     <MdKeyboardArrowDown />
+                    // )
+                      
+                      <i className={`${index === selectedIndex ? 'rotate-180' : ''} transition ease-in-out`}>
                         <MdKeyboardArrowDown />
-                    ))}
-                </i>
+                      </i>
+                    // )
+                    }
                 </IconContext.Provider>
             }
           </NavLink>

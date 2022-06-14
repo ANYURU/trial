@@ -32,7 +32,7 @@ export default function MemberLoans() {
   const indexOfLastPage = currentPage * loansPerPage
   const indexOfFirstPage = indexOfLastPage - loansPerPage
 
-  const shownloans = loans.slice(indexOfFirstPage, indexOfLastPage)
+  const shownloans = !loans || loans.slice(indexOfFirstPage, indexOfLastPage)
 
   const [ activeIndex, setActiveIndex ] = useState(null)
   const [ show, setShow ] = useState(false)
@@ -72,7 +72,7 @@ export default function MemberLoans() {
         </div>
 
       <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
-        {loans.length > 0
+        {loans !== null && loans.length > 0
         ?
         <>
         <div className="w-full overflow-x-auto sm:rounded-lg">
