@@ -63,8 +63,6 @@ export default function LoanPaymentVerify() {
     } catch (error) {
       toast.error(`${error?.message}`, { position:"top-center"})
       console.log(error)
-     
-
     }
 
   }

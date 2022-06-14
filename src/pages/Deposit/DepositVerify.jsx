@@ -11,11 +11,30 @@ export default function DepositVerify() {
   const { id } = useParams()
   const [ profile ] = useOutletContext()
 
-  useEffect(() => {
-    getApplication()
-  }, [])
   const [ deposit, setDeposit ] = useState(null)
   const [ imageURL, setImageURL ] = useState('')
+
+  useEffect(() => {
+    if( !deposit ) {
+      getApplication()
+      .then( async ( data ) => {
+        if( data ) {
+          setDeposit( data )
+          // Downloading the image.
+          if( !imageURL ) {
+            const { data: file, error } = await supabase.storage  
+              .from("deposits")
+              .download(await data.application_meta.files[0].file_url.substring(9))
+
+            if( error ) throw error
+            const url = URL.createObjectURL(file)
+            setImageURL(url)
+          }
+        }
+      })
+      .catch(error => console.log(error))     
+    }
+  }, [])
 
   const getApplication = async () => {
     const { error, data } = await supabase
@@ -26,17 +45,6 @@ export default function DepositVerify() {
     .single()
     
     setDeposit(data)
-  }
-
-  if (deposit){
-    console.log(deposit.application_meta.files[0].file_url.substring(9))
-    downloadFile(deposit.application_meta.files[0].file_url.substring(9), "deposits")
-    .then((data) => {
-      // console.log(data.avatar_url)
-      setImageURL(data.avatar_url)
-      return data
-    })
-    .catch(error => error)
   }
 
   const approveDepositTransaction = async () => {
@@ -54,10 +62,7 @@ export default function DepositVerify() {
     } catch (error) {
       toast.error(`${error?.message}`, { position:"top-center"})
       console.log(error)
-     
-
     }
-
   }
 
 
@@ -67,8 +72,8 @@ export default function DepositVerify() {
       if( error ) {
         throw error
       } else {
-        toast.success(`Transaction has been rejected.`, { position:"top-center" })
         // handle the alerts and navigation
+        toast.success(`Transaction has been rejected.`, { position:"top-center" })
       }
     } catch(error) {
       console.log(error)
