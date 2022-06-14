@@ -88,7 +88,7 @@ export default function LoanPaymentVerify() {
   return (
     <div className='h-full'>
       <ToastContainer />
-      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Verify loanPaymentApplication</h1>
+      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'> Verify loan Payment </h1>
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
       {loanPaymentApplication  ? <div className='flex flex-grow flex-col min-h-full'>
            <div className='mb-3'>
