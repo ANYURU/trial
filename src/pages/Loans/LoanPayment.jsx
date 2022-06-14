@@ -29,7 +29,8 @@ function LoanPayment() {
           const { account_type, amount, phone_number, particulars, evidence } =  values
           
           try {
-            const { Key: url} = await uploadFile(evidence, 'loans')  
+            const { Key: url} = await uploadFile(evidence, 'loans') 
+            console.log(url) 
             const {error, data } = await supabase
               .from('applications')
               .insert([
