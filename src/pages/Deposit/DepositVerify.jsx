@@ -44,7 +44,7 @@ export default function DepositVerify() {
     .eq("application_id", id)
     .single()
     
-    setDeposit(data)
+    return data
   }
 
   const approveDepositTransaction = async () => {
