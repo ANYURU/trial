@@ -64,8 +64,6 @@ export default function Loan() {
   return (
     <div className='h-full'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>My Loans</h1>
-
-
       <div className='flex my-1 justify-between gap-5'>
           <div className='flex flex-col w-56'>
             <select name="status" id="" className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
@@ -139,21 +137,21 @@ export default function Loan() {
               }
             </div>
           }
+          {loans?.length > 0 && (
+              <div className="flex justify-between px-6 my-5">
+                <Pagination
+                  pages={Math.ceil(loanHistory.length/loansPerPage)}
+                  setCurrentPage={setCurrentPage}
+                  indexOfFirstPage={indexOfFirstPage}
+                  indexOfLastPage={indexOfLastPage}
+                  data={loanHistory}
+                  loansPerPage={loansPerPage}
+                  setLoansPerPage={setLoansPerPage}
+                />
+              </div>
+            )
+          }
         </div>
-        {loans?.length > 0 && (
-            <div className="flex justify-between px-6 my-5">
-              <Pagination
-                pages={Math.ceil(loanHistory.length/loansPerPage)}
-                setCurrentPage={setCurrentPage}
-                indexOfFirstPage={indexOfFirstPage}
-                indexOfLastPage={indexOfLastPage}
-                data={loanHistory}
-                loansPerPage={loansPerPage}
-                setLoansPerPage={setLoansPerPage}
-              />
-            </div>
-          )
-        }
       </div>
     </div>
   )
