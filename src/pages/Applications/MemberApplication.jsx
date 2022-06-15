@@ -5,11 +5,14 @@ import { Formik, Form }  from 'formik'
 import { supabase } from '../../helpers/supabase'
 import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
-import { useOutletContext, useNavigate } from "react-router-dom"
+import { useOutletContext, useNavigate, useLocation } from "react-router-dom"
+import { createUser } from "../../helpers/createuser"
 
 function MemberApplication() {
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ profile, setProfile ] = useOutletContext()
+  const location = useLocation()
+
   const initialValues = {
     fullname:'',
     dob:'',
@@ -69,49 +72,61 @@ function MemberApplication() {
       <Formik 
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
+
           console.log(values)
           const { fullname: applicants_name, ...rest } = values
           try {
-            const { data, error } = await supabase
-              .from('applications')
-              .insert(
-                [
-                  {
-                    _type: "membership",
-                    created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                    updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                    reviewed: false,
-                    application_meta: {
-                      applicants_id,
-                      applicants_name,
-                      ...rest
-                    }
-                  }
-                ]
-              )
-              .single()
 
-            if (error) { 
-              throw error 
-            } else {
-              resetForm({ values: initialValues })
-              toast.success(`Membership submitted for review`, {position:'top-center'})
+            if(location.state.from === "/members") {
+              const { fullname } = profile
+              createUser("256434111119", "namikaLeticia", values, fullname)
+                .then( response => response.json())
+                .then( data => console.log( data ))
+                .catch( error => console.log( error ))
               
-              const { data, error } = await supabase
-                .from('_member_profiles')
-                .select()
-                .eq('id', applicants_id)
-                .single();
-
-              if( error ) {
-                throw error
-              } else {
-                setProfile(data)
-                navigate('/dashboard')
-
-              }
-             
             }
+
+
+            // const { data, error } = await supabase
+            //   .from('applications')
+            //   .insert(
+            //     [
+            //       {
+            //         _type: "membership",
+            //         created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+            //         updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+            //         reviewed: false,
+            //         application_meta: {
+            //           applicants_id,
+            //           applicants_name,
+            //           ...rest
+            //         }
+            //       }
+            //     ]
+            //   )
+            //   .single()
+
+            // if (error) { 
+            //   throw error 
+            // } else {
+            //   resetForm({ values: initialValues })
+            //   toast.success(`Membership submitted for review`, {position:'top-center'})
+              
+            //   const { data, error } = await supabase
+            //     .from('_member_profiles')
+            //     .select()
+            //     .eq('id', applicants_id)
+            //     .single();
+
+            //   if( error ) {
+            //     throw error
+            //   } else {
+            //     setProfile(data)
+            //     navigate('/dashboard')
+
+            //   }
+             
+            // }
 
 
             // supabase.

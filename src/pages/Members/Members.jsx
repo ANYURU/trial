@@ -8,6 +8,7 @@ import { ConfirmModal } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../../helpers/supabase"
 import { Loader, NothingShown } from "../../components"
+import { useLocation } from "react-router-dom"
 
 export default function Members() {
   useEffect(() => {
@@ -17,6 +18,7 @@ export default function Members() {
 
   const [ members, setMembers ] = useState([])
   const navigate = useNavigate()
+  const location = useLocation()
 
   const getMembers = async () => {
     const { error, data } = await supabase
@@ -61,7 +63,7 @@ export default function Members() {
           <input type="text" className="w-8/12 rounded-md px-2 py-2 sm:py-1 dark:bg-dark-bg-600" placeholder="Search"onChange={(event) => setSearchText(event.target.value)}/>
           <button className="w-3/12 bg-primary py-2 text-white rounded-md flex justify-center items-center"
             onClick={() => {
-              navigate('/application')
+              navigate('/application', { state: { from: location.pathname }} )
             }}
           ><MdAdd /> New Member </button>
         </div>
