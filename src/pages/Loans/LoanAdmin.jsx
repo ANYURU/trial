@@ -6,6 +6,8 @@ import { MdOutlineSearch } from "react-icons/md";
 import { Pagination } from "../../components";
 import { filterByStatus } from "../../helpers/utilites";
 import { FaEllipsisV } from "react-icons/fa";
+import { AiFillCheckSquare } from "react-icons/ai";
+import { MdInfo } from "react-icons/md";
 
 export default function LoanAdmin() {
   useEffect(() => {
@@ -81,6 +83,7 @@ export default function LoanAdmin() {
 
   //context
   const [show, setShow] = useState(false);
+  const [ activeIndex, setActiveIndex] = useState(false)
   if (show === true) {
     window.onclick = function (event) {
       if (!event.target.matches(".dialog")) {
@@ -89,13 +92,11 @@ export default function LoanAdmin() {
     };
   }
 
-  console.log(shownLoans)
-
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
       <div className="flex flex-col justify-between pb-3 h-[150px]">
         <h1 className="mb-2 font-bold uppercase dark:text-white">
-          Loan Applicatio
+          Loan Applications
         </h1>
 
         
@@ -264,14 +265,36 @@ export default function LoanAdmin() {
                           <button
                             className="block p-2 rounded-md dialog"
                             onClick={(event) => {
-                              // setActiveIndex(index)
+                              setActiveIndex(index)
                               setShow(!show);
                               event.stopPropagation();
                             }}
                           >
                             <FaEllipsisV />
                           </button>
-                          {/* <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} /> */}
+                          <ul
+                            className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
+                              index === activeIndex && show ? "" : "hidden"
+                            }`}
+                          >
+                            <li
+                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                              onClick={() => {
+                                // setLoanModal(true)
+                                handleDeposit(deposit.application_id);
+                              }}
+                            >
+                              <AiFillCheckSquare /> Verify
+                            </li>
+                            <li
+                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                              onClick={() => {
+                                // setLoanModal(true)
+                              }}
+                            >
+                              <MdInfo /> Details
+                            </li>
+                          </ul>
                         </div>
                       </td>
                     </tr>

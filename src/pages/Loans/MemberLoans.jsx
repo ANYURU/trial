@@ -48,6 +48,20 @@ export default function MemberLoans() {
       : null
     : null;
 
+  shownloans = shownloans
+    ? shownloans.filter(
+        (loan) =>
+          !searchText || loan?.loan_meta.applicants_name.toLowerCase()
+          .indexOf(searchText.toLowerCase()) > -1
+      ).length > 0
+      ? shownloans.filter(
+          (loan) =>
+            !searchText || loan?.loan_meta.applicants_name.toLowerCase()
+            .indexOf(searchText.toLowerCase()) > -1
+        )
+      : null
+    : null;
+
   const [activeIndex, setActiveIndex] = useState(null);
   const [show, setShow] = useState(false);
   if (show === true) {

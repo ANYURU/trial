@@ -84,11 +84,13 @@ export default function LoanPaymentApplications() {
   shownLoans = shownLoans
     ? shownLoans.filter(
         (loan) =>
-          !searchText || loan?.application_meta.applicants_name === searchText
+          !searchText || loan?.application_meta.applicants_name.toLowerCase()
+          .indexOf(searchText.toLowerCase()) > -1
       ).length > 0
       ? shownLoans.filter(
           (loan) =>
-            !searchText || loan?.application_meta.applicants_name === searchText
+            !searchText || loan?.application_meta.applicants_name.toLowerCase()
+            .indexOf(searchText.toLowerCase()) > -1
         )
       : null
     : null;

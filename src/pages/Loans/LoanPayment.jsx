@@ -38,8 +38,6 @@ function LoanPayment() {
     setLoan(data[0])
   }
 
-  console.log(loan)
-
   return (
       <Formik
         initialValues={initialValues}
@@ -90,18 +88,17 @@ function LoanPayment() {
       >
         {({values, errors, touched, handleChange, handleBlur, isValid, dirty}) => {
           return (
-            <Form>
-              <div className='h-full'>
+            <Form className='mx-5 my-2 h-[calc(100vh-70px)]'>
+              <div>
                 <ToastContainer />
-                <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Loan Payment</h1>
-                <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
-                  <div className='flex flex-grow flex-col min-h-full'>
+                <h1 className='mb-3 mt-2 font-bold uppercase dark:text-white'>Loan Payment</h1>
+                <div className="flex flex-col bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
 
-                    <div className="m-2 mb-3">
+                    <div className="m-2">
                       <label>Amount To Pay: <span className="font-bold">{loan.outstanding_balance}</span></label>
                     </div>
 
-                    <div className='m-2 mb-3 flex flex-wrap gap-5 h-16'>
+                    <div className='m-2 flex flex-wrap gap-5 h-16'>
                         <div className='flex flex-col w-56 '>
                           <label htmlFor="" className=' text-sm'>Enter Amount</label>
                           <input type="text" name="amount" id="amount" placeholder='Enter Amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values.amount}/>
@@ -109,8 +106,8 @@ function LoanPayment() {
                         </div>
                     </div>
 
-                    <div className='mb-3'>
-                        <div action="" className='m-2'>
+                   
+                        <div className='mx-2 my-1'>
                           <div className='flex flex-wrap gap-5 h-20'>
                               <div className='flex flex-col w-56'>
                                 <label htmlFor="" className='text-sm'>Enter Phone Number</label>
@@ -130,16 +127,14 @@ function LoanPayment() {
                               </div>
                           </div>
                         </div>
-                    </div>
-                      <div className='mb-3'>
+                      <div className='mb-2'>
                           <h1 className='font-semibold'>Particulars</h1>
-                          <textarea name="particulars" id="particulars" cols="30" rows="10" className='outline outline-1 p-2 rounded-md w-full dark:bg-dark-bg-700' onChange={handleChange("particulars")} value={values?.particulars}
+                          <textarea name="particulars" id="particulars" cols="25" rows="10" className='outline outline-1 p-2 rounded-md w-full dark:bg-dark-bg-700' onChange={handleChange("particulars")} value={values?.particulars}
                           ></textarea>
                       </div>
                     <div className="w-56">
                       <Submit value='Request' disabled={!(isValid && dirty)}/>
                     </div>
-                  </div>
                 </div>
               </div>
             </Form>
