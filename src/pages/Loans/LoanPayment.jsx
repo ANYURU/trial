@@ -10,6 +10,7 @@ import { evidencedRequestValidationSchema as loanPaymentRequestValidationSchema}
 function LoanPayment() {
   // Will be used later
   const { id: loan_id } = useParams()
+  console.log(loan_id)
   const { user: { id: applicants_id }} = useAuth()
   const [{ fullname: applicants_name }] = useOutletContext()
 

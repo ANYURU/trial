@@ -119,7 +119,7 @@ export default function Loan() {
                                 >
                                     <FaEllipsisV />
                                 </button>
-                                <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.ID} setLoanModal={setLoanModal} />
+                                <LoansContext activeIndex={activeIndex} show={show} index={index} setShow={setShow} member={activeIndex === index ? loan : null} id={loan.id} setLoanModal={setLoanModal} />
                             </div>
                           </td>
 

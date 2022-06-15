@@ -7,8 +7,7 @@ import { useOutletContext } from "react-router-dom"
 
 export default function LoanPaymentVerify() {
   const { id } = useParams()
-  const [ profile ] = useOutletContext()
-  
+  const [ profile ] = useOutletContext() 
   const [ loanPaymentApplication, setLoanPaymentApplication ] = useState(null)
   const [ imageURL, setImageURL ] = useState('')
 
@@ -44,15 +43,17 @@ export default function LoanPaymentVerify() {
     .eq("application_id", id)
     .single() 
 
+    console.log(data)
+    
     if( error ) throw error
     return data
   }
 
   const approveLoanPaymentApplicationTransaction = async () => {
-    const { application_meta : { applicants_id }} = loanPaymentApplication
+    const { application_meta : { loan_id }} = loanPaymentApplication
     
     try {
-      const { data, error } = await supabase.rpc( 'approve_transaction', { members_id: applicants_id, application: id })
+      const { data, error } = await supabase.rpc( 'approve_loan_payment', { loan:loan_id, application:id  })
       if ( error ) {
         throw error
       } else {
