@@ -73,11 +73,18 @@ export default function DepositAdmin() {
 
   
   return (
-    <div className='h-full'>
+    <div className='mx-5 my-2 h-[calc(100vh-70px)]'>
+
+      <div className="flex flex-col justify-between pb-3 h-[150px]">
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Member Deposits</h1>
 
       <div className=" dark:text-secondary-text rounded">
           <div className="w-full h-7 rounded flex overflow-hidden">
+          {shownDeposits.length === 0 &&
+            <>
+            <div className="animate-pulse h-7 inline-block bg-gray-300" style={{width: `100%`}}></div>
+            </>
+            }
             <div className="h-7 inline-block bg-green-400" style={{width: `${approved}%`}}></div>
             <div className="h-7 inline-block bg-yellow-400" style={{width: `${pending}%`}}></div>
             <div className="h-7 inline-block bg-red-400" style={{width: `${rejected}%`}}></div>
@@ -123,11 +130,13 @@ export default function DepositAdmin() {
             <input type="date" name="inputDate" onChange={(event) => setDate(event.target.value)} id="" placeholder='Old Password' className='rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text' />
           </div>
         </div>
+      </div>
 
-      <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
+
+      <div className="bg-white p-6 overflow-hidden  relative  h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {deposits !== null && deposits.length > 0 ? 
         <>
-        <div className="w-full overflow-x-auto sm:rounded-lg">
+        <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
@@ -181,7 +190,7 @@ export default function DepositAdmin() {
             </tbody>
           </table>
         </div>
-        <div className="flex justify-between px-6 my-5">
+        <div className="flex bg-white dark:bg-dark-bg-700 justify-between absolute left-0 right-0 bottom-0 px-5 py-1">
           <Pagination
             pages={Math.ceil(deposits.length/withdrawPerPage)}
             setCurrentPage={setCurrentPage}
