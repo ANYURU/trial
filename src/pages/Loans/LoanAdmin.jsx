@@ -1,6 +1,6 @@
 import { supabase } from "../../helpers/supabase";
 import { useEffect, useState, useParams } from "react";
-import { Spinner } from "../../components";
+import { NothingShown, Spinner } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineSearch } from "react-icons/md";
 import { Pagination } from "../../components";
@@ -44,7 +44,12 @@ export default function LoanAdmin() {
 
   let shownLoans = !loans || loans.slice(indexOfFirstPage, indexOfLastPage);
 
-  shownLoans = shownLoans.filter(loan => loan.application_meta.applicants_name.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+  shownLoans = shownLoans.filter(
+    (loan) =>
+      loan.application_meta.applicants_name
+        .toLowerCase()
+        .indexOf(searchText.toLowerCase()) > -1
+  );
 
   shownLoans =
     !loans ||
@@ -84,88 +89,123 @@ export default function LoanAdmin() {
     };
   }
 
+  console.log(shownLoans)
+
   return (
-    <div className="h-full mx-1">
-      <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
-        Loan Applications
-      </h1>
+    <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
+      <div className="flex flex-col justify-between pb-3 h-[150px]">
+        <h1 className="mb-2 font-bold uppercase dark:text-white">
+          Loan Applicatio
+        </h1>
 
-      <div className=" dark:text-secondary-text rounded">
-        <div className="w-full h-7 rounded flex overflow-hidden">
-          <div
-            className={`h-7 inline-block bg-green-400`}
-            style={{ width: `${status === "approved" ? 100 : status === "" ? approved : 0}%` }}
-          ></div>
-          <div
-            className="h-7 inline-block bg-yellow-400"
-            style={{ width: `${status === "pending" ? 100 : status === "" ? pending : 0}%` }}
-          ></div>
-          <div
-            className="h-7 inline-block bg-red-400"
-            style={{ width: `${status === "rejected" ? 100 : status === "" ? rejected : 0}%` }}
-          ></div>
+        
+
+        <div className=" dark:text-secondary-text rounded">
+          <div className="w-full h-7 rounded flex overflow-hidden">
+          {shownLoans.length === 0 &&
+            <>
+            <div className="animate-pulse h-7 inline-block bg-gray-300" style={{width: `100%`}}></div>
+            </>
+            }
+            <div
+              className={`h-7 inline-block bg-green-400`}
+              style={{
+                width: `${
+                  status === "approved" ? 100 : status === "" ? approved : 0
+                }%`,
+              }}
+            ></div>
+            <div
+              className="h-7 inline-block bg-yellow-400"
+              style={{
+                width: `${
+                  status === "pending" ? 100 : status === "" ? pending : 0
+                }%`,
+              }}
+            ></div>
+            <div
+              className="h-7 inline-block bg-red-400"
+              style={{
+                width: `${
+                  status === "rejected" ? 100 : status === "" ? rejected : 0
+                }%`,
+              }}
+            ></div>
+          </div>
+          <div className="flex justify-between px-2 items-center py-2">
+            <div className="flex items-center gap-1 text-sm">
+              <div className="w-2 h-2 bg-green-400 inline-block rounded-full"></div>{" "}
+              Approved:{" "}
+              {status === "approved" || status === ""
+                ? approvedMembers.length
+                : 0}{" "}
+              ({status === "approved" ? 100 : status === "" ? approved : 0}%)
+            </div>
+            <div className="flex items-center gap-1 text-sm">
+              <div className="w-2 h-2 bg-yellow-400 inline-block rounded-full"></div>{" "}
+              Pending:{" "}
+              {status === "pending" || status === ""
+                ? pendingMembers.length
+                : 0}{" "}
+              ({status === "pending" ? 100 : status === "" ? pending : 0}%)
+            </div>
+            <div className="flex items-center gap-1 text-sm">
+              <div className="w-2 h-2 bg-red-400 inline-block rounded-full"></div>{" "}
+              Reject:{" "}
+              {status === "rejected" || status === ""
+                ? rejectedMembers.length
+                : 0}{" "}
+              ({status === "rejected" ? 100 : status === "" ? rejected : 0}%)
+            </div>
+          </div>
         </div>
-        <div className="flex justify-between px-2 items-center py-2">
-          <div className="flex items-center gap-1 text-sm">
-            <div className="w-2 h-2 bg-green-400 inline-block rounded-full"></div>{" "}
-            Approved: {status === "approved" || status === "" ? approvedMembers.length : 0} ({status === "approved" ? 100 : status === "" ? approved : 0}%)
+
+        <div className="flex  my-1 justify-between gap-5">
+          <div className="flex justify-between searchInput">
+            <input
+              type="text"
+              className="px-2 py-2 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text"
+              placeholder="Search by name..."
+              onChange={(event) => setSearchText(event.target.value)}
+            />
+            <MdOutlineSearch className="search_icon" />
           </div>
-          <div className="flex items-center gap-1 text-sm">
-            <div className="w-2 h-2 bg-yellow-400 inline-block rounded-full"></div>{" "}
-            Pending: {status === "pending" || status === "" ? pendingMembers.length : 0} ({status === "pending" ? 100 : status === "" ? pending : 0}%)
+
+          <div className="flex flex-col w-56">
+            <select
+              name="status"
+              id=""
+              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+              onChange={(event) => {
+                setFilterName(event.target.name);
+                setStatus(event.target.value);
+              }}
+            >
+              <option value="">Status</option>
+              <option value="approved">Approved</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+            </select>
           </div>
-          <div className="flex items-center gap-1 text-sm">
-            <div className="w-2 h-2 bg-red-400 inline-block rounded-full"></div>{" "}
-            Reject: {status === "rejected" || status === "" ? rejectedMembers.length : 0} ({status === "rejected" ? 100 : status === "" ? rejected : 0}%)
+          <div className="flex flex-col w-56">
+            <input
+              type="date"
+              name="inputDate"
+              onChange={(event) => setDate(event.target.value)}
+              id=""
+              placeholder="Old Password"
+              className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
+            />
           </div>
         </div>
       </div>
 
-      <div className="my-2 flex justify-between searchInput">
-        <input
-          type="text"
-          className="px-2 py-2 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text"
-          placeholder="Search by name..."
-          onChange={(event) => setSearchText(event.target.value)}
-        />
-        <MdOutlineSearch className="search_icon" />
-      </div>
-
-      <div className="flex  my-1 justify-between gap-5">
-        <div className="flex flex-col w-56">
-          <select
-            name="status"
-            id=""
-            className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-            onChange={(event) => {
-              setFilterName(event.target.name);
-              setStatus(event.target.value);
-            }}
-          >
-            <option value="">Status</option>
-            <option value="approved">Approved</option>
-            <option value="pending">Pending</option>
-            <option value="rejected">Rejected</option>
-          </select>
-        </div>
-        <div className="flex flex-col w-56">
-          <input
-            type="date"
-            name="inputDate"
-            onChange={(event) => setDate(event.target.value)}
-            id=""
-            placeholder="Old Password"
-            className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
-          />
-        </div>
-      </div>
-
-      <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
-        {loans !== null && loans.length > 0 ? (
+      <div className="bg-white p-6 overflow-hidden  relative  h-[calc(100%-170px)] dark:bg-dark-bg-700">
+        {loans !== null && shownLoans.length > 0 ? (
           <>
-            <div className="w-full overflow-x-auto sm:rounded-lg">
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+            <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
+              <table className="w-full h-6 text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
+                <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
@@ -239,7 +279,7 @@ export default function LoanAdmin() {
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-between px-6 my-5">
+            <div className="flex bg-white dark:bg-dark-bg-700 justify-between absolute left-0 right-0 bottom-0 px-5 py-1">
               <Pagination
                 pages={Math.ceil(loans.length / withdrawPerPage)}
                 setCurrentPage={setCurrentPage}
@@ -254,11 +294,13 @@ export default function LoanAdmin() {
                     ? pendingMembers
                     : rejectedMembers
                 }
-                loansPerPage={withdrawPerPage}
-                setLoansPerPage={setWithdrawPerPage}
+                DepositsPerPage={withdrawPerPage}
+                setDepositsPerPage={setWithdrawPerPage}
               />
             </div>
           </>
+        ) : loans && loans.length > 0 ? (
+          <NothingShown />
         ) : (
           <Spinner />
         )}

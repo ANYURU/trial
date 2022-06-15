@@ -1,6 +1,6 @@
 import { supabase } from "../../helpers/supabase";
 import { useEffect, useState, useParams } from "react";
-import { Spinner } from "../../components";
+import { Spinner, NothingShown } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineSearch } from "react-icons/md";
 import { Pagination } from "../../components";
@@ -35,7 +35,6 @@ export default function LoanPaymentApplications() {
   const [account, setAccount] = useState("");
   const [searchText, setSearchText] = useState("");
   const [date, setDate] = useState(null);
-  const [filterName, setFilterName] = useState("");
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,12 +48,18 @@ export default function LoanPaymentApplications() {
 
   shownLoans =
     !loans ||
-    shownLoans
-      .filter(
-        (deposit) =>
-          !account || deposit?.application_meta.account_type === account
-      )
-      .filter(
+    shownLoans.filter(
+      (deposit) =>
+        !account || deposit?.application_meta.account_type === account
+    ).length > 0
+      ? shownLoans.filter(
+          (deposit) =>
+            !account || deposit?.application_meta.account_type === account
+        )
+      : null;
+
+  shownLoans = shownLoans
+    ? shownLoans.filter(
         (loan) =>
           !status ||
           (status === "pending"
@@ -63,7 +68,30 @@ export default function LoanPaymentApplications() {
             ? loan.application_meta.review_status === "approved"
             : loan.reviewed &&
               loan.application_meta.review_status !== "approved")
-      );
+      )
+    : null;
+
+  shownLoans = shownLoans
+    ? shownLoans.filter(
+        (loan) => !date || loan.created_at.substring(0, 10) === date
+      ).length > 0
+      ? shownLoans.filter(
+          (loan) => !date || loan.created_at.substring(0, 10) === date
+        )
+      : null
+    : null;
+
+  shownLoans = shownLoans
+    ? shownLoans.filter(
+        (loan) =>
+          !searchText || loan?.application_meta.applicants_name === searchText
+      ).length > 0
+      ? shownLoans.filter(
+          (loan) =>
+            !searchText || loan?.application_meta.applicants_name === searchText
+        )
+      : null
+    : null;
 
   //context
   const [show, setShow] = useState(false);
@@ -78,69 +106,70 @@ export default function LoanPaymentApplications() {
   const [activeIndex, setActiveIndex] = useState(false);
 
   return (
-    <div className="h-full mx-1">
-      <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
-        Loan Payment Applications
-      </h1>
-      <div className="my-2 flex justify-between searchInput">
-        <input
-          type="text"
-          className="px-2 py-2 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text"
-          placeholder="Search by name..."
-          onChange={(event) => setSearchText(event.target.value)}
-        />
-        <MdOutlineSearch className="search_icon" />
-      </div>
-
-      <div className="flex my-1 justify-between gap-5">
-        <div className="flex flex-col w-56">
-          <select
-            name="status"
-            id=""
-            className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-            onChange={(event) => {
-              setFilterName(event.target.name);
-              setStatus(event.target.value);
-            }}
-          >
-            <option value="">Status</option>
-            <option value="approved">Approved</option>
-            <option value="pending">Pending</option>
-            <option value="rejected">Rejected</option>
-          </select>
-        </div>
-        <div className="flex flex-col w-56">
-          <select
-            name="account"
-            id=""
-            className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-            onChange={(event) => setAccount(event.target.value)}
-          >
-            <option value="">Account</option>
-            <option value="savings">Savings</option>
-            <option value="shares">Shares</option>
-            <option value="mwana">Mwana</option>
-            <option value="fixed">Fixed</option>
-          </select>
-        </div>
-        <div className="flex flex-col w-56">
+    <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
+      <div className="flex flex-col justify-between pb-3 h-[150px]">
+        <h1 className="mb-2 mt-2 font-bold uppercase dark:text-white">
+          Loan Payment Applications
+        </h1>
+        <div className="my-2 flex justify-between searchInput">
           <input
-            type="date"
-            name="inputDate"
-            onChange={(event) => setDate(event.target.value)}
-            id=""
-            placeholder="Old Password"
-            className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
+            type="text"
+            className="px-2 py-2 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text"
+            placeholder="Search by name..."
+            onChange={(event) => setSearchText(event.target.value)}
           />
+          <MdOutlineSearch className="search_icon" />
+        </div>
+
+        <div className="flex my-1 justify-between gap-5">
+          <div className="flex flex-col w-56">
+            <select
+              name="status"
+              id=""
+              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+              onChange={(event) => {
+                setStatus(event.target.value);
+              }}
+            >
+              <option value="">Status</option>
+              <option value="approved">Approved</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div className="flex flex-col w-56">
+            <select
+              name="account"
+              id=""
+              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+              onChange={(event) => setAccount(event.target.value)}
+            >
+              <option value="">Account</option>
+              <option value="savings">Savings</option>
+              <option value="shares">Shares</option>
+              <option value="mwana">Mwana</option>
+              <option value="fixed">Fixed</option>
+            </select>
+          </div>
+          <div className="flex flex-col w-56">
+            <input
+              type="date"
+              name="inputDate"
+              onChange={(event) => setDate(event.target.value)}
+              id=""
+              placeholder="Old Password"
+              className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
+            />
+          </div>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-dark-bg-700 p-6 min-h-full">
-        {loans !== null && loans.length > 0 ? (
+      <div className="bg-white p-6 overflow-hidden  relative  h-[calc(100%-170px)] dark:bg-dark-bg-700">
+        {loans !== null && shownLoans !== null && shownLoans.length > 0 ? (
           <>
-            <div className="w-full overflow-x-auto sm:rounded-lg">
+            <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+                <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
@@ -239,7 +268,7 @@ export default function LoanPaymentApplications() {
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-between px-6 my-5">
+            <div className="flex bg-white dark:bg-dark-bg-700 justify-between absolute left-0 right-0 bottom-0 px-5 py-1">
               <Pagination
                 pages={Math.ceil(loans.length / withdrawPerPage)}
                 setCurrentPage={setCurrentPage}
@@ -251,6 +280,8 @@ export default function LoanPaymentApplications() {
               />
             </div>
           </>
+        ) : loans && loans.length > 0 ? (
+          <NothingShown />
         ) : (
           <Spinner />
         )}

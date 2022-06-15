@@ -80,7 +80,7 @@ export default function WithdrawMembers() {
           <div className="w-full h-7 rounded flex overflow-hidden">
             {filteredWithdraws.length === 0 &&
             <>
-              <div className="h-7 inline-block bg-gray-300" style={{width: `100%`}}></div>
+              <div className="animate-pulse h-7 inline-block bg-gray-300" style={{width: `100%`}}></div>
             </>
             }
             <div className="h-7 inline-block bg-green-400 transition duration-300" style={{width: `${approved}%`}}></div>

@@ -38,26 +38,30 @@ const PrivateRoute = ({ allowedRoles }) => {
           className={`flex flex-col min-h-screen  w-screen outline outline-green-700 overflow-y-auto bg-back dark:bg-dark-bg`}
         >
           <Navbar user={profile} showSidebar={showSidebar} />
-          <div className={`min-h-screen w-screen flex flex-col`}>
-            <div className="mt-[65px]">
-              <Sidebar
-                user={profile}
-                showSidebar={showSidebar}
-                setShowSidebar={setShowSidebar}
-              />
-            </div>
-            <div className={`${showSidebar ? "ml-[265px]" : "ml-[85px]"} flex-grow`}>
+          <div
+            className={`h-[calc(100vh-70px)] pb-3 overflow-hidden mt-[65px] w-screen flex flex-col`}
+          >
+            <Sidebar
+              user={profile}
+              showSidebar={showSidebar}
+              setShowSidebar={setShowSidebar}
+            />
+            <div
+              className={`${
+                showSidebar ? "ml-[265px]" : "ml-[85px]"
+              } flex-grow`}
+            >
               {profile &&
                 (allowedRoles !== undefined ? (
                   roles ? (
                     roles.find((role) => allowedRoles.includes(role)) ? (
-                      <div className="flex-grow mx-5 overflow-y-auto h-full">
-                        {loading ? (
+                      loading ? (
+                        <div className="flex-grow mx-5 my-2 overflow-y-auto outline h-full">
                           <Spinner />
-                        ) : (
-                          <Outlet context={[profile, setProfile]} />
-                        )}
-                      </div>
+                        </div>
+                      ) : (
+                        <Outlet context={[profile, setProfile]} />
+                      )
                     ) : (
                       <div className="flex-grow mt-5 overflow-y-auto">
                         <Navigate
