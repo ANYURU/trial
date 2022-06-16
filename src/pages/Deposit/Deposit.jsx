@@ -5,13 +5,16 @@ import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { FaEllipsisV } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
+import { AiOutlineConsoleSql } from "react-icons/ai";
+import { Helmet } from "react-helmet";
+import DepositModal from '../../components/Modals/DepositModal'
 
 export default function Deposit() {
   const [deposits, setDeposits] = useState([]);
+  const [depositModal, setDepositModal] = useState(false);
   const [account, setAccount] = useState("");
 
   useEffect(() => {
-    document.title = "Deposit - Bweyogere tuberebumu";
     getApplications();
   }, []);
 
@@ -22,17 +25,14 @@ export default function Deposit() {
   const [date, setDate] = useState(null);
 
   const getApplications = async () => {
-    const { error, data } = await supabase
+    const { data } = await supabase
       .from("transactions")
       .select()
       .eq("_type", "deposit")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .eq("created_by", profile.id);
 
-    const personData = data.filter(
-      (deposit) => deposit.created_by === profile.id
-    );
-
-    setDeposits(personData.length > 0 ? personData : null);
+    setDeposits(data.length > 0 ? data : null);
   };
 
   // pagination
@@ -52,14 +52,21 @@ export default function Deposit() {
     };
   }
 
-  const filteredDeposits = !deposits || deposits.filter(
-    (deposit) => !date || deposit.created_at.substring(0, 10) === date
-  );
-
-  console.log(deposits);
+  const filteredDeposits =
+    !deposits ||
+    deposits.filter(
+      (deposit) => !date || deposit.created_at.substring(0, 10) === date
+    ).length > 0
+      ? deposits.filter(
+          (deposit) => !date || deposit.created_at.substring(0, 10) === date
+        )
+      : null;
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
+      <Helmet>
+        <title>Deposit - Bweyogere tuberebumu</title>
+      </Helmet>
       <div className="flex flex-col justify-between pb-3 h-[110px]">
         <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
           My Deposits
@@ -112,56 +119,61 @@ export default function Deposit() {
                 </thead>
                 <tbody>
                   {filteredDeposits.map((deposit, index) => (
-                    <tr
-                      className={`${
-                        index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
-                      key={index}
-                    >
-                      <td className="px-6 py-3">
-                        {
-                          new Date(deposit.created_at)
-                            .toISOString()
-                            .split("T")[0]
-                        }
-                      </td>
-                      <td className="px-6 py-3">{deposit.transaction_id}</td>
-                      <td className="px-6 py-3">{}</td>
-                      <td className="px-6 py-3">{deposit.amount}</td>
-                      <td className="px-6 py-3">
-                        {deposit.transaction_meta.approved_by}
-                      </td>
+                    <>
+                      <tr
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
+                        } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
+                        key={index}
+                      >
+                        {depositModal && index === activeIndex && <DepositModal deposit={deposit} setDepositModal={setDepositModal} />}
+                        <td className="px-6 py-3">
+                          {
+                            new Date(deposit.created_at)
+                              .toISOString()
+                              .split("T")[0]
+                          }
+                        </td>
+                        <td className="px-6 py-3">{deposit.transaction_id}</td>
+                        <td className="px-6 py-3">{}</td>
+                        <td className="px-6 py-3">{deposit.amount}</td>
+                        <td className="px-6 py-3">
+                          {deposit.transaction_meta.approved_by}
+                        </td>
 
-                      <td className="px-6 py-2">
-                        <div className="relative">
-                          <button
-                            className="block p-2 rounded-md dialog"
-                            onClick={(event) => {
-                              setActiveIndex(index);
-                              setShow(!show);
-                              event.stopPropagation();
-                            }}
-                          >
-                            <FaEllipsisV />
-                          </button>
-
-                          <ul
-                            className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
-                              index === activeIndex && show ? "" : "hidden"
-                            }`}
-                          >
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                // setLoanModal(true)
+                        <td className="px-6 py-2">
+                          <div className="relative">
+                            <button
+                              className="block p-2 rounded-md dialog"
+                              onClick={(event) => {
+                                setActiveIndex(index);
+                                setShow(!show);
+                                event.stopPropagation();
+                                
                               }}
                             >
-                              <MdInfo /> Details
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
+                              <FaEllipsisV />
+                            </button>
+
+                            <ul
+                              className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
+                                index === activeIndex && show ? "" : "hidden"
+                              }`}
+                            >
+                              <li
+                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                                onClick={() => {
+                                  setDepositModal(true);
+                                }}
+                              >
+                                <MdInfo /> Details
+                              </li>
+                              
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    </>
                   ))}
                 </tbody>
               </table>
@@ -178,7 +190,7 @@ export default function Deposit() {
               />
             </div>
           </>
-        ) : deposits === null || filteredDeposits?.length === 0 ? (
+        ) : deposits?.length !== 0 && filteredDeposits === null ? (
           <NothingShown />
         ) : (
           <Spinner />
