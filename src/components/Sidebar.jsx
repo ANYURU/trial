@@ -24,7 +24,7 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
   const matches = useMediaQuery("(min-width: 800px)");
 
   return (
-    <div className={`h-full fixed  bg-white pt-4 ease-in-out duration-100  ${showSidebar ? "sidebar w-[260px]" : "minibar w-[80px]" } dark:bg-dark-bg-700`}>
+    <div className={`h-full fixed  bg-white pt-4 z-20 ease-in-out duration-100  ${showSidebar ? "sidebar w-[260px]" : "minibar w-[80px]" } dark:bg-dark-bg-700`}>
       {/* <div className="bg-white h-[110px] dark:bg-dark-bg-700 flex justify-center items-center mb-6">
         { showSidebar && <img src={logo} alt="tube" width={110} loading="lazy" /> }
       </div> */}
@@ -51,7 +51,7 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
             </div>
             {!showSidebar &&
             <div className="relative hidden group-hover:block">
-              <div className="absolute  text-white left-[20px] -top-2 bg-black rounded p-1 bg-opacity-90 before:block before:absolute before:-inset-1 before:rotate-45 before:w-2 before:h-2 before:top-3 before:-left-1	 before:bg-black before:bg-opacity-90 before:-z-10">
+              <div className="absolute text-white left-[20px] -top-2 bg-black z-50 rounded p-1 bg-opacity-90 before:block before:absolute before:-inset-1 before:rotate-45 before:w-2 before:h-2 before:top-3 before:-left-1	 before:bg-black before:bg-opacity-90 before:z-90">
                 <div>
                   {item.label}
                 </div>

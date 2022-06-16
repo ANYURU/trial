@@ -29,7 +29,7 @@ function Accounts() {
   };
 
   return (
-    <div className="min-h-[100vh - 65px] flex flex-col">
+    <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Accounts
       </h1>

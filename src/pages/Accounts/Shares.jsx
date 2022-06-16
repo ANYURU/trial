@@ -34,7 +34,7 @@ function Shares() {
 
 
   return (
-    <div className='h-full'>
+    <div className='flex-grow mx-5 my-2 h-[calc(100vh-70px)]'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Shares Account</h1>
       <div className="flex flex-col bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
         {
