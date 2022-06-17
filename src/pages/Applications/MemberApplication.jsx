@@ -6,15 +6,17 @@ import { supabase } from '../../helpers/supabase'
 import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom"
-import { addMember } from "../../helpers/addMember"
 import { getOTP } from "../../helpers/getotp"
 import PasswordGenerator from "../../components/Form/PasswordGenerator"
+import ApplicationVerify from "./ApplicationVerify"
 
 function MemberApplication() {
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ profile, setProfile ] = useOutletContext()
-  const location = useLocation()
   const [ password, setPassword ]= useState('')
+
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const initialValues = {
     fullname:'',
@@ -67,7 +69,6 @@ function MemberApplication() {
 
   const { user : { id: applicants_id } } = useAuth()
   const [ employed, setEmployed ] = useState(null)
-  const [ verify, setVerify ] = useState(false)
   
   return (
     <>
@@ -79,31 +80,21 @@ function MemberApplication() {
           console.log(values)
 
           try {
-            if(location.state.from === "/members") {
-
-              const { fullname: administrator } = profile
-              // Scenario: An administrator is adding a member directly to the sacco.
-              // Questions:
-              // 1. David: Do the users need to verify their numbers?
+            if ( location.state.from === "/members" ) {
               getOTP( phone_number, "VERIFICATION" )
                 .then( response => response.json() )
                 .then( data => {
                   localStorage.setItem('verification_key', data?.Details)
-                  // navigate('/verify', { state: { phone_number:`256${phone_number.slice(1)}`, password:"password", details:values, administrator:administrator }})
-                  
+                  console.log(values)
+                  setPageNumber(pageNumber + 1)
                   return 
                 })
                 .catch( error => console.log( error ))     
               
-
-              // addMember("256434111119", "namikaLeticia", values, fullname)
-              //   .then( response => response.json())
-              //   .then( data => console.log( data ))
-              //   .catch( error => console.log( error ))              
             } 
 
             else {
-              const { data, error } = await supabase
+              const { error } = await supabase
                 .from('applications')
                 .insert(
                   [
@@ -152,22 +143,26 @@ function MemberApplication() {
           }
         }}
       >
-        {({ values, errors, touched, handleChange, handleBlur }) => {
+        {({ values, errors, touched, handleChange, handleBlur, resetForm }) => {
           return (
             <Form className='h-full'>
-              <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">MemberShip Application</h1>
+              <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Membership Application</h1>
               <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
                   <div className='flex flex-grow flex-col min-h-full'>
                     {pageNumber === 1 &&
                       <ApplicationPg1 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} employed={employed} setEmployed={setEmployed}/>
                     }
                     {pageNumber === 2 &&
-                    <>
-                      <ApplicationPg2 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
-                      {
-                        location.state.from === "/members" && <div><PasswordGenerator password={password} setPassword={setPassword}/>here</div>
-                      }
-                    </>
+                      <>
+                        <ApplicationPg2 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
+                        {
+                          location.state.from === "/members" && <div><PasswordGenerator password={password} setPassword={setPassword}/>here</div>
+                        }
+                      </>
+                    }
+                    {
+                      pageNumber === 3 && 
+                      <ApplicationVerify values={values} password={password} setPassword={setPassword} resetForm={resetForm}/>
                     }
                     <div className="flex justify-end w-full">
 
