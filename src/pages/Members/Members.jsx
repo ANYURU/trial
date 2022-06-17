@@ -43,7 +43,11 @@ export default function Members() {
   const indexOfLastPage = currentPage * withdrawPerPage
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage
 
-  const filteredMembers = members && members.filter(member => member.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1).filter(member => !status || member.member_status === status)
+  const filteredMembers = members && members.filter(member => {
+    if(member?.fullname) {
+      return member?.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+    }
+  }).filter(member => !status || member.member_status === status)
   const shownMembers = members && filteredMembers.slice(indexOfFirstPage, indexOfLastPage)
 
   if(show === true){

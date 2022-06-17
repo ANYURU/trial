@@ -6,12 +6,15 @@ import { supabase } from '../../helpers/supabase'
 import { useAuth } from '../../auth/AuthContext'
 import { toast, ToastContainer } from 'react-toastify'
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom"
-import { createUser } from "../../helpers/createuser"
+import { addMember } from "../../helpers/addMember"
+import { getOTP } from "../../helpers/getotp"
+import PasswordGenerator from "../../components/Form/PasswordGenerator"
 
 function MemberApplication() {
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ profile, setProfile ] = useOutletContext()
   const location = useLocation()
+  const [ password, setPassword ]= useState('')
 
   const initialValues = {
     fullname:'',
@@ -63,8 +66,8 @@ function MemberApplication() {
   }  
 
   const { user : { id: applicants_id } } = useAuth()
-  const navigate = useNavigate()
   const [ employed, setEmployed ] = useState(null)
+  const [ verify, setVerify ] = useState(false)
   
   return (
     <>
@@ -72,68 +75,76 @@ function MemberApplication() {
       <Formik 
         initialValues={initialValues}
         onSubmit={async ( values, { resetForm } ) => {
-
+          const { fullname: applicants_name, phone_number, ...rest } = values
           console.log(values)
-          const { fullname: applicants_name, ...rest } = values
-          try {
 
+          try {
             if(location.state.from === "/members") {
-              const { fullname } = profile
-              createUser("256434111119", "namikaLeticia", values, fullname)
-                .then( response => response.json())
-                .then( data => console.log( data ))
-                .catch( error => console.log( error ))
+
+              const { fullname: administrator } = profile
+              // Scenario: An administrator is adding a member directly to the sacco.
+              // Questions:
+              // 1. David: Do the users need to verify their numbers?
+              getOTP( phone_number, "VERIFICATION" )
+                .then( response => response.json() )
+                .then( data => {
+                  localStorage.setItem('verification_key', data?.Details)
+                  // navigate('/verify', { state: { phone_number:`256${phone_number.slice(1)}`, password:"password", details:values, administrator:administrator }})
+                  
+                  return 
+                })
+                .catch( error => console.log( error ))     
               
+
+              // addMember("256434111119", "namikaLeticia", values, fullname)
+              //   .then( response => response.json())
+              //   .then( data => console.log( data ))
+              //   .catch( error => console.log( error ))              
+            } 
+
+            else {
+              const { data, error } = await supabase
+                .from('applications')
+                .insert(
+                  [
+                    {
+                      _type: "membership",
+                      created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                      updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                      reviewed: false,
+                      application_meta: {
+                        applicants_id,
+                        applicants_name,
+                        ...rest
+                      }
+                    }
+                  ]
+                )
+                .single()
+  
+              if (error) { 
+                throw error 
+              } else {
+                resetForm({ values: initialValues })
+                toast.success(`Membership submitted for review`, {position:'top-center'})
+                
+                const { data, error } = await supabase
+                  .from('_member_profiles')
+                  .select()
+                  .eq('id', applicants_id)
+                  .single();
+  
+                if( error ) {
+                  throw error
+                } else {
+                  setProfile(data)
+                  navigate('/dashboard')
+  
+                }
+               
+              }
             }
 
-
-            // const { data, error } = await supabase
-            //   .from('applications')
-            //   .insert(
-            //     [
-            //       {
-            //         _type: "membership",
-            //         created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-            //         updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-            //         reviewed: false,
-            //         application_meta: {
-            //           applicants_id,
-            //           applicants_name,
-            //           ...rest
-            //         }
-            //       }
-            //     ]
-            //   )
-            //   .single()
-
-            // if (error) { 
-            //   throw error 
-            // } else {
-            //   resetForm({ values: initialValues })
-            //   toast.success(`Membership submitted for review`, {position:'top-center'})
-              
-            //   const { data, error } = await supabase
-            //     .from('_member_profiles')
-            //     .select()
-            //     .eq('id', applicants_id)
-            //     .single();
-
-            //   if( error ) {
-            //     throw error
-            //   } else {
-            //     setProfile(data)
-            //     navigate('/dashboard')
-
-            //   }
-             
-            // }
-
-
-            // supabase.
-            //   from('applications')
-            //   .on('INSERT', payload => console.log('Application received', payload))
-            //   .subscribe()
-            
             
           } catch ( error ) {
             // handle the errors depending on error status codes & give appropriate messages to the users
@@ -151,9 +162,15 @@ function MemberApplication() {
                       <ApplicationPg1 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} employed={employed} setEmployed={setEmployed}/>
                     }
                     {pageNumber === 2 &&
+                    <>
                       <ApplicationPg2 values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur}/>
+                      {
+                        location.state.from === "/members" && <div><PasswordGenerator password={password} setPassword={setPassword}/>here</div>
+                      }
+                    </>
                     }
                     <div className="flex justify-end w-full">
+
                     {pageNumber === 1 && 
                         <div className='flex justify-end w-full'>
                           <input
