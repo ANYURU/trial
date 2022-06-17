@@ -5,7 +5,7 @@ import { Spinner } from "../../components";
 import { downloadFile } from "../../helpers/utilites";
 import { toast, ToastContainer } from "react-toastify";
 
-export default function DepositVerify() {
+export default function LoanVerify() {
   const { id } = useParams();
 
   const [loan, setLoan] = useState(null);
@@ -16,7 +16,7 @@ export default function DepositVerify() {
   }, []);
 
   const getApplication = async () => {
-    const { data } = await supabase
+    const { error, data } = await supabase
       .from("applications")
       .select()
       .eq("_type", "loan")
@@ -24,86 +24,53 @@ export default function DepositVerify() {
     setLoan(data[0]);
   };
 
-  if (loan) {
-    try {
-      downloadFile(
-        loan.application_meta.files[0].file_url.substring(9),
-        "loans"
-      )
-        .then((data) => setImageURL(data.avatar_url))
-        .catch((error) => console.log("failed"));
-    } catch (error) {
-      console.log("failed");
-    }
-  }
+  // if (loan) {
+  //   try {
+  //     downloadFile(
+  //       loan?.application_meta.files[0].file_url.substring(9),
+  //       "loans"
+  //     )
+  //       .then((data) => setImageURL(data.avatar_url))
+  //       .catch((error) => console.log("failed"));
+  //   } catch (error) {
+  //     console.log("failed");
+  //   }
+  // }
 
-  const approveLoanPaymentTransaction = async () => {
-    const {
-      application_meta: { applicants_id },
-    } = loan;
-
-    try {
-      const { data, error } = await supabase.rpc("approve_transaction", {
-        members_id: applicants_id,
-        application: id,
-      });
-      if (error) {
-        throw error;
-      } else {
-        // handle the alerts and navigation
-        toast.success(`Transaction has been approved.`, {
-          position: "top-center",
-        });
-      }
-    } catch (error) {
-      toast.error(`${error?.message}`, { position: "top-center" });
-      console.log(error);
-    }
-  };
-
-  const rejectLoanPaymentTransaction = async () => {
-    try {
-      const { data, error } = await supabase.rpc("reject_application", {
-        application: id,
-      });
-      if (error) {
-        throw error;
-      } else {
-        toast.success(`Transaction has been rejected.`, {
-          position: "top-center",
-        });
-        // handle the alerts and navigation
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // console.log(imageURL)
-  
-  console.log(new Date(loan.created_at).toLocaleTimeString('en-US'))
-  console.log(new Date(loan.created_at).toLocaleDateString('en-US'))
   return (
-    <div className="h-full">
+    <div className="mx-5 my-2 h-[calc(100vh-70px)]">
       <ToastContainer />
-      <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
-        Verify Lo
-      </h1>
-      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
+      <div className="flex flex-col justify-between pb-3 h-[60px]">
+        <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
+          Verify Loan request
+        </h1>
+      </div>
+      <div className="bg-white p-3 overflow-hidden  relative  h-[calc(100%-80px)] dark:bg-dark-bg-700 dark:text-secondary-text">
         {loan ? (
           <div className="flex flex-grow flex-col min-h-full">
             <div className="mb-3">
-              <h1 className="font-semibold">
-                {loan.application_meta.applicants_name}'s Loan Request
-                <span className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${!loan.reviewed ? "bg-yellow-400" : loan.loan_status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
-                {!loan.reviewed ? "Pending" : "Reviewed"}
-              </span>
+              <h1 className="font-semibold mb-2">
+                {loan.application_meta && loan.application_meta.applicants_name}'s Loan Request
+                <span
+                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
+                    !loan.reviewed
+                      ? "bg-yellow-400"
+                      : loan.loan_status === "paid"
+                      ? "bg-green-400"
+                      : "bg-yellow-400"
+                  }`}
+                >
+                  {!loan.reviewed ? "Reviewed" : "Pending"}
+                </span>
               </h1>
 
               <div className="outline outline-1 outline-gray-100 p-3">
                 <div className="my-6">
                   created_at:{" "}
-                  <span className="font-semibold">{new Date(loan.created_at).toLocaleTimeString('en-US')}</span>
+                  <span className="font-semibold">
+                    {new Date(loan.created_at).toLocaleDateString("en-US")}{" "}
+                    {new Date(loan.created_at).toLocaleTimeString("en-US")}
+                  </span>
                 </div>
                 <div className="my-6">
                   Application ID:{" "}
@@ -112,28 +79,39 @@ export default function DepositVerify() {
                 <div className="my-6">
                   Applicant ID:{" "}
                   <span className="font-semibold">
-                    {loan.application_meta.applicants_id}
+                    {loan.application_meta && loan.application_meta.applicants_id}
                   </span>
                 </div>
                 <div className="my-6">
                   Applicant Name:{" "}
                   <span className="font-semibold">
-                    {loan.application_meta.applicants_name}
+                    {loan.application_meta && loan.application_meta.applicants_name}
                   </span>
                 </div>
+
                 <div className="my-6">
                   Amount:{" "}
                   <span className="font-semibold">
-                    {loan.application_meta.amount}
-                    <span className="ml-1">({loan.application_meta.amount_in_words})</span>
+                    {loan.application_meta && loan.application_meta.amount} ({ loan.application_meta && loan.application_meta.amount_in_words})
                   </span>
                 </div>
+
                 <div className="my-6">
-                  Amount:{" "}
+                  Account Type:{" "}
                   <span className="font-semibold">
-                    {loan.application_meta.amount}
+                    {loan.application_meta && loan.application_meta.account_type}
                   </span>
                 </div>
+
+                <div className="my-6">
+                  Particulars:{" "}
+                  <span className="font-semibold">
+                    {loan.application_meta && loan.application_meta.particulars}
+                  </span>
+                </div>
+
+
+
                 <img
                   src={imageURL}
                   width={200}
@@ -146,13 +124,13 @@ export default function DepositVerify() {
             <div className="flex gap-10 justify-end items-center mt-3">
               <button
                 className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-                onClick={rejectLoanPaymentTransaction}
+                // onClick={rejectLoanPaymentTransaction}
               >
                 Reject
               </button>
               <button
                 className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-                onClick={approveLoanPaymentTransaction}
+                // onClick={approveLoanPaymentTransaction}
               >
                 Approve
               </button>

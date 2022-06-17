@@ -22,8 +22,6 @@ export default function DepositVerify() {
       .select()
       .eq("_type", "deposit")
       .eq("application_id", id);
-
-    console.log(data[0]);
     setDeposit(data[0]);
   };
 

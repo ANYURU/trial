@@ -23,6 +23,7 @@ export default function LoanAdmin() {
       .select()
       .eq("_type", "loan")
       .order("created_at", { ascending: false });
+      console.log(data)
     setLoans(data);
   };
 
@@ -263,7 +264,7 @@ export default function LoanAdmin() {
                       <td className="px-6 py-3">
                         <div className="relative">
                           <button
-                            className="block p-2 rounded-md dialog"
+                            className="block p-2 rounded-md dialog cursor-context-menu"
                             onClick={(event) => {
                               setActiveIndex(index)
                               setShow(!show);

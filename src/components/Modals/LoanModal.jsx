@@ -39,7 +39,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Amount Paid:</p>
-              <p className="font-bold col-span-3">{loan.total_repayment_amount}</p>
+              <p className="font-bold col-span-3">{loan.amount_paid}</p>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">

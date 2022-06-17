@@ -1,14 +1,13 @@
-import { loanHistory } from "../../helpers/mockData";
 import { Pagination } from "../../components";
 import { useEffect, useState } from "react";
 import { supabase } from "../../helpers/supabase";
 import { FaEllipsisV } from "react-icons/fa";
 import { LoansContext } from "../../components";
 import { LoanModal, Spinner, NothingShown } from "../../components";
+import { Helmet } from "react-helmet";
 
 export default function MemberLoans() {
   useEffect(() => {
-    document.title = "Loans - Bweyogere tuberebumu";
     getApplications();
   }, []);
 
@@ -74,6 +73,9 @@ export default function MemberLoans() {
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
+      <Helmet>
+        <title>Loans - Bweyogere tuberebumu</title>
+      </Helmet>
       <div className="flex flex-col justify-between pb-3 h-[110px]">
         <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
           Member's Loans
@@ -174,10 +176,10 @@ export default function MemberLoans() {
                         </span>
                       </td>
 
-                      <td className="p-2">
+                      <td className="px-6 py-3">
                         <div className="relative">
                           <button
-                            className="block p-2 rounded-md dialog"
+                            className="block rounded-md dialog cursor-context-menu"
                             onClick={(event) => {
                               setActiveIndex(index);
                               setShow(!show);
@@ -204,11 +206,11 @@ export default function MemberLoans() {
             </div>
             <div className="flex bg-white dark:bg-dark-bg-700 justify-between absolute left-0 right-0 bottom-0 px-5 py-1">
               <Pagination
-                pages={Math.ceil(loanHistory.length / loansPerPage)}
+                pages={Math.ceil(loans.length / loansPerPage)}
                 setCurrentPage={setCurrentPage}
                 indexOfFirstPage={indexOfFirstPage}
                 indexOfLastPage={indexOfLastPage}
-                data={loanHistory}
+                data={loans}
                 DepositsPerPage={loansPerPage}
                 setDepositsPerPage={setLoansPerPage}
               />

@@ -2,7 +2,6 @@ import ReactDOM from "react-dom";
 import { IoCloseSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { IconContext } from "react-icons/lib";
 
 export default function DepositModal({ passed, setDepositModal, deposit }) {
   const { darkMode } = useAuth();

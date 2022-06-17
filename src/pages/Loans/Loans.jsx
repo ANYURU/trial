@@ -6,10 +6,10 @@ import { FaEllipsisV } from "react-icons/fa";
 import { LoansContext } from "../../components";
 import { LoanModal, Spinner, NothingShown } from "../../components";
 import { useAuth } from "../../auth/AuthContext";
+import { Helmet } from "react-helmet";
 
 export default function MemberLoans() {
   useEffect(() => {
-    document.title = "Loans - Bweyogere tuberebumu";
     getApplications();
   }, []);
 
@@ -63,6 +63,9 @@ export default function MemberLoans() {
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
+      <Helmet>
+        <title>Loans - Bweyogere tuberebumu</title>
+      </Helmet>
       <div className="flex flex-col justify-between pb-3 h-[110px]">
         <h1 className="mb-5 font-bold uppercase dark:text-white">My Loans</h1>
 
@@ -144,10 +147,10 @@ export default function MemberLoans() {
                         </span>
                       </td>
 
-                      <td className="p-2">
+                      <td className="px-6 py-3">
                         <div className="relative">
                           <button
-                            className="block p-2 rounded-md dialog"
+                            className="block p-2 rounded-md dialog cursor-context-menu"
                             onClick={(event) => {
                               setActiveIndex(index);
                               setShow(!show);
