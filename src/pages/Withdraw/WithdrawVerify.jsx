@@ -2,6 +2,9 @@ import { useOutletContext, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../helpers/supabase";
 import { toast, ToastContainer } from "react-toastify";
+import { Spinner } from "../../components";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function WithdrawVerify() {
   const { id } = useParams();
@@ -60,6 +63,8 @@ export default function WithdrawVerify() {
     }
   };
 
+  console.log(withdraw);
+
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
       <div className="flex flex-col justify-between pb-3 h-[60px]">
@@ -69,60 +74,92 @@ export default function WithdrawVerify() {
       </div>
       <ToastContainer />
       <div className="bg-white p-3 overflow-scroll  relative  h-[calc(100%-80px)] dark:bg-dark-bg-700">
-        <div className="flex flex-grow flex-col min-h-full">
-          <div className="mb-3">
-            <h1 className="font-semibold mb-2">
-              {profile?.fullname}'s withdraw Request Details
-            </h1>
-            <div className="outline outline-1 outline-gray-100 p-3">
-              <div className="my-6">MemberID: {profile?.id}</div>
-              <div className="my-6">
-                Amount: {withdraw && withdraw.application_meta.amount}
+        {withdraw ? (
+          <div className="flex flex-grow flex-col min-h-full">
+            <div className="mb-3">
+              <h1 className="font-semibold mb-2">
+                {withdraw.application_meta &&
+                  withdraw.application_meta.applicants_name}
+                's withdraw Request Details
+                <span
+                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
+                    !withdraw.reviewed
+                      ? "bg-yellow-400"
+                      : withdraw.application_meta.review_status === "approved"
+                      ? "bg-green-400"
+                      : "bg-red-400"
+                  }`}
+                >
+                  {!withdraw.reviewed
+                    ? "Pending"
+                    : withdraw.application_meta.review_status === "approved"
+                    ? "Approved"
+                    : "Rejected"}
+                </span>
+              </h1>
+
+              <div className="outline outline-1 outline-gray-100 p-3">
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Application ID:</p>
+                  <p className="font-bold col-span-3">
+                    {withdraw.application_id}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Applicant's name:</p>
+                  <p className="font-bold col-span-3">
+                    {withdraw.application_meta.applicants_name}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Account:</p>
+                  <p className="font-bold col-span-3">
+                    {withdraw.application_meta.account_type}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Amount:</p>
+                  <p className="font-bold col-span-3">UGX 
+                    {currencyFormatter(withdraw.application_meta.amount)}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Particulars:</p>
+                  <p className="font-bold col-span-3">
+                    {withdraw.application_meta.particulars}
+                  </p>
+                </div>
+
+                <div className="my-6">Account/Mobile Number: 0770566711</div>
               </div>
-              <div className="my-6">Method of Withdraw: Bank</div>
-              <div className="my-6">Account/Mobile Number: 0770566711</div>
-              <div className="my-6">Particulars: </div>
-              <div>{withdraw && withdraw.application_meta.particulars}</div>
+            </div>
+            <div className="flex gap-10 justify-end items-center mt-3">
+              {withdraw && !withdraw.reviewed && (
+                <div className="flex gap-10 justify-end items-center mt-3">
+                  <button
+                    type="submit"
+                    className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                  >
+                    Reject
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                  >
+                    Approve
+                  </button>
+                </div>
+              )}
+              {withdraw && withdraw.reviewed && (
+                <div className="flex justify-end items-center mt-3">
+                  Reviewed by: {withdraw.application_meta.reviewed_by}
+                </div>
+              )}
             </div>
           </div>
-          <div className="flex gap-10 justify-end items-center mt-3">
-            <button
-              type="submit"
-              className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-              onClick={rejectWithdrawTransaction}
-            >
-              Reject
-            </button>
-            <button
-              type="submit"
-              className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-              onClick={approveWithdrawTransaction}
-            >
-              Approve
-            </button>
-            {withdraw && !withdraw.reviewed && (
-              <div className="flex gap-10 justify-end items-center mt-3">
-                <button
-                  type="submit"
-                  className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-                >
-                  Reject
-                </button>
-                <button
-                  type="submit"
-                  className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-                >
-                  Approve
-                </button>
-              </div>
-            )}
-            {withdraw && withdraw.reviewed && (
-              <div className="flex justify-end items-center mt-3">
-                Reviewed by: {withdraw.application_meta.reviewed_by}
-              </div>
-            )}
-          </div>
-        </div>
+        ) : (
+          <Spinner />
+        )}
       </div>
     </div>
   );

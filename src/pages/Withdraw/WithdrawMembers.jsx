@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { FaEllipsisV } from "react-icons/fa";
 import { AiFillCheckSquare } from "react-icons/ai";
 import { NothingShown } from "../../components";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { MdInfo } from 'react-icons/md'
 
 export default function WithdrawMembers() {
   const [status, setStatus] = useState("");
@@ -96,7 +99,7 @@ export default function WithdrawMembers() {
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
-        Members Withdraw History
+        Members Withdraw
       </h1>
 
       <div className=" dark:text-secondary-text rounded">
@@ -208,13 +211,10 @@ export default function WithdrawMembers() {
                         index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
                       } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                       key={index}
-                      onClick={() => handleWithdraw(withdraw.application_id)}
                     >
                       <td className="px-6 py-3">
                         {
-                          new Date(withdraw.created_at)
-                            .toISOString()
-                            .split("T")[0]
+                          moment(withdraw.created_at).format("DD-MM-YYYY")
                         }
                       </td>
                       <td className="px-6 py-3">{withdraw.application_id}</td>
@@ -225,7 +225,7 @@ export default function WithdrawMembers() {
                         {withdraw.application_meta.account_type}
                       </td>
                       <td className="px-6 py-3">
-                        {withdraw.application_meta.amount}
+                        {currencyFormatter(withdraw.application_meta.amount)}
                       </td>
                       <td className="px-6 py-3"></td>
                       <td className={`px-6 py-3`}>
@@ -251,7 +251,7 @@ export default function WithdrawMembers() {
                       <td className="px-6 py-3">
                         <div className="relative">
                           <button
-                            className="block p-2 rounded-md dialog"
+                            className="block p-2 rounded-md dialog cursor-context-menu"
                             onClick={(event) => {
                               setActiveIndex(index);
                               setShow(!show);
@@ -266,6 +266,15 @@ export default function WithdrawMembers() {
                               index === activeIndex && show ? "" : "hidden"
                             }`}
                           >
+                            <li
+                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
+                              onClick={() => {
+                                // handleWithdraw(withdraw.application_id);
+
+                              }}
+                            >
+                              <MdInfo /> Details
+                            </li>
                             <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {

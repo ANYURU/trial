@@ -7,6 +7,8 @@ import { FaEllipsisV } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
 import WithdrawModal from "../../components/Modals/WithdrawModal";
 import { Helmet } from "react-helmet";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function Withdrawy() {
   useEffect(() => {
@@ -136,14 +138,12 @@ export default function Withdrawy() {
                       )}
                       <td className="px-6 py-3">
                         {
-                          new Date(withdraw.created_at)
-                            .toISOString()
-                            .split("T")[0]
+                          moment(withdraw.created_at).format("DD-MM-YYYY")
                         }
                       </td>
                       <td className="px-6 py-3">{withdraw.transaction_id}</td>
                       <td className="px-6 py-3">{withdraw.account}</td>
-                      <td className="px-6 py-3">{withdraw.amount}</td>
+                      <td className="px-6 py-3">{currencyFormatter(withdraw.amount)}</td>
                       <td className="px-6 py-3">{withdraw.depositMethod}</td>
 
                       <td className="px-6 py-3">
