@@ -5,6 +5,8 @@ import { Spinner } from "../../components";
 import { downloadFile } from "../../helpers/utilites";
 import { toast, ToastContainer } from "react-toastify";
 import { useOutletContext } from "react-router-dom";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
+import moment from "moment";
 
 export default function VerifyPayment() {
   const { id } = useParams();
@@ -76,6 +78,8 @@ export default function VerifyPayment() {
     }
   };
 
+  console.log(deposit)
+
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
       <ToastContainer />
@@ -89,7 +93,7 @@ export default function VerifyPayment() {
           <div className="flex flex-grow flex-col min-h-full">
             <div className="mb-3">
               {/* <h1 className='font-semibold'>{profile?.fullname}'s withdraw Request Details</h1> */}
-              <div className="outline outline-1 outline-gray-100 p-3">
+              <div className="outline outline-1 outline-gray-100 dark:outline-secondary-text p-3">
                 <div className="my-6">
                   Applicant ID:{" "}
                   <span className="font-semibold">
@@ -109,9 +113,16 @@ export default function VerifyPayment() {
                   </span>
                 </div>
                 <div className="my-6">
+                  Create At:{" "}
+                  <span className="font-semibold">
+                    {moment(deposit.created_at).format("DD-MM-YYYY HH:MM")}
+                  </span>
+                </div>
+
+                <div className="my-6">
                   Amount Paid:{" "}
                   <span className="font-semibold">
-                    {deposit.application_meta.amount}
+                    {currencyFormatter(deposit.application_meta.amount)}
                   </span>
                 </div>
                 <img

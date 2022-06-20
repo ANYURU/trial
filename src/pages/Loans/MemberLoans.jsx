@@ -5,6 +5,8 @@ import { FaEllipsisV } from "react-icons/fa";
 import { LoansContext } from "../../components";
 import { LoanModal, Spinner, NothingShown } from "../../components";
 import { Helmet } from "react-helmet";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function MemberLoans() {
   useEffect(() => {
@@ -147,20 +149,20 @@ export default function MemberLoans() {
                         <LoanModal setLoanModal={setLoanModal} loan={loan} />
                       )}
                       <td className="px-6 py-3">
-                        {loan.created_at.substring(0, 10)}
+                        {moment(loan.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">{loan.id}</td>
                       <td className="px-6 py-3">
                         {loan.loan_meta.applicants_name}
                       </td>
                       <td className="px-6 py-3">
-                        {loan.outstanding_balance +
-                          0.05 * loan.outstanding_balance}
+                        {currencyFormatter(loan.outstanding_balance +
+                          0.05 * loan.outstanding_balance)}
                       </td>
                       <td className="px-6 py-3">
                         {loan.total_repayment_amount}
                       </td>
-                      <td className="px-6 py-3">{loan.outstanding_balance}</td>
+                      <td className="px-6 py-3">{currencyFormatter(loan.outstanding_balance)}</td>
                       <td className="px-6 py-3">5</td>
                       <td className={`px-6 py-3`}>
                         <span

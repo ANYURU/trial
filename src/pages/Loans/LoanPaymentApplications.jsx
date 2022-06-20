@@ -7,6 +7,9 @@ import { Pagination } from "../../components";
 import { FaEllipsisV } from "react-icons/fa";
 import { AiFillCheckSquare } from "react-icons/ai";
 import { MdInfo } from "react-icons/md";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
+import LoanPayModal from "../../components/Modals/LoanPayModal";
 
 export default function LoanPaymentApplications() {
   useEffect(() => {
@@ -15,6 +18,7 @@ export default function LoanPaymentApplications() {
   });
 
   const [loans, setLoans] = useState([]);
+  const [loanModal, setLoanModal] = useState(false);
 
   const getApplications = async () => {
     const { error, data } = await supabase
@@ -84,13 +88,17 @@ export default function LoanPaymentApplications() {
   shownLoans = shownLoans
     ? shownLoans.filter(
         (loan) =>
-          !searchText || loan?.application_meta.applicants_name.toLowerCase()
-          .indexOf(searchText.toLowerCase()) > -1
+          !searchText ||
+          loan?.application_meta.applicants_name
+            .toLowerCase()
+            .indexOf(searchText.toLowerCase()) > -1
       ).length > 0
       ? shownLoans.filter(
           (loan) =>
-            !searchText || loan?.application_meta.applicants_name.toLowerCase()
-            .indexOf(searchText.toLowerCase()) > -1
+            !searchText ||
+            loan?.application_meta.applicants_name
+              .toLowerCase()
+              .indexOf(searchText.toLowerCase()) > -1
         )
       : null
     : null;
@@ -190,12 +198,11 @@ export default function LoanPaymentApplications() {
                       } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
                       key={index}
                     >
+                      {loanModal && activeIndex === index && (
+                        <LoanPayModal setLoanModal={setLoanModal} loan={deposit} />
+                      )}
                       <td className="px-6 py-3">
-                        {
-                          new Date(deposit.created_at)
-                            .toISOString()
-                            .split("T")[0]
-                        }
+                        {moment(deposit.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">{deposit.application_id}</td>
                       <td className="px-6 py-3">
@@ -205,7 +212,7 @@ export default function LoanPaymentApplications() {
                         {deposit?.application_meta.account_type}
                       </td>
                       <td className="px-6 py-3">
-                        {deposit?.application_meta.amount}
+                        {currencyFormatter(deposit?.application_meta.amount)}
                       </td>
 
                       <td className={`px-6 py-3`}>
@@ -248,7 +255,6 @@ export default function LoanPaymentApplications() {
                             <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {
-                                // setLoanModal(true)
                                 handleDeposit(deposit.application_id);
                               }}
                             >
@@ -257,7 +263,7 @@ export default function LoanPaymentApplications() {
                             <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {
-                                // setLoanModal(true)
+                                setLoanModal(true)
                               }}
                             >
                               <MdInfo /> Details

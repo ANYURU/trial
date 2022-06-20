@@ -2,7 +2,8 @@ import ReactDOM from "react-dom"
 import { IoCloseSharp } from 'react-icons/io5'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { IconContext } from "react-icons/lib";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
+import moment from "moment";
 
 export default function LoanModal({ passed, setLoanModal, loan }) {
 
@@ -34,12 +35,12 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Principal:</p>
-              <p className="font-bold col-span-3">{loan.outstanding_balance}</p>
+              <p className="font-bold col-span-3">{currencyFormatter(loan.outstanding_balance)}</p>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Amount Paid:</p>
-              <p className="font-bold col-span-3">{loan.amount_paid}</p>
+              <p className="font-bold col-span-3">{currencyFormatter(loan.amount_paid)}</p>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -49,17 +50,17 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
 
           <div className="grid grid-cols-5 gap-2 mb-5 justify-start w-full">
               <p className="col-span-2">Amount to pay:</p>
-              <p className="font-bold col-span-3">{loan.outstanding_balance + 0.05 * loan.outstanding_balance}</p>
+              <p className="font-bold col-span-3">{currencyFormatter(loan.outstanding_balance + 0.05 * loan.outstanding_balance)}</p>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Approved at:</p>
-              <p className="font-bold col-span-3">{loan.loan_meta.approved_at}</p>
+              <p className="font-bold col-span-3">{moment(loan.loan_meta.approved_at).format("DD-MM-YYYY  HH:MM")}</p>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">End Date:</p>
-              <p className="font-bold col-span-3">{loan.end_date}</p>
+              <p className="font-bold col-span-3">{moment(loan.end_date).format("DD-MM-YYYY HH:MM")}</p>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">

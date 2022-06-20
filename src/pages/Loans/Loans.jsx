@@ -7,6 +7,8 @@ import { LoansContext } from "../../components";
 import { LoanModal, Spinner, NothingShown } from "../../components";
 import { useAuth } from "../../auth/AuthContext";
 import { Helmet } from "react-helmet";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
+import moment from "moment";
 
 export default function MemberLoans() {
   useEffect(() => {
@@ -124,14 +126,14 @@ export default function MemberLoans() {
                         <LoanModal setLoanModal={setLoanModal} loan={loan} />
                       )}
                       <td className="px-6 py-3">
-                        {loan.created_at.substring(0, 10)}
+                        {moment(loan.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">
-                        {loan.outstanding_balance +
-                          0.05 * loan.outstanding_balance}
+                        {currencyFormatter(loan.outstanding_balance +
+                          0.05 * loan.outstanding_balance)}
                       </td>
-                      <td className="px-6 py-3">{loan.amount_paid}</td>
-                      <td className="px-6 py-3">{loan.outstanding_balance}</td>
+                      <td className="px-6 py-3">{ currencyFormatter(loan.amount_paid)}</td>
+                      <td className="px-6 py-3">{currencyFormatter(loan.outstanding_balance)}</td>
                       <td className="px-6 py-3">5</td>
                       <td className={`px-6 py-3`}>
                         <span

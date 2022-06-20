@@ -8,6 +8,9 @@ import { filterByStatus } from "../../helpers/utilites";
 import { FaEllipsisV } from "react-icons/fa";
 import { AiFillCheckSquare } from "react-icons/ai";
 import { MdInfo } from "react-icons/md";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
+import LoanAppModal from "../../components/Modals/LoanAppModal";
 
 export default function LoanAdmin() {
   useEffect(() => {
@@ -16,6 +19,7 @@ export default function LoanAdmin() {
   }, []);
 
   const [loans, setLoans] = useState([]);
+  const [loanModal, setLoanModal] = useState(false)
 
   const getApplications = async () => {
     const { error, data } = await supabase
@@ -23,7 +27,6 @@ export default function LoanAdmin() {
       .select()
       .eq("_type", "loan")
       .order("created_at", { ascending: false });
-      console.log(data)
     setLoans(data);
   };
 
@@ -84,7 +87,7 @@ export default function LoanAdmin() {
 
   //context
   const [show, setShow] = useState(false);
-  const [ activeIndex, setActiveIndex] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(false);
   if (show === true) {
     window.onclick = function (event) {
       if (!event.target.matches(".dialog")) {
@@ -100,15 +103,16 @@ export default function LoanAdmin() {
           Loan Applications
         </h1>
 
-        
-
         <div className=" dark:text-secondary-text rounded">
           <div className="w-full h-7 rounded flex overflow-hidden">
-          {shownLoans.length === 0 &&
-            <>
-            <div className="animate-pulse h-7 inline-block bg-gray-300" style={{width: `100%`}}></div>
-            </>
-            }
+            {shownLoans.length === 0 && (
+              <>
+                <div
+                  className="animate-pulse h-7 inline-block bg-gray-300"
+                  style={{ width: `100%` }}
+                ></div>
+              </>
+            )}
             <div
               className={`h-7 inline-block bg-green-400`}
               style={{
@@ -224,21 +228,19 @@ export default function LoanAdmin() {
                         index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
                       } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
                       key={index}
-                      onClick={() => handleDeposit(deposit.application_id)}
                     >
+                      {loanModal && activeIndex === index && (
+                        <LoanAppModal setLoanModal={setLoanModal} loan={deposit} />
+                      )}
                       <td className="px-6 py-3">
-                        {
-                          new Date(deposit.created_at)
-                            .toISOString()
-                            .split("T")[0]
-                        }
+                        {moment(deposit.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">{deposit.application_id}</td>
                       <td className="px-6 py-3">
                         {deposit?.application_meta.applicants_name}
                       </td>
                       <td className="px-6 py-3">
-                        {deposit?.application_meta.amount}
+                        {currencyFormatter(deposit?.application_meta.amount)}
                       </td>
 
                       <td className={`px-6 py-3`}>
@@ -266,7 +268,7 @@ export default function LoanAdmin() {
                           <button
                             className="block p-2 rounded-md dialog cursor-context-menu"
                             onClick={(event) => {
-                              setActiveIndex(index)
+                              setActiveIndex(index);
                               setShow(!show);
                               event.stopPropagation();
                             }}
@@ -290,7 +292,7 @@ export default function LoanAdmin() {
                             <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {
-                                // setLoanModal(true)
+                                setLoanModal(true)
                               }}
                             >
                               <MdInfo /> Details

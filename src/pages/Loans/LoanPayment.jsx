@@ -7,6 +7,7 @@ import { useOutletContext, useParams } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { evidencedRequestValidationSchema as loanPaymentRequestValidationSchema } from "../../helpers/validator";
 import { useEffect, useState } from "react";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 function LoanPayment() {
   // Will be used later
@@ -104,14 +105,16 @@ function LoanPayment() {
             <div className="flex flex-col bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
               <div className="m-2">
                 <label>
-                  Amount To Pay:{" "}
-                  <span className="font-bold">{loan.outstanding_balance}</span>
+                  Total Amount To Pay:{" "}
+                  <span className="font-bold">
+                    {currencyFormatter(loan.outstanding_balance)}
+                  </span>
                 </label>
               </div>
 
               <div className="m-2 flex flex-wrap gap-5 h-16">
                 <div className="flex flex-col w-56 ">
-                  <label htmlFor="" className=" text-sm">
+                  <label htmlFor="amount" className=" text-sm">
                     Enter Amount
                   </label>
                   <input
@@ -135,7 +138,7 @@ function LoanPayment() {
               <div className="mx-2 my-1">
                 <div className="flex flex-wrap gap-5 h-20">
                   <div className="flex flex-col w-56">
-                    <label htmlFor="" className="text-sm">
+                    <label htmlFor="phone_number" className="text-sm">
                       Enter Phone Number
                     </label>
                     <input
@@ -153,7 +156,7 @@ function LoanPayment() {
                     )}
                   </div>
                   <div className="flex flex-col w-56 ">
-                    <label htmlFor="" className=" text-sm">
+                    <label htmlFor="evidence" className=" text-sm">
                       Upload Receipt
                     </label>
                     <input
@@ -188,7 +191,11 @@ function LoanPayment() {
                 ></textarea>
               </div>
               <div className="w-56">
-                <Submit value="Request" disabled={!(isValid && dirty)} />
+                <input
+                  type="submit"
+                  value="submit"
+                  className="bg-primary inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2 w-full mt-1 cursor-pointer"
+                />
               </div>
             </div>
           </Form>
