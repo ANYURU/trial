@@ -7,6 +7,8 @@ import { Pagination } from "../../components";
 import { FaEllipsisV } from "react-icons/fa";
 import { AiFillCheckSquare } from "react-icons/ai";
 import DepositModal from "../../components/Modals/DepositModal";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function DepositAdmin() {
   const [deposits, setDeposits] = useState([]);
@@ -173,8 +175,6 @@ export default function DepositAdmin() {
               type="date"
               name="inputDate"
               onChange={(event) => setDate(event.target.value)}
-              id=""
-              placeholder="Old Password"
               className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
             />
           </div>
@@ -213,11 +213,7 @@ export default function DepositAdmin() {
                         />
                       )} */}
                       <td className="px-6 py-3">
-                        {
-                          new Date(deposit.created_at)
-                            .toISOString()
-                            .split("T")[0]
-                        }
+                        {moment(deposit.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">{deposit.application_id}</td>
                       <td className="px-6 py-3">
@@ -227,7 +223,7 @@ export default function DepositAdmin() {
                         {deposit?.application_meta.account_type}
                       </td>
                       <td className="px-6 py-3">
-                        {deposit?.application_meta.amount}
+                        {currencyFormatter(deposit?.application_meta.amount)}
                       </td>
 
                       <td className={`px-6 py-3`}>
@@ -304,7 +300,7 @@ export default function DepositAdmin() {
             </div>
           </>
         ) : (
-            <Spinner />
+          <Spinner />
         )}
       </div>
     </div>

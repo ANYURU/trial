@@ -8,6 +8,8 @@ import { MdInfo } from "react-icons/md";
 import { AiOutlineConsoleSql } from "react-icons/ai";
 import { Helmet } from "react-helmet";
 import DepositModal from "../../components/Modals/DepositModal";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function Deposit() {
   const [deposits, setDeposits] = useState([]);
@@ -135,14 +137,12 @@ export default function Deposit() {
                         )}
                         <td className="px-6 py-3">
                           {
-                            new Date(deposit.created_at)
-                              .toISOString()
-                              .split("T")[0]
+                            moment(deposit.created_at).format("DD-MM-YYYY")
                           }
                         </td>
                         <td className="px-6 py-3">{deposit.transaction_id}</td>
                         <td className="px-6 py-3">{}</td>
-                        <td className="px-6 py-3">{deposit.amount}</td>
+                        <td className="px-6 py-3">{currencyFormatter(deposit.amount)}</td>
                         <td className="px-6 py-3">
                           {deposit.transaction_meta.approved_by}
                         </td>

@@ -2,6 +2,8 @@ import ReactDOM from "react-dom";
 import { IoCloseSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function DepositModal({ passed, setDepositModal, deposit }) {
   const { darkMode } = useAuth();
@@ -20,7 +22,7 @@ export default function DepositModal({ passed, setDepositModal, deposit }) {
         {/* {children} */}
         <div className="flex justify-between items-center w-full mb-5">
           <div>
-            <h1 className="font-bold text-lg">Loan Details</h1>
+            <h1 className="font-bold text-lg">Deposit Details</h1>
           </div>
 
           <div
@@ -39,19 +41,19 @@ export default function DepositModal({ passed, setDepositModal, deposit }) {
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Created At:</p>
           <p className="font-bold col-span-3">
-            {new Date(deposit.created_at).toISOString().split("T")[0]}, {new Date(deposit.created_at).toLocaleTimeString()}
+            {moment(deposit.created_at).format("DD-MM-YYYY")}, {moment(deposit.created_at).format("HH:MM")}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Amount:</p>
-          <p className="font-bold col-span-3">{deposit.amount}</p>
+          <p className="font-bold col-span-3">{currencyFormatter(deposit.amount)}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Approved at:</p>
           <p className="font-bold col-span-3">
-          {new Date(deposit.transaction_meta.approved_at).toISOString().split("T")[0]}, {new Date(deposit.transaction_meta.approved_at).toLocaleTimeString()}
+          {moment(deposit.transaction_meta.approved_at).format("DD-MM-YYYY")}, {moment(deposit.transaction_meta.approved_at).format("HH:MM")}
           </p>
         </div>
 
