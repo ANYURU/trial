@@ -90,15 +90,15 @@ export default function DepositVerify() {
         {deposit ? (
           <div className="flex flex-grow flex-col min-h-full">
             <div className="mb-3">
-              <h1 className="font-semibold">
-                {deposit.application_meta.applicants_name}'s withdraw Request
-                Details
+              <h1 className="font-semibold mb-3">
+                {deposit.application_meta.applicants_name}'s Deposit Details
               </h1>
               <div className="outline outline-1 outline-gray-100 p-3">
                 <div className="my-6">
                   Created At:{" "}
                   <span className="font-semibold">
-                    {new Date(deposit.created_at).toLocaleDateString("en-US")} {new Date(deposit.created_at).toLocaleTimeString("en-US")}
+                    {new Date(deposit.created_at).toISOString().split("T")[0]},{" "}
+                    {new Date(deposit.created_at).toLocaleTimeString("en-US")}
                   </span>
                 </div>
                 <div className="my-6">

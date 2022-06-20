@@ -6,9 +6,11 @@ import { MdOutlineSearch, MdInfo } from "react-icons/md";
 import { Pagination } from "../../components";
 import { FaEllipsisV } from "react-icons/fa";
 import { AiFillCheckSquare } from "react-icons/ai";
+import DepositModal from "../../components/Modals/DepositModal";
 
 export default function DepositAdmin() {
   const [deposits, setDeposits] = useState([]);
+  const [depositModal, setDepositModal] = useState(false);
 
   useEffect(() => {
     getApplications();
@@ -136,47 +138,47 @@ export default function DepositAdmin() {
           </div>
 
           {/* <div className="flex my-1 justify-between gap-1"> */}
-            <div className="flex flex-col w-56">
-              <select
-                name="status"
-                id=""
-                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-                onChange={(event) => {
-                  setFilterName(event.target.name);
-                  setStatus(event.target.value);
-                }}
-              >
-                <option value="">Status</option>
-                <option value="approved">Approved</option>
-                <option value="pending">Pending</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-            <div className="flex flex-col w-56">
-              <select
-                name="account"
-                id=""
-                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-                onChange={(event) => setAccount(event.target.value)}
-              >
-                <option value="">Account</option>
-                <option value="savings">Savings</option>
-                <option value="shares">Shares</option>
-                <option value="mwana">Mwana</option>
-                <option value="fixed">Fixed</option>
-              </select>
-            </div>
-            <div className="flex flex-col w-56">
-              <input
-                type="date"
-                name="inputDate"
-                onChange={(event) => setDate(event.target.value)}
-                id=""
-                placeholder="Old Password"
-                className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
-              />
-            </div>
+          <div className="flex flex-col w-56">
+            <select
+              name="status"
+              id=""
+              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+              onChange={(event) => {
+                setFilterName(event.target.name);
+                setStatus(event.target.value);
+              }}
+            >
+              <option value="">Status</option>
+              <option value="approved">Approved</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+            </select>
           </div>
+          <div className="flex flex-col w-56">
+            <select
+              name="account"
+              id=""
+              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+              onChange={(event) => setAccount(event.target.value)}
+            >
+              <option value="">Account</option>
+              <option value="savings">Savings</option>
+              <option value="shares">Shares</option>
+              <option value="mwana">Mwana</option>
+              <option value="fixed">Fixed</option>
+            </select>
+          </div>
+          <div className="flex flex-col w-56">
+            <input
+              type="date"
+              name="inputDate"
+              onChange={(event) => setDate(event.target.value)}
+              id=""
+              placeholder="Old Password"
+              className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
+            />
+          </div>
+        </div>
         {/* </div> */}
       </div>
 
@@ -204,6 +206,12 @@ export default function DepositAdmin() {
                       } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                       key={index}
                     >
+                      {/* {depositModal && index === activeIndex && (
+                        <DepositModal
+                          deposit={deposit}
+                          setDepositModal={setDepositModal}
+                        />
+                      )} */}
                       <td className="px-6 py-3">
                         {
                           new Date(deposit.created_at)
@@ -245,7 +253,7 @@ export default function DepositAdmin() {
                       <td className="px-6 py-3">
                         <div className="relative">
                           <button
-                            className="block p-2 rounded-md dialog"
+                            className="block p-2 rounded-md dialog cursor-context-menu"
                             onClick={(event) => {
                               setActiveIndex(index);
                               setShow(!show);
@@ -260,22 +268,21 @@ export default function DepositAdmin() {
                             }`}
                           >
                             <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {
-                                // setLoanModal(true)
                                 handleDeposit(deposit.application_id);
                               }}
                             >
                               <AiFillCheckSquare /> Verify
                             </li>
-                            <li
+                            {/* <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {
-                                // setLoanModal(true)
+                                setDepositModal(true);
                               }}
                             >
                               <MdInfo /> Details
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
                       </td>
@@ -297,9 +304,7 @@ export default function DepositAdmin() {
             </div>
           </>
         ) : (
-          <div className="w-full flex justify-center">
             <Spinner />
-          </div>
         )}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { Pagination, Spinner, NothingShown } from "../../components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { supabase } from "../../helpers/supabase";
 import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { FaEllipsisV } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
 import { AiOutlineConsoleSql } from "react-icons/ai";
 import { Helmet } from "react-helmet";
-import DepositModal from '../../components/Modals/DepositModal'
+import DepositModal from "../../components/Modals/DepositModal";
 
 export default function Deposit() {
   const [deposits, setDeposits] = useState([]);
@@ -62,6 +62,7 @@ export default function Deposit() {
         )
       : null;
 
+
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
       <Helmet>
@@ -100,7 +101,7 @@ export default function Deposit() {
         </div>
       </div>
 
-      <div className="bg-white p-6 overflow-hidden  relative  h-[calc(100%-120px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-2 overflow-hidden  relative  h-[calc(100%-120px)] dark:bg-dark-bg-700">
         {deposits !== null &&
         filteredDeposits !== null &&
         filteredDeposits.length > 0 ? (
@@ -119,14 +120,19 @@ export default function Deposit() {
                 </thead>
                 <tbody>
                   {filteredDeposits.map((deposit, index) => (
-                    <>
+                    <Fragment key={index}>
                       <tr
                         className={`${
                           index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
                         } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                         key={index}
                       >
-                        {depositModal && index === activeIndex && <DepositModal deposit={deposit} setDepositModal={setDepositModal} />}
+                        {depositModal && index === activeIndex && (
+                          <DepositModal
+                            deposit={deposit}
+                            setDepositModal={setDepositModal}
+                          />
+                        )}
                         <td className="px-6 py-3">
                           {
                             new Date(deposit.created_at)
@@ -149,7 +155,6 @@ export default function Deposit() {
                                 setActiveIndex(index);
                                 setShow(!show);
                                 event.stopPropagation();
-                                
                               }}
                             >
                               <FaEllipsisV />
@@ -168,12 +173,11 @@ export default function Deposit() {
                               >
                                 <MdInfo /> Details
                               </li>
-                              
                             </ul>
                           </div>
                         </td>
                       </tr>
-                    </>
+                    </Fragment>
                   ))}
                 </tbody>
               </table>

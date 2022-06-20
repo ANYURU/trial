@@ -24,10 +24,10 @@ function Mwana() {
   
 
   return (
-    <div className='flex-grow mx-5 my-2 h-[calc(100vh-70px)]'>
+    <div className='flex-grow mx-5 my-2 h-[calc(100vh-60px)]'>
       <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Mwana Account</h1>
-      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
-        <div className="flex flex-col justify-center items-center w-full">
+      <div className="bg-white p-2 overflow-hidden  relative  h-[calc(100%-80px)] dark:bg-dark-bg-700">
+        <div className="flex h-full flex-col justify-center items-center w-full">
           <p className='text-md'>You don't have a Mwana account</p>
           <button 
             className='bg-primary rounded-md text-white px-3 py-1 w-56 mt-3'
