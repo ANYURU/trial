@@ -96,7 +96,41 @@ export const loan3ValidationSchema = Yup.object({
   years_of_operation: Yup.string().required("required"),
   business_income: Yup.string().required("required"),
   loan_purpose: Yup.string().required("required"),
-  amount: Yup.string().required("Amount is required"),
-  amount_in_words: Yup.string().required("required"),
-  months: Yup.string().required("required"),
+  amount: Yup.string().required("Amount is required!"),
+  amount_in_words: Yup.string().required("required!"),
+  months: Yup.string().required("required!"),
+})
+
+
+export const member1ValidationSchema = Yup.object({
+  fullname: Yup.string().required("fullname is required!"),
+  phone_number: Yup.string().required("phone number is required!"),
+  id_passport_number: Yup.string().required("ID/Passport number is required!"),
+  fathers_name: Yup.string().required("father's name is required!"),
+  fathers_address: Yup.string().required("father's address is required!"),
+  dob: Yup.string().required("Date if birth is required!"),
+  income_sources: Yup.object({
+    status: Yup.string().required("Your income source is required!"),
+    employed: Yup.object().when("status", {
+      is: "Employed",
+      then: Yup.object({
+        employers_name: Yup.string().required("employers name is required!"),
+        employers_address: Yup.string().required("employers address is required!"),
+        gross_monthly_income: Yup.string().required("Gross monthly income is required!")
+      })
+    }),
+    business: Yup.object().when("status", {
+      is: "Business",
+      then: Yup.object({ 
+        business_name: Yup.string().required("business name is required!"),
+        business_address: Yup.string().required("business address is required!"),
+        gross_monthly_income: Yup.string().required("Gross monthly income is required!") 
+      })
+    }),
+  })
+})
+
+export const member2ValidationSchema = Yup.object({
+  proposed_monthly_contributions: Yup.string().matches(/^[0-9]+$/, "Must be a number").required("Monthly contributions are required!"),
+  amount_in_words: Yup.string().matches(/^[a-zA-Z ]+$/, "Must only contain letters").required("Amount in words is required!")
 })

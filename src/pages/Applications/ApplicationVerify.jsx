@@ -6,11 +6,61 @@ import { toast } from 'react-toastify'
 import { OTPBox } from "../../components"
 import { addMember } from "../../helpers/addMember"
 
-function ApplicationVerify({ values, password, setPassword, resetForm }) {
+function ApplicationVerify({ values, password, setPassword, setInitialValues }) {
+
+    console.log(values)
     const [ otp, setOtp ] = useState(["", "", "", "", "", ""])
     const { phone_number } = values
     const [ { fullname: administrator }] = useOutletContext()
     const navigate = useNavigate()
+    const defaultInitialValues = {
+        fullname:'',
+        dob:'',
+        gender:'',
+        present_address:'',
+        email_address:'',
+        phone_number:'',
+        id_passport_number:'',
+        marital_status:'',
+        fathers_name:'',
+        fathers_address:'',
+        income_sources: {
+          status:'',
+          employed:{
+            employers_name: '',
+            employers_address:'',
+            position:'',
+            work_station:'',
+            gross_monthly_income:'',
+            appointment_date:'',
+            payroll_number:'',
+            source_of_income:''  
+          }, 
+          business: {
+            business_name: '',
+            business_address: '',
+            business_location: '',
+            other_income_sources: '',
+          }
+        },
+        nominees: [
+          {
+            name:'',
+            id:'',
+            contact:'',
+            dob:'',
+            percentage:''
+          }
+        ],
+        proposed_mode_of_remittances: {
+          standing_order:false,
+          direct_debit:false,
+          date_effective: '',
+          others: ''
+        },
+        proposed_monthly_contributions:'', 
+        amount_in_words:'',
+      }
 
     const handleSubmit = async ( one_time_password ) => {
         const verification_key = localStorage.getItem('verification_key')
@@ -27,7 +77,7 @@ function ApplicationVerify({ values, password, setPassword, resetForm }) {
                     console.log(data)
                     toast.success(`Member has successfully been created.`, { position:"top-center" })
                     setPassword("")
-                    resetForm()
+                    setInitialValues(defaultInitialValues)
                     navigate(-1)
                 })
                 .catch( error => console.log( error )) 
@@ -48,6 +98,7 @@ function ApplicationVerify({ values, password, setPassword, resetForm }) {
                 disabled={ otp?.length < 6 }
                 onClick={ async () => {
                 if ( otp ) {
+                    console.log(values)
                     handleSubmit(otp.join(""))
                 }
                 }}

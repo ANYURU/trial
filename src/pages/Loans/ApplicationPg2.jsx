@@ -51,7 +51,6 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
                 
                 <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer"  label="Employer" placeholder="Enter employer" defaultValue={initialValues.employer} />
 
-
                 <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer_postal_address"  label="Employer Postal Address" placeholder="Enter postal address" defaultValue={initialValues.employer_postal_address} />
 
                 <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="employer_no"  label="Telephone Number" placeholder="Enter number" defaultValue={initialValues.employer_no} />
