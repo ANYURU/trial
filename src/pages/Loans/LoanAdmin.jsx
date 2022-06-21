@@ -108,7 +108,7 @@ export default function LoanAdmin() {
             {shownLoans.length === 0 && (
               <>
                 <div
-                  className="animate-pulse h-7 inline-block bg-gray-300"
+                  className="animate-pulse h-7 inline-block bg-accent"
                   style={{ width: `100%` }}
                 ></div>
               </>

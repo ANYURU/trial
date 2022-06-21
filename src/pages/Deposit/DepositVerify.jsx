@@ -5,15 +5,27 @@ import { Spinner } from "../../components";
 import { downloadFile } from "../../helpers/utilites";
 import { toast, ToastContainer } from "react-toastify";
 import { useOutletContext } from "react-router-dom";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function DepositVerify() {
   const { id } = useParams();
   const [profile] = useOutletContext();
+  const [deposit, setDeposit] = useState(null);
 
   useEffect(() => {
     getApplication();
+
+    // if (deposit) {
+    //     downloadFile(
+    //       deposit.application_meta.files[0].file_url.substring(9),
+    //       "deposits"
+    //     )
+    //       .then((data) => setImageURL(data.avatar_url))
+    //       .catch((error) => error);
+    //   }
   }, []);
-  const [deposit, setDeposit] = useState(null);
+
   const [imageURL, setImageURL] = useState("");
 
   const getApplication = async () => {
@@ -22,17 +34,16 @@ export default function DepositVerify() {
       .select()
       .eq("_type", "deposit")
       .eq("application_id", id);
+
+    downloadFile(
+      data[0].application_meta.files[0].file_url.substring(9),
+      "deposits"
+    )
+      .then((data) => setImageURL(data.avatar_url))
+      .catch((error) => error);
+
     setDeposit(data[0]);
   };
-
-  // if (deposit) {
-  //   downloadFile(
-  //     deposit.application_meta.files[0].file_url.substring(9),
-  //     "deposits"
-  //   )
-  //     .then((data) => setImageURL(data.avatar_url))
-  //     .catch((error) => error);
-  // }
 
   const approveDepositTransaction = async () => {
     const {
@@ -76,7 +87,7 @@ export default function DepositVerify() {
     }
   };
 
-  // console.log(deposit)
+  console.log(deposit);
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
@@ -86,85 +97,103 @@ export default function DepositVerify() {
           Verify Deposit
         </h1>
       </div>
-      <div className="bg-white p-3 overflow-hidden  relative  h-[calc(100%-80px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-3 md:overflow-y-auto  relative  md:h-[calc(100%-80px)] dark:bg-dark-bg-700 dark:text-secondary-text">
         {deposit ? (
           <div className="flex flex-grow flex-col min-h-full">
             <div className="mb-3">
               <h1 className="font-semibold mb-3">
                 {deposit.application_meta.applicants_name}'s Deposit Details
+                <span
+                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
+                    !deposit.reviewed
+                      ? "bg-yellow-400"
+                      : deposit.application_meta.review_status === "approved"
+                      ? "bg-green-400"
+                      : "bg-red-400"
+                  }`}
+                >
+                  {!deposit.reviewed
+                    ? "Pending"
+                    : deposit.application_meta.review_status === "approved"
+                    ? "Approved"
+                    : "Rejected"}
+                </span>
               </h1>
-              <div className="outline outline-1 outline-gray-100 p-3">
-                <div className="my-6">
-                  Created At:{" "}
-                  <span className="font-semibold">
-                    {new Date(deposit.created_at).toISOString().split("T")[0]},{" "}
-                    {new Date(deposit.created_at).toLocaleTimeString("en-US")}
-                  </span>
+              <div className="outline outline-1 outline-gray-100 dark:outline-secondary-text p-3">
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Created At</p>
+                  <p className="font-bold col-span-3">
+                    : {moment(deposit.created_at).format("DD-MM-YYYY")},{" "}
+                    {moment(deposit.created_at).format("HH:MM")}
+                  </p>
                 </div>
-                <div className="my-6">
-                  Applicant ID:{" "}
-                  <span className="font-semibold">
-                    {deposit.application_meta.applicants_id}
-                  </span>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Application ID</p>
+                  <p className="font-bold col-span-3">
+                    : {deposit.application_id}
+                  </p>
                 </div>
-                <div className="my-6">
-                  Application ID:{" "}
-                  <span className="font-semibold">
-                    {deposit.application_id}
-                  </span>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Amount</p>
+                  <p className="font-bold col-span-3">
+                    : {currencyFormatter(deposit.application_meta.amount)}
+                  </p>
                 </div>
-                <div className="my-6">
-                  Account:{" "}
-                  <span className="font-semibold">
-                    {deposit.application_meta.account_type}
-                  </span>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Shares</p>
+                  <p className="font-bold col-span-3">
+                    : {deposit.application_meta.account_type}
+                  </p>
                 </div>
-                <div className="my-6">
-                  Amount:{" "}
-                  <span className="font-semibold">
-                    {deposit.application_meta.amount}
-                  </span>
-                </div>
-                <div className="my-6">
-                  Account/Mobile Number:
-                  <span className="font-semibold">
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Mobile Number</p>
+                  <p className="font-bold col-span-3">
+                    :{" "}
                     {deposit.application_meta &&
                       deposit?.application_meta.phone_number}
-                  </span>
+                  </p>
                 </div>
-                <div className="my-6">
-                  Particulars:{" "}
-                  <span className="font-semibold">
-                    {deposit.application_meta.particulars}
-                  </span>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Reason</p>
+                  <p className="font-bold col-span-3">
+                    :{" "}
+                    {deposit.application_meta &&
+                      deposit?.application_meta.particulars}
+                  </p>
                 </div>
-                {/* <img
-                  src={imageURL}
-                  width={200}
-                  className="rounded"
-                  alt="receipt"
-                  loading="lazy"
-                /> */}
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Proof of payment</p>
+                  <p className="font-bold col-span-3">
+                    <img
+                      src={imageURL}
+                      width={200}
+                      className="rounded"
+                      alt="receipt"
+                      loading="lazy"
+                    />
+                  </p>
+                </div>
               </div>
             </div>
-            {deposit.application_meta.applicants_id !== profile.id && (
-              <div className="flex gap-10 justify-end items-center mt-3">
-                <button
-                  type="submit"
-                  className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-                  onClick={rejectDepositTransaction}
-                >
-                  Reject
-                </button>
-                <button
-                  type="submit"
-                  className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-                  onClick={approveDepositTransaction}
-                >
-                  Approve
-                </button>
-              </div>
-            )}
+            {deposit.application_meta.applicants_id !== profile.id &&
+              !deposit.application_meta.reviewed && (
+                <div className="flex gap-10 justify-end items-center mt-3">
+                  <button
+                    type="submit"
+                    className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                    onClick={rejectDepositTransaction}
+                  >
+                    Reject
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                    onClick={approveDepositTransaction}
+                  >
+                    Approve
+                  </button>
+                </div>
+              )}
           </div>
         ) : (
           <Spinner />

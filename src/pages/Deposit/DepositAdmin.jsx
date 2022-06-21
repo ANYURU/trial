@@ -67,9 +67,28 @@ export default function DepositAdmin() {
 
   let shownDeposits = deposits.slice(indexOfFirstPage, indexOfLastPage);
 
+  shownDeposits = shownDeposits
+    .filter(
+      (deposit) =>
+        !account || deposit?.application_meta.account_type === account
+    )
+    .filter(
+      (deposit) =>
+        !status ||
+        (status === "pending"
+          ? !deposit.reviewed
+          : status === "approved"
+          ? deposit.application_meta.review_status === "approved"
+          : deposit.reviewed &&
+            deposit.application_meta.review_status !== "approved")
+    );
+  
   shownDeposits = shownDeposits.filter(
-    (deposit) => !account || deposit?.application_meta.account_type === account
-  );
+    (deposit) =>
+      deposit.application_meta.applicants_name
+        .toLowerCase()
+        .indexOf(searchText.toLowerCase()) > -1
+  )
 
   //context
   const [show, setShow] = useState(false);
@@ -94,7 +113,7 @@ export default function DepositAdmin() {
             {shownDeposits.length === 0 && (
               <>
                 <div
-                  className="animate-pulse h-7 inline-block bg-gray-300"
+                  className="animate-pulse h-7 inline-block bg-accent"
                   style={{ width: `100%` }}
                 ></div>
               </>
@@ -132,7 +151,7 @@ export default function DepositAdmin() {
           <div className="flex justify-between searchInput">
             <input
               type="text"
-              className="px-2 py-2 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text"
+              className="px-2 py-1 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text"
               placeholder="Search by name..."
               onChange={(event) => setSearchText(event.target.value)}
             />
@@ -146,7 +165,6 @@ export default function DepositAdmin() {
               id=""
               className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
               onChange={(event) => {
-                setFilterName(event.target.name);
                 setStatus(event.target.value);
               }}
             >
@@ -182,7 +200,7 @@ export default function DepositAdmin() {
         {/* </div> */}
       </div>
 
-      <div className="bg-white p-3 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-3 pb-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {deposits !== null && deposits.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">

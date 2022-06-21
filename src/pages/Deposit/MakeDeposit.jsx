@@ -1,4 +1,4 @@
-import { Submit } from "../../components";
+import { Submit, Spinner } from "../../components";
 import { Formik, Form } from "formik";
 import { uploadFile } from "../../helpers/uploadFile";
 import { supabase } from "../../helpers/supabase";
@@ -6,13 +6,16 @@ import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import { evidencedRequestValidationSchema as depositRequestValidationSchema } from "../../helpers/validator";
 import { useOutletContext } from "react-router-dom";
+import { useState } from "react";
 
 function MakeDeposit() {
+  const [loading, setLoading] = useState(false);
+
   const {
     user: { id: applicants_id },
   } = useAuth();
   const [{ fullname: applicants_name }] = useOutletContext();
-  console.log(applicants_name);
+
   const initialValues = {
     account_type: "",
     amount: "",
@@ -20,14 +23,23 @@ function MakeDeposit() {
     particulars: "",
     evidence: "",
   };
-  // This is me male for the first time that am supposed to make the world a better place for everyone living and staying in it. It looks crazy but its actually not crasy for the first time the world world had to remember that all kinds of animals living in the world have to survive for the great world and then we leave the rest to the world that doesn't believe in the world work and the work o
+  
+  console.log(loading)
+
+
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Deposit</h1>
-      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full w-full justify-center">
+      <div className="flex bg-white relative dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full w-full justify-center">
+        {loading && (
+          <div className="absolute z-10 bg-white dark:bg-dark-bg-700 dark:bg-opacity-90 bg-opacity-90 w-full h-full rounded-lg">
+            <Spinner />
+          </div>
+        )}
         <Formik
           initialValues={initialValues}
           onSubmit={async (values, { resetForm }) => {
+            setLoading(true);
             const {
               account_type,
               amount,
@@ -68,12 +80,13 @@ function MakeDeposit() {
 
               if (error) throw error;
 
-              console.log(data);
               resetForm({ values: initialValues });
+              setLoading(false);
               toast.success(`Request submitted for review.`, {
                 position: "top-center",
               });
             } catch (error) {
+              setLoading(false);
               toast.error(`${error?.message}`, { position: "top-center" });
             }
           }}
@@ -193,10 +206,7 @@ function MakeDeposit() {
 
                   <div className="flex justify-end w-full">
                     <div className="w-56">
-                      <Submit
-                        value="Make Deposit"
-                        disabled={!(isValid && dirty)}
-                      />
+                      <Submit value="Submit" disabled={!(isValid && dirty)} />
                     </div>
                   </div>
                 </div>

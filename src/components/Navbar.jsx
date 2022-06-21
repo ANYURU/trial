@@ -104,7 +104,7 @@ function Navbar({ user, showSidebar }) {
                 </div>
               )
             ) : (
-              <div class="animate-pulse rounded-full bg-accent h-10 w-10"></div>
+              <div class="animate-pulse rounded-full mx-2 bg-accent h-10 w-10"></div>
             )}
             <i className="dark:text-white">
               <MdKeyboardArrowDown />
