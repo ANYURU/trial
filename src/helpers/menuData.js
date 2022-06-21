@@ -171,5 +171,42 @@ export const menuData = {
             icon: <MdOutlinePersonOutline />,
             link: 'profile'
         }
+    ],
+    system_admin : [
+        {
+            label: 'Dashboard',
+            icon: <AiOutlineHome />,
+            link: 'dashboard'
+        },
+        {
+            label: 'Loans',
+            icon: <SiHomeassistantcommunitystore />,
+            link: 'loans/members'
+        },
+        {
+            label: 'Deposit',
+            icon: <RiExchangeDollarLine />,
+            link: 'deposit/members'
+        },
+        {
+            label: 'Withdraw',
+            icon: <IoMdCard />,
+            link: 'withdraw/members'
+        },
+        {
+            label: 'Admins',
+            icon: <MdPeopleOutline />,
+            link: 'admins'
+        },
+        {
+            label: 'Members',
+            icon: <MdPeopleOutline />,
+            link: 'members'
+        },
+        {
+            label: 'Profile',
+            icon: <MdOutlinePersonOutline />,
+            link: 'profile'
+        }
     ]
 }
