@@ -17,7 +17,7 @@ export const menuData = {
             link: 'loans',
             sublinks: [
                 {
-                    label: 'Request',
+                    label: 'Request Loan',
                     link: 'loans/request'
                 },
             ]
@@ -28,7 +28,7 @@ export const menuData = {
             link: 'deposit',
             sublinks: [
                 {
-                    label: 'Deposit',
+                    label: 'Make Deposit',
                     link: '/deposit/deposit'
                 }
             ]
@@ -39,7 +39,7 @@ export const menuData = {
             link: 'withdraw',
             sublinks: [
                 {
-                    label: 'Request',
+                    label: 'Request Withdraw',
                     link: 'withdraw/request'
                 }
             ]
@@ -54,7 +54,7 @@ export const menuData = {
                     link: 'accounts/shares'
                 },
                 {
-                    label: 'Mwanaa',
+                    label: 'Mwana',
                     link: 'accounts/mwana'
                 },
                 {
@@ -146,7 +146,7 @@ export const menuData = {
                     link: 'accounts/shares'
                 },
                 {
-                    label: 'Mwanaa',
+                    label: 'Mwana',
                     link: 'accounts/mwana'
                 },
                 {

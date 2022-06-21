@@ -33,8 +33,7 @@ export default function Deposit() {
       .eq("_type", "deposit")
       .order("created_at", { ascending: false })
       .eq("created_by", profile.id);
-
-    setDeposits(data.length > 0 ? data : null);
+    setDeposits(data && data.length > 0 ? data : null);
   };
 
   // pagination

@@ -31,7 +31,7 @@ function Accounts() {
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
-        Accounts
+        Accounts summary
       </h1>
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 h-full">
         {loading ? (
@@ -45,7 +45,7 @@ function Accounts() {
                   <th className="px-6 py-4">Amount</th>
                   <th className="px-6 py-4">Created At</th>
                   <th className="px-6 py-4">Status</th>
-                  <th>Actions</th>
+                  {/* <th>Actions</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -58,10 +58,10 @@ function Accounts() {
                         "DD-MM-YYYY"
                       )}
                     </td>
-                    <td className="px-6 py-4">Active</td>
+                    <td className="px-6 py-4">{accounts?.savings?.balance}</td>
                     <td className="px-5 py-4">
                       <div className="relative">
-                        <button className="block p-2 rounded-md dialog">
+                        <button className="block p-2 rounded-md dialog cursor-context-menu">
                           <FaEllipsisV />
                         </button>
                       </div>
@@ -77,10 +77,10 @@ function Accounts() {
                         "DD-MM-YYYY"
                       )}
                     </td>
-                    <td className="px-6 py-4">Active</td>
+                    <td className="px-6 py-4">{accounts?.shares?.balance}</td>
                     <td className="px-5 py-4">
                       <div className="relative">
-                        <button className="block p-2 rounded-md dialog">
+                        <button className="block p-2 rounded-md dialog cursor-context-menu">
                           <FaEllipsisV />
                         </button>
                       </div>
@@ -94,14 +94,16 @@ function Accounts() {
                     <td className="px-6 py-4">
                       {moment(accounts?.mwana?.created_at).format("DD-MM-YYYY")}
                     </td>
-                    <td className="px-6 py-4">Active</td>
-                    <td className="px-5 py-4">
+                    <td className="px-6 py-4">
+                      {accounts?.mwana?.account_status}
+                    </td>
+                    {/* <td className="px-5 py-4">
                       <div className="relative">
-                        <button className="block p-2 rounded-md dialog">
+                        <button className="block p-2 rounded-md dialog cursor-context-menu">
                           <FaEllipsisV />
                         </button>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 )}
                 {accounts?.fixed && (
@@ -111,14 +113,16 @@ function Accounts() {
                     <td className="px-6 py-4">
                       {moment(accounts?.fixed?.created_at).format("DD-MM-YYYY")}
                     </td>
-                    <td className="px-6 py-4">Active</td>
-                    <td className="px-5 py-4">
+                    <td className="px-6 py-4">
+                      {accounts?.fixed?.account_status}
+                    </td>
+                    {/* <td className="px-5 py-4">
                       <div className="relative">
-                        <button className="block p-2 rounded-md dialog">
+                        <button className="block p-2 rounded-md dialog cursor-context-menu">
                           <FaEllipsisV />
                         </button>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 )}
               </tbody>

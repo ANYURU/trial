@@ -2,13 +2,14 @@ import { depositHistory } from "../../helpers/mockData";
 import { supabase } from "../../helpers/supabase";
 import { useState, useEffect } from "react";
 import { filterByStatus } from "../../helpers/utilites";
-import { Pagination, Spinner } from "../../components";
+import { Pagination, Spinner, NothingShown } from "../../components";
 import { FaEllipsisV } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
 import WithdrawModal from "../../components/Modals/WithdrawModal";
 import { Helmet } from "react-helmet";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { useOutletContext } from "react-router-dom";
 
 export default function Withdrawy() {
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function Withdrawy() {
   const [account, setAccount] = useState("");
   const [withdrawModal, setWithdrawModal] = useState(false);
   const [show, setShow] = useState(false);
+  const [profile] = useOutletContext();
 
   let loans = filterByStatus(depositHistory, "status", status);
 
@@ -31,8 +33,9 @@ export default function Withdrawy() {
       .from("transactions")
       .select()
       .eq("_type", "withdraw")
-      .order("created_at", { ascending: false });
-    setWithraws(data);
+      .order("created_at", { ascending: false })
+      .eq("created_by", profile.id);
+    setWithraws(data && data.length > 0 ? data : null);
   };
 
   //pagination
@@ -137,13 +140,13 @@ export default function Withdrawy() {
                         />
                       )}
                       <td className="px-6 py-3">
-                        {
-                          moment(withdraw.created_at).format("DD-MM-YYYY")
-                        }
+                        {moment(withdraw.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">{withdraw.transaction_id}</td>
                       <td className="px-6 py-3">{withdraw.account}</td>
-                      <td className="px-6 py-3">{currencyFormatter(withdraw.amount)}</td>
+                      <td className="px-6 py-3">
+                        {currencyFormatter(withdraw.amount)}
+                      </td>
                       <td className="px-6 py-3">{withdraw.depositMethod}</td>
 
                       <td className="px-6 py-3">
@@ -194,6 +197,8 @@ export default function Withdrawy() {
               />
             </div>
           </>
+        ) : withdraws === null ? (
+          <NothingShown />
         ) : (
           <Spinner />
         )}
