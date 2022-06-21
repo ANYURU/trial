@@ -98,13 +98,13 @@ function LoanRequest() {
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
       <ToastContainer />
-      <div className="flex flex-col justify-between pb-3 h-[60px]">
+      <div className="flex flex-col justify-between pb-3 md:h-[60px]">
         <h1 className="mb-5 font-bold uppercase dark:text-white">
           Loan Request
         </h1>
       </div>
 
-      <div className="flex flex-col overflow-hidden  relative bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 h-[calc(100%-80px)]">
+      <div className="flex flex-col overflow-hidden  relative bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 md:h-[calc(100%-80px)]">
         <Stepper pageNumber={pageNumber} />
         <br />
         <div className="flex flex-col w-full  relative overflow-y-auto pb-5 px-1 mt-2">

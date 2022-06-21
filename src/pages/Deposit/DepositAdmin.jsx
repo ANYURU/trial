@@ -84,7 +84,7 @@ export default function DepositAdmin() {
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
-      <div className="flex flex-col justify-between pb-3 mb-2 overflow-hidden h-[150px]">
+      <div className="flex flex-col justify-between pb-3 mb-2 overflow-hidden md:h-[150px]">
         <h1 className="mb-3 mt-2 font-bold uppercase dark:text-white">
           Member Deposits
         </h1>
@@ -128,7 +128,7 @@ export default function DepositAdmin() {
           </div>
         </div>
 
-        <div className="flex gap-1">
+        <div className="flex sm:flex-wrap gap-1">
           <div className="flex justify-between searchInput">
             <input
               type="text"
@@ -182,7 +182,7 @@ export default function DepositAdmin() {
         {/* </div> */}
       </div>
 
-      <div className="bg-white p-3 overflow-hidden  relative  h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-3 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {deposits !== null && deposits.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
@@ -287,7 +287,7 @@ export default function DepositAdmin() {
                 </tbody>
               </table>
             </div>
-            <div className="flex bg-white dark:bg-dark-bg-700 justify-between absolute left-0 right-0 bottom-0 px-5 py-1">
+            <div className="flex bg-white dark:bg-dark-bg-700 justify-between md:absolute left-0 right-0 bottom-0 px-5 py-1">
               <Pagination
                 pages={Math.ceil(deposits.length / withdrawPerPage)}
                 setCurrentPage={setCurrentPage}

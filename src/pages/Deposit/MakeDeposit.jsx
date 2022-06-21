@@ -1,137 +1,212 @@
-import { Submit } from "../../components"
-import { Formik,  Form } from 'formik'
-import { uploadFile } from '../../helpers/uploadFile'
-import { supabase } from '../../helpers/supabase'
-import { useAuth } from "../../auth/AuthContext"
-import { toast, ToastContainer } from 'react-toastify'
-import { evidencedRequestValidationSchema as depositRequestValidationSchema } from '../../helpers/validator'
-import { useOutletContext } from 'react-router-dom'
+import { Submit } from "../../components";
+import { Formik, Form } from "formik";
+import { uploadFile } from "../../helpers/uploadFile";
+import { supabase } from "../../helpers/supabase";
+import { useAuth } from "../../auth/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
+import { evidencedRequestValidationSchema as depositRequestValidationSchema } from "../../helpers/validator";
+import { useOutletContext } from "react-router-dom";
 
 function MakeDeposit() {
-  const { user: { id: applicants_id } } = useAuth()
-  const [{ fullname: applicants_name}] = useOutletContext()
-  console.log(applicants_name)
+  const {
+    user: { id: applicants_id },
+  } = useAuth();
+  const [{ fullname: applicants_name }] = useOutletContext();
+  console.log(applicants_name);
   const initialValues = {
-    account_type: '',
-    amount: '',
-    phone_number: '',
-    particulars: '',
-    evidence: ''
-  }
-   // This is me male for the first time that am supposed to make the world a better place for everyone living and staying in it. It looks crazy but its actually not crasy for the first time the world world had to remember that all kinds of animals living in the world have to survive for the great world and then we leave the rest to the world that doesn't believe in the world work and the work o
+    account_type: "",
+    amount: "",
+    phone_number: "",
+    particulars: "",
+    evidence: "",
+  };
+  // This is me male for the first time that am supposed to make the world a better place for everyone living and staying in it. It looks crazy but its actually not crasy for the first time the world world had to remember that all kinds of animals living in the world have to survive for the great world and then we leave the rest to the world that doesn't believe in the world work and the work o
   return (
-    <div className='mx-5 my-2 h-[calc(100vh-70px)]'>
-      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Deposit</h1>
+    <div className="mx-5 my-2 h-[calc(100vh-70px)]">
+      <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Deposit</h1>
       <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full w-full justify-center">
-      <Formik
-        initialValues={initialValues}
-        onSubmit={async ( values, { resetForm } ) => {
-          const { account_type, amount, phone_number, particulars, evidence } = values
-          
-          try {
-            const { Key: url } = await uploadFile(evidence, 'deposits')
-            const { error, data } = await supabase
-              .from('applications')
-              .insert([
-                { 
-                  _type: "deposit",
-                  created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                  updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                  reviewed: false,
-                  application_meta: {
-                    applicants_id,
-                    applicants_name,
-                    account_type,
-                    amount,
-                    phone_number,
-                    files: [
-                      {
-                        file_url: url
-                      }
-                    ],
-                    particulars
-                  }
-                }
-              ]
-            )
+        <Formik
+          initialValues={initialValues}
+          onSubmit={async (values, { resetForm }) => {
+            const {
+              account_type,
+              amount,
+              phone_number,
+              particulars,
+              evidence,
+            } = values;
 
-            if( error ) throw error
-            
-            console.log(data)
-            resetForm({ values: initialValues })
-            toast.success(`Request submitted for review.`, { position: 'top-center' })
-            
-          } catch ( error ) {
-            toast.error(`${error?.message}`, {position:'top-center'})
-          }
-        }}
+            try {
+              const { Key: url } = await uploadFile(evidence, "deposits");
+              const { error, data } = await supabase
+                .from("applications")
+                .insert([
+                  {
+                    _type: "deposit",
+                    created_at: new Date()
+                      .toISOString()
+                      .toLocaleString("en-GB", { timeZone: "UTC" }),
+                    updated_at: new Date()
+                      .toISOString()
+                      .toLocaleString("en-GB", { timeZone: "UTC" }),
+                    reviewed: false,
+                    application_meta: {
+                      applicants_id,
+                      applicants_name,
+                      account_type,
+                      amount,
+                      phone_number,
+                      files: [
+                        {
+                          file_url: url,
+                        },
+                      ],
+                      particulars,
+                    },
+                  },
+                ]);
 
-        validationSchema={ depositRequestValidationSchema }
-      >
-        {({ values, errors, touched, handleChange, handleBlur, isValid, dirty}) => {
-          return (
-            <Form>
-              <div className='flex flex-grow flex-col min-h-full w-full'>
-                <ToastContainer />
-                <div className='mb-3'>
-                    <div className='m-2'>
-                      <div className='flex flex-wrap gap-5 h-16'>
-                          <div className='flex flex-col w-56'>
-                            <label className='text-sm'>Please select an account</label>
-                            <select name="account_type" id="account_type" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 dark:text-secondary-text" onChange={handleChange} onBlur={handleBlur} value={values.account_type}>
-                              <option value="">--Select Account--</option>
-                              <option value="savings">Savings</option>
-                              <option value="shares">Shares</option>
-                              <option value="fixed">Fixed</option>
-                              <option value="mwana">Mwana</option>
-                            </select>
-                            {touched?.account_type && errors?.account_type && <div className="error text-red-600 text-xs">{errors?.account_type}</div>}
-                          </div>
-                          <div className='flex flex-col w-56 '>
-                            <label className=' text-sm'>Enter Amount</label>
-                            <input type="number" name="amount" id="amount" placeholder='Enter amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values.amount}/>
-                            {touched?.amount && errors?.amount && <div className="error text-red-600 text-xs">{errors?.amount}</div>}
-                          </div>
-                      </div>
+              if (error) throw error;
+
+              console.log(data);
+              resetForm({ values: initialValues });
+              toast.success(`Request submitted for review.`, {
+                position: "top-center",
+              });
+            } catch (error) {
+              toast.error(`${error?.message}`, { position: "top-center" });
+            }
+          }}
+          validationSchema={depositRequestValidationSchema}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            isValid,
+            dirty,
+          }) => {
+            return (
+              <Form>
+                <div className="flex flex-grow flex-col min-h-full w-full">
+                  <ToastContainer />
+
+                  <div className="mb-3 flex flex-wrap gap-5 md:h-16">
+                    <div className="flex flex-col w-56">
+                      <label className="text-sm">
+                        Please select an account
+                      </label>
+                      <select
+                        name="account_type"
+                        id="account_type"
+                        className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.account_type}
+                      >
+                        <option value="">--Select Account--</option>
+                        <option value="savings">Savings</option>
+                        <option value="shares">Shares</option>
+                        <option value="fixed">Fixed</option>
+                        <option value="mwana">Mwana</option>
+                      </select>
+                      {touched?.account_type && errors?.account_type && (
+                        <div className="error text-red-600 text-xs">
+                          {errors?.account_type}
+                        </div>
+                      )}
                     </div>
-                </div>
-                <div className='mb-3'>
-                    <div className='m-2'>
-                      <div className='flex flex-wrap gap-5 h-20'>
-                          <div className='flex flex-col w-56'>
-                            <label className='text-sm'>Enter Phone Number</label>
-                            <input type="text" name="phone_number" id="phone_number" placeholder='Enter phone number' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values.phone_number}/>
-                            {touched?.phone_number && errors?.phone_number && <div className="error text-red-600 text-xs">{errors?.phone_number}</div>}
-                          </div>
-                          <div className='flex flex-col w-56 '>
-                            <label className=' text-sm'>Upload Receipt</label>
-                            <input type="file" name="evidence" id="evidence" placeholder='Enter postal address' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' onChange={(event) => {
-                              values.evidence = event.currentTarget.files[0]
-                            }} onBlur={handleBlur}/>
-                            {touched?.evidence && errors?.evidence && <div className="error text-red-600 text-xs">{errors?.evidence}</div>} 
-                          </div>
-                      </div>
+                    <div className="flex flex-col w-56 ">
+                      <label className=" text-sm">Enter Amount</label>
+                      <input
+                        type="number"
+                        name="amount"
+                        id="amount"
+                        placeholder="Enter amount"
+                        className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.amount}
+                      />
+                      {touched?.amount && errors?.amount && (
+                        <div className="error text-red-600 text-xs">
+                          {errors?.amount}
+                        </div>
+                      )}
                     </div>
-                </div>
+                  </div>
+                  <div className="mb-3 flex flex-wrap gap-5 md:h-20">
+                    <div className="flex flex-col w-56">
+                      <label className="text-sm">Enter Phone Number</label>
+                      <input
+                        type="text"
+                        name="phone_number"
+                        id="phone_number"
+                        placeholder="Enter phone number"
+                        className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.phone_number}
+                      />
+                      {touched?.phone_number && errors?.phone_number && (
+                        <div className="error text-red-600 text-xs">
+                          {errors?.phone_number}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col w-56 ">
+                      <label className=" text-sm">Upload Receipt</label>
+                      <input
+                        type="file"
+                        name="evidence"
+                        id="evidence"
+                        placeholder="Enter postal address"
+                        className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
+                        onChange={(event) => {
+                          values.evidence = event.currentTarget.files[0];
+                        }}
+                        onBlur={handleBlur}
+                      />
+                      {touched?.evidence && errors?.evidence && (
+                        <div className="error text-red-600 text-xs">
+                          {errors?.evidence}
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
-                <div className='mb-3'>
-                    <h1 className='font-semibold'>Particulars</h1>
-                    <textarea name="particulars" id="particulars" cols="30" rows="10" className='outline outline-1 rounded-md w-full p-2 dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values.particulars}></textarea>
-                </div>
+                  <div className="mb-3">
+                    <h1 className="font-semibold">Particulars</h1>
+                    <textarea
+                      name="particulars"
+                      id="particulars"
+                      cols="30"
+                      rows="10"
+                      className="outline outline-1 rounded-md w-full p-2 dark:bg-dark-bg-600"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.particulars}
+                    ></textarea>
+                  </div>
 
-                <div className="flex justify-end w-full">
-                  <div className="w-56">
-                    <Submit value='Make Deposit' disabled={!(isValid && dirty)}/>
+                  <div className="flex justify-end w-full">
+                    <div className="w-56">
+                      <Submit
+                        value="Make Deposit"
+                        disabled={!(isValid && dirty)}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Form>
-          )
-        }}
-      </Formik>
+              </Form>
+            );
+          }}
+        </Formik>
       </div>
     </div>
-  )
+  );
 }
 
-export default MakeDeposit
+export default MakeDeposit;

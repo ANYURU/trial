@@ -98,7 +98,7 @@ export default function LoanAdmin() {
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
-      <div className="flex flex-col justify-between pb-3 h-[150px]">
+      <div className="flex flex-col justify-between pb-3 md:h-[150px]">
         <h1 className="mb-2 font-bold uppercase dark:text-white">
           Loan Applications
         </h1>
@@ -206,7 +206,7 @@ export default function LoanAdmin() {
         </div>
       </div>
 
-      <div className="bg-white p-6 overflow-hidden  relative  h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {loans !== null && shownLoans.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
@@ -305,7 +305,7 @@ export default function LoanAdmin() {
                 </tbody>
               </table>
             </div>
-            <div className="flex bg-white dark:bg-dark-bg-700 justify-between absolute left-0 right-0 bottom-0 px-5 py-1">
+            <div className="flex bg-white dark:bg-dark-bg-700 justify-between md:absolute left-0 right-0 bottom-0 px-5 py-1">
               <Pagination
                 pages={Math.ceil(loans.length / withdrawPerPage)}
                 setCurrentPage={setCurrentPage}

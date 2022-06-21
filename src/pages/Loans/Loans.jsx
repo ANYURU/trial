@@ -68,7 +68,7 @@ export default function MemberLoans() {
       <Helmet>
         <title>Loans - Bweyogere tuberebumu</title>
       </Helmet>
-      <div className="flex flex-col justify-between pb-3 h-[110px]">
+      <div className="flex flex-col justify-between pb-3 md:h-[110px]">
         <h1 className="mb-5 font-bold uppercase dark:text-white">My Loans</h1>
 
         <div className="flex my-1 justify-between gap-5">
@@ -98,7 +98,7 @@ export default function MemberLoans() {
         </div>
       </div>
 
-      <div className="bg-white p-6 overflow-hidden  relative  h-[calc(100%-120px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-6 overflow-hidden  relative  md:h-[calc(100%-120px)] dark:bg-dark-bg-700">
         {shownloans && shownloans.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
@@ -177,7 +177,7 @@ export default function MemberLoans() {
                 </tbody>
               </table>
             </div>
-            <div className="flex bg-white dark:bg-dark-bg-700 justify-between absolute left-0 right-0 bottom-0 px-5 py-1">
+            <div className="flex bg-white dark:bg-dark-bg-700 justify-between md:absolute left-0 right-0 bottom-0 px-5 py-1">
               <Pagination
                 pages={Math.ceil(loanHistory.length / loansPerPage)}
                 setCurrentPage={setCurrentPage}

@@ -187,7 +187,7 @@ export default function WithdrawMembers() {
           </div>
         </form>
       </div>
-      <div className="bg-white p-3 overflow-hidden  relative  h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-3 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {filteredWithdraws.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto sm:rounded-lg">

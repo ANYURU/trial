@@ -71,8 +71,8 @@ export default function Members() {
   // console.log(members);
 
   return (
-    <div className="mx-5 my-2 h-[calc(100vh-70px)]">
-      <div className="flex flex-col justify-between pb-3 h-[150px]">
+    <div className="mx-5 my-2 md:h-[calc(100vh-70px)]">
+      <div className="flex flex-col justify-between pb-3 md:h-[150px]">
         <h1 className="mb-3 mt-2 font-bold uppercase dark:text-white">
           Members
         </h1>
@@ -115,7 +115,7 @@ export default function Members() {
         </div>
       </div>
 
-      <div className="bg-white p-6 overflow-hidden  relative  h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {members && members.length > 0 ? (
           <>
             <div className="w-full pb-3 overflow-x-auto h-full  relative overflow-y-auto">
@@ -214,7 +214,7 @@ export default function Members() {
                 </tbody>
               </table>
             </div>
-            <div className="flex bg-white dark:bg-dark-bg-700 justify-between absolute left-0 right-0 bottom-0 px-5 py-1">
+            <div className="flex bg-white dark:bg-dark-bg-700 justify-between md:absolute left-0 right-0 bottom-0 px-5 py-1">
               <Pagination
                 pages={Math.ceil(filteredMembers.length / withdrawPerPage)}
                 setCurrentPage={setCurrentPage}
