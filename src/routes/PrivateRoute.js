@@ -14,7 +14,7 @@ const PrivateRoute = ({ allowedRoles }) => {
   const { user, darkMode } = useAuth();
   const [profile, setProfile] = useState({});
   const [roles, setRoles] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
 
   useEffect(() => {

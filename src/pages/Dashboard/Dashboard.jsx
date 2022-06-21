@@ -94,10 +94,12 @@ export default function Dashboard() {
     cutoutPercentage: 25,
   };
 
+  console.log(profile)
+
   return (
     <div className={`flex flex-col ${matches && "overflow-y-hidden"}`}>
       {/* Account Summaries */}
-      {!profile?.fullname && <RegistrationModal />}
+      {Object.keys(profile).length > 0 && !profile?.fullname && <RegistrationModal />}
       <div className="">
         <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
           Dashboard
