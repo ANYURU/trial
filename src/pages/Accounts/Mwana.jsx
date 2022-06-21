@@ -38,15 +38,12 @@ function Mwana() {
     // .catch(error => console.log(error))
   }, []);
 
-  console.log(account);
-
   // const navigate = useNavigate()
   const create_account = async () => {
     try {
       const { data, error } = await supabase.rpc("create_mwana_account", {});
       if (error) throw error;
       toast.success(`Account successfully opened`, { position: "top-center" });
-      console.log(data);
     } catch (error) {
       toast.error(
         `${
