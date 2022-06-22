@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { getOTP } from '../../helpers/getotp'
 import { verifyOTP } from '../../helpers/verifyotp'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import { OTPBox } from "../../components"
 import { addMember } from "../../helpers/addMember"
 
@@ -88,6 +88,7 @@ function ApplicationVerify({ values, password, setPassword, setInitialValues }) 
     }
     return (
         <div className='flex flex-col justify-center items-center h-full w-full'>
+            <ToastContainer />
             <h1 className='font-bold'>Verify member's to confirm your submission</h1>
             <p className='text-sm'>An OTP has been sent to your phone number. Please enter a valid OTP to confirm submission.</p>
             <div className="flex flex-col justify-center items-center mt-5 p-5">
