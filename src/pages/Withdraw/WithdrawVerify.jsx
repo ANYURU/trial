@@ -73,7 +73,7 @@ export default function WithdrawVerify() {
               </div>
           </div>
           <div className="flex gap-10 justify-end items-center mt-3">
-          <button
+          {/* <button
             type="submit"
             className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
             onClick={rejectWithdrawTransaction}
@@ -84,16 +84,16 @@ export default function WithdrawVerify() {
             className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
             onClick={approveWithdrawTransaction}
             >Approve
-          </button>
+          </button> */}
           {withdraw && !withdraw.reviewed && 
             <div className="flex gap-10 justify-end items-center mt-3">
             <button
-              type="submit"
+              onClick={rejectWithdrawTransaction}
               className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
               >Reject
             </button>
             <button
-              type="submit"
+              onClick={approveWithdrawTransaction}
               className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
               >Approve
             </button>

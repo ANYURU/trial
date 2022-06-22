@@ -5,6 +5,7 @@ import { useAuth } from "../auth/AuthContext";
 import { useEffect, useState } from "react";
 import { getProfile } from "../helpers/getProfile";
 import { Loader } from "../components";
+import { ToastContainer } from "react-toastify";
 
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
@@ -50,6 +51,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                   roles ? (
                     roles.find((role) => allowedRoles.includes(role)) ? (
                       <div className="flex-grow mx-5 overflow-y-auto h-full">
+                        <ToastContainer />
                         {loading ? (
                           <Loader />
                         ) : (

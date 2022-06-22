@@ -13,7 +13,6 @@ import PasswordGenerator from "../../components/Form/PasswordGenerator"
 function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNumber, password, setPassword }) {
     console.log(initialValues)
   const {
-    proposed_mode_of_remittances: { others, date_effective },
     proposed_monthly_contributions,
     amount_in_words,
   } = initialValues;
@@ -29,7 +28,9 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
     const { fullname: applicants_name, phone_number, ...rest } = values
 
     try {
-      if ( location.state.from === "/members" ) {
+      if ( location.state?.from === "/members" ) {
+
+        console.log("here")
         getOTP( phone_number, "VERIFICATION" )
           .then( response => response.json() )
           .then( data => {
@@ -39,11 +40,13 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
             return 
           })
           .catch( error => console.log( error ))     
+
+
         
       } 
 
       else {
-        const { error } = await supabase
+        const { error, data } = await supabase
           .from('applications')
           .insert(
             [
@@ -62,6 +65,8 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
             ]
           )
           .single()
+
+          console.log(data)
 
         if (error) { 
           throw error 
@@ -86,6 +91,7 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
     } catch ( error ) {
       // handle the errors depending on error status codes & give appropriate messages to the users
       toast.error(`${error?.message}`, {position:'top-center'})
+      console.log(error)
     }
   }
 
@@ -135,7 +141,7 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
                   name="proposed_mode_of_remittances[standing_order]"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  defaultChecked={initialValues.proposed_mode_of_remittances.standing_order}
+                  defaultChecked={initialValues.proposed_mode_of_remittances?.standing_order || false}
                 />
                 <label htmlFor="">Standing Order</label>
               </div>
@@ -145,7 +151,7 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
                   name="proposed_mode_of_remittances[direct_debit]"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  defaultChecked={initialValues.proposed_mode_of_remittances.direct_debit}
+                  defaultChecked={initialValues.proposed_mode_of_remittances?.direct_debit || false}
                 />
                 <label htmlFor="">Direct Debit</label>
               </div>
@@ -157,7 +163,7 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
                 reference="proposed_mode_of_remittances[others]"
                 label="Specify Others"
                 placeholder="Enter other modes"
-                defaultValue={others}
+                defaultValue={initialValues.proposed_mode_of_remittances?.others || ""}
                 type="text"
               />
               <InputField
@@ -168,7 +174,7 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
                 reference="proposed_mode_of_remittances[date_effective]"
                 label="Effective Date (dd/mm/yyyy)"
                 placeholder="dd/mm/yyyy"
-                defaultValue={date_effective}
+                defaultValue={initialValues.proposed_mode_of_remittances?.date_effective}
                 type="date"
               />
             </div>
@@ -181,7 +187,7 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
             handleBlur={handleBlur}
           />
             {
-                location.state.from === "/members" && <div><PasswordGenerator password={password} setPassword={setPassword}/>here</div>
+                location.state?.from === "/members" && <div><PasswordGenerator password={password} setPassword={setPassword}/>here</div>
             }
             <div className="flex justify-between w-full">
                 <input
@@ -197,7 +203,7 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
                 <button 
                     type='submit'
                     className='outline outline-primary outline-2 text-white bg-primary px-4 py-1 rounded-lg cursor-pointer'
-                    disabled={!password}
+                    disabled={location.state?.from === "/member" && !password ? true : false}
                 >submit</button>
             </div>
         </Form>
