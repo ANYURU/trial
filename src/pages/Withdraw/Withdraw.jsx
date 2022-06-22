@@ -143,7 +143,7 @@ export default function Withdrawy() {
                         {moment(withdraw.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">{withdraw.transaction_id}</td>
-                      <td className="px-6 py-3">{withdraw.account}</td>
+                      <td className="px-6 py-3">{withdraw.account_type}</td>
                       <td className="px-6 py-3">
                         {currencyFormatter(withdraw.amount)}
                       </td>

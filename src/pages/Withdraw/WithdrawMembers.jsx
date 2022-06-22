@@ -9,12 +9,14 @@ import { AiFillCheckSquare } from "react-icons/ai";
 import { NothingShown } from "../../components";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
-import { MdInfo } from 'react-icons/md'
+import WithdrawModal from "../../components/Modals/WithdrawModal2";
+import { MdInfo } from "react-icons/md";
 
 export default function WithdrawMembers() {
   const [status, setStatus] = useState("");
   const [searchText, setSearchText] = useState("");
   const [date, setDate] = useState(null);
+  const [withdrawModal, setWithdrawModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -146,8 +148,8 @@ export default function WithdrawMembers() {
           </div>
         </div>
       </div>
-      <div className="my-3">
-        <div className="my-2 flex justify-between searchInput">
+      <div className="flex justify-between gap-5 m-1 mb-2">
+        <div className=" flex justify-between searchInput">
           <input
             type="text"
             name=""
@@ -156,139 +158,151 @@ export default function WithdrawMembers() {
             placeholder="Search by name..."
             onChange={(event) => setSearchText(event.target.value)}
           />
-          <MdOutlineSearch className="search_icon" />
+          {/* <MdOutlineSearch className="search_icon" /> */}
         </div>
-        <form action="" className="m-1">
-          <div className="flex justify-between gap-5">
-            <div className="flex flex-col w-56">
-              <select
-                name="status"
-                id=""
-                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
-                onChange={(event) => setStatus(event.target.value)}
-              >
-                <option value="">Status</option>
-                <option value="approved">Approved</option>
-                <option value="pending">Pending</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
+        <div className="flex flex-col w-56">
+          <select
+            name="status"
+            id=""
+            className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
+            onChange={(event) => setStatus(event.target.value)}
+          >
+            <option value="">Status</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
 
-            <div className="flex flex-col w-56">
-              <input
-                type="date"
-                name="inputDate"
-                onChange={(event) => setDate(event.target.value)}
-                id=""
-                placeholder="Old Password"
-                className=" rounded inputDate dark:bg-dark-bg-700 dark:text-secondary-text"
-              />
-            </div>
-          </div>
-        </form>
+        <div className="flex flex-col w-56">
+          <input
+            type="date"
+            name="inputDate"
+            onChange={(event) => setDate(event.target.value)}
+            id=""
+            placeholder="Old Password"
+            className=" rounded inputDate dark:bg-dark-bg-700 dark:text-secondary-text"
+          />
+        </div>
       </div>
       <div className="bg-white p-3 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {filteredWithdraws.length > 0 ? (
           <>
-            <div className="w-full overflow-x-auto sm:rounded-lg">
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th className="px-6 py-4">Date</th>
-                    <th className="px-6 py-4">Transaction ID</th>
-                    <th className="px-6 py-4">Name</th>
-                    <th className="px-6 py-4">Account</th>
-                    <th className="px-6 py-4">Amount</th>
-                    <th className="px-6 py-4">Cashout Method</th>
-                    <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {shownWithdraw.map((withdraw, index) => (
-                    <tr
-                      className={`${
-                        index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
-                      key={index}
-                    >
-                      <td className="px-6 py-3">
-                        {
-                          moment(withdraw.created_at).format("DD-MM-YYYY")
-                        }
-                      </td>
-                      <td className="px-6 py-3">{withdraw.application_id}</td>
-                      <td className="px-6 py-3">
-                        {withdraw.application_meta.applicants_name}
-                      </td>
-                      <td className="px-6 py-3">
-                        {withdraw.application_meta.account_type}
-                      </td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(withdraw.application_meta.amount)}
-                      </td>
-                      <td className="px-6 py-3"></td>
-                      <td className={`px-6 py-3`}>
-                        <span
-                          className={` py-1 px-2 rounded-xl text-white ${
-                            withdraw.reviewed
-                              ? withdraw.application_meta.review_status ===
-                                "approved"
-                                ? "bg-green-400"
-                                : "bg-red-400"
-                              : "bg-yellow-400"
-                          }`}
-                        >
-                          {withdraw.reviewed
-                            ? withdraw.application_meta.review_status ===
-                              "approved"
-                              ? "Approved"
-                              : "Rejected"
-                            : "Pending"}
-                        </span>
-                      </td>
-
-                      <td className="px-6 py-3">
-                        <div className="relative">
-                          <button
-                            className="block p-2 rounded-md dialog cursor-context-menu"
-                            onClick={(event) => {
-                              setActiveIndex(index);
-                              setShow(!show);
-                              event.stopPropagation();
-                            }}
-                          >
-                            <FaEllipsisV />
-                          </button>
-
-                          <ul
-                            className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
-                              index === activeIndex && show ? "" : "hidden"
+            <div className="w-full md:h-[calc(100%-1px)] outline outline-red-500 overflow-y-hidden overscroll-y-none overflow-x-auto">
+              <table
+                className="w-full table-auto md:h-[calc(100%-100px)] overflow-y-auto text-sm text-left text-gray-500 dark:text-gray-400"
+                cellPadding="10"
+                border="1"
+              >
+                <div>
+                  <thead
+                    className="text-x text-gray-700 font-bold uppercase dark:bg-gray-700 dark:text-gray-400"
+                    cellPadding="100px"
+                  >
+                    <div className="flex gap-2">
+                      <div className="w-48 py-4">Member</div>
+                      <div className="w-40 py-4">Date</div>
+                      <div className="w-48 py-4">Transactions ID</div>
+                      <div className="w-40 py-4">Account</div>
+                      <div className="w-48 py-4">Amount</div>
+                      <div className="w-48 py-4">Cashout Method</div>
+                      <div className="w-40 py-4">Status</div>
+                      <div className="w-36 py-4">Action</div>
+                    </div>
+                  </thead>
+                </div>
+                <div className="w-full md:h-[calc(100%-100px)] overflow-y-auto">
+                  <tbody>
+                    {shownWithdraw.map((withdraw, index) => (
+                      <div
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
+                        } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer flex gap-2`}
+                        key={index}
+                      >
+                        {withdrawModal && index === activeIndex && (
+                          <WithdrawModal
+                            withdraw={withdraw}
+                            setWithdrawModal={setWithdrawModal}
+                          />
+                        )}
+                        <div className="w-48 py-4">
+                          {withdraw.application_meta.applicants_name}
+                        </div>
+                        <div className="w-40 py-4">
+                          {moment(withdraw.created_at).format("DD-MM-YYYY")}
+                        </div>
+                        <div className=" py-4 overflow-hidden w-48">
+                          {withdraw.application_id}
+                        </div>
+                        <div className="w-40 py-4">
+                          {withdraw.application_meta.account_type}
+                        </div>
+                        <div className="w-48 py-4">
+                          {currencyFormatter(withdraw.application_meta.amount)}
+                        </div>
+                        <td className="w-48 py-4"></td>
+                        <td className={`w-40 py-4`}>
+                          <span
+                            className={` py-1 px-2 rounded-xl text-white ${
+                              withdraw.reviewed
+                                ? withdraw.application_meta.review_status ===
+                                  "approved"
+                                  ? "bg-green-400"
+                                  : "bg-red-400"
+                                : "bg-yellow-400"
                             }`}
                           >
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                // handleWithdraw(withdraw.application_id);
+                            {withdraw.reviewed
+                              ? withdraw.application_meta.review_status ===
+                                "approved"
+                                ? "Approved"
+                                : "Rejected"
+                              : "Pending"}
+                          </span>
+                        </td>
 
+                        <div className="w-36 py-4">
+                          <div className="relative">
+                            <button
+                              className="block p-2 rounded-md dialog cursor-context-menu"
+                              onClick={(event) => {
+                                setActiveIndex(index);
+                                setShow(!show);
+                                event.stopPropagation();
                               }}
                             >
-                              <MdInfo /> Details
-                            </li>
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                handleWithdraw(withdraw.application_id);
-                              }}
+                              <FaEllipsisV />
+                            </button>
+
+                            <ul
+                              className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
+                                index === activeIndex && show ? "" : "hidden"
+                              }`}
                             >
-                              <AiFillCheckSquare /> Verify
-                            </li>
-                          </ul>
+                              <li
+                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
+                                onClick={() => {
+                                  setWithdrawModal(true);
+                                }}
+                              >
+                                <MdInfo /> Details
+                              </li>
+                              <li
+                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
+                                onClick={() => {
+                                  handleWithdraw(withdraw.application_id);
+                                }}
+                              >
+                                <AiFillCheckSquare /> Verify
+                              </li>
+                            </ul>
+                          </div>
                         </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                      </div>
+                    ))}
+                  </tbody>
+                </div>
               </table>
             </div>
             <div className="flex justify-between px-6 my-5">

@@ -1,6 +1,6 @@
 import { supabase } from "../../helpers/supabase";
 import { useEffect, useState } from "react";
-import { Spinner } from "../../components";
+import { NothingShown, Spinner } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineSearch, MdInfo } from "react-icons/md";
 import { Pagination } from "../../components";
@@ -82,13 +82,13 @@ export default function DepositAdmin() {
           : deposit.reviewed &&
             deposit.application_meta.review_status !== "approved")
     );
-  
+
   shownDeposits = shownDeposits.filter(
     (deposit) =>
       deposit.application_meta.applicants_name
         .toLowerCase()
         .indexOf(searchText.toLowerCase()) > -1
-  )
+  );
 
   //context
   const [show, setShow] = useState(false);
@@ -110,7 +110,7 @@ export default function DepositAdmin() {
 
         <div className=" dark:text-secondary-text rounded">
           <div className="w-full h-7 rounded flex overflow-hidden">
-            {shownDeposits.length === 0 && (
+            {deposits.length === 0 && (
               <>
                 <div
                   className="animate-pulse h-7 inline-block bg-accent"
@@ -201,7 +201,7 @@ export default function DepositAdmin() {
       </div>
 
       <div className="bg-white p-3 pb-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
-        {deposits !== null && deposits.length > 0 ? (
+        {deposits !== null && shownDeposits.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -317,6 +317,8 @@ export default function DepositAdmin() {
               />
             </div>
           </>
+        ) : deposits && deposits.length > 0 ? (
+          <NothingShown />
         ) : (
           <Spinner />
         )}

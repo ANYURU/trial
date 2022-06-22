@@ -10,6 +10,7 @@ export default function WithdrawVerify() {
   const { id } = useParams();
   const [profile] = useOutletContext();
   const [withdraw, setWithdraw] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getApplication();
@@ -25,6 +26,7 @@ export default function WithdrawVerify() {
   };
 
   const approveWithdrawTransaction = async () => {
+    setLoading(true);
     const {
       application_meta: { applicants_id },
     } = withdraw;
@@ -36,30 +38,38 @@ export default function WithdrawVerify() {
       });
 
       if (error) {
+        setLoading(false);
         toast.error(`${error?.message}`, { position: "top-center" });
       } else {
-        toast.success(`Transaction has been approved.`, {
+        setLoading(false);
+        toast.success(`Withdraw has been approved.`, {
           position: "top-center",
         });
       }
     } catch (error) {
+      setLoading(false);
       toast.error(`Try again later`, { position: "top-center" });
     }
   };
 
   const rejectWithdrawTransaction = async () => {
+    setLoading(true)
     try {
       const { data, error } = await supabase.rpc("reject_application", {
         application: id,
       });
       if (error) {
-        throw error;
+        setLoading(false);
+        toast.error(`${error?.message}`, { position: "top-center" });
       } else {
-        console.log(data);
-        // handle the alerts and navigation
+        setLoading(false);
+        toast.success(`Withdraw has been rejected.`, {
+          position: "top-center",
+        });
       }
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      toast.error(`Try again later`, { position: "top-center" });
     }
   };
 
@@ -73,7 +83,16 @@ export default function WithdrawVerify() {
         </h1>
       </div>
       <ToastContainer />
-      <div className="bg-white p-3 overflow-scroll  relative  h-[calc(100%-80px)] dark:bg-dark-bg-700">
+      <div
+        className={`bg-white ${
+          !loading && "p-3"
+        }  overflow-y-auto  relative  h-[calc(100%-80px)] dark:bg-dark-bg-700`}
+      >
+        {loading && (
+          <div className="absolute z-10 bg-white dark:bg-dark-bg-700 dark:bg-opacity-90 bg-opacity-90 w-full h-full rounded-lg">
+            <Spinner />
+          </div>
+        )}
         {withdraw ? (
           <div className="flex flex-grow flex-col min-h-full">
             <div className="mb-3">
@@ -119,8 +138,8 @@ export default function WithdrawVerify() {
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Amount:</p>
-                  <p className="font-bold col-span-3">UGX 
-                    {currencyFormatter(withdraw.application_meta.amount)}
+                  <p className="font-bold col-span-3">
+                    UGX {currencyFormatter(withdraw.application_meta.amount)}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -130,21 +149,30 @@ export default function WithdrawVerify() {
                   </p>
                 </div>
 
-                <div className="my-6">Account/Mobile Number: 0770566711</div>
+                {withdraw && withdraw.reviewed && (
+                  <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                    <p className="col-span-2">Reviewed on:</p>
+                    <p className="font-bold col-span-3">
+                      {moment(withdraw.application_meta.reviewed_at).format(
+                        "MMMM Do YYYY, h a"
+                      )}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex gap-10 justify-end items-center mt-3">
               {withdraw && !withdraw.reviewed && (
                 <div className="flex gap-10 justify-end items-center mt-3">
                   <button
-                    type="submit"
                     className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                    onClick={() => rejectWithdrawTransaction()}
                   >
                     Reject
                   </button>
                   <button
-                    type="submit"
                     className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                    onClick={() => approveWithdrawTransaction()}
                   >
                     Approve
                   </button>
@@ -152,7 +180,10 @@ export default function WithdrawVerify() {
               )}
               {withdraw && withdraw.reviewed && (
                 <div className="flex justify-end items-center mt-3">
-                  Reviewed by: {withdraw.application_meta.reviewed_by}
+                  Reviewed by:{" "}
+                  <span className="font-bold">
+                    {withdraw.application_meta.reviewed_by}
+                  </span>
                 </div>
               )}
             </div>
