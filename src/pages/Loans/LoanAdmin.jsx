@@ -210,7 +210,7 @@ export default function LoanAdmin() {
         {loans !== null && shownLoans.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
-              <table className="w-full h-6 text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
+              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
                 <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
                     <th className="px-6 py-4">Date</th>

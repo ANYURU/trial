@@ -48,7 +48,7 @@ export default function WithdrawMembers() {
   const indexOfLastPage = currentPage * withdrawPerPage;
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage;
 
-  const filteredWithdraws = withdraws.filter((application) =>
+  let filteredWithdraws = withdraws.filter((application) =>
     status === ""
       ? application
       : status === "pending"
@@ -57,6 +57,13 @@ export default function WithdrawMembers() {
       ? application.application_meta.review_status === status
       : application.reviewed &&
         application.application_meta.review_status !== "approved"
+  );
+
+  filteredWithdraws = filteredWithdraws.filter(
+    (withdraw) =>
+      withdraw.application_meta.applicants_name
+        .toLowerCase()
+        .indexOf(searchText.toLowerCase()) > -1
   );
 
   const approvedwithdraws = filteredWithdraws.filter(
@@ -97,6 +104,8 @@ export default function WithdrawMembers() {
       }
     };
   }
+
+  console.log(withdraws);
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
@@ -188,130 +197,131 @@ export default function WithdrawMembers() {
       <div className="bg-white p-3 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {filteredWithdraws.length > 0 ? (
           <>
-            <div className="w-full md:h-[calc(100%-1px)] outline outline-red-500 overflow-y-hidden overscroll-y-none overflow-x-auto">
-              <table
-                className="w-full table-auto md:h-[calc(100%-100px)] overflow-y-auto text-sm text-left text-gray-500 dark:text-gray-400"
-                cellPadding="10"
-                border="1"
-              >
-                <div>
-                  <thead
-                    className="text-x text-gray-700 font-bold uppercase dark:bg-gray-700 dark:text-gray-400"
-                    cellPadding="100px"
-                  >
-                    <div className="flex gap-2">
-                      <div className="w-48 py-4">Member</div>
-                      <div className="w-40 py-4">Date</div>
-                      <div className="w-48 py-4">Transactions ID</div>
-                      <div className="w-40 py-4">Account</div>
-                      <div className="w-48 py-4">Amount</div>
-                      <div className="w-48 py-4">Cashout Method</div>
-                      <div className="w-40 py-4">Status</div>
-                      <div className="w-36 py-4">Action</div>
-                    </div>
-                  </thead>
-                </div>
-                <div className="w-full md:h-[calc(100%-100px)] overflow-y-auto">
+            <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
+              <table className="md:h-[calc(100%-100px)] overflow-y-none text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                  <tr className="flex gap-2">
+                    <th className="w-48 py-4">Member</th>
+                    <th className="w-40 py-4">Date</th>
+                    <th className="w-48 py-4">Transactions ID</th>
+                    <th className="w-40 py-4">Account</th>
+                    <th className="w-48 py-4">Amount</th>
+                    <th className="w-48 py-4">Cashout Method</th>
+                    <th className="w-40 py-4">Status</th>
+                    <th className="w-36 py-4">Action</th>
+                  </tr>
+                </thead>
                   <tbody>
-                    {shownWithdraw.map((withdraw, index) => (
-                      <div
-                        className={`${
-                          index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                        } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer flex gap-2`}
-                        key={index}
-                      >
-                        {withdrawModal && index === activeIndex && (
-                          <WithdrawModal
-                            withdraw={withdraw}
-                            setWithdrawModal={setWithdrawModal}
-                          />
-                        )}
-                        <div className="w-48 py-4">
-                          {withdraw.application_meta.applicants_name}
-                        </div>
-                        <div className="w-40 py-4">
-                          {moment(withdraw.created_at).format("DD-MM-YYYY")}
-                        </div>
-                        <div className=" py-4 overflow-hidden w-48">
-                          {withdraw.application_id}
-                        </div>
-                        <div className="w-40 py-4">
-                          {withdraw.application_meta.account_type}
-                        </div>
-                        <div className="w-48 py-4">
-                          {currencyFormatter(withdraw.application_meta.amount)}
-                        </div>
-                        <td className="w-48 py-4"></td>
-                        <td className={`w-40 py-4`}>
-                          <span
-                            className={` py-1 px-2 rounded-xl text-white ${
-                              withdraw.reviewed
-                                ? withdraw.application_meta.review_status ===
-                                  "approved"
-                                  ? "bg-green-400"
-                                  : "bg-red-400"
-                                : "bg-yellow-400"
-                            }`}
-                          >
-                            {withdraw.reviewed
-                              ? withdraw.application_meta.review_status ===
-                                "approved"
-                                ? "Approved"
-                                : "Rejected"
-                              : "Pending"}
-                          </span>
-                        </td>
-
-                        <div className="w-36 py-4">
-                          <div className="relative">
-                            <button
-                              className="block p-2 rounded-md dialog cursor-context-menu"
-                              onClick={(event) => {
-                                setActiveIndex(index);
-                                setShow(!show);
-                                event.stopPropagation();
-                              }}
-                            >
-                              <FaEllipsisV />
-                            </button>
-
-                            <ul
-                              className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
-                                index === activeIndex && show ? "" : "hidden"
+                      {shownWithdraw.map((withdraw, index) => (
+                        <tr
+                          className={`${
+                            index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
+                          } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer flex`}
+                          key={index}
+                        >
+                          {withdrawModal && index === activeIndex && (
+                            <WithdrawModal
+                              withdraw={withdraw}
+                              setWithdrawModal={setWithdrawModal}
+                            />
+                          )}
+                          <td className="w-48 py-4">
+                            {withdraw.application_meta.applicants_name}
+                          </td>
+                          <td className="w-40 py-4">
+                            {moment(withdraw.created_at).format("DD-MM-YYYY")}
+                          </td>
+                          <td className=" py-4 overflow-hidden w-48">
+                            {withdraw.application_id}
+                          </td>
+                          <td className="w-40 py-4">
+                            {withdraw.application_meta.account_type}
+                          </td>
+                          <td className="w-48 py-4">
+                            {currencyFormatter(
+                              withdraw.application_meta.amount
+                            )}
+                          </td>
+                          <td className="w-48 py-4">
+                            {withdraw.application_meta.cashout_method}
+                          </td>
+                          <td className={`w-40 py-4`}>
+                            <span
+                              className={` py-1 px-2 rounded-xl text-white ${
+                                withdraw.reviewed
+                                  ? withdraw.application_meta.review_status ===
+                                    "approved"
+                                    ? "bg-green-400"
+                                    : "bg-red-400"
+                                  : "bg-yellow-400"
                               }`}
                             >
-                              <li
-                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
-                                onClick={() => {
-                                  setWithdrawModal(true);
+                              {withdraw.reviewed
+                                ? withdraw.application_meta.review_status ===
+                                  "approved"
+                                  ? "Approved"
+                                  : "Rejected"
+                                : "Pending"}
+                            </span>
+                          </td>
+
+                          <td className="w-36 py-4">
+                            <div className="relative">
+                              <button
+                                className="block p-2 rounded-md dialog cursor-context-menu"
+                                onClick={(event) => {
+                                  setActiveIndex(index);
+                                  setShow(!show);
+                                  event.stopPropagation();
                                 }}
                               >
-                                <MdInfo /> Details
-                              </li>
-                              <li
-                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
-                                onClick={() => {
-                                  handleWithdraw(withdraw.application_id);
-                                }}
+                                <FaEllipsisV />
+                              </button>
+
+                              <ul
+                                className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
+                                  index === activeIndex && show ? "" : "hidden"
+                                }`}
                               >
-                                <AiFillCheckSquare /> Verify
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                                <li
+                                  className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
+                                  onClick={() => {
+                                    setWithdrawModal(true);
+                                  }}
+                                >
+                                  <MdInfo /> Details
+                                </li>
+                                <li
+                                  className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
+                                  onClick={() => {
+                                    handleWithdraw(withdraw.application_id);
+                                  }}
+                                >
+                                  <AiFillCheckSquare /> Verify
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
-                </div>
               </table>
             </div>
-            <div className="flex justify-between px-6 my-5">
+            <div className="flex bg-white dark:bg-dark-bg-700 justify-between md:absolute left-0 right-0 bottom-0 px-5 py-1">
               <Pagination
                 pages={Math.ceil(withdraws.length / withdrawPerPage)}
                 setCurrentPage={setCurrentPage}
                 indexOfFirstPage={indexOfFirstPage}
                 indexOfLastPage={indexOfLastPage}
-                data={withdraws}
+                data={
+                  status === ""
+                    ? withdraws
+                    : status === "approved"
+                    ? approvedwithdraws
+                    : status === "pending"
+                    ? pendingwithdraws
+                    : rejectedwithdraws
+                }
                 depositsPerPage={withdrawPerPage}
                 setDepositsPerPage={setWithdrawPerPage}
               />
