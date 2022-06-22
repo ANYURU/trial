@@ -37,9 +37,6 @@ export default function ApplicationPg1({ initialValues, setInitialValues, setPag
         },
     } = initialValues
 
-
-
-
     return (
         <Formik
             initialValues={initialValues}
