@@ -8,11 +8,14 @@ import { supabase } from "../../helpers/supabase"
 import { useAuth } from "../../auth/AuthContext"
 import { uploadFile } from "../../helpers/uploadFile"
 import { OTPBox } from "../../components"
+import { generate_amortization_schedule } from "../../helpers/generateAmortizationSchedule"
 
 function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
   
   const [ { phone_number, fullname: applicants_name, user_role } ] = useOutletContext()
   const { user: { id: applicants_id } } = useAuth()
+  const { amount, months } = initialValues
+  const rate = 3;
   
   const defaultInitialValues = {
     applicant_name: applicants_name,
@@ -118,7 +121,6 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
       // if ( bank_statement_url ) {
       //   initialValues.bank_statement = bank_statement_url
       // }
-
     }  
     
     // Uploading the cash flow
@@ -197,7 +199,7 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     const verification_key = localStorage.getItem('loans_application_verification_key')
     // Destructuring files to upload in the loans bucket.
     // const { Key: url } = await uploadFile(evidence, 'deposits')
-
+    const { amortizationSchedule, total } = generate_amortization_schedule(Number(amount), rate ,Number(months))
 
     verifyOTP( phone_number, one_time_password, verification_key)
       .then( response => response.json() )
@@ -222,7 +224,9 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
                       application_meta: {
                         applicants_id,
                         applicants_name,
-                        ...initialValues
+                        amortization_schedule: amortizationSchedule,
+                        ...initialValues, 
+                        total
                       }
                     }
                   ]
