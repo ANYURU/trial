@@ -262,7 +262,9 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
             disabled={ otp?.length < 6 }
             onClick={ async () => {
               if ( otp ) {
-                handleSubmit(otp)
+                // console.log(otp.join(""))
+
+                handleSubmit(otp.join(""))
               }
             }}
           >
