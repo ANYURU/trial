@@ -25,8 +25,6 @@ export default function Dashboard() {
       .catch((error) => console.log(error));
   }, []);
 
-  console.log(accounts)
-
   const get_account_information = async () => {
     const { data, error } = await supabase.rpc("get_accounts_information", {});
     if (error) throw error;

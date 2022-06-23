@@ -1,13 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { menuData } from "../helpers/menuData";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import React, { useState } from "react";
 import { IconContext } from "react-icons/lib";
 import { useMediaQuery } from "../hooks";
-import {
-  HiOutlineChevronDoubleLeft,
-  HiOutlineChevronDoubleRight,
-} from "react-icons/hi";
+import { HiOutlineChevronDoubleLeft } from "react-icons/hi";
 
 export default function Sidebar({ user, showSidebar, setShowSidebar }) {
   const role = !user
@@ -16,8 +13,6 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
     ? "admin"
     : "member";
 
-  const [show, setShow] = useState(true);
-  //   const [showSidebar, setShowSidebar] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [disabled] = useState(!(user || user?.roles));
   const lit = menuData[`${role}`]
@@ -43,10 +38,7 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
               } hover:bg-accent rounded-md
                w-full
                dark:hover:bg-dark-bg-600 ${
-                 disabled &&
-                 item?.link !== "dashboard" &&
-                 // item?.link !== "profile" &&
-                 `disabled-link`
+                 disabled && item?.link !== "dashboard" && `disabled-link`
                }`}
               onClick={() => {
                 setSelectedIndex(index);
@@ -125,7 +117,10 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
           className={`fixed bottom-0 flex h-14 justify-center items-center gap-4 dark:text-secondary-text cursor-pointer hover:bg-accent ${
             showSidebar ? "w-[260px]" : "w-[80px]"
           } dark:hover:bg-dark-bg-600 border-t-2 border-t-accent dark:border-t-dark-bg-600`}
-          onClick={() => setShowSidebar(!showSidebar)}
+          onClick={() => {
+            localStorage.setItem("sidebarCollapsed", showSidebar);
+            setShowSidebar(!showSidebar);
+          }}
         >
           <i
             className={`${

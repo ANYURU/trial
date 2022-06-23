@@ -10,7 +10,7 @@ import ErrorBoundary from "../components/ErrorBoundary";
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
 
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(!JSON.parse(localStorage.getItem("sidebarCollapsed")) || false);;
 
   const { user, darkMode } = useAuth();
   const [profile, setProfile] = useState({});
@@ -31,8 +31,6 @@ const PrivateRoute = ({ allowedRoles }) => {
       .then(() => setLoading(false))
       .catch((error) => console.log(error));
   }, [user]);
-
-  console.log(user)
 
   return user?.role === "authenticated" ? (
     matches ? (
