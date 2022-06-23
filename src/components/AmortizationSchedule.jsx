@@ -1,15 +1,7 @@
 import React from 'react'
-import { useEffect, useState } from "react"
-import { supabase } from "../helpers/supabase"
-import { FaEllipsisV } from 'react-icons/fa'
-import { LoansContext } from "."
-import { LoanModal } from "."
-import { useOutletContext } from "react-router-dom"
-import Loader from "./Loader"
-import moment from "moment"
-import { generate_amortization_schedule } from '../helpers/generateAmortizationSchedule'
+import moment from 'moment'
 
-function AmortizationSchedule({ amortization_schedule }) {
+function AmortizationSchedule({ amortization_schedule, start_date }) {
     const rate = 3;
   return (
     <div className='mb-3'>
@@ -31,12 +23,12 @@ function AmortizationSchedule({ amortization_schedule }) {
                         const {month, principal, emi, interest, repayment_amount, outstanding_balance} = monthly_summary
                         return (
                             <tr key={index} className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`}>
-                                <td className="px-6 py-3">{month}</td>
+                                <td className="px-6 py-3">{moment(start_date).add(index + 1, "months").format("DD-MM-YYYY")}</td>
                                 <td className="px-6 py-3">{principal}</td>
                                 <td className="px-6 py-3">{emi}</td>
-                                <td className="px-6 py-3">{interest}</td>
-                                <td className="px-6 py-3">{repayment_amount}</td>
-                                <td className="px-6 py-3">{outstanding_balance}</td>
+                                <td className="px-6 py-3">{interest.toFixed(2)}</td>
+                                <td className="px-6 py-3">{repayment_amount.toFixed(2)}</td>
+                                <td className="px-6 py-3">{outstanding_balance.toFixed(2)}</td>
                             </tr>
                         )
 

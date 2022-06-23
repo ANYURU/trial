@@ -5,7 +5,7 @@ import { useAuth } from "../../auth/AuthContext";
 import { IconContext } from "react-icons/lib";
 import AmortizationSchedule from "../AmortizationSchedule"
 
-export default function LoanModal({ passed, setLoanModal, loan, amortization_schedule }) {
+export default function LoanModal({ passed, setLoanModal, loan, amortization_schedule, start_date }) {
 
     const { darkMode } = useAuth()
 
@@ -42,7 +42,7 @@ export default function LoanModal({ passed, setLoanModal, loan, amortization_sch
               <p className="col-span-2">Amount to pay:</p>
               <p className="font-bold col-span-3">{loan.amountToPay}</p>
           </div>
-          <AmortizationSchedule  amortization_schedule={amortization_schedule}/>
+          <AmortizationSchedule  amortization_schedule={amortization_schedule} start_date={loan.start_date}/>
 
 
       </div>

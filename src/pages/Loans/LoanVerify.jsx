@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Loader } from "../../components"
 import { downloadFile } from "../../helpers/utilites"
 import { toast, ToastContainer } from "react-toastify"
+import AmortizationSchedule from "../../components/AmortizationSchedule"
 
 export default function DepositVerify() {
   const { id } = useParams()
@@ -89,6 +90,8 @@ export default function DepositVerify() {
                 <img src={imageURL} width={200} className="rounded" alt="receipt" loading="lazy"/>
               </div>
           </div>
+
+          <AmortizationSchedule amortization_schedule={loan.application_meta.amortization_schedule} start_date={loan.application_meta.start_date}/>
           <div className="flex gap-10 justify-end items-center mt-3">
           <button
             className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
