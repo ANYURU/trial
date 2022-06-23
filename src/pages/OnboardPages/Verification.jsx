@@ -12,8 +12,6 @@ function Verification() {
   const location = useLocation()
   const type = location?.state?.type
  
-
-
   const handleSubmit = async (event, values) => {
     event.preventDefault()
     
@@ -27,7 +25,6 @@ function Verification() {
       .then( data => data?.Status === "Failure" ? toast.error(`${data.Details}`, {position: "top-center"}) : data?.Status === "Success" && navigate('/set-password', { state: { type: type } }) )
       .catch( error => console.log(error) )
   }
-
 
   return (
     <>

@@ -94,14 +94,14 @@ export default function Loan() {
                   <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                     <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
                       <tr>
-                        <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Amount to Pay</th><th className='px-6 py-4'>Amount Paid</th><th className='px-6 py-4'>Principal</th><th className='px-6 py-4'>Interest (%)</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Action</th>
+                        <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Amount to Pay</th><th className='px-6 py-4'>Amount Paid</th><th className='px-6 py-4'>Principal</th><th className='px-6 py-4'>Interest (3%)</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       {loans.map((loan, index) => (
                         <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
-                          {loanModal && activeIndex === index && <LoanModal setLoanModal={setLoanModal} loan={loan} id={loan.id} amortization_schedule={loan.amortization_schedule} start_date={loan.start_date}/>}
-                          <td className='px-6 py-3'>{moment(loan.created_at).format('DD-MM-YYYY')}</td><td className='px-6 py-3'>{loan.outstanding_balance}</td><td className='px-6 py-3'>{loan.amount_paid}</td><td className='px-6 py-3'>{loan.amount_issued}</td><td className='px-6 py-3'>{loan.interest_rate || '18%'}</td>
+                          {loanModal && activeIndex === index && <LoanModal setLoanModal={setLoanModal} loan={loan} id={loan.id} />}
+                          <td className='px-6 py-3'>{moment(loan.created_at).format('DD-MM-YYYY')}</td><td className='px-6 py-3'>{loan.outstanding_balance}</td><td className='px-6 py-3'>{loan.amount_paid}</td><td className='px-6 py-3'>{loan.amount_issued}</td><td className='px-6 py-3'>{loan.interest_rate || '3%'}</td>
                           <td className={`px-6 py-3`}>
                             <span className={` py-1 px-2 rounded-xl text-white ${loan.loan_status === "pending" ? "bg-yellow-400" : loan.loan_status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
                             {loan.loan_status}

@@ -84,7 +84,7 @@ export default function DepositVerify() {
                 <div className="my-6">Application ID: <span className="font-semibold">{loan.application_id}</span></div>
                 <div className="my-6">Applicant ID: <span className="font-semibold">{loan.application_meta.applicants_id}</span></div>
                 <div className="my-6">Principal: <span className="font-semibold">{loan.application_meta.amount}</span></div>
-                <div className="my-6">Outstanding balance: <span className="font-semibold">{loan.application_meta.total}</span></div>
+                <div className="my-6">Total repayment: <span className="font-semibold">{loan.application_meta.total}</span></div>
                 <div className="my-6">Interest: <span className="font-semibold">{loan.application_meta.total - loan.application_meta.amount}</span></div>
               </div>
           </div>
