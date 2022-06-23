@@ -24,7 +24,7 @@ function AmortizationSchedule({ amortization_schedule, start_date }) {
                         return (
                             <tr key={index} className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`}>
                                 <td className="px-6 py-3">{moment(start_date).add(index + 1, "months").format("DD-MM-YYYY")}</td>
-                                <td className="px-6 py-3">{principal}</td>
+                                <td className="px-6 py-3">{principal.toFixed(2)}</td>
                                 <td className="px-6 py-3">{emi}</td>
                                 <td className="px-6 py-3">{interest.toFixed(2)}</td>
                                 <td className="px-6 py-3">{repayment_amount.toFixed(2)}</td>
