@@ -3,8 +3,9 @@ import { IoCloseSharp } from 'react-icons/io5'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { IconContext } from "react-icons/lib";
+import AmortizationSchedule from "../AmortizationSchedule"
 
-export default function LoanModal({ passed, setLoanModal, loan }) {
+export default function LoanModal({ passed, setLoanModal, loan, amortization_schedule }) {
 
     const { darkMode } = useAuth()
 
@@ -41,6 +42,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
               <p className="col-span-2">Amount to pay:</p>
               <p className="font-bold col-span-3">{loan.amountToPay}</p>
           </div>
+          <AmortizationSchedule  amortization_schedule={amortization_schedule}/>
 
 
       </div>

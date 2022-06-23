@@ -1,13 +1,13 @@
 import React from 'react'
 import { useEffect, useState } from "react"
-import { supabase } from "../../helpers/supabase"
+import { supabase } from "../helpers/supabase"
 import { FaEllipsisV } from 'react-icons/fa'
-import { LoansContext } from "../../components"
-import { LoanModal } from "../../components"
+import { LoansContext } from "."
+import { LoanModal } from "."
 import { useOutletContext } from "react-router-dom"
-import Loader from "../../components/Loader"
+import Loader from "./Loader"
 import moment from "moment"
-import { generate_amortization_schedule } from '../../helpers/generateAmortizationSchedule'
+import { generate_amortization_schedule } from '../helpers/generateAmortizationSchedule'
 
 function AmortizationSchedule({ amortization_schedule }) {
     const rate = 3;
