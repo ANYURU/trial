@@ -5,6 +5,7 @@ import { useAuth } from "../auth/AuthContext";
 import { useEffect, useState } from "react";
 import { getProfile } from "../helpers/getProfile";
 import { Spinner } from "../components";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
@@ -30,6 +31,8 @@ const PrivateRoute = ({ allowedRoles }) => {
       .then(() => setLoading(false))
       .catch((error) => console.log(error));
   }, [user]);
+
+  console.log(user)
 
   return user?.role === "authenticated" ? (
     matches ? (
@@ -60,7 +63,9 @@ const PrivateRoute = ({ allowedRoles }) => {
                           <Spinner />
                         </div>
                       ) : (
-                        <Outlet context={[profile, setProfile]} />
+                        <ErrorBoundary>
+                          <Outlet context={[profile, setProfile]} />
+                        </ErrorBoundary>
                       )
                     ) : (
                       <div className="flex-grow mt-5 overflow-y-auto">
@@ -76,7 +81,9 @@ const PrivateRoute = ({ allowedRoles }) => {
                       {loading ? (
                         <Spinner />
                       ) : (
-                        <Outlet context={[profile, setProfile]} />
+                        <ErrorBoundary>
+                          <Outlet context={[profile, setProfile]} />
+                        </ErrorBoundary>
                       )}
                     </div>
                   )
@@ -85,7 +92,9 @@ const PrivateRoute = ({ allowedRoles }) => {
                     {loading ? (
                       <Spinner />
                     ) : (
-                      <Outlet context={[profile, setProfile]} />
+                      <ErrorBoundary>
+                        <Outlet context={[profile, setProfile]} />
+                      </ErrorBoundary>
                     )}
                   </div>
                 ))}
@@ -100,7 +109,9 @@ const PrivateRoute = ({ allowedRoles }) => {
             <MobileNav user={profile} />
           </div>
           <div className="flex flex-col h-screen px-2 mt-20">
-            <Outlet context={[profile]} />
+            <ErrorBoundary>
+              <Outlet context={[profile]} />
+            </ErrorBoundary>
           </div>
         </div>
       </div>

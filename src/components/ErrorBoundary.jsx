@@ -21,17 +21,20 @@ class ErrorBoundary extends Component {
     if (this.state.hasError) {
       // You can render any custom fallback UI
       return (
-        <div className="w-screen h-screen flex flex-col justify-center items-center">
-          <IconContext.Provider
-            value={{
-              className: `text-gray-500 dark:text-secondary-text`,
-            }}
-          >
-            <AiFillWarning size={70}/>
-          </IconContext.Provider>
-
-          <span className="text-xl dark:text-secondary-text">Oops</span>
-          <h1 className="font-bold text-xl dark:text-secondary-text">Something went wrong.</h1>
+        <div className="w-[100vw-265px] h-full mx-5 my-2">
+          <div className="w-full h-full flex flex-col justify-center items-center ">
+            <IconContext.Provider
+              value={{
+                className: `text-gray-500 dark:text-secondary-text`,
+              }}
+            >
+              <AiFillWarning size={70} />
+            </IconContext.Provider>
+            <span className="text-xl dark:text-secondary-text">Oops</span>
+            <h1 className="font-bold text-xl dark:text-secondary-text">
+              Something went wrong.
+            </h1>
+          </div>
         </div>
       );
     }

@@ -94,8 +94,6 @@ export default function Dashboard() {
     cutoutPercentage: 25,
   };
 
-  console.log(profile)
-
   return (
     <div className={`flex flex-col ${matches && "overflow-y-hidden"}`}>
       {/* Account Summaries */}

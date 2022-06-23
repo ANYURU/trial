@@ -5,7 +5,6 @@ import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { FaEllipsisV } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
-import { AiOutlineConsoleSql } from "react-icons/ai";
 import { Helmet } from "react-helmet";
 import DepositModal from "../../components/Modals/DepositModal";
 import moment from "moment";
@@ -53,7 +52,7 @@ export default function Deposit() {
     };
   }
 
-  const filteredDeposits =
+  let filteredDeposits =
     !deposits ||
     deposits.filter(
       (deposit) => !date || deposit.created_at.substring(0, 10) === date
@@ -63,6 +62,12 @@ export default function Deposit() {
         )
       : null;
 
+  filteredDeposits =
+    !filteredDeposits ||
+    filteredDeposits.filter(
+      (deposit) =>
+        !account || deposit?.transaction_meta.account_type === account
+    );
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
@@ -135,13 +140,15 @@ export default function Deposit() {
                           />
                         )}
                         <td className="px-6 py-3">
-                          {
-                            moment(deposit.created_at).format("DD-MM-YYYY")
-                          }
+                          {moment(deposit.created_at).format("DD-MM-YYYY")}
                         </td>
                         <td className="px-6 py-3">{deposit.transaction_id}</td>
-                        <td className="px-6 py-3">{}</td>
-                        <td className="px-6 py-3">{currencyFormatter(deposit.amount)}</td>
+                        <td className="px-6 py-3">
+                          {deposit.transaction_meta.account_type}
+                        </td>
+                        <td className="px-6 py-3">
+                          {currencyFormatter(deposit.amount)}
+                        </td>
                         <td className="px-6 py-3">
                           {deposit.transaction_meta.approved_by}
                         </td>

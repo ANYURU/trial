@@ -34,7 +34,6 @@ export default function App() {
   return (
     !loading &&
     <Router>
-      <ErrorBoundary >
       <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Navigate to="/" replace />} />
@@ -94,7 +93,6 @@ export default function App() {
           </Route>
 
       </Routes>
-      </ErrorBoundary>
     </Router>
   )
 }

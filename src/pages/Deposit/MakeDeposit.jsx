@@ -23,14 +23,12 @@ function MakeDeposit() {
     particulars: "",
     evidence: "",
   };
-  
-  console.log(loading)
 
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Deposit</h1>
-      <div className="flex bg-white relative dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full w-full justify-center">
+      <div className="flex bg-white overflow-hidden relative dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full w-full justify-center">
         {loading && (
           <div className="absolute z-10 bg-white dark:bg-dark-bg-700 dark:bg-opacity-90 bg-opacity-90 w-full h-full rounded-lg">
             <Spinner />
@@ -106,7 +104,7 @@ function MakeDeposit() {
                 <div className="flex flex-grow flex-col min-h-full w-full">
                   <ToastContainer />
 
-                  <div className="mb-3 flex flex-wrap gap-5 md:h-16">
+                  <div className="mb-3 flex flex-col md:flex-row gap-5">
                     <div className="flex flex-col w-56">
                       <label className="text-sm">
                         Please select an account
@@ -114,7 +112,7 @@ function MakeDeposit() {
                       <select
                         name="account_type"
                         id="account_type"
-                        className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+                        className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.account_type}
@@ -150,7 +148,7 @@ function MakeDeposit() {
                       )}
                     </div>
                   </div>
-                  <div className="mb-3 flex flex-wrap gap-5 md:h-20">
+                  <div className="mb-3 flex flex-col md:flex-row gap-5">
                     <div className="flex flex-col w-56">
                       <label className="text-sm">Enter Phone Number</label>
                       <input
