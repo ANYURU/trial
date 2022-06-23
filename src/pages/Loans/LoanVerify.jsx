@@ -83,11 +83,9 @@ export default function DepositVerify() {
               <div className="outline outline-1 outline-gray-100 p-3">
                 <div className="my-6">Application ID: <span className="font-semibold">{loan.application_id}</span></div>
                 <div className="my-6">Applicant ID: <span className="font-semibold">{loan.application_meta.applicants_id}</span></div>
-                <div className="my-6">Account: <span className="font-semibold">{loan.application_meta.account_type}</span></div>
-                <div className="my-6">Amount: <span className="font-semibold">{loan.application_meta.amount}</span></div>
-                <div className="my-6">Method of Withdraw: Bank</div>
-                <div className="my-6">Account/Mobile Number: {loan.application_meta &&  loan?.application_meta.phone_number}</div>
-                <img src={imageURL} width={200} className="rounded" alt="receipt" loading="lazy"/>
+                <div className="my-6">Principal: <span className="font-semibold">{loan.application_meta.amount}</span></div>
+                <div className="my-6">Outstanding balance: <span className="font-semibold">{loan.application_meta.total}</span></div>
+                <div className="my-6">Interest: <span className="font-semibold">{loan.application_meta.total - loan.application_meta.amount}</span></div>
               </div>
           </div>
 
