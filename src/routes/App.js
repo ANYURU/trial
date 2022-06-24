@@ -2,12 +2,12 @@ import { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, De
 import { Loans, LoanHistory, LoanPayment, LoanRequest, LoanVerify, LoanAdmin, VerifyPayment, MemberLoans, LoanPaymentApplications } from "../pages";
 import { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers, DepositVerify, WithdrawVerify, Members, Applications, MemberApplication } from "../pages";
 import { Accounts, Savings, Mwana, Fixed, Shares, DepositAdmin } from "../pages";
+import { Admins, AdminInfo, SuperAdDashboard } from '../pages'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import { useState } from "react";
 import Unauthorized from "../pages/Unauthorized";
 import { ApplicantApproval } from "../pages";
-import ErrorBoundary from "../components/ErrorBoundary";
 
 
 
@@ -26,7 +26,7 @@ export default function App() {
     setTimeout(() => {
       preloader.style.display = "none";
       setLoading(false);
-    }, 1000);
+    }, 500);
   }
 
   
@@ -43,12 +43,20 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPassword/>} />
 
           {/* Accessed privately but doesnot have restricted access depending on the access role */}
+          
+
           <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
           </Route>
 
+          <Route element={<PrivateRoute allowedRoles={[ "super_admin" ]}/>}>
+            <Route path="admins" element={<Admins />} />
+            <Route path="admins/:id" element={<AdminInfo />} />
+            {/* <Route path="dashboard" element={<SuperAdDashboard />} /> */}
+          </Route>
+
           {/* Accessed by only administrators. */}
-          <Route element={<PrivateRoute allowedRoles={[ "admin" ]}/>}>
+          <Route element={<PrivateRoute allowedRoles={[ "admin", "super_admin" ]}/>}>
             <Route path='loans/members-requests/:id' element={<LoanVerify />} />
             <Route path="loans/members" element={<MemberLoans />} />
             <Route path="loans/members-requests" element={<LoanAdmin />} />
@@ -64,8 +72,11 @@ export default function App() {
             <Route path="application" element={<MemberApplication />} />
           </Route>
 
+          {/* Accessed by only the system_admin */}
+          
+
           {/* Accessed by both members and admins */}
-          <Route element={<PrivateRoute allowedRoles={[ "member", "admin" ]}/>}>
+          <Route element={<PrivateRoute allowedRoles={[ "member", "admin", "super_admin" ]}/>}>
             <Route path="/loans" element={<Loans />} />
               <Route path='loans/history' element={<LoanHistory />} />
               <Route path='loans/Payment/:id' element={<LoanPayment />} />

@@ -10,6 +10,8 @@ function MobileMenu({ user, setShowMenu }) {
     ? "member"
     : user?.roles && user?.roles.includes("admin")
     ? "admin"
+    : user?.roles && user?.roles.includes("super_admin")
+    ? "super_admin"
     : "member";
 
   const [show, setShow] = useState(true);
@@ -26,7 +28,7 @@ function MobileMenu({ user, setShowMenu }) {
       <div className="bg-white dark:bg-dark-bg-700 flex justify-center items-center mb-6">
         <img src={logo} alt="tube" width={110} />
       </div>
-      {menuData.admin.map((item, index) => (
+      {menuData[`${role}`].map((item, index) => (
         <Fragment key={index}>
           <NavLink
             key={index}
@@ -39,8 +41,8 @@ function MobileMenu({ user, setShowMenu }) {
             }`}
             onClick={() => {
               setSelectedIndex(index);
-              
-              if (index === 0 || index === menuData[`${role}`].length - 1) {
+
+              if (index === 0 || index === menuData[`${role}`].length - 1 || role === "super_admin") {
                 setShowMenu(false);
               }
             }}
@@ -51,23 +53,25 @@ function MobileMenu({ user, setShowMenu }) {
               </IconContext.Provider>
               <span className="font-semibold">{item.label}</span>
             </div>
-            <IconContext.Provider
-              value={{
-                className: `font-bold text-lg dark:text-secondary-text`,
-              }}
-            >
-              <i>
-                {index !== 0 &&
-                  index < menuData[`${role}`].length - 1 &&
-                  (show && index === selectedIndex ? (
-                    <MdKeyboardArrowUp />
-                  ) : (
-                    <MdKeyboardArrowDown />
-                  ))}
-              </i>
-            </IconContext.Provider>
+            {role !== "super_admin" && (
+              <IconContext.Provider
+                value={{
+                  className: `font-bold text-lg dark:text-secondary-text`,
+                }}
+              >
+                <i>
+                  {index !== 0 &&
+                    index < menuData[`${role}`].length - 1 &&
+                    (show && index === selectedIndex ? (
+                      <MdKeyboardArrowUp />
+                    ) : (
+                      <MdKeyboardArrowDown />
+                    ))}
+                </i>
+              </IconContext.Provider>
+            )}
           </NavLink>
-          {index === selectedIndex &&
+          {index === selectedIndex && role !== "super_admin" &&
             index > 0 &&
             index < menuData[`${role}`].length - 1 && (
               <div className="bg-accent dark:bg-dark-bg-600 mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer dark:text-secondary-text">

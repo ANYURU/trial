@@ -32,6 +32,8 @@ const PrivateRoute = ({ allowedRoles }) => {
       .catch((error) => console.log(error));
   }, [user]);
 
+  // console.log(profile)
+
   return user?.role === "authenticated" ? (
     matches ? (
       <div className={`${darkMode ? "dark" : ""}`}>
@@ -57,7 +59,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                   roles ? (
                     roles.find((role) => allowedRoles.includes(role)) ? (
                       loading ? (
-                        <div className="flex-grow mx-5 my-2 overflow-y-auto outline h-full">
+                        <div className="flex-grow mx-5 my-2 overflow-y-auto h-full">
                           <Spinner />
                         </div>
                       ) : (
@@ -106,7 +108,7 @@ const PrivateRoute = ({ allowedRoles }) => {
           <div className="">
             <MobileNav user={profile} />
           </div>
-          <div className="flex flex-col h-screen px-2 mt-20">
+          <div className="flex flex-col h-[calc(100vh-70px)] px-2 mt-20">
             <ErrorBoundary>
               <Outlet context={[profile]} />
             </ErrorBoundary>

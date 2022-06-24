@@ -22,5 +22,6 @@ import OTPBox from "./OTP/OTP";
 import Stepper from "./Stepper";
 import Spinner from "./Loaders/Spinner";
 import TubeIcon from "./Icons/TubeIcon";
+import Transactions from "./Dashboard/Transactions"
 
-export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu, MemberModal, AccSummary, Pagination, LoansContext, NothingShown, LoanModal, OTPBox, Stepper, Spinner, TubeIcon }
+export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu, MemberModal, AccSummary, Pagination, LoansContext, NothingShown, LoanModal, OTPBox, Stepper, Spinner, TubeIcon, Transactions }

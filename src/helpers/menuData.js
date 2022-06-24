@@ -1,4 +1,4 @@
-import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineBungalow, MdPeopleOutline } from 'react-icons/md'
+import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineAdminPanelSettings, MdPeopleOutline } from 'react-icons/md'
 import { IoMdCard } from 'react-icons/io'
 import { RiExchangeDollarLine } from 'react-icons/ri'
 import { SiHomeassistantcommunitystore } from 'react-icons/si'
@@ -172,11 +172,21 @@ export const menuData = {
             link: 'profile'
         }
     ],
-    system_admin : [
+    super_admin : [
         {
             label: 'Dashboard',
             icon: <AiOutlineHome />,
             link: 'dashboard'
+        },
+        {
+            label: 'Admins',
+            icon: <MdOutlineAdminPanelSettings />,
+            link: 'admins'
+        },
+        {
+            label: 'Members',
+            icon: <MdPeopleOutline />,
+            link: 'members'
         },
         {
             label: 'Loans',
@@ -192,16 +202,6 @@ export const menuData = {
             label: 'Withdraw',
             icon: <IoMdCard />,
             link: 'withdraw/members'
-        },
-        {
-            label: 'Admins',
-            icon: <MdPeopleOutline />,
-            link: 'admins'
-        },
-        {
-            label: 'Members',
-            icon: <MdPeopleOutline />,
-            link: 'members'
         },
         {
             label: 'Profile',

@@ -65,8 +65,8 @@ function Navbar({ user, showSidebar }) {
             <div className="text-center">
               {Object.keys(user).length === 0 ? (
                 <>
-                  <p class="animate-pulse bg-accent h-3 w-20 mb-1"></p>
-                  <p class="animate-pulse bg-accent h-3 w-14"></p>
+                  <p className="animate-pulse bg-accent h-3 w-20 mb-1"></p>
+                  <p className="animate-pulse bg-accent h-3 w-14"></p>
                 </>
               ) : (
                 <>
@@ -104,7 +104,7 @@ function Navbar({ user, showSidebar }) {
                 </div>
               )
             ) : (
-              <div class="animate-pulse rounded-full mx-2 bg-accent h-10 w-10"></div>
+              <div className="animate-pulse rounded-full mx-2 bg-accent h-10 w-10"></div>
             )}
             <i className="dark:text-white">
               <MdKeyboardArrowDown />

@@ -4,7 +4,7 @@
   theme: {
     extend: {
       screens: {
-        'sm': '700px',
+        'sm': '400px',
         'md':'800px'
       },
       colors: {
