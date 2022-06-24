@@ -1,5 +1,7 @@
 import React from 'react'
 import { toast } from 'react-toastify'
+import { MdContentCopy } from 'react-icons/md';
+
 
 function PasswordGenerator({ password, setPassword }) {
 
@@ -29,26 +31,33 @@ function PasswordGenerator({ password, setPassword }) {
 
   return (
     <div>
-        <button 
-            type="button"
-            onClick={async ( event ) => {
-                event.preventDefault()
-                const generatedPassword = generatePassword(12)
-                setPassword(generatedPassword)
-            }}>Generate Password</button>
-        <button 
-            type="button"
-            onClick={(event) => {
-                event.preventDefault()
-                if(!password) {
-                    toast.error('Nothing to Copy', {position: "top-center"})
-                } else {
-                    copyToClipboard()
-                    toast.success('Password successfully copied to clipboard', {position:"top-center"})
-                }
-            }}
-        >copy</button>
-        <p>{password}</p>
+        <p className='my-2'>
+            Generate Password
+        </p>
+        <span className='bg-[#D7E4F1] px-5 py-2 my-2 rounded text-[#6C7279] ml-2'>{password}</span>
+        <div className='flex h-15 my-2'>
+            <button 
+                type="button"
+                className='bg-primary text-white px-3 py-2 rounded m-2 cursor-pointer text-sm h-15'
+                onClick={async ( event ) => {
+                    event.preventDefault()
+                    const generatedPassword = generatePassword(12)
+                    setPassword(generatedPassword)
+                }}>Generate</button>
+            <button 
+                type="button"
+                className='bg-primary text-white px-3 py-2 rounded m-2 cursor-pointer h-15'
+                onClick={(event) => {
+                    event.preventDefault()
+                    if(!password) {
+                        toast.error('Nothing to Copy', {position: "top-center"})
+                    } else {
+                        copyToClipboard()
+                        toast.success('Password successfully copied to clipboard', {position:"top-center"})
+                    }
+                }}
+            ><i className='text-lg'><MdContentCopy/></i></button> 
+        </div>
     </div>
   )
 }

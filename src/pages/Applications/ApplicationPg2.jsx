@@ -187,7 +187,7 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
             handleBlur={handleBlur}
           />
             {
-                location.state?.from === "/members" && <div><PasswordGenerator password={password} setPassword={setPassword}/>here</div>
+              location.state?.from === "/members" && <div><PasswordGenerator password={password} setPassword={setPassword}/></div>
             }
             <div className="flex justify-between w-full">
                 <input
