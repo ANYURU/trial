@@ -24,77 +24,78 @@ function MobileNav({ user }) {
     };
   }
   return (
-    <div className="fixed flex justify-between z-20 top-0 right-0 left-0 items-center mobile-navbar p-2 bg-white dark:bg-dark-bg-700 dark:text-white">
+    <div className="fixed flex justify-between z-30 top-0 right-0 left-0 h-[70px] items-center mobile-navbar bg-white dark:bg-dark-bg-700 dark:text-white">
       <div
         onClick={() => {
           setShowMenu(!showMenu);
         }}
-        className="mx-3 font-bold cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600 p-2 rounded-full"
+        className="mx-2 font-bold cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600 p-2 rounded-full"
       >
         <IconContext.Provider value={{ className: `font-bold text-2xl` }}>
           {!showMenu ? <GiHamburgerMenu /> : <IoCloseSharp />}
         </IconContext.Provider>
       </div>
 
-      <div className="mx-3">
-        <DarkModeSwitch
-          style={{ marginBottom: "0" }}
-          checked={darkMode}
-          onChange={() => toggleDarkMode()}
-          size={30}
-        />
-      </div>
-
-      <div
-        className="flex items-end relative mr-8 dialog"
-        onClick={(event) => {
-          setShow(!show);
-          event.stopPropagation();
-        }}
-      >
-        <div className="flex items-center cursor-pointer">
-          <div className="text-center">
-            <p className="mb-0 cursor-pointer">
-              Hello
-              {user?.fullname !== undefined
-                ? ` ${user?.fullname.split(" ")[0]}`
-                : ""}
-            </p>
-            <p
-              className={`text-sm ${
-                user?.member_status === "active"
-                  ? "text-green-600"
-                  : "text-accent-red"
-              }`}
-            >
-              {user?.member_status ? user.member_status : "status"}
-            </p>
+      <div className="flex items-center">
+        <div className="mx-3">
+          <DarkModeSwitch
+            style={{ marginBottom: "0" }}
+            checked={darkMode}
+            onChange={() => toggleDarkMode()}
+            size={23}
+          />
+        </div>
+        <div
+          className="flex items-end relative mr-2 dialog"
+          onClick={(event) => {
+            setShow(!show);
+            event.stopPropagation();
+          }}
+        >
+          <div className="flex items-center cursor-pointer">
+            <div className="text-center text-sm">
+              <p className="mb-0 cursor-pointer">
+                Hello
+                {user?.fullname !== undefined
+                  ? ` ${user?.fullname.split(" ")[0]}`
+                  : ""}
+              </p>
+              <p
+                className={`text-sm ${
+                  user?.member_status === "active"
+                    ? "text-green-600"
+                    : "text-accent-red"
+                }`}
+              >
+                {user?.member_status ? user.member_status : "status"}
+              </p>
+            </div>
+            <div>
+              {user?.avatar ? (
+                <div
+                  className="w-10 h-10 bg-accent rounded-full mx-2 overflow-hidden bg-cover"
+                  style={{ backgroundImage: `url(${user?.avatar})` }}
+                ></div>
+              ) : (
+                <div className="w-10 h-10 bg-accent rounded-full mx-2 flex justify-center font-bold items-center overflow-hidden dark:bg-dark-bg-600 dark:text-secondary-text">
+                  {user?.fullname !== undefined &&
+                    user.fullname !== null &&
+                    ` ${user?.fullname.split("")[0]}`}
+                </div>
+              )}
+              <p
+                className={`${
+                  user.memberStatus === "active"
+                    ? "text-green-600"
+                    : "text-accent-red"
+                }`}
+              >
+                {user.memberStatus}
+              </p>
+            </div>
+            <MdKeyboardArrowDown />
+            <ProfileModal show={show} setShow={setShow} />
           </div>
-          <div>
-            {user?.avatar ? (
-              <div
-                className="w-10 h-10 bg-accent rounded-full mx-2 overflow-hidden bg-cover"
-                style={{ backgroundImage: `url(${user?.avatar})` }}
-              ></div>
-            ) : (
-              <div className="w-10 h-10 bg-accent rounded-full mx-2 flex justify-center font-bold items-center overflow-hidden dark:bg-dark-bg-600 dark:text-secondary-text">
-                {user?.fullname !== undefined &&
-                  user.fullname !== null &&
-                  ` ${user?.fullname.split("")[0]}`}
-              </div>
-            )}
-            <p
-              className={`${
-                user.memberStatus === "active"
-                  ? "text-green-600"
-                  : "text-accent-red"
-              }`}
-            >
-              {user.memberStatus}
-            </p>
-          </div>
-          <MdKeyboardArrowDown />
-          <ProfileModal show={show} setShow={setShow} />
         </div>
       </div>
 
@@ -105,7 +106,7 @@ function MobileNav({ user }) {
         <MobileMenu setShowMenu={setShowMenu} user={user} />
       </div>
       {showMenu && (
-        <div className="w-screen h-screen bg-black opacity-20 fixed top-[60px] left-0 z-10"></div>
+        <div className="w-screen h-screen bg-black opacity-20 fixed top-[70px] left-0 z-10"></div>
       )}
     </div>
   );

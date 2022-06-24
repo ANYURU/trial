@@ -24,7 +24,7 @@ function MobileMenu({ user, setShowMenu }) {
     .map((item) => item.sublinks);
 
   return (
-    <div className="bg-white dark:bg-dark-bg-700 h-screen w-11/12 top-0 left-0 bottom-0 shadow-sm z-20">
+    <div className="bg-white dark:bg-dark-bg-700 h-screen w-11/12 left-0 bottom-0 shadow-sm z-20">
       <div className="bg-white dark:bg-dark-bg-700 flex justify-center items-center mb-6">
         <img src={logo} alt="tube" width={110} />
       </div>
