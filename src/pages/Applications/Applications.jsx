@@ -132,7 +132,7 @@ export default function Applications() {
           </div>
         </div>
       </div>
-      <div className="bg-white p-6 overflow-hidden  relative  h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white overflow-hidden  relative  h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {shownApplications.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">

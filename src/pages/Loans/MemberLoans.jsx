@@ -52,13 +52,17 @@ export default function MemberLoans() {
   shownloans = shownloans
     ? shownloans.filter(
         (loan) =>
-          !searchText || loan?.loan_meta.applicants_name.toLowerCase()
-          .indexOf(searchText.toLowerCase()) > -1
+          !searchText ||
+          loan?.loan_meta.applicants_name
+            .toLowerCase()
+            .indexOf(searchText.toLowerCase()) > -1
       ).length > 0
       ? shownloans.filter(
           (loan) =>
-            !searchText || loan?.loan_meta.applicants_name.toLowerCase()
-            .indexOf(searchText.toLowerCase()) > -1
+            !searchText ||
+            loan?.loan_meta.applicants_name
+              .toLowerCase()
+              .indexOf(searchText.toLowerCase()) > -1
         )
       : null
     : null;
@@ -119,12 +123,12 @@ export default function MemberLoans() {
         </div>
       </div>
 
-      <div className="bg-white p-6 overflow-hidden  relative  md:h-[calc(100%-120px)] dark:bg-dark-bg-700">
+      <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-120px)] dark:bg-dark-bg-700">
         {loans !== null && shownloans !== null && shownloans.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">ID</th>
@@ -132,7 +136,7 @@ export default function MemberLoans() {
                     <th className="px-6 py-4">Amount to Pay</th>
                     <th className="px-6 py-4">Amount Paid</th>
                     <th className="px-6 py-4">Principal</th>
-                    <th className="px-6 py-4">Interest (%)</th>
+                    <th className="px-6 py-4">Interest Rate(%)</th>
                     <th className="px-6 py-4">Status</th>
                     <th className="px-6 py-4">Action</th>
                   </tr>
@@ -156,13 +160,17 @@ export default function MemberLoans() {
                         {loan.loan_meta.applicants_name}
                       </td>
                       <td className="px-6 py-3">
-                        {currencyFormatter(loan.outstanding_balance +
-                          0.05 * loan.outstanding_balance)}
+                        {currencyFormatter(
+                          loan.amount_issued +
+                            0.05 * loan.amount_issued
+                        )}
                       </td>
                       <td className="px-6 py-3">
-                        {loan.total_repayment_amount}
+                        {loan.amount_paid}
                       </td>
-                      <td className="px-6 py-3">{currencyFormatter(loan.outstanding_balance)}</td>
+                      <td className="px-6 py-3">
+                        {currencyFormatter(loan.amount_issued)}
+                      </td>
                       <td className="px-6 py-3">5</td>
                       <td className={`px-6 py-3`}>
                         <span

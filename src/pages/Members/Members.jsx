@@ -163,6 +163,7 @@ export default function Members() {
                         <MemberModal
                           member={activeIndex === index && member}
                           setMemberModal={setMemberModal}
+                          memberModal={memberModal}
                         />
                       )}
 
