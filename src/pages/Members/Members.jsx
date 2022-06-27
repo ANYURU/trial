@@ -13,6 +13,7 @@ import { date } from "yup";
 export default function Members() {
   useEffect(() => {
     getMembers();
+    getSuspend();
     document.title = "Members - Bweyogere tuberebumu";
   }, []);
 
@@ -27,12 +28,20 @@ export default function Members() {
     dataArray.length === 0 ? setMembers(null) : setMembers(dataArray);
   };
 
+  const getSuspend = async () => {
+    // const { error, data } = await supabase
+    //   .from("users")
+    //   .select()
+    // console.log(data);
+  };
+
   const [status, setStatus] = useState(null);
   const [activeIndex, setActiveIndex] = useState(null);
   const [show, setShow] = useState(false);
 
   const [memberModal, setMemberModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [suspendModal, setSuspendModal] = useState(false);
   const [searchText, setSearchText] = useState("");
 
   //pagination
@@ -84,17 +93,18 @@ export default function Members() {
             onChange={(event) => setSearchText(event.target.value)}
           />
           <button
-            className="w-3/12 bg-primary py-2 text-white rounded-md flex justify-center items-center"
+            className=" px-4 bg-primary py-2 text-white rounded-md flex justify-center items-center"
             onClick={() => {
               navigate("/application");
             }}
           >
-            <MdAdd /> New Member{" "}
+            {/* <MdAdd />  */}
+            Add Member
           </button>
         </div>
 
         <div className="flex justify-between my-3 m-1">
-          <div className="flex flex-col w-56">
+          <div className="flex flex-col w-56 mr-1">
             <select
               name="status"
               className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
@@ -105,7 +115,7 @@ export default function Members() {
               <option value="dormant">Dormant</option>
             </select>
           </div>
-          <div className="flex flex-col w-56 dark:text-secondary-text">
+          <div className="flex flex-col w-56 ml-1 dark:text-secondary-text">
             <input
               type="date"
               onChange={(event) => setDate(event.target.value)}
@@ -115,17 +125,29 @@ export default function Members() {
         </div>
       </div>
 
-      <div className="bg-white p-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {members && members.length > 0 ? (
           <>
-            <div className="w-full pb-3 overflow-x-auto h-full  relative overflow-y-auto">
+            <div className="w-full pb-3 overflow-x-auto h-full  relative overflow-y-auto ">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-4">ID</th>
                     <th className="px-6 py-4">Name</th>
+                    <th className="px-6 py-4">ID</th>
                     <th className="px-6 py-4">Phone Number</th>
-                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <select
+                          name="status"
+                          className="py-2 px-2 bg-gray-700 dark:bg-gray-700 font-bold text-xs text-white uppercase"
+                          onChange={(event) => setStatus(event.target.value)}
+                        >
+                          <option value="">Status</option>
+                          <option value="active">Active</option>
+                          <option value="dormant">Dormant</option>
+                        </select>
+                      </div>
+                    </th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -169,16 +191,50 @@ export default function Members() {
                           </div>
                         </ConfirmModal>
                       )}
-                      <td className="px-6 py-3">{member.id}</td>
+                      {suspendModal && activeIndex === index && (
+                        <ConfirmModal setPopUp={setSuspendModal}>
+                          <h1 className="font-bold">
+                            Are you sure you want to suspend{" "}
+                            {member.fullname.toUpperCase()}?
+                          </h1>
+                          <p>
+                            If you supsend this account, the owner won't be able
+                            to use it until you unsuspend.
+                          </p>
+                          <div className="flex justify-end gap-3 mt-3">
+                            <button
+                              className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
+                              onClick={() => {
+                                
+                                setSuspendModal(false);
+                              }}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              className="bg-accent-red px-3 py-1 outline outline-1  rounded-md text-white"
+                              onClick={async() => {
+                                await supabase
+                                  .from("users")
+                                  .update({suspended : true})
+                                  .eq("id", member.id)
+                                setSuspendModal(false)}}
+                            >
+                              Suspend
+                            </button>
+                          </div>
+                        </ConfirmModal>
+                      )}
                       <td className="px-6 py-3">{member.fullname}</td>
+                      <td className="px-6 py-3">{member.id}</td>
                       <td className="px-6 py-3">{member.phone_number}</td>
 
-                      <td className={`px-6 py-3`}>
+                      <td className={`px-6 py-3 font-semibold`}>
                         <span
                           className={` py-1 px-2 rounded-xl text-white ${
                             member.member_status === "active"
-                              ? "bg-green-400"
-                              : "bg-red-400"
+                              ? "bg-emerald-600"
+                              : "bg-rose-600"
                           }`}
                         >
                           {member.member_status}
@@ -203,8 +259,8 @@ export default function Members() {
                             index={index}
                             setShow={setShow}
                             setMemberModal={setMemberModal}
-                            deleteModal={deleteModal}
                             setDeleteModal={setDeleteModal}
+                            setSuspendModal={setSuspendModal}
                             member={activeIndex === index ? member : null}
                           />
                         </div>

@@ -96,7 +96,7 @@ function LoanRequest() {
   });
 
   return (
-    <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
+    <div className="flex-grow sm:mx-2 md:mx-5 my-2 h-[calc(100vh-70px)]">
       <ToastContainer />
       <div className="flex flex-col justify-between pb-3 md:h-[60px]">
         <h1 className="mb-5 font-bold uppercase dark:text-white">

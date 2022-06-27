@@ -1,8 +1,10 @@
 import { TiTick } from "react-icons/ti";
 import { steps } from "../helpers/loanSteps";
 import { Fragment } from "react";
+import { useMediaQuery } from "../hooks";
 
 export default function Stepper({ pageNumber }) {
+  const matches = useMediaQuery("(min-width: 500px)");
   return (
     <div className="flex justify-between w-full py-4 px-2 mb-2 items-center">
       {steps.map((step, index) => (
@@ -17,13 +19,15 @@ export default function Stepper({ pageNumber }) {
             >
               {pageNumber > step.number ? <TiTick /> : step.number}
             </span>
-            <span
-              className={`text-xs absolute top-0 mt-10 text-center ${
-                pageNumber === step.number ? "text-primary" : "text-gray-400"
-              } `}
-            >
-              {step.title}
-            </span>
+            {matches && (
+              <span
+                className={`text-xs absolute top-0 mt-10 text-center ${
+                  pageNumber === step.number ? "text-primary" : "text-gray-400"
+                } `}
+              >
+                {step.title}
+              </span>
+            )}
           </div>
           {index !== 5 && (
             <div
