@@ -9,22 +9,20 @@ import { FaEllipsisV } from 'react-icons/fa'
 
 export default function LoanAdmin() {
   useEffect(() => {
-    getApplications()
+    supabase.rpc("fetch_loans", {})
+    .then(({ data, error }) => {
+      if( error ) { 
+        throw error
+      } else {
+        setLoans(data)
+      }
+    }) 
+    .catch( error => console.log(error))
+
     document.title = 'Loan Applications - Bweyogere tuberebumu'
   }, [])
 
   const [ loans, setLoans ] = useState([])
-
-  const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("applications")
-    .select()
-    .eq("_type", "loan")
-    .order("created_at",  { ascending: false })
-
-    console.log(data)
-    setLoans(data)
-  }
 
   const navigate = useNavigate()
 

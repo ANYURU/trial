@@ -22,13 +22,14 @@ const PrivateRoute = ({ allowedRoles }) => {
       .then((data) => {
         if (data) {
           const { roles } = data;
+          console.log(data)
           setRoles(roles);
           setProfile(data);
         }
       })
       .then(() => setLoading(false))
       .catch((error) => console.log(error));
-  }, [user]);
+  }, [user?.session]);
 
   return user?.role === "authenticated" ? (
     matches ? (
