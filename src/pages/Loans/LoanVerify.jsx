@@ -14,25 +14,27 @@ export default function DepositVerify() {
 
   useEffect(() => {
     getApplication()
+      .then(data => setLoan(data)) 
+      .catch(error => console.log(error))
   }, [ ])
 
   const getApplication = async () => {
-    const { error, data } = await supabase
-    .from("applications")
-    .select()
-    .eq("_type", "loan")
-    .eq("application_id", id)
-    setLoan(data[0])
+    const { error, data } = await supabase.rpc("fetch_loans")
+    if(error) throw error
+    if(data) {
+      const [loan_application] = data.filter( loan => loan.application_id === id)
+      return loan_application
+    }
   }
 
   if (loan){
+  
     try {
       downloadFile(loan.application_meta.files[0].file_url.substring(9), "loans")
       .then((data) => setImageURL(data.avatar_url))
       .catch(error => console.log("failed"))
-    }
-    catch (error) {
-      console.log("failed")
+    } catch ( error ){
+      // console.log(error)
     }
   }
 

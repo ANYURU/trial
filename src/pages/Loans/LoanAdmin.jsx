@@ -52,10 +52,6 @@ export default function LoanAdmin() {
   const pendingMembers = loans.filter(member => !member.reviewed)
   const rejectedMembers = loans.filter(member => member.reviewed && member.application_meta.review_status !== 'approved')
 
-  // loans = filterByStatus(loans, "account", account)
-  // loans = loans.filter(loan => !date || loan.date === date)
-
-
   const approved = Math.round((approvedMembers.length/loans.length) * 100)
   const pending = Math.round((pendingMembers.length/loans.length) * 100)
   const rejected = Math.round((rejectedMembers.length/loans.length) * 100)
