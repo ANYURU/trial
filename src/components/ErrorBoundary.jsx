@@ -5,21 +5,17 @@ import { IconContext } from "react-icons/lib";
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { error: null, errorInfo: null };
   }
 
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
-    return { hasError: true };
-  }
   componentDidCatch(error, errorInfo) {
-    // You can also log the error to an error reporting service
-    // logErrorToMyService(error, errorInfo);
-    console.log(error, errorInfo);
+    this.setState({
+      error: error,
+      errorInfo: errorInfo,
+    });
   }
   render() {
-    if (this.state.hasError) {
-      // You can render any custom fallback UI
+    if (this.state.errorInfo) {
       return (
         <div className="w-[100vw-265px] h-full mx-5 my-2">
           <div className="w-full h-full flex flex-col justify-center items-center ">
@@ -34,6 +30,10 @@ class ErrorBoundary extends Component {
             <h1 className="font-bold text-xl dark:text-secondary-text">
               Something went wrong.
             </h1>
+            <details style={{ whiteSpace: "pre-wrap" }}>
+              <summary>Need More Details</summary>
+              {this.state.error && this.state.error.toString()}
+            </details>
           </div>
         </div>
       );

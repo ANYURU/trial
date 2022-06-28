@@ -137,7 +137,7 @@ export default function Applications() {
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Member's Name</th>

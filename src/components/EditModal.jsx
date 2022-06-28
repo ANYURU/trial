@@ -91,6 +91,7 @@ function EditModal({ setEditPop }) {
               setLoading(false);
               console.log(`Error ${error}`);
             });
+            
         }}
       >
         {({ values, errors, touched, handleChange, handleBlur }) => {

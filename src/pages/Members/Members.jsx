@@ -8,13 +8,12 @@ import { ConfirmModal } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../helpers/supabase";
 import { Spinner, NothingShown } from "../../components";
-import { date } from "yup";
+import { Helmet } from "react-helmet";
 
 export default function Members() {
   useEffect(() => {
     getMembers();
     getSuspend();
-    document.title = "Members - Bweyogere tuberebumu";
   }, []);
 
   const [members, setMembers] = useState([]);
@@ -25,7 +24,7 @@ export default function Members() {
     const { error, data } = await supabase.from("_member_profiles").select();
 
     const dataArray = data.filter((member) => member.roles);
-    dataArray.length === 0 ? setMembers(null) : setMembers(dataArray);
+    dataArray.length === 0 ? setMembers(null) : setMembers(null);
   };
 
   const getSuspend = async () => {
@@ -81,6 +80,9 @@ export default function Members() {
 
   return (
     <div className="mx-5 my-2 md:h-[calc(100vh-70px)]">
+      <Helmet>
+        <title>Members - Bweyogere tuberebumu</title>
+      </Helmet>
       <div className="flex flex-col justify-between pb-3 md:h-[150px]">
         <h1 className="mb-3 mt-2 font-bold uppercase dark:text-white">
           Members
@@ -104,7 +106,7 @@ export default function Members() {
         </div>
 
         <div className="flex justify-between my-3 m-1">
-          {/* <div className="flex flex-col w-56 mr-1">
+          <div className="flex flex-col w-56 mr-1">
             <select
               name="status"
               className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
@@ -114,7 +116,7 @@ export default function Members() {
               <option value="active">Active</option>
               <option value="dormant">Dormant</option>
             </select>
-          </div> */}
+          </div>
           <div className="flex flex-col w-56 ml-1 dark:text-secondary-text">
             <input
               type="date"
@@ -126,7 +128,7 @@ export default function Members() {
       </div>
 
       <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
-        {members && members.length > 0 ? (
+        {members.length > 0 ? (
           <>
             <div className="w-full pb-3 overflow-x-auto h-full  relative overflow-y-auto ">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -134,21 +136,10 @@ export default function Members() {
                   <tr>
                     <th className="px-6 py-4">Name</th>
                     <th className="px-6 py-4">ID</th>
-                    <th className="px-6 py-4 whitespace-nowrap">Phone Number</th>
-                    <th className="px-6 py-4">
-                      <div className="flex justify-start items-center">
-                        <select
-                          name="status"
-                          className="py-2 px-2 bg-gray-700 dark:bg-gray-700 font-bold text-xs text-white uppercase appearance-none cursor-pointer"
-                          onChange={(event) => setStatus(event.target.value)}
-                        >
-                          <option value="">Status <MdArrowDropDown /></option>
-                          <option value="active">Active</option>
-                          <option value="dormant">Dormant</option>
-                        </select>
-                        <MdArrowDropDown size={25} />
-                      </div>
+                    <th className="px-6 py-4 whitespace-nowrap">
+                      Phone Number
                     </th>
+                    <th className="px-6 py-4">Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -207,7 +198,6 @@ export default function Members() {
                             <button
                               className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
                               onClick={() => {
-                                
                                 setSuspendModal(false);
                               }}
                             >
@@ -215,12 +205,13 @@ export default function Members() {
                             </button>
                             <button
                               className="bg-accent-red px-3 py-1 outline outline-1  rounded-md text-white"
-                              onClick={async() => {
+                              onClick={async () => {
                                 await supabase
                                   .from("users")
-                                  .update({suspended : true})
-                                  .eq("id", member.id)
-                                setSuspendModal(false)}}
+                                  .update({ suspended: true })
+                                  .eq("id", member.id);
+                                setSuspendModal(false);
+                              }}
                             >
                               Suspend
                             </button>
