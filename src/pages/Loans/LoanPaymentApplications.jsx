@@ -128,7 +128,7 @@ export default function LoanPaymentApplications() {
             placeholder="Search by name..."
             onChange={(event) => setSearchText(event.target.value)}
           />
-          <MdOutlineSearch className="search_icon" />
+          {/* <MdOutlineSearch className="search_icon" /> */}
         </div>
 
         <div className="flex my-1 justify-between gap-5">
@@ -174,12 +174,12 @@ export default function LoanPaymentApplications() {
         </div>
       </div>
 
-      <div className="bg-white p-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {loans !== null && shownLoans !== null && shownLoans.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>

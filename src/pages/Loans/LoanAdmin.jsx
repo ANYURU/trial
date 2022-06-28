@@ -7,7 +7,7 @@ import { Pagination } from "../../components";
 import { filterByStatus } from "../../helpers/utilites";
 import { FaEllipsisV } from "react-icons/fa";
 import { AiFillCheckSquare } from "react-icons/ai";
-import { MdInfo } from "react-icons/md";
+import { MdInfo, MdArrowDropDown } from "react-icons/md";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import LoanAppModal from "../../components/Modals/LoanAppModal";
@@ -19,7 +19,7 @@ export default function LoanAdmin() {
   }, []);
 
   const [loans, setLoans] = useState([]);
-  const [loanModal, setLoanModal] = useState(false)
+  const [loanModal, setLoanModal] = useState(false);
 
   const getApplications = async () => {
     const { error, data } = await supabase
@@ -174,7 +174,7 @@ export default function LoanAdmin() {
               placeholder="Search by name..."
               onChange={(event) => setSearchText(event.target.value)}
             />
-            <MdOutlineSearch className="search_icon" />
+            {/* <MdOutlineSearch className="search_icon" /> */}
           </div>
 
           <div className="flex flex-col w-56">
@@ -193,30 +193,29 @@ export default function LoanAdmin() {
               <option value="rejected">Rejected</option>
             </select>
           </div>
+
           <div className="flex flex-col w-56">
             <input
               type="date"
               name="inputDate"
               onChange={(event) => setDate(event.target.value)}
-              id=""
-              placeholder="Old Password"
               className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
             />
           </div>
         </div>
       </div>
 
-      <div className="bg-white p-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {loans !== null && shownLoans.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
-                <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
                     <th className="px-6 py-4">Name</th>
-                    <th className="px-6 py-4">Amount</th>
+                    <th className="px-6 py-4">Amount UGX</th>
                     <th className="px-6 py-4">Status</th>
                     <th className="px-6 py-4">Actions</th>
                   </tr>
@@ -230,7 +229,10 @@ export default function LoanAdmin() {
                       key={index}
                     >
                       {loanModal && activeIndex === index && (
-                        <LoanAppModal setLoanModal={setLoanModal} loan={deposit} />
+                        <LoanAppModal
+                          setLoanModal={setLoanModal}
+                          loan={deposit}
+                        />
                       )}
                       <td className="px-6 py-3">
                         {moment(deposit.created_at).format("DD-MM-YYYY")}
@@ -287,12 +289,12 @@ export default function LoanAdmin() {
                                 handleDeposit(deposit.application_id);
                               }}
                             >
-                              <AiFillCheckSquare /> Verify
+                              <AiFillCheckSquare /> Approve
                             </li>
                             <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {
-                                setLoanModal(true)
+                                setLoanModal(true);
                               }}
                             >
                               <MdInfo /> Details

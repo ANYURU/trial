@@ -161,13 +161,10 @@ export default function MemberLoans() {
                       </td>
                       <td className="px-6 py-3">
                         {currencyFormatter(
-                          loan.amount_issued +
-                            0.05 * loan.amount_issued
+                          loan.amount_issued + 0.05 * loan.amount_issued
                         )}
                       </td>
-                      <td className="px-6 py-3">
-                        {loan.amount_paid}
-                      </td>
+                      <td className="px-6 py-3">{loan.amount_paid}</td>
                       <td className="px-6 py-3">
                         {currencyFormatter(loan.amount_issued)}
                       </td>
