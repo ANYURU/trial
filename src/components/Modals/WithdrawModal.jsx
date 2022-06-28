@@ -7,7 +7,6 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 export default function WithdrawModal({ passed, setWithdrawModal, withdraw }) {
   const { darkMode } = useAuth();
 
-  console.log(withdraw)
   return ReactDOM.createPortal(
     <div
       className={`bg-black bg-opacity-20 z-40 w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center ${
@@ -34,31 +33,35 @@ export default function WithdrawModal({ passed, setWithdrawModal, withdraw }) {
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">withdraw ID:</p>
-          <p className="font-bold col-span-3">{withdraw.transaction_id}</p>
+          <p className="font-bold col-span-3">:{" "} {withdraw.transaction_id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Created At:</p>
-          <p className="font-bold col-span-3">
-            {moment(withdraw.created_at).format("MMMM Do YYYY")}
+          <p className="col-span-2">Created At</p>
+          <p className="font-bold col-span-3">:{" "}
+            {moment(withdraw.created_at).format("Do MMMM YYYY, hh:mm a")}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Amount:</p>
-          <p className="font-bold col-span-3">UGX{" "}{currencyFormatter(withdraw.amount)}</p>
-        </div>
-
-        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Approved at:</p>
-          <p className="font-bold col-span-3">
-          {moment(withdraw.transaction_meta.approved_at).format("MMMM Do YYYY")}
+          <p className="col-span-2">Amount</p>
+          <p className="font-bold col-span-3">: {" "}
+            UGX {currencyFormatter(withdraw.amount)}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Approved by:</p>
-          <p className="font-bold col-span-3">
+          <p className="col-span-2">Approved at</p>
+          <p className="font-bold col-span-3">: {" "}
+            {moment(withdraw.transaction_meta.approved_at).format(
+              "Do MMMM YYYY, hh:mm a"
+            )}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+          <p className="col-span-2">Approved by</p>
+          <p className="font-bold col-span-3">: {" "}
             {withdraw.transaction_meta.approved_by}
           </p>
         </div>
