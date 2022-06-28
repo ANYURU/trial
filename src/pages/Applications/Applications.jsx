@@ -13,7 +13,15 @@ import { Loader } from "../../components"
 export default function Applications() {
 
   useEffect(() => {
-    getApplications()
+    // getApplications()
+    supabase.rpc("fetch_membership_applications")
+      .then(({data, error}) => {
+        if ( error ) throw error
+        if ( data ) {
+          setApplications(data)
+        }
+      })
+      .catch(error => console.log(error))
     document.title = "Membership Application - Bweyogere tuberebumu"
   }, [])
 
@@ -22,15 +30,6 @@ export default function Applications() {
   const [ applications, setApplications ] = useState([])
 
   const navigate = useNavigate()
-
-  const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("applications")
-    .select()
-    .eq("_type", "membership")
-    .order("created_at",  { ascending: false })
-    setApplications(data)
-  }
 
   const [ status, setStatus ] = useState("")
   const approvedMembers = applications.filter(application => application.application_meta.review_status)
