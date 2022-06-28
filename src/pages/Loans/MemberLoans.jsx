@@ -10,7 +10,15 @@ import moment from 'moment'
 export default function MemberLoans() {
   useEffect(() => {
     document.title = 'Loans - Bweyogere tuberebumu'
-    getApplications()
+    supabase.rpc("fetch_loans", {})
+    .then(({ data, error }) => {
+      if( error ) { 
+        console.log(error)
+      } else {
+        setLoans(data)
+      }
+    }) 
+    .catch( error => console.log(error))
   }, [])
 
   const [ searchText, setSearchText ] = useState('')
@@ -19,14 +27,6 @@ export default function MemberLoans() {
   const [ loanModal, setLoanModal ] = useState(false)
   const [ status, setStatus ] = useState('')
   const [ date, setDate ] = useState(null)
-
-  const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("loans")
-    .select()
-    setLoans(data)
-    console.log(data)
-  }
 
   //pagination
   const [ currentPage, setCurrentPage ] = useState(1)
