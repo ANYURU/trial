@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/images/tube-no-bg.png'
 import { PhoneTextField, PasswordTextField, Submit } from "../../components";
-import { Formik, Form, formik } from "formik";
+import { Formik, Form } from "formik";
 import { validationSchema } from "../../helpers/validator";
 import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer } from 'react-toastify'
@@ -24,24 +24,29 @@ export default function Login() {
     setLoading(true)
     const { phoneNo, password } = values
 
-    supabase.rpc('does_phone_exist', { phone: `256${phoneNo.slice(1)}`})
-    .then(async ({ data }) => {
-      if ( data ) {
-        const { error } = await signIn({  
-          phone: '256'+ phoneNo.slice(1),
+    supabase.rpc('check_phone', { phone: `256${phoneNo.slice(1)}`, _at:'login'})
+    .then(async ({ data, error }) => {
+      if ( error ) {
+        setLoading(false)
+        toast.error(`${error?.message}`, {position: "top-center"})
+        console.log(error)
+      } else if ( data ) {
+        const { error } = await signIn({
+          phone: '256' + phoneNo.slice(1),
           password: password
         })
 
         setLoading(false)
-        if ( error ) {
-          toast.error(`${error?.message}`, { position: "top-center" })
-        } else {
+        if (error) {
+          toast.error(`${error?.message}`, {position: "top-center"})
+        } else { 
           navigate('/dashboard')
         }
       } else {
-        toast.error(`User does not exist.`, { position: "top-center" })
+        toast.error(`User does not exist.`, {position: "top-center"})
       }
-    })
+    }).catch(error => console.log(error))
+    
   }
 
   return (

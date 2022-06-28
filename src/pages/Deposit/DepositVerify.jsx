@@ -11,11 +11,30 @@ export default function DepositVerify() {
   const { id } = useParams()
   const [ profile ] = useOutletContext()
 
-  useEffect(() => {
-    getApplication()
-  }, [])
   const [ deposit, setDeposit ] = useState(null)
   const [ imageURL, setImageURL ] = useState('')
+
+  useEffect(() => {
+    if( !deposit ) {
+      getApplication()
+      .then( async ( data ) => {
+        if( data ) {
+          setDeposit( data )
+          // Downloading the image.
+          if( !imageURL ) {
+            const { data: file, error } = await supabase.storage  
+              .from("deposits")
+              .download(await data.application_meta.files[0].file_url.substring(9))
+
+            if( error ) throw error
+            const url = URL.createObjectURL(file)
+            setImageURL(url)
+          }
+        }
+      })
+      .catch(error => console.log(error))     
+    }
+  }, [])
 
   const getApplication = async () => {
     const { error, data } = await supabase
@@ -23,13 +42,9 @@ export default function DepositVerify() {
     .select()
     .eq("_type", "deposit")
     .eq("application_id", id)
-    setDeposit(data[0])
-  }
-
-  if (deposit){
-    downloadFile(deposit.application_meta.files[0].file_url.substring(9), "deposits")
-    .then((data) => setImageURL(data.avatar_url))
-    .catch(error => error)
+    .single()
+    
+    return data
   }
 
   const approveDepositTransaction = async () => {
@@ -47,10 +62,7 @@ export default function DepositVerify() {
     } catch (error) {
       toast.error(`${error?.message}`, { position:"top-center"})
       console.log(error)
-     
-
     }
-
   }
 
 
@@ -60,8 +72,8 @@ export default function DepositVerify() {
       if( error ) {
         throw error
       } else {
-        toast.success(`Transaction has been rejected.`, { position:"top-center" })
         // handle the alerts and navigation
+        toast.success(`Transaction has been rejected.`, { position:"top-center" })
       }
     } catch(error) {
       console.log(error)
@@ -87,6 +99,7 @@ export default function DepositVerify() {
                 <div className="my-6">Method of Withdraw: Bank</div>
                 <div className="my-6">Account/Mobile Number: {deposit.application_meta &&  deposit?.application_meta.phone_number}</div>
                 <img src={imageURL} width={200} className="rounded" alt="receipt" loading="lazy"/>
+                {/* {imageURL && console.log(imageURL)} */}
               </div>
           </div>
           {deposit.application_meta.applicants_id !== profile.id &&

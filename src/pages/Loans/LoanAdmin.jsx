@@ -9,25 +9,25 @@ import { FaEllipsisV } from 'react-icons/fa'
 
 export default function LoanAdmin() {
   useEffect(() => {
-    getApplications()
+    supabase.rpc("fetch_loan_applications", {})
+    .then(({ data, error }) => {
+      if( error ) { 
+        throw error
+      } else {
+        setLoans(data)
+      }
+    }) 
+    .catch( error => console.log(error))
+
     document.title = 'Loan Applications - Bweyogere tuberebumu'
   }, [])
 
   const [ loans, setLoans ] = useState([])
 
-  const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("applications")
-    .select()
-    .eq("_type", "deposit")
-    .order("created_at",  { ascending: false })
-    setLoans(data)
-  }
-
   const navigate = useNavigate()
 
-  const handleDeposit = depositID => {
-    navigate(`/loans/members/${depositID}`)
+  const handleLoan = loanID => {
+    navigate(`/loans/members/${loanID}`)
   }
 
   const [ status, setStatus ] = useState('')
@@ -51,10 +51,6 @@ export default function LoanAdmin() {
   const approvedMembers = loans.filter(member => member.application_meta.review_status === 'approved')
   const pendingMembers = loans.filter(member => !member.reviewed)
   const rejectedMembers = loans.filter(member => member.reviewed && member.application_meta.review_status !== 'approved')
-
-  // loans = filterByStatus(loans, "account", account)
-  // loans = loans.filter(loan => !date || loan.date === date)
-
 
   const approved = Math.round((approvedMembers.length/loans.length) * 100)
   const pending = Math.round((pendingMembers.length/loans.length) * 100)
@@ -129,20 +125,19 @@ export default function LoanAdmin() {
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400'>
               <tr>
-                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Name</th><th className='px-6 py-4'>Account</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Actions</th>
+                <th className='px-6 py-4'>Date</th><th className='px-6 py-4'>Transaction ID</th><th className='px-6 py-4'>Name</th><th className='px-6 py-4'>Amount</th><th className='px-6 py-4'>Status</th><th className='px-6 py-4'>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {shownLoans.map((deposit, index) => (
+              {shownLoans.map((loan, index) => (
                 <tr className={`cursor-pointer ${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}
-                  onClick={() => handleDeposit(deposit.application_id)}
+                  onClick={() =>{ handleLoan(loan.application_id); console.log(loan)}}
                 >
-                    <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit?.application_meta.applicants_name}</td><td className='px-6 py-3'>{deposit?.application_meta.account_type}</td><td className='px-6 py-3'>{deposit?.application_meta.amount}</td>
-
+                    <td className='px-6 py-3'>{new Date(loan.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{loan.application_id}</td><td className='px-6 py-3'>{loan?.application_meta.applicants_name}</td><td className='px-6 py-3'>{loan?.application_meta.amount}</td>
                     <td className={`px-6 py-3`}>
-                      <span className={` py-1 px-2 rounded-xl text-white ${deposit.reviewed ? deposit.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
-                      {deposit.reviewed ?
-                        deposit.application_meta.review_status === "approved" ? "Approved" : "Rejected"
+                      <span className={` py-1 px-2 rounded-xl text-white ${loan.reviewed ? loan.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
+                      {loan.reviewed ?
+                        loan.application_meta.review_status === "approved" ? "Approved" : "Rejected"
                       : "Pending"}
                       </span>
                     </td>

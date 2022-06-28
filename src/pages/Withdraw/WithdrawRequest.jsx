@@ -15,7 +15,8 @@ function WithdrawRequest() {
   const initialValues = {
     account_type: '',
     amount:'',
-    particulars:''
+    particulars:'',
+    cashout_method: ''
   }
 
   
@@ -29,7 +30,8 @@ function WithdrawRequest() {
           validationSchema={withdrawRequestValidationSchema}
           onSubmit={async (values, { resetForm }) => {
             console.log(values)
-            const { account_type, amount, particulars } = values
+            const { account_type, amount, particulars, cashout_method } = values
+            console.log(values)
             try {
               const { error } = await supabase
                 .from('applications')
@@ -45,7 +47,8 @@ function WithdrawRequest() {
                         applicants_name,
                         account_type,
                         amount,
-                        particulars
+                        particulars,
+                        cashout_method
                       }
                     }
                   ]

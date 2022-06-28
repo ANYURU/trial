@@ -5,11 +5,12 @@ import { toast, ToastContainer } from "react-toastify"
 import { supabase } from "../../helpers/supabase"
 import { useOutletContext, useParams } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
-import { evidencedRequestValidationSchema as loanPaymentRequestValidationSchema} from '../../helpers/validator'
+import { loanPaymentValidationSchema as loanPaymentRequestValidationSchema} from '../../helpers/validator'
 
 function LoanPayment() {
   // Will be used later
-  // const { id: loan_id } = useParams()
+  const { id: loan_id } = useParams()
+  console.log(loan_id)
   const { user: { id: applicants_id }} = useAuth()
   const [{ fullname: applicants_name }] = useOutletContext()
 
@@ -26,10 +27,12 @@ function LoanPayment() {
         initialValues={initialValues}
         validationSchema={loanPaymentRequestValidationSchema}
         onSubmit={ async ( values, { resetForm } ) => {
+          console.log(values)
           const { account_type, amount, phone_number, particulars, evidence } =  values
           
           try {
-            const { Key: url} = await uploadFile(evidence, 'loans')  
+            const { Key: url} = await uploadFile(evidence, 'loans') 
+            console.log(url) 
             const {error, data } = await supabase
               .from('applications')
               .insert([
@@ -42,8 +45,7 @@ function LoanPayment() {
                     applicants_id,
                     applicants_name,
                     account_type,
-                    // later use
-                    // loan_id,            
+                    loan_id,            
                     amount,
                     phone_number,
                     files: [
@@ -80,24 +82,6 @@ function LoanPayment() {
                     <div className='mb-3'>
                         <div className='m-2'>
                           <div className='flex flex-wrap gap-5 h-16'>
-                              <div className='flex flex-col w-56'>
-                                <label htmlFor="" className='text-sm'>Please select an account</label>
-                                <select name="account_type" id="account" className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600" onChange={handleChange} onBlur={handleBlur}
-                                >
-                                  {
-                                    /* 
-                                      I was thinking that loans payments are either made to the bank account or the sacco accounts. Therefore I suggest we revise the account options to either bank or sacco. 
-                                      And, we should create a loans account for every user so that they are able to track their loans from their respective accounts.
-                                    */
-                                  }
-                                  <option value="">--Select Account--</option>
-                                  <option value="savings">Bank</option>
-                                  <option value="shares">Sacco</option>
-                                  {/* <option value="fixed">Fixed</option>
-                                  <option value="mwana">Mwana</option> */}
-                                </select>
-                                {touched?.account_type && errors?.account_type && <div className="error text-red-600 text-xs">{errors?.account_type}</div>}
-                              </div>
                               <div className='flex flex-col w-56 '>
                                 <label htmlFor="" className=' text-sm'>Enter Amount</label>
                                 <input type="text" name="amount" id="amount" placeholder='Enter Amount' className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values.amount}/>
@@ -134,7 +118,7 @@ function LoanPayment() {
                           ></textarea>
                       </div>
                     <div className="w-56">
-                      <Submit value='Request' disabled={!(isValid && dirty)}/>
+                      <Submit value='Request' disabled={!(isValid && dirty)} onClick={console.log(errors)}/>
                     </div>
                   </div>
                 </div>

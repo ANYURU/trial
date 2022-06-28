@@ -3,6 +3,7 @@ import { IoCloseSharp } from 'react-icons/io5'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { IconContext } from "react-icons/lib";
+import AmortizationSchedule from "../AmortizationSchedule"
 
 export default function LoanModal({ passed, setLoanModal, loan }) {
 
@@ -24,23 +25,24 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Principal:</p>
-              <p className="font-bold col-span-3">{loan.principal}</p>
+              <p className="font-bold col-span-3">{loan.amount_issued}</p>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Amount Paid:</p>
-              <p className="font-bold col-span-3">{loan.amountPaid}</p>
+              <p className="font-bold col-span-3">{loan.amount_paid}</p>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Interest Rate:</p>
-              <p className="font-bold col-span-3">{loan.interest_rate}%</p>
+              <p className="font-bold col-span-3">{loan.interest_rate || 3}%</p>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Amount to pay:</p>
-              <p className="font-bold col-span-3">{loan.amountToPay}</p>
+              <p className="font-bold col-span-3">{loan.outstanding_balance}</p>
           </div>
+          <AmortizationSchedule  amortization_schedule={loan.amortization_schedule} start_date={loan.start_date}/>
 
 
       </div>

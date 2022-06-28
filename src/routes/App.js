@@ -7,6 +7,7 @@ import PrivateRoute from "./PrivateRoute";
 import { useState } from "react";
 import Unauthorized from "../pages/Unauthorized";
 import { ApplicantApproval } from "../pages";
+import { LoanPaymentVerify } from "../pages/Loans";
 
 
 
@@ -78,6 +79,7 @@ export default function App() {
             <Route path="loans/members" element={<MemberLoans />} />
             <Route path="loans/members-requests" element={<LoanAdmin />} />
             <Route path="loans/applications" element={<LoanPaymentApplications />} />
+            <Route path="loans/applications/:id" element={<LoanPaymentVerify/>}/>
             <Route path="withdraw/members/:id" element={<WithdrawVerify />} />
             <Route path="withdraw/members" element={<WithdrawMembers />} />
             <Route path="deposit/members/:id" element={<DepositVerify />} />

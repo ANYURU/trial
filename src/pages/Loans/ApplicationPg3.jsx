@@ -20,7 +20,7 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
         setPageNumber(4)
     }}
   >
-    {({values, errors, touched, handleChange, handleBlur}) => {
+    {({values, errors, touched, handleChange, handleBlur, setFieldValue}) => {
   return (
     <Form>
         <div className='mb-3'>
@@ -68,7 +68,11 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
             <div className='m-2'>
             <div className='flex flex-wrap gap-5'>
                 <div className='flex flex-col w-56'>
-                  <input type="file" name="additional_files" className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' />
+                  <input type="file" name="additional_files" className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' 
+                    onChange={event => {
+                        setFieldValue(event.target.name, event.target.files[0])
+                    }} 
+                  />
                 </div>
             </div>
             </div>

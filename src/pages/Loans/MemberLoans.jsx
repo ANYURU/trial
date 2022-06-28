@@ -5,11 +5,20 @@ import { supabase } from "../../helpers/supabase"
 import { FaEllipsisV } from 'react-icons/fa'
 import { LoansContext } from "../../components"
 import { LoanModal } from "../../components"
+import moment from 'moment'
 
 export default function MemberLoans() {
   useEffect(() => {
     document.title = 'Loans - Bweyogere tuberebumu'
-    getApplications()
+    supabase.rpc("fetch_loans", {})
+    .then(({ data, error }) => {
+      if( error ) { 
+        console.log(error)
+      } else {
+        setLoans(data)
+      }
+    }) 
+    .catch( error => console.log(error))
   }, [])
 
   const [ searchText, setSearchText ] = useState('')
@@ -18,14 +27,6 @@ export default function MemberLoans() {
   const [ loanModal, setLoanModal ] = useState(false)
   const [ status, setStatus ] = useState('')
   const [ date, setDate ] = useState(null)
-
-  const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("applications")
-    .select()
-    .eq("_type", "loan")
-    setLoans(data)
-  }
 
   //pagination
   const [ currentPage, setCurrentPage ] = useState(1)
@@ -81,13 +82,13 @@ export default function MemberLoans() {
               </tr>
             </thead>
             <tbody>
-              {loan.map((loan, index) => (
+              {loans.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
                   {loanModal && activeIndex === index && <LoanModal setLoanModal={setLoanModal} loan={loan} />}
-                  <td className='px-6 py-3'>{loan.date}</td><td className='px-6 py-3'>{loan.ID}</td><td className='px-6 py-3'>{loan.applicants_name}</td><td className='px-6 py-3'>{loan.amountToPay}</td><td className='px-6 py-3'>{loan.amountPaid}</td><td className='px-6 py-3'>{loan.principal}</td><td className='px-6 py-3'>{loan.interest_rate}</td>
+                  <td className='px-6 py-3'>{moment(loan.start_date).format("DD-MM-YYYY")}</td><td className='px-6 py-3'>{loan.id}</td><td className='px-6 py-3'>{loan.loan_meta.applicants_name}</td><td className='px-6 py-3'>{loan.outstanding_balance}</td><td className='px-6 py-3'>{loan.amount_paid}</td><td className='px-6 py-3'>{loan.amount_issued}</td><td className='px-6 py-3'>{loan.interest_rate || '3%'}</td>
                   <td className={`px-6 py-3`}>
                     <span className={` py-1 px-2 rounded-xl text-white ${loan.status === "pending" ? "bg-yellow-400" : loan.status === 'paid' ? "bg-green-400" : "bg-red-400"}`}>
-                    {loan.status}
+                    {loan.loan_status}
                     </span>
                   </td>
 
