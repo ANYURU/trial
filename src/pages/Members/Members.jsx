@@ -1,4 +1,3 @@
-import { MdArrowDropDown } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { ContextMenu } from "../../components";
@@ -13,7 +12,6 @@ import { Helmet } from "react-helmet";
 export default function Members() {
   useEffect(() => {
     getMembers();
-    getSuspend();
   }, []);
 
   const [members, setMembers] = useState([]);
@@ -24,14 +22,7 @@ export default function Members() {
     const { error, data } = await supabase.from("_member_profiles").select();
 
     const dataArray = data.filter((member) => member.roles);
-    dataArray.length === 0 ? setMembers(null) : setMembers(null);
-  };
-
-  const getSuspend = async () => {
-    // const { error, data } = await supabase
-    //   .from("users")
-    //   .select()
-    // console.log(data);
+    dataArray.length === 0 ? setMembers(null) : setMembers(dataArray);
   };
 
   const [status, setStatus] = useState(null);
@@ -128,7 +119,7 @@ export default function Members() {
       </div>
 
       <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
-        {members.length > 0 ? (
+        {members && members.length > 0 ? (
           <>
             <div className="w-full pb-3 overflow-x-auto h-full  relative overflow-y-auto ">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

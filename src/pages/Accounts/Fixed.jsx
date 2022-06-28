@@ -16,7 +16,7 @@ function Fixed() {
 
   const getAccount = async () => {
     const { data, error } = await supabase
-      .from("fixed_accounts")
+      .from("fixed_deposit_accounts")
       .select()
       .eq("member_id", id)
       .single();

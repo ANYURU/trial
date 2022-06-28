@@ -33,13 +33,13 @@ function Accounts() {
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Accounts summary
       </h1>
-      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 h-full">
+      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text h-full">
         {loading ? (
           <Spinner />
         ) : (
-          <div className="w-full overflow-x-auto sm:rounded-lg">
+          <div className="w-full overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+              <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                 <tr>
                   <th className="px-6 py-4">Account Type</th>
                   <th className="px-6 py-4">Amount</th>
