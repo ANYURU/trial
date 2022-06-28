@@ -28,7 +28,7 @@ export default async ( req, res ) => {
 
         try {
             decoded = await decode(verification_key)
-            console.log('here')
+            // console.log('here')
         }
         catch( error ) {
             const response = {"Status":"Failure", "Details":"Bad Request"}

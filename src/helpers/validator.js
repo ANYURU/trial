@@ -7,8 +7,6 @@ export const validationSchema = Yup.object({
   password: Yup.string().trim().min(8, 'Password must be atleast 8 characters').required("Password is required"),
 })
 
-
-
 export const registerValidationSchema = Yup.object({
   password: Yup.string().trim().min(8, 'Password must be atleast 8 characters').required("Password is required"),
   // Matching passwords schema
@@ -48,16 +46,16 @@ Yup.addMethod(Yup.string, 'isNumber', function () {
   }).required("Required!")
 })
 
-export const depositRequestValidationSchema = Yup.object({
+export const evidencedRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
-  account_type: Yup.string().required('Required!'),
+  // account_type: Yup.string().required('Required!'),
   particulars: Yup.string(),
   phone_number: Yup.string().required('Required!'),
   evidence: Yup.string().required('Required!')
 })
 
 
-export const withdrawRequestValidationSchema = Yup.object({
+export const nonEvidencedRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
   account_type: Yup.string().required('Required!'),
   particulars: Yup.string(),

@@ -1,4 +1,4 @@
-import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineBungalow, MdPeopleOutline } from 'react-icons/md'
+import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineAdminPanelSettings, MdPeopleOutline } from 'react-icons/md'
 import { IoMdCard } from 'react-icons/io'
 import { RiExchangeDollarLine } from 'react-icons/ri'
 import { SiHomeassistantcommunitystore } from 'react-icons/si'
@@ -17,7 +17,7 @@ export const menuData = {
             link: 'loans',
             sublinks: [
                 {
-                    label: 'Request',
+                    label: 'Request Loan',
                     link: 'loans/request'
                 },
             ]
@@ -28,7 +28,7 @@ export const menuData = {
             link: 'deposit',
             sublinks: [
                 {
-                    label: 'Deposit',
+                    label: 'Make Deposit',
                     link: '/deposit/deposit'
                 }
             ]
@@ -39,7 +39,7 @@ export const menuData = {
             link: 'withdraw',
             sublinks: [
                 {
-                    label: 'Request',
+                    label: 'Request Withdraw',
                     link: 'withdraw/request'
                 }
             ]
@@ -54,7 +54,7 @@ export const menuData = {
                     link: 'accounts/shares'
                 },
                 {
-                    label: 'Mwanaa',
+                    label: 'Mwana',
                     link: 'accounts/mwana'
                 },
                 {
@@ -146,7 +146,7 @@ export const menuData = {
                     link: 'accounts/shares'
                 },
                 {
-                    label: 'Mwanaa',
+                    label: 'Mwana',
                     link: 'accounts/mwana'
                 },
                 {
@@ -165,6 +165,43 @@ export const menuData = {
                     link: 'members/applications'
                 }
             ]
+        },
+        {
+            label: 'Profile',
+            icon: <MdOutlinePersonOutline />,
+            link: 'profile'
+        }
+    ],
+    super_admin : [
+        {
+            label: 'Dashboard',
+            icon: <AiOutlineHome />,
+            link: 'dashboard'
+        },
+        {
+            label: 'Admins',
+            icon: <MdOutlineAdminPanelSettings />,
+            link: 'admins'
+        },
+        {
+            label: 'Members',
+            icon: <MdPeopleOutline />,
+            link: 'members'
+        },
+        {
+            label: 'Loans',
+            icon: <SiHomeassistantcommunitystore />,
+            link: 'loans/members'
+        },
+        {
+            label: 'Deposit',
+            icon: <RiExchangeDollarLine />,
+            link: 'deposit/members'
+        },
+        {
+            label: 'Withdraw',
+            icon: <IoMdCard />,
+            link: 'withdraw/members'
         },
         {
             label: 'Profile',
