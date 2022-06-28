@@ -9,7 +9,7 @@ import { FaEllipsisV } from 'react-icons/fa'
 
 export default function LoanAdmin() {
   useEffect(() => {
-    supabase.rpc("fetch_loans", {})
+    supabase.rpc("fetch_loan_applications", {})
     .then(({ data, error }) => {
       if( error ) { 
         throw error

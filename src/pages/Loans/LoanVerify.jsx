@@ -19,7 +19,7 @@ export default function DepositVerify() {
   }, [ ])
 
   const getApplication = async () => {
-    const { error, data } = await supabase.rpc("fetch_loans")
+    const { error, data } = await supabase.rpc("fetch_loan_applications")
     if(error) throw error
     if(data) {
       const [loan_application] = data.filter( loan => loan.application_id === id)
@@ -28,7 +28,6 @@ export default function DepositVerify() {
   }
 
   if (loan){
-  
     try {
       downloadFile(loan.application_meta.files[0].file_url.substring(9), "loans")
       .then((data) => setImageURL(data.avatar_url))

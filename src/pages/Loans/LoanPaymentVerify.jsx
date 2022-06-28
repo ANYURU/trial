@@ -33,20 +33,14 @@ export default function LoanPaymentVerify() {
         .catch(error => console.log(error))
     }
   }, [])
-  
 
   const getApplication = async () => {
-    const { error, data } = await supabase
-    .from("applications")
-    .select()
-    .eq("_type", "payment")
-    .eq("application_id", id)
-    .single() 
-
-    console.log(data)
-    
-    if( error ) throw error
-    return data
+    const { error, data } = await supabase.rpc("fetch_payment_applications")
+    if(error) throw error
+    if(data) {
+      const [loan_application] = data.filter( loan => loan.application_id === id)
+      return loan_application
+    }
   }
 
   const approveLoanPaymentApplicationTransaction = async () => {
@@ -65,7 +59,6 @@ export default function LoanPaymentVerify() {
       toast.error(`${error?.message}`, { position:"top-center"})
       console.log(error)
     }
-
   }
 
 

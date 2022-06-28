@@ -14,10 +14,19 @@ export default function Loan() {
 
   useEffect(() => {
     document.title = 'Loans - Bweyogere tuberebumu'
-    getApplications()
-    .catch(error => {
-      setLoading(false)
-    })
+
+    supabase.rpc("fetch_loans", {})
+    .then(({ data, error }) => {
+      if( error ) { 
+        setLoading(false)
+        console.log(error)
+      } else {
+        setLoans(data)
+        setLoading(false)
+      }
+    }) 
+    .catch( error => console.log(error))
+
   }, [])
 
   const [ loans, setLoans] = useState([])
@@ -25,23 +34,6 @@ export default function Loan() {
   const [ status, setStatus ] = useState('')
   const [ date, setDate ] = useState(null)
   const [ loading, setLoading ] = useState(true)
-
-  const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("loans")
-    .select()
-    .eq("member_id", id)
-
-    if(error)  throw error
-
-    if(data) {
-      setLoans(data)
-      setLoading(false)
-      console.log(data)
-    } else {
-      setLoading(false)
-    }
-  }
 
   //pagination
   const [ currentPage, setCurrentPage ] = useState(1)
