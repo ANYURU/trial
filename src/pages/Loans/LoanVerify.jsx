@@ -32,8 +32,9 @@ export default function DepositVerify() {
       downloadFile(loan.application_meta.files[0].file_url.substring(9), "loans")
       .then((data) => setImageURL(data.avatar_url))
       .catch(error => console.log("failed"))
-    } catch ( error ){
-      // console.log(error)
+    }
+    catch (error) {
+      console.log('failed')
     }
   }
 

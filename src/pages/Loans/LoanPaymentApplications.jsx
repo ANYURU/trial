@@ -8,21 +8,20 @@ import { FaEllipsisV } from 'react-icons/fa'
 
 export default function LoanPaymentApplications() {
   useEffect(() => {
-    getApplications()
+    supabase.rpc("fetch_payment_applications")
+    .then(({data, error}) => {
+      if(error) throw error
+      if(data) {
+        console.log(data)
+        setLoans(data)
+      }
+    })
+    .catch(error => console.log(error))
+
     document.title = 'Loan Applications - Bweyogere tuberebumu'
-  })
+  }, [])
 
   const [ loans, setLoans ] = useState([])
-
-  const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("applications")
-    .select()
-    .eq("_type", "payment")
-    .order("created_at",  { ascending: false })
-    setLoans(data)
-  }
-
   const navigate = useNavigate()
 
   const handleLoanPayment = loanPaymentId => {

@@ -22,7 +22,6 @@ const PrivateRoute = ({ allowedRoles }) => {
       .then((data) => {
         if (data) {
           const { roles } = data;
-          console.log(data)
           setRoles(roles);
           setProfile(data);
         }

@@ -13,9 +13,11 @@ export default function LoanPaymentVerify() {
 
   useEffect(() => {
     if(!loanPaymentApplication) {
+      
         // Fetching the application.
         getApplication()
         .then( async ( data ) => {
+            console.log(data)
             if( data ) {
                 setLoanPaymentApplication(data)
                 // Downloading the image.
@@ -35,9 +37,11 @@ export default function LoanPaymentVerify() {
   }, [])
 
   const getApplication = async () => {
-    const { error, data } = await supabase.rpc("fetch_payment_applications")
+    const { error, data } = await supabase.rpc("fetch_payment_applications", {})
     if(error) throw error
+    console.log(data)
     if(data) {
+      
       const [loan_application] = data.filter( loan => loan.application_id === id)
       return loan_application
     }
@@ -90,9 +94,7 @@ export default function LoanPaymentVerify() {
               <div className="outline outline-1 outline-gray-100 p-3">
                 <div className="my-6">Applicant ID: <span className="font-semibold">{loanPaymentApplication.application_meta.applicants_id}</span></div>
                 <div className="my-6">Application ID: <span className="font-semibold">{loanPaymentApplication.application_id}</span></div>
-                <div className="my-6">Account: <span className="font-semibold">{loanPaymentApplication.application_meta.account_type}</span></div>
                 <div className="my-6">Amount: <span className="font-semibold">{loanPaymentApplication.application_meta.amount}</span></div>
-                <div className="my-6">Method of Withdraw: Bank</div>
                 <div className="my-6">Account/Mobile Number: {loanPaymentApplication.application_meta &&  loanPaymentApplication?.application_meta.phone_number}</div>
                 <img src={imageURL} width={200} className="rounded" alt="receipt" loading="lazy"/>
                 {/* {imageURL && console.log(imageURL)} */}
