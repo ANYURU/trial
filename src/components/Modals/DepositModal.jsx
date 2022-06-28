@@ -1,6 +1,5 @@
 import ReactDOM from "react-dom";
 import { IoCloseSharp } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
@@ -8,7 +7,6 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 export default function DepositModal({ passed, setDepositModal, deposit }) {
   const { darkMode } = useAuth();
 
-  const navigate = useNavigate();
   return ReactDOM.createPortal(
     <div
       className={`bg-black bg-opacity-20 z-40 w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center ${
@@ -34,32 +32,40 @@ export default function DepositModal({ passed, setDepositModal, deposit }) {
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">deposit ID:</p>
-          <p className="font-bold col-span-3">{deposit.transaction_id}</p>
+          <p className="col-span-2">Deposit ID</p>
+          <p className="font-bold col-span-3">:{" "}{deposit.transaction_id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Created At:</p>
-          <p className="font-bold col-span-3">
-            {moment(deposit.created_at).format("DD-MM-YYYY")}, {moment(deposit.created_at).format("HH:MM")}
+          <p className="col-span-2">Created At</p>
+          <p className="font-bold col-span-3">:{" "}
+            {moment(deposit.created_at).format("DD-MM-YYYY, hh:mm a")}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Amount:</p>
-          <p className="font-bold col-span-3">{currencyFormatter(deposit.amount)}</p>
+          <p className="col-span-2">Amount</p>
+          <p className="font-bold col-span-3">:{" "}UGX{" "}
+            {currencyFormatter(deposit.amount)}
+          </p>
         </div>
-
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Approved at:</p>
-          <p className="font-bold col-span-3">
-          {moment(deposit.transaction_meta.approved_at).format("DD-MM-YYYY")}, {moment(deposit.transaction_meta.approved_at).format("HH:MM")}
+          <p className="col-span-2">Account</p>
+          <p className="font-bold col-span-3">:{" "}
+            {deposit.transaction_meta.account_type}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Approved by:</p>
-          <p className="font-bold col-span-3">
+          <p className="col-span-2">Approved at</p>
+          <p className="font-bold col-span-3">:{" "}
+            {moment(deposit.transaction_meta.approved_at).format("DD-MM-YYYY, hh:mm a")}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+          <p className="col-span-2">Approved by</p>
+          <p className="font-bold col-span-3">:{" "}
             {deposit.transaction_meta.approved_by}
           </p>
         </div>

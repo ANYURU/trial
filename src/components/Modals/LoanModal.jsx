@@ -6,7 +6,6 @@ import moment from "moment";
 
 export default function LoanModal({ passed, setLoanModal, loan }) {
   const { darkMode } = useAuth();
-  console.log(loan);
 
   return ReactDOM.createPortal(
     <div

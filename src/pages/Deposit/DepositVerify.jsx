@@ -121,22 +121,21 @@ export default function DepositVerify() {
               </h1>
               <div className="outline outline-1 outline-gray-100 dark:outline-secondary-text p-3">
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-                  <p className="col-span-2">Created At</p>
-                  <p className="font-bold col-span-3">
-                    : {moment(deposit.created_at).format("DD-MM-YYYY")},{" "}
-                    {moment(deposit.created_at).format("HH:MM")}
-                  </p>
-                </div>
-                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Application ID</p>
                   <p className="font-bold col-span-3">
                     : {deposit.application_id}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Created At</p>
+                  <p className="font-bold col-span-3">
+                    : {moment(deposit.created_at).format("DD-MM-YYYY hh:mm a")}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Amount</p>
                   <p className="font-bold col-span-3">
-                    : {currencyFormatter(deposit.application_meta.amount)}
+                    : UGX {currencyFormatter(deposit.application_meta.amount)}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -167,7 +166,6 @@ export default function DepositVerify() {
                     <img
                       src={imageURL}
                       width={200}
-                      className="rounded"
                       alt="receipt"
                       loading="lazy"
                     />

@@ -200,12 +200,12 @@ export default function DepositAdmin() {
         {/* </div> */}
       </div>
 
-      <div className="bg-white p-3 pb-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
+      <div className="bg-white pb-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {deposits !== null && shownDeposits.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-800 uppercase  bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
