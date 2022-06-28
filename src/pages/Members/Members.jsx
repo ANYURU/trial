@@ -12,22 +12,23 @@ import { useLocation } from "react-router-dom"
 
 export default function Members() {
   useEffect(() => {
-    getMembers()
+    supabase.rpc("fetch_members")
+      .then(({data, error}) => {
+        if ( error ) throw error
+        if ( data ) {
+          console.log(data)
+          const dataArray = data.filter(member => member.roles)
+          dataArray.length === 0 ? setMembers(null) : setMembers(dataArray)
+        }
+      })
+      .catch( error => console.log(error))
+
     document.title = 'Members - Bweyogere tuberebumu'
   }, [])
 
   const [ members, setMembers ] = useState([])
   const navigate = useNavigate()
   const location = useLocation()
-
-  const getMembers = async () => {
-    const { error, data } = await supabase
-    .from("_member_profiles")
-    .select()
-
-    const dataArray = data.filter(member => member.roles)
-    dataArray.length === 0 ? setMembers(null) : setMembers(dataArray)
-  }
 
   const [ status, setStatus ] = useState(null)
   const [ activeIndex, setActiveIndex ] = useState(null)
