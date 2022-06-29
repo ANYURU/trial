@@ -28,13 +28,8 @@ function Accounts() {
     return data;
   };
 
-  const getApplications = async () => {
-    const { error, data } = await supabase.from("accounts").select();
-    console.log("data", data);
-  };
-
   return (
-    <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
+    <div className="flex-grow mx-5 mt-2 h-[calc(100vh-70px)]">
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Accounts summary
       </h1>

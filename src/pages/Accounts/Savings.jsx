@@ -58,7 +58,7 @@ function Savings() {
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Savings Account
       </h1>
-      <div className="bg-white p-2 overflow-hidden  relative  h-[calc(100%-80px)] dark:bg-dark-bg-700">
+      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text h-full p-6">
         {account && Object.keys(account).length > 0 ? (
           <div className="flex h-full flex-col p-3 w-full">
             <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">

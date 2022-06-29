@@ -47,11 +47,11 @@ function Fixed() {
   };
 
   return (
-    <div className="flex-grow mx-5 my-2 h-[calc(100vh-60px)]">
+    <div className="flex-grow mx-5 mt-2 h-[calc(100vh-70px)]">
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Fixed Account
       </h1>
-      <div className="bg-white p-2 overflow-hidden  relative  h-[calc(100%-80px)] dark:bg-dark-bg-700">
+      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text h-full p-6">
         {account && Object.keys(account).length > 0 ? (
           <div className="flex h-full flex-col p-3 w-full">
             <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
