@@ -2,7 +2,7 @@ import React from 'react'
 import { useAuth } from '../../auth/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { IoMdPower } from 'react-icons/io'
-import { MdSettings } from 'react-icons/md'
+import { MdOutlinePersonOutline } from 'react-icons/md'
 
 function ProfileModal({ show, setShow }) {
   const { signOut } = useAuth()
@@ -16,7 +16,7 @@ function ProfileModal({ show, setShow }) {
           className='flex cursor-pointer justify-start items-center hover:bg-gray-100 dark:hover:bg-dark-bg-600 p-2'
         >
           <span className='mr-2'>
-            <MdSettings />
+            <MdOutlinePersonOutline />
           </span>
           Profile
         </p>

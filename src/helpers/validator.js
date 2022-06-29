@@ -48,7 +48,7 @@ Yup.addMethod(Yup.string, 'isNumber', function () {
 
 export const evidencedRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
-  account_type: Yup.string().required('Required!'),
+  // account_type: Yup.string().required('Required!'),
   particulars: Yup.string(),
   phone_number: Yup.string().required('Required!'),
   evidence: Yup.string().required('Required!')

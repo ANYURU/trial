@@ -4,17 +4,21 @@ import { useMediaQuery } from "../hooks";
 import { useAuth } from "../auth/AuthContext";
 import { useEffect, useState } from "react";
 import { getProfile } from "../helpers/getProfile";
-import { Loader } from "../components";
-import { ToastContainer } from "react-toastify";
+import { Spinner } from "../components";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
+
+  const [showSidebar, setShowSidebar] = useState(
+    !JSON.parse(localStorage.getItem("sidebarCollapsed")) || false
+  );
+
   const { user, darkMode } = useAuth();
   const [profile, setProfile] = useState({});
   const [roles, setRoles] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
-  const [showSidebar, setShowSidebar] = useState(true);
 
   useEffect(() => {
     // Getting information that is required in all components.
@@ -34,30 +38,35 @@ const PrivateRoute = ({ allowedRoles }) => {
     matches ? (
       <div className={`${darkMode ? "dark" : ""}`}>
         <div
-          className={`flex flex-col min-h-screen  w-screen outline outline-green-700 overflow-y-auto bg-back dark:bg-dark-bg`}
+          className={`flex flex-col min-h-screen  w-screen bg-back dark:bg-dark-bg`}
         >
           <Navbar user={profile} showSidebar={showSidebar} />
-          <div className={`min-h-screen w-screen outline-red-600`}>
-            <div className="mt-[65px]">
-              <Sidebar
-                user={profile}
-                showSidebar={showSidebar}
-                setShowSidebar={setShowSidebar}
-              />
-            </div>
-            <div className={`${showSidebar ? "ml-[265px]" : "ml-[85px]"}`}>
+          <div
+            className={`h-[calc(100vh-68px)] overflow-hidden mt-[65px] w-screen flex flex-col`}
+          >
+            <Sidebar
+              user={profile}
+              showSidebar={showSidebar}
+              setShowSidebar={setShowSidebar}
+            />
+            <div
+              className={`${
+                showSidebar ? "ml-[265px]" : "ml-[85px]"
+              } flex-grow`}
+            >
               {profile &&
                 (allowedRoles !== undefined ? (
                   roles ? (
                     roles.find((role) => allowedRoles.includes(role)) ? (
-                      <div className="flex-grow mx-5 overflow-y-auto h-full">
-                        <ToastContainer />
-                        {loading ? (
-                          <Loader />
-                        ) : (
+                      loading ? (
+                        <div className="flex-grow mx-5 my-2 overflow-y-auto h-full">
+                          <Spinner />
+                        </div>
+                      ) : (
+                        <ErrorBoundary>
                           <Outlet context={[profile, setProfile]} />
-                        )}
-                      </div>
+                        </ErrorBoundary>
+                      )
                     ) : (
                       <div className="flex-grow mt-5 overflow-y-auto">
                         <Navigate
@@ -70,18 +79,22 @@ const PrivateRoute = ({ allowedRoles }) => {
                   ) : (
                     <div className="flex-grow mx-5 mt-5 overflow-y-auto">
                       {loading ? (
-                        <Loader />
+                        <Spinner />
                       ) : (
-                        <Outlet context={[profile, setProfile]} />
+                        <ErrorBoundary>
+                          <Outlet context={[profile, setProfile]} />
+                        </ErrorBoundary>
                       )}
                     </div>
                   )
                 ) : (
                   <div className="flex-grow mx-5 mt-5 overflow-y-auto">
                     {loading ? (
-                      <Loader />
+                      <Spinner />
                     ) : (
-                      <Outlet context={[profile, setProfile]} />
+                      <ErrorBoundary>
+                        <Outlet context={[profile, setProfile]} />
+                      </ErrorBoundary>
                     )}
                   </div>
                 ))}
@@ -95,8 +108,10 @@ const PrivateRoute = ({ allowedRoles }) => {
           <div className="">
             <MobileNav user={profile} />
           </div>
-          <div className="flex flex-col h-screen px-2 mt-20">
-            <Outlet context={[profile]} />
+          <div className="flex flex-col min-h-[calc(100vh-70px)] px-2 mt-[70px]">
+            <ErrorBoundary>
+              <Outlet context={[profile]} />
+            </ErrorBoundary>
           </div>
         </div>
       </div>

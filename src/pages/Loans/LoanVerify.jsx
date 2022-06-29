@@ -1,114 +1,222 @@
-import { useParams } from "react-router-dom"
-import { supabase } from "../../helpers/supabase"
-import { useState, useEffect } from "react"
-import { Loader } from "../../components"
-import { downloadFile } from "../../helpers/utilites"
-import { toast, ToastContainer } from "react-toastify"
-import AmortizationSchedule from "../../components/AmortizationSchedule"
+import { useParams } from "react-router-dom";
+import { supabase } from "../../helpers/supabase";
+import { useState, useEffect } from "react";
+import { Spinner } from "../../components";
+import { downloadFile } from "../../helpers/utilites";
+import { toast, ToastContainer } from "react-toastify";
+import moment from "moment";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
 
-export default function DepositVerify() {
-  const { id } = useParams()
+export default function LoanVerify() {
+  const { id } = useParams();
 
-  const [ loan, setLoan ] = useState(null)
-  const [ imageURL, setImageURL ] = useState('')
+  const [loan, setLoan] = useState(null);
+  const [imageURL, setImageURL] = useState("");
 
   useEffect(() => {
-    getApplication()
-      .then(data => setLoan(data)) 
-      .catch(error => console.log(error))
-  }, [ ])
+    getApplication();
+  }, []);
 
   const getApplication = async () => {
-    const { error, data } = await supabase.rpc("fetch_loan_applications")
-    if(error) throw error
-    if(data) {
-      const [loan_application] = data.filter( loan => loan.application_id === id)
-      return loan_application
-    }
-  }
+    const { error, data } = await supabase
+      .from("applications")
+      .select()
+      .eq("_type", "loan")
+      .eq("application_id", id);
+    setLoan(data[0]);
+  };
 
-  if (loan){
-    try {
-      downloadFile(loan.application_meta.files[0].file_url.substring(9), "loans")
-      .then((data) => setImageURL(data.avatar_url))
-      .catch(error => console.log("failed"))
-    }
-    catch (error) {
-      console.log('failed')
-    }
-  }
+  // if (loan) {
+  //   try {
+  //     downloadFile(
+  //       loan?.application_meta.files[0].file_url.substring(9),
+  //       "loans"
+  //     )
+  //       .then((data) => setImageURL(data.avatar_url))
+  //       .catch((error) => console.log("failed"));
+  //   } catch (error) {
+  //     console.log("failed");
+  //   }
+  // }
 
-
-  const approveLoanRequest = async () => {
-    const { application_meta : { applicants_id }} = loan
-    
-    try {
-      const { data, error } = await supabase.rpc('approve_loan', { members_id: applicants_id, application: id })
-      if ( error ) {
-        throw error
-      } else {
-        // handle the alerts and navigation
-        console.log(data)
-        toast.success(`Transaction has been approved.`, { position:"top-center" })
-      }
-    } catch (error) {
-      toast.error(`${error?.message}`, { position:"top-center"})
-      console.log(error)
-    }
-
-  }
-
-
-  const rejectLoanRequest = async() => {
-    try {
-      const { data, error } = await supabase.rpc( 'reject_application', { application: id })
-      if( error ) {
-        throw error
-      } else {
-        toast.success(`Transaction has been rejected.`, { position:"top-center" })
-        // handle the alerts and navigation
-      }
-    } catch(error) {
-      console.log(error)
-    }
-  }
-  
-  // console.log(imageURL)
   return (
-    <div className='h-full'>
-      <ToastContainer /> 
-      <h1 className='mb-5 mt-2 font-bold uppercase dark:text-white'>Verify Loan</h1>
-      <div className="flex bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
-      {loan  ? <div className='flex flex-grow flex-col min-h-full'>
-           <div className='mb-3'>
-              <h1 className='font-semibold'>{loan.application_meta.applicants_name}'s Loan Request Details</h1>
-              <div className="outline outline-1 outline-gray-100 p-3">
-                <div className="my-6">Application ID: <span className="font-semibold">{loan.application_id}</span></div>
-                <div className="my-6">Applicant ID: <span className="font-semibold">{loan.application_meta.applicants_id}</span></div>
-                <div className="my-6">Principal: <span className="font-semibold">{loan.application_meta.amount}</span></div>
-                <div className="my-6">Total repayment: <span className="font-semibold">{loan.application_meta.total}</span></div>
-                <div className="my-6">Interest: <span className="font-semibold">{loan.application_meta.total - loan.application_meta.amount}</span></div>
-              </div>
-          </div>
-
-          <AmortizationSchedule amortization_schedule={loan.application_meta.amortization_schedule} start_date={loan.application_meta.start_date}/>
-          <div className="flex gap-10 justify-end items-center mt-3">
-          <button
-            className='bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            onClick={rejectLoanRequest}
-           >Reject
-          </button>
-          <button
-            className='bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2'
-            onClick={approveLoanRequest}
-            >Approve
-          </button>
-          </div>
+    <div className="mx-5 my-2 h-[calc(100vh-70px)]">
+      <ToastContainer />
+      <div className="flex flex-col justify-between pb-3 h-[60px]">
+        <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
+          Verify Loan request
+        </h1>
       </div>
-      :
-      <Loader />
-      }
+      <div className="bg-white p-3 overflow-y-scroll  relative  h-[calc(100%-80px)] dark:bg-dark-bg-700 dark:text-secondary-text">
+        {loan ? (
+          <div className="flex flex-grow flex-col min-h-full">
+            <div className="mb-3">
+              <h1 className="font-semibold mb-2">
+                {loan.application_meta && loan.application_meta.applicants_name}
+                's Loan Request
+                <span
+                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
+                    !loan.reviewed
+                      ? "bg-yellow-400"
+                      : loan.application_meta.review_status === "approved"
+                      ? "bg-green-400"
+                      : "bg-red-400"
+                  }`}
+                >
+                  {!loan.reviewed
+                    ? "Pending"
+                    : loan.application_meta.review_status === "approved"
+                    ? "Approved"
+                    : "Rejected"}
+                </span>
+              </h1>
+
+              <div className="outline outline-1 outline-gray-100 p-3">
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">created_at:</p>
+                  <p className="font-bold col-span-3">
+                    {moment(loan.created_at).format("DD-MM-YYYY")}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Application ID:</p>
+                  <p className="font-bold col-span-3">{loan.application_id}</p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Applicants Name:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta.applicants_name}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Position in SACCO:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta.position_in_sacco}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Amount Requested:</p>
+                  <p className="font-bold col-span-3">
+                    UGX
+                    {loan.application_meta &&
+                      currencyFormatter(loan.application_meta.amount)}{" "}
+                    (
+                    {loan.application_meta &&
+                      loan.application_meta.amount_in_words}
+                    )
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Assets:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta.asset1},{" "}
+                    {loan.application_meta.asset2},{" "}
+                    {loan.application_meta.asset3}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Account Type:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta.account_type}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Loan Purpose:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta.loan_purpose}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Landline:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta?.landline_number}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Town:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta?.town}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Next of Kin:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta?.kin_name}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Next of Kin Contact:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta?.kin_contact}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-5 justify-start w-full">
+                  <p className="col-span-2">Next of Kin Profession:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta?.kin_profession}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Spouse:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta?.spouse_name}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Next of spouse Contact:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta?.spouse_contact}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Next of spouse Profession:</p>
+                  <p className="font-bold col-span-3">
+                    {loan.application_meta?.spouse_profession}
+                  </p>
+                </div>
+
+                <img
+                  src={imageURL}
+                  width={200}
+                  className="rounded"
+                  alt="receipt"
+                  loading="lazy"
+                />
+
+                {loan.application_meta.guarantors.map((guarantor, index) => (
+                  <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                    <p className="col-span-2">Guarantor {index}:</p>
+                    <div className="col-span-3">
+                      <p className="font-bold ">{guarantor.name}</p>
+                      <p className="font-bold ">{guarantor.contact}</p>
+                      <p className="font-bold ">{guarantor.contact}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex gap-10 justify-end items-center mt-3">
+              <button
+                className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                // onClick={rejectLoanPaymentTransaction}
+              >
+                Reject
+              </button>
+              <button
+                className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                // onClick={approveLoanPaymentTransaction}
+              >
+                Approve
+              </button>
+            </div>
+          </div>
+        ) : (
+          <Spinner />
+        )}
       </div>
     </div>
-  )
+  );
 }
