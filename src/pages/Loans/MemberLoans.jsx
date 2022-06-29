@@ -12,15 +12,12 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 export default function MemberLoans() {
   useEffect(() => {
     document.title = "Member Loans - Bweyogere tuberebumu";
-    // getApplications()
-
     supabase
       .rpc("fetch_member_loans", {})
       .then(({ data, error }) => {
         if (error) {
           console.log(error);
         } else {
-          console.log(data);
           setLoans(data);
         }
       })
@@ -34,11 +31,6 @@ export default function MemberLoans() {
   const [status, setStatus] = useState("");
   const [date, setDate] = useState(null);
 
-  const getApplications = async () => {
-    const { error, data } = await supabase.from("loans").select();
-    setLoans(data);
-  };
-
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [loansPerPage, setLoansPerPage] = useState(10);
@@ -48,41 +40,39 @@ export default function MemberLoans() {
   let shownloans = !loans || loans.slice(indexOfFirstPage, indexOfLastPage);
 
   shownloans =
-    !shownloans ||
     shownloans.filter((loan) => !status || loan.loan_status === status).length >
-      0
+    0
       ? shownloans.filter((loan) => !status || loan.loan_status === status)
       : null;
 
-  shownloans =
-    !shownloans || shownloans
+  shownloans = shownloans
+    ? shownloans.filter(
+        (loan) => !date || loan.created_at.substring(0, 10) === date
+      ).length > 0
       ? shownloans.filter(
           (loan) => !date || loan.created_at.substring(0, 10) === date
-        ).length > 0
-        ? shownloans.filter(
-            (loan) => !date || loan.created_at.substring(0, 10) === date
-          )
-        : null
-      : null;
+        )
+      : null
+    : null;
 
-  shownloans =
-    !shownloans || shownloans
+  shownloans = shownloans
+    ? shownloans.filter(
+        (loan) =>
+          !searchText ||
+          loan?.loan_meta.applicants_name
+            .toLowerCase()
+            .indexOf(searchText.toLowerCase()) > -1
+      ).length > 0
       ? shownloans.filter(
           (loan) =>
             !searchText ||
             loan?.loan_meta.applicants_name
               .toLowerCase()
               .indexOf(searchText.toLowerCase()) > -1
-        ).length > 0
-        ? shownloans.filter(
-            (loan) =>
-              !searchText ||
-              loan?.loan_meta.applicants_name
-                .toLowerCase()
-                .indexOf(searchText.toLowerCase()) > -1
-          )
-        : null
-      : null;
+        )
+      : null
+    : null;
+
 
   const [activeIndex, setActiveIndex] = useState(null);
   const [show, setShow] = useState(false);
