@@ -9,16 +9,18 @@ import moment from 'moment'
 
 export default function MemberLoans() {
   useEffect(() => {
+    fetch_member_loans().catch(error => console.log(error))
+    
+    const mySubscription = supabase
+    .from('loans')
+    .on('*', async ( payload ) => {
+      console.log(payload)
+      await fetch_member_loans().catch(error => console.log(error))
+    })
+    .subscribe()
+    
     document.title = 'Loans - Bweyogere tuberebumu'
-    supabase.rpc("fetch_loans", {})
-    .then(({ data, error }) => {
-      if( error ) { 
-        console.log(error)
-      } else {
-        setLoans(data)
-      }
-    }) 
-    .catch( error => console.log(error))
+    return () => supabase.removeSubscription(mySubscription)
   }, [])
 
   const [ searchText, setSearchText ] = useState('')
@@ -35,6 +37,12 @@ export default function MemberLoans() {
   const indexOfFirstPage = indexOfLastPage - loansPerPage
 
   const loan = loanHistory.slice(indexOfFirstPage, indexOfLastPage)
+
+  const fetch_member_loans = async () => {
+    const { data, error } = await supabase.rpc("fetch_member_loans")
+    if ( error ) throw error 
+    setLoans(data)
+  }
 
   const [ activeIndex, setActiveIndex ] = useState(null)
   const [ show, setShow ] = useState(false)

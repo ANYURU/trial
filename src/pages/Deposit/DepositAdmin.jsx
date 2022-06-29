@@ -12,7 +12,16 @@ export default function DepositAdmin() {
 
   useEffect(() => {
     getApplications()
+
+    const mySubscription = supabase
+      .from('applications')
+      .on('*', async ( payload ) => {
+        await getApplications()
+      })
+      .subscribe()
     document.title = 'Deposit Applications - Bweyogere tuberebumu'
+
+    return () => supabase.removeSubscription(mySubscription)
   }, [])
 
   //pagination
