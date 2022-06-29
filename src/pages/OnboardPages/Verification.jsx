@@ -12,37 +12,13 @@ import { OTPBox } from "../../components";
 import { Spinner } from "../../components";
 
 function Verification() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const type = location?.state?.type;
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [loading, setLoading] = useState(false)
-  const { darkMode } = useAuth();
-
-  console.log(otp.join(""));
-
+  const navigate = useNavigate()
+  const location = useLocation()
+  const type = location?.state?.type
+ 
   const handleSubmit = async (event, values) => {
     event.preventDefault();
-
-    const phoneNumber = localStorage.getItem("phone_number");
-    const verification_key = localStorage.getItem("verification_key");
-    const { code } = values;
-
-    verifyOTP(phoneNumber, code, verification_key)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        return data;
-      })
-      .then((data) =>
-        data?.Status === "Failure"
-          ? toast.error(`${data.Details}`, { position: "top-center" })
-          : data?.Status === "Success" &&
-            navigate("/set-password", { state: { type: type } })
-      )
-      .catch((error) => console.log(error));
-  };
-
+  }
   return (
     <div
       className={`inline-flex justify-center items-center w-screen h-screen font-montserrat ${

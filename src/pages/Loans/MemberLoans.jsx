@@ -1,17 +1,25 @@
-import { Pagination } from "../../components";
-import { useEffect, useState } from "react";
-import { supabase } from "../../helpers/supabase";
-import { FaEllipsisV } from "react-icons/fa";
-import { LoansContext } from "../../components";
-import { LoanModal, Spinner, NothingShown } from "../../components";
-import { Helmet } from "react-helmet";
-import moment from "moment";
-import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { loanHistory } from "../../helpers/mockData"
+import { Pagination } from "../../components"
+import { useEffect, useState } from "react"
+import { supabase } from "../../helpers/supabase"
+import { FaEllipsisV } from 'react-icons/fa'
+import { LoansContext } from "../../components"
+import { LoanModal } from "../../components"
+import moment from 'moment'
 
 export default function MemberLoans() {
   useEffect(() => {
-    getApplications();
-  }, []);
+    document.title = 'Loans - Bweyogere tuberebumu'
+    supabase.rpc("fetch_loans", {})
+    .then(({ data, error }) => {
+      if( error ) { 
+        console.log(error)
+      } else {
+        setLoans(data)
+      }
+    }) 
+    .catch( error => console.log(error))
+  }, [])
 
   const [searchText, setSearchText] = useState("");
 

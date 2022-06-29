@@ -6,12 +6,16 @@ import { verifyOTP } from '../../helpers/verifyotp'
 import { toast } from 'react-toastify'
 import { supabase } from "../../helpers/supabase"
 import { useAuth } from "../../auth/AuthContext"
+import { uploadFile } from "../../helpers/uploadFile"
 import { OTPBox } from "../../components"
+import { generate_amortization_schedule } from "../../helpers/generateAmortizationSchedule"
 
 function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
   
   const [ { phone_number, fullname: applicants_name, user_role } ] = useOutletContext()
   const { user: { id: applicants_id } } = useAuth()
+  const { amount, months } = initialValues
+  const rate = 3;
   
   const defaultInitialValues = {
     applicant_name: applicants_name,
@@ -43,7 +47,6 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     business_type: '',
     years_of_operation: '',
     business_income: '',
-    bank_settlement: '',
     asset1: '',
     asset2: '',
     asset3: '',
@@ -87,43 +90,159 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
         savings: '',
         others: ''
       }
-    ]
+    ],
+    a_years_cashflow:"",
+    supporting_files:"",
+    additional_files:"",
+    bank_settlement:""
+  }
+
+  const uploadApplicationFiles = async () => {
+    const { guarantors, bank_statement, a_years_cashflow, additional_files, supporting_files } = initialValues
+
+    // Uploading the bank statement
+
+    let allPromises = []
+    if ( bank_statement ) {
+
+      allPromises.push(
+        uploadFile(bank_statement, 'loans')
+          .then(({ Key: bank_settlement_url}) => {
+            if(bank_settlement_url) {
+              initialValues.bank_settlement_url= bank_settlement_url
+              return true
+            }
+          })
+          .catch(error => console.log(error))
+
+      )
+
+      // const { Key: bank_statement_url } = await uploadFile(bank_statement, 'loans') 
+      // if ( bank_statement_url ) {
+      //   initialValues.bank_statement = bank_statement_url
+      // }
+    }  
+    
+    // Uploading the cash flow
+    if ( a_years_cashflow ) {
+      allPromises.push(
+        uploadFile(a_years_cashflow, 'loans')
+          .then(({ Key: a_years_cashflow_url }) => {
+            if(a_years_cashflow_url) {
+              initialValues.a_years_cashflow_url = a_years_cashflow_url
+              return true
+            }
+          })
+          .catch(error => console.log(error))
+
+      )
+      // const { Key: a_years_cashflow_url } = await uploadFile(a_years_cashflow, 'loans')
+      // if ( a_years_cashflow ) {
+      //   initialValues.a_years_cashflow = a_years_cashflow_url
+      
+      // }
+
+    }  
+
+    // Uploading additional files.
+    if ( additional_files ) {
+      allPromises.push(
+        uploadFile(additional_files, 'loans')
+          .then(({ Key: additional_files_url }) => {
+            if(additional_files_url) {
+              initialValues.additional_files_url = additional_files_url
+              return true
+            }
+          })
+          .catch(error => console.log(error))
+
+      )
+      // const { Key: additional_files_url } = await uploadFile(additional_files, 'loans')
+      // if ( additional_files_url ) {
+      //   initialValues.additional_files_url = additional_files_url
+        
+      // }
+    }  
+    
+
+    // uploading supporting files.
+    if ( supporting_files ) {
+      allPromises.push( 
+        uploadFile(supporting_files, 'loans')
+          .then(({ Key: supporting_files_url }) => {
+          if ( supporting_files_url ) {
+            initialValues.supporting_files_url = supporting_files_url
+            return true
+          }
+        })
+      )
+    } 
+    
+    // uploading the gurantors finacial statements.
+    const promises = await guarantors.map((guarantor, index) => {
+      if( guarantor?.financial_statement ) {
+        console.log(guarantor.financial_statement)
+        return uploadFile( guarantor?.financial_statement, 'loans')
+          .then(({ Key: guarantor_url }) => {
+            if( guarantor_url) {
+              initialValues.guarantors[index].financial_statement = guarantor_url
+            }
+          })
+          .catch( error  => console.log(error))
+      } 
+    })
+
+    return Promise.all([...allPromises, ...promises])
   }
 
   const handleSubmit = async (one_time_password) => {
     const verification_key = localStorage.getItem('loans_application_verification_key')
+    // Destructuring files to upload in the loans bucket.
+    // const { Key: url } = await uploadFile(evidence, 'deposits')
+    const { amortizationSchedule, total } = generate_amortization_schedule(Number(amount), rate ,Number(months))
+
     verifyOTP( phone_number, one_time_password, verification_key)
       .then( response => response.json() )
       .then( async ( data) => {
         if (data?.Status === "Failure") {
           toast.error(`${data.Details}`, {position: "top-center"}) 
-        } else {
-          const { error } = await supabase
-            .from('applications')
-            .insert(
-              [
-                {
-                  _type: "loan",
-                  created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                  updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                  reviewed: false,
-                  application_meta: {
-                    applicants_id,
-                    applicants_name,
-                    ...initialValues
-                  }
-                }
-              ]
-            )
 
-          if (error) {
-            throw error
-          } else {
-            console.log(data)
-            toast.success(`Loans application has been submitted for review.`, {position: 'top-center'})    
-            setPageNumber(1)
-            setInitialValues(defaultInitialValues)
-          }
+        } else {
+
+          uploadApplicationFiles()
+          .then( async data => {
+            if ( data ) {
+              const { data, error } = await supabase
+                .from('applications')
+                .insert(
+                  [
+                    {
+                      _type: "loan",
+                      created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                      updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                      reviewed: false,
+                      application_meta: {
+                        applicants_id,
+                        applicants_name,
+                        amortization_schedule: amortizationSchedule,
+                        ...initialValues, 
+                        total
+                      }
+                    }
+                  ]
+                )
+    
+              if (error) {
+                throw error
+              } else {
+                console.log(data)
+                toast.success(`Loans application has been submitted for review.`, {position: 'top-center'})    
+                setPageNumber(1)
+                setInitialValues(defaultInitialValues)
+              }
+            }
+          }) 
+          .catch( error => console.log(error) ) 
         }
       })
       .catch( error => console.log(error))
@@ -143,7 +262,9 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
             disabled={ otp?.length < 6 }
             onClick={ async () => {
               if ( otp ) {
-                handleSubmit(otp)
+                // console.log(otp.join(""))
+
+                handleSubmit(otp.join(""))
               }
             }}
           >

@@ -18,45 +18,41 @@ function LoanRequest() {
   const [initialValues, setInitialValues] = useState({
     applicant_name: profile.fullname,
     applicant_id: profile.id,
-    position_in_sacco:
-      profile?.user_role && profile?.user_role.roles.length === 1
-        ? "member"
-        : "",
-    postal_address: "",
-    landline_number: "",
-    marital_status: "",
-    no_of_dependents: "",
-    town: "",
-    estate: "",
-    street: "",
-    house_no: "",
-    ownership: "",
-    years_spent: "",
-    kin_name: "",
-    kin_profession: "",
-    kin_contact: "",
-    spouse_name: "",
-    spouse_profession: "",
-    spouse_contact: "",
-    employment: "",
-    employer: "",
-    employer_postal_address: "",
-    employer_no: "",
-    employer_designation: "",
-    retirement_date: "",
-    employment_type: "",
-    business_type: "",
-    years_of_operation: "",
-    business_income: "",
-    bank_settlement: "",
-    asset1: "",
-    asset2: "",
-    asset3: "",
-    loan_type: "",
-    loan_purpose: "",
-    amount: "",
-    amount_in_words: "",
-    months: "",
+    position_in_sacco: profile?.user_role && profile?.user_role.roles.length === 1 ? 'member': '',
+    postal_address: '',
+    landline_number: '',
+    marital_status: '',
+    no_of_dependents: '',
+    town: '',
+    estate: '',
+    street: '',
+    house_no: '',
+    ownership: '',
+    years_spent: '',
+    kin_name: '',
+    kin_profession: '',
+    kin_contact: '',
+    spouse_name: '',
+    spouse_profession: '',
+    spouse_contact: '',
+    employment: '',
+    employer: '',
+    employer_postal_address: '',
+    employer_no: '',
+    employer_designation: '',
+    retirement_date: '',
+    employment_type: '',
+    business_type: '',
+    years_of_operation: '',
+    business_income: '',
+    asset1: '',
+    asset2: '',
+    asset3: '',
+    loan_type: '',
+    loan_purpose: '',
+    amount: '',
+    amount_in_words: '',
+    months: '',
     securities: [],
     bank_loans: [
       {
@@ -88,14 +84,19 @@ function LoanRequest() {
     ],
     securities_offered: [
       {
-        shares: "",
-        savings: "",
-        others: "",
-      },
-    ],
-  });
 
-  return (
+        shares: '',
+        savings: '',
+        others: ''
+      }
+    ],
+    a_years_cashflow:"",
+    supporting_files:"",
+    additional_files:"",
+    bank_settlement:""
+  })
+
+return (
     <div className="flex-grow sm:mx-2 md:mx-5 my-2 h-[calc(100vh-70px)]">
       <ToastContainer />
       <div className="flex flex-col justify-between pb-3 md:h-[60px]">
@@ -103,6 +104,7 @@ function LoanRequest() {
           Loan Request
         </h1>
       </div>
+      <div className="flex flex-col bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full">
 
       <div className="flex flex-col overflow-hidden  relative bg-white dark:bg-dark-bg-700 dark:text-secondary-text p-6 md:h-[calc(100%-80px)]">
         <Stepper pageNumber={pageNumber} />
@@ -155,6 +157,7 @@ function LoanRequest() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

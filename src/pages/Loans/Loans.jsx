@@ -1,33 +1,39 @@
-import { loanHistory } from "../../helpers/mockData";
-import { Pagination } from "../../components";
-import { useEffect, useState } from "react";
-import { supabase } from "../../helpers/supabase";
-import { FaEllipsisV } from "react-icons/fa";
-import { LoansContext } from "../../components";
-import { LoanModal, Spinner, NothingShown } from "../../components";
-import { useAuth } from "../../auth/AuthContext";
-import { Helmet } from "react-helmet";
-import { currencyFormatter } from "../../helpers/currencyFormatter";
-import moment from "moment";
+import { loanHistory } from "../../helpers/mockData"
+import { Pagination } from "../../components"
+import { useEffect, useState } from "react"
+import { supabase } from "../../helpers/supabase"
+import { FaEllipsisV } from 'react-icons/fa'
+import { LoansContext } from "../../components"
+import { LoanModal } from "../../components"
+import { useOutletContext } from "react-router-dom"
+import Loader from "../../components/Loader"
+import moment from "moment"
 
-export default function MemberLoans() {
+export default function Loan() {
+  const [{ id }] = useOutletContext()
+
   useEffect(() => {
-    getApplications();
-  }, []);
+    document.title = 'Loans - Bweyogere tuberebumu'
 
-  const {
-    user: { id },
-  } = useAuth();
+    supabase.rpc("fetch_loans", {})
+    .then(({ data, error }) => {
+      if( error ) { 
+        setLoading(false)
+        console.log(error)
+      } else {
+        setLoans(data)
+        setLoading(false)
+      }
+    }) 
+    .catch( error => console.log(error))
 
-  const [loans, setLoans] = useState([]);
-  const [loanModal, setLoanModal] = useState(false);
-  const [status, setStatus] = useState("");
-  const [date, setDate] = useState(null);
+  }, [])
 
-  const getApplications = async () => {
-    const { data } = await supabase.from("loans").select().eq("member_id", id);
-    setLoans(data.length > 0 ? data : null);
-  };
+  const [ loans, setLoans] = useState([])
+  const [ loanModal, setLoanModal ] = useState(false)
+  const [ status, setStatus ] = useState('')
+  const [ date, setDate ] = useState(null)
+  const [ loading, setLoading ] = useState(true)
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);

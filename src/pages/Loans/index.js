@@ -5,7 +5,10 @@ import ApplicationPg4 from "./ApplicationPg4";
 import ApplicationPg5 from "./ApplicationPg5";
 import ApplicationVerify from "./ApplicationVerify";
 import LoanAdmin from "./LoanAdmin";
+import LoanRequest from "./LoanRequest";
+import LoanHistory from './LoanHistory';
 import LoanPaymentApplications from "./LoanPaymentApplications";
-import VerifyPayment from "./VerifyPayment";
+import LoanPaymentVerify from "./LoanPaymentVerify"
+import VerifyPayment from './VerifyPayment'
 
-export { ApplicationPg1, ApplicationPg2, ApplicationPg3, ApplicationPg4, ApplicationPg5, ApplicationVerify, LoanAdmin, LoanPaymentApplications, VerifyPayment }
+export { ApplicationPg1, ApplicationPg2, ApplicationPg3, ApplicationPg4, ApplicationPg5, ApplicationVerify, LoanAdmin, LoanPaymentApplications, LoanPaymentVerify, VerifyPayment}

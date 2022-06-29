@@ -23,15 +23,26 @@ function Fixed() {
     setAccount(data ? data : null);
   };
 
-  useEffect(() => {
-    getAccount();
-  }, []);
+  const [ fixed, setFixed ] = useState({})
 
-  // const get_account_information = async () => {
-  //   const { data, error } = await supabase.rpc("get_accounts_information", {});
-  //   if (error) throw error;
-  //   return data;
-  // };
+  useEffect(() => {
+    document.title = 'Fixed Accounts - Bweyogere tuberebumu'
+    getFixed()
+      .then(data => {
+        if (data) {
+          console.log(data)
+          setFixed(data)
+          setLoading(false)
+        }
+        else {
+          setLoading(false)
+          setFixed(null)
+        }
+      })
+      .catch(error => console.log(error))
+
+    return () => {}
+  }, [])
 
   const create_account = async () => {
     try {
@@ -49,6 +60,17 @@ function Fixed() {
       );
     }
   };
+
+  const getFixed = async () => {
+    const { data, error } = await supabase
+      .from('fixed_deposit_accounts')
+      .select()
+      .eq('member_id', id)
+      .single()
+
+    if( error ) throw error
+    return data
+  }
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-60px)]">

@@ -52,6 +52,9 @@ import { useState } from "react";
 import Unauthorized from "../pages/Unauthorized";
 import { ApplicantApproval } from "../pages";
 import ErrorBoundary from "../components/ErrorBoundary";
+import { LoanPaymentVerify } from "../pages/Loans";
+
+
 
 export default function App() {
   const [loading, setLoading] = useState(true);

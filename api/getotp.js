@@ -12,6 +12,7 @@ const supabaseKey = process.env.SUPABASE_ANON_KEY
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async (req, res) => {
+    console.log(req.body)
     try {
         const { phone_number, type } = req.body
         let phone_message
