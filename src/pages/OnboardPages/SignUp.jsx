@@ -21,30 +21,27 @@ export default function SignUp() {
     const { phoneNo } = values;
 
     // Check if the phone number has really been used
-    supabase
-      .rpc("does_phone_exist", { phone: `256${phoneNo.slice(1)}` })
-      .then(({ data }) => {
-        if (data) {
-          setLoading(false);
-          toast.error(`Phone number has already been registered.`, {
-            position: "top-center",
-          });
-        } else {
-          setLoading(false);
-          localStorage.setItem("phone_number", phoneNo);
-          navigate("/verify", { state: { type: "signup" } });
+    supabase.rpc('check_phone', { phone: `256${phoneNo.slice(1)}`, _at:'signup'})
+    .then(({ data }) => {
+      if ( data ) {
+        toast.error(`Phone number has already been registered.`, {position: "top-center"})
+      }
+      else {
 
-          getOTP(phoneNo, "VERIFICATION")
-            .then((response) => response.json())
-            .then((data) => {
-              localStorage.setItem("verification_key", data?.Details);
-              return;
-            })
-            .catch((error) => console.log(error));
+        localStorage.setItem('phone_number', phoneNo)
+        navigate('/verify', { state: { type: "signup" } })
+        
+        getOTP( phoneNo, "VERIFICATION" )
+          .then( response => response.json() )
+          .then( data => {
+            localStorage.setItem('verification_key', data?.Details)
+            return 
+          })
+          .catch( error => console.log( error ) )
         }
-      })
-      .catch((error) => console.log(error));
-  };
+      }
+    )   
+  }
 
   return (
     <div

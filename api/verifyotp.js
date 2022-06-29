@@ -60,6 +60,8 @@ export default async ( req, res ) => {
                         const expiration_date = new Date(expiration_time)
                         
                         if ( compareDates( expiration_date, current_date ) === 1 ) {
+                            console.log(typeof(otp))
+                            console.log(typeof(otp_check))
                             if ( otp === otp_check ) {
                                 const { error } = await supabase
                                     .from('otps')
@@ -76,6 +78,7 @@ export default async ( req, res ) => {
                             }
                             else {
                                 const response = { "Status":"Failure", "Details": "OTP NOT Matched" }
+                                console.log(otp)
                                 return res.status(400).json( response )
                             }
                         }

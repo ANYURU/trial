@@ -3,14 +3,25 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../helpers/supabase";
 import { FaEllipsisV } from "react-icons/fa";
 import { LoansContext } from "../../components";
-import { LoanModal, Spinner, NothingShown } from "../../components";
-import { Helmet } from "react-helmet";
+import { LoanModal } from "../../components";
 import moment from "moment";
+import { Helmet } from "react-helmet";
+import { Spinner, NothingShown } from "../../components";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function MemberLoans() {
   useEffect(() => {
-    getApplications();
+    document.title = "Member Loans - Bweyogere tuberebumu";
+    supabase
+      .rpc("fetch_member_loans", {})
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        } else {
+          setLoans(data);
+        }
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   const [searchText, setSearchText] = useState("");
@@ -19,11 +30,6 @@ export default function MemberLoans() {
   const [loanModal, setLoanModal] = useState(false);
   const [status, setStatus] = useState("");
   const [date, setDate] = useState(null);
-
-  const getApplications = async () => {
-    const { error, data } = await supabase.from("loans").select();
-    setLoans(data);
-  };
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -66,6 +72,7 @@ export default function MemberLoans() {
         )
       : null
     : null;
+
 
   const [activeIndex, setActiveIndex] = useState(null);
   const [show, setShow] = useState(false);

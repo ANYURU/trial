@@ -18,8 +18,8 @@ function WithdrawRequest() {
   const initialValues = {
     account_type: "",
     amount: "",
-    cashout_method: "",
     particulars: "",
+    cashout_method: "",
   };
 
   return (
@@ -40,8 +40,10 @@ function WithdrawRequest() {
           initialValues={initialValues}
           validationSchema={withdrawRequestValidationSchema}
           onSubmit={async (values, { resetForm }) => {
-            setLoading(true);
-            const { account_type, amount, particulars } = values;
+            console.log(values);
+            const { account_type, amount, particulars, cashout_method } =
+              values;
+            console.log(values);
             try {
               const { error } = await supabase.from("applications").insert([
                 {
@@ -59,24 +61,23 @@ function WithdrawRequest() {
                     account_type,
                     amount,
                     particulars,
+                    cashout_method,
                   },
                 },
               ]);
 
-              if (error) {
-                setLoading(false)
-                throw error;
-              }
-
+              if (error) throw error;
               toast.success(`Request submitted for review.`, {
                 position: "top-center",
               });
-              setLoading(false)
               resetForm({ values: initialValues });
+              setLoading(false);
             } catch (error) {
+              console.log(error);
               setLoading(false);
               toast.error(`${error?.message}`, { position: "top-center" });
             }
+            
           }}
         >
           {({

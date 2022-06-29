@@ -14,9 +14,18 @@ import LoanAppModal from "../../components/Modals/LoanAppModal";
 
 export default function LoanAdmin() {
   useEffect(() => {
-    getApplications();
-    document.title = "Loan Applications - Bweyogere tuberebumu";
-  }, []);
+    supabase.rpc("fetch_loan_applications", {})
+    .then(({ data, error }) => {
+      if( error ) { 
+        throw error
+      } else {
+        setLoans(data)
+      }
+    }) 
+    .catch( error => console.log(error))
+
+    document.title = 'Loan Applications - Bweyogere tuberebumu'
+  }, [])
 
   const [loans, setLoans] = useState([]);
   const [loanModal, setLoanModal] = useState(false);
@@ -30,11 +39,14 @@ export default function LoanAdmin() {
     setLoans(data);
   };
 
-  const navigate = useNavigate();
-
   const handleDeposit = (loanID) => {
     navigate(`/loans/members-requests/${loanID}`);
   };
+  const navigate = useNavigate()
+
+  const handleLoan = loanID => {
+    navigate(`/loans/members/${loanID}`)
+  }
 
   const [status, setStatus] = useState("");
   const [account, setAccount] = useState("");

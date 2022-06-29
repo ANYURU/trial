@@ -24,25 +24,29 @@ export default function Login() {
     event.preventDefault()
     const { phoneNo, password } = values
 
-    supabase.rpc('does_phone_exist', { phone: `256${phoneNo.slice(1)}`})
-    .then(async ({ data }) => {
-      if ( data ) {
-        const { error } = await signIn({  
-          phone: '256'+ phoneNo.slice(1),
+    supabase.rpc('check_phone', { phone: `256${phoneNo.slice(1)}`, _at:'login'})
+    .then(async ({ data, error }) => {
+      if ( error ) {
+        setLoading(false)
+        toast.error(`${error?.message}`, {position: "top-center"})
+        console.log(error)
+      } else if ( data ) {
+        const { error } = await signIn({
+          phone: '256' + phoneNo.slice(1),
           password: password
         })
-        if ( error ) {
-          setLoading(false)
-          toast.error(`${error?.message}`, { position: "top-center" })
-        } else {
-          setLoading(false)
+
+        setLoading(false)
+        if (error) {
+          toast.error(`${error?.message}`, {position: "top-center"})
+        } else { 
           navigate('/dashboard')
         }
       } else {
-        toast.error(`User does not exist.`, { position: "top-center" })
-        setLoading(false)
+        toast.error(`User does not exist.`, {position: "top-center"})
       }
-    })
+    }).catch(error => console.log(error))
+    
   }
 
   return (

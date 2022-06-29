@@ -13,7 +13,16 @@ import LoanPayModal from "../../components/Modals/LoanPayModal";
 
 export default function LoanPaymentApplications() {
   useEffect(() => {
-    getApplications();
+    // getApplications();
+    supabase.rpc("fetch_payment_applications")
+    .then(({data, error}) => {
+      if(error) throw error
+      if(data) {
+        console.log(data)
+        setLoans(data)
+      }
+    })
+    .catch(error => console.log(error))
     document.title = "Loan Applications - Bweyogere tuberebumu";
   });
 
@@ -34,6 +43,10 @@ export default function LoanPaymentApplications() {
   const handleDeposit = (id) => {
     navigate(`/loans/verify-payment/${id}`);
   };
+
+  const handleLoanPayment = loanPaymentId => {
+    navigate(`/loans/applications/${loanPaymentId}`)
+  }
 
   const [status, setStatus] = useState("");
   const [account, setAccount] = useState("");

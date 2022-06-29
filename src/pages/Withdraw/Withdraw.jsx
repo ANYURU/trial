@@ -14,6 +14,7 @@ import { useOutletContext } from "react-router-dom";
 export default function Withdrawy() {
   useEffect(() => {
     getApplications();
+    document.title = "Withdraws - Bweyogere tuberebumu";
   }, []);
 
   const [status, setStatus] = useState("");
@@ -67,9 +68,6 @@ export default function Withdrawy() {
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
-      <Helmet>
-        <title>Withdraw - Bweyogere tuberebumu</title>
-      </Helmet>
       <div className="flex flex-col justify-between pb-3 md:h-[110px]">
         <h1 className="mb-3 mt-2 font-bold uppercase dark:text-white">
           My Withdraws

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../../helpers/supabase";
 import { Spinner, NothingShown } from "../../components";
 import { Helmet } from "react-helmet";
+import { useLocation } from "react-router-dom"
 
 export default function Members() {
   useEffect(() => {
@@ -17,6 +18,7 @@ export default function Members() {
   const [members, setMembers] = useState([]);
   const [date, setDate] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation()
 
   const getMembers = async () => {
     const { error, data } = await supabase.from("_member_profiles").select();
@@ -88,7 +90,7 @@ export default function Members() {
           <button
             className=" px-4 bg-primary py-2 text-white rounded-md flex justify-center items-center"
             onClick={() => {
-              navigate("/application");
+              navigate('/application', { state: { from: location.pathname }} )
             }}
           >
             {/* <MdAdd />  */}

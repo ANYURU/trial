@@ -28,6 +28,28 @@ export default function DepositVerify() {
 
   const [imageURL, setImageURL] = useState("");
 
+  useEffect(() => {
+    if( !deposit ) {
+      getApplication()
+      .then( async ( data ) => {
+        if( data ) {
+          setDeposit( data )
+          // Downloading the image.
+          if( !imageURL ) {
+            const { data: file, error } = await supabase.storage  
+              .from("deposits")
+              .download(await data.application_meta.files[0].file_url.substring(9))
+
+            if( error ) throw error
+            const url = URL.createObjectURL(file)
+            setImageURL(url)
+          }
+        }
+      })
+      .catch(error => console.log(error))     
+    }
+  }, [])
+
   const getApplication = async () => {
     const { data } = await supabase
       .from("applications")
@@ -43,6 +65,7 @@ export default function DepositVerify() {
       .catch((error) => error);
 
     setDeposit(data[0]);
+    return data
   };
 
   const approveDepositTransaction = async () => {
@@ -64,12 +87,13 @@ export default function DepositVerify() {
         });
       }
     } catch (error) {
-      toast.error(`${error?.message}`, { position: "top-center" });
-      console.log(error);
+      toast.error(`${error?.message}`, { position:"top-center"})
+      console.log(error)
     }
-  };
+  }
 
-  const rejectDepositTransaction = async () => {
+
+  const rejectDepositTransaction = async() => {
     try {
       const { data, error } = await supabase.rpc("reject_application", {
         application: id,
@@ -81,6 +105,7 @@ export default function DepositVerify() {
           position: "top-center",
         });
         // handle the alerts and navigation
+        toast.success(`Transaction has been rejected.`, { position:"top-center" })
       }
     } catch (error) {
       console.log(error);
