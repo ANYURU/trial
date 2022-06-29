@@ -63,14 +63,14 @@ export default function Members() {
   }
 
   return (
-    <div className="mx-2 md:mx-5 mb-2 my-2 h-full">
-      <div className="flex flex-col justify-between pb-3 md:h-[50px]">
-        <h1 className="mb-3 mt-2 font-bold uppercase dark:text-white">
+    <div className="mx-2 md:mx-5 md:mt-2 h-[calc(100vh-70px)] flex flex-col">
+      <div className="flex flex-col justify-between  md:h-[50px]">
+        <h1 className="mt-2 font-bold uppercase dark:text-white">
           Administrators
         </h1>
       </div>
 
-      <div className="bg-white md:shadow-md overflow-hidden flex-grow  relative md:h-[calc(100%-70px)] sm:min-h-[calc(100%-45px)] dark:bg-dark-bg-700">
+      <div className="bg-white md:shadow-md overflow-hidden flex-grow  relative md:h-[calc(100%-50px)] sm:min-h-[calc(100%-50px)] dark:bg-dark-bg-700">
         {admins && admins.length > 0 ? (
           <>
             <div className="w-full  overflow-x-auto h-full  relative overflow-y-auto">

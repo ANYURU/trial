@@ -6,12 +6,13 @@ import { useEffect, useState } from "react";
 import { getProfile } from "../helpers/getProfile";
 import { Spinner } from "../components";
 import ErrorBoundary from "../components/ErrorBoundary";
-import { ToastContainer } from "react-toastify";
 
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
 
-  const [showSidebar, setShowSidebar] = useState(!JSON.parse(localStorage.getItem("sidebarCollapsed")) || false);;
+  const [showSidebar, setShowSidebar] = useState(
+    !JSON.parse(localStorage.getItem("sidebarCollapsed")) || false
+  );
 
   const { user, darkMode } = useAuth();
   const [profile, setProfile] = useState({});
@@ -33,17 +34,15 @@ const PrivateRoute = ({ allowedRoles }) => {
       .catch((error) => console.log(error));
   }, [user?.session]);
 
-  // console.log(profile)
-
   return user?.role === "authenticated" ? (
     matches ? (
       <div className={`${darkMode ? "dark" : ""}`}>
         <div
-          className={`flex flex-col min-h-screen  w-screen outline outline-green-700 overflow-y-auto bg-back dark:bg-dark-bg`}
+          className={`flex flex-col min-h-screen  w-screen bg-back dark:bg-dark-bg`}
         >
           <Navbar user={profile} showSidebar={showSidebar} />
           <div
-            className={`h-[calc(100vh-70px)] pb-3 overflow-hidden mt-[65px] w-screen flex flex-col`}
+            className={`h-[calc(100vh-68px)] overflow-hidden mt-[65px] w-screen flex flex-col`}
           >
             <Sidebar
               user={profile}
@@ -109,7 +108,7 @@ const PrivateRoute = ({ allowedRoles }) => {
           <div className="">
             <MobileNav user={profile} />
           </div>
-          <div className="flex flex-col h-[calc(100vh-70px)] px-2 mt-20">
+          <div className="flex flex-col min-h-[calc(100vh-70px)] px-2 mt-[70px]">
             <ErrorBoundary>
               <Outlet context={[profile]} />
             </ErrorBoundary>

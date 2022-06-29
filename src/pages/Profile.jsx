@@ -72,14 +72,14 @@ function Profile() {
   };
 
   return (
-    <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
+    <div className="mx-5 mt-2 h-[calc(100vh-70px)]">
       <div className="flex flex-col justify-between pb-3 h-[60px]">
         <h1 className="mb-5 mt-2 font-bold uppercase text dark:text-white">
           Profile
         </h1>
       </div>
       <ToastContainer />
-      <div className="bg-white p-6 overflow-y-auto  md:h-[calc(100%-75px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-6 overflow-y-auto  md:h-[calc(100%-65px)] dark:bg-dark-bg-700">
         {profile?.fullname ? (
           <>
             <h1 className="font-semibold mb-3">Profile Details</h1>
@@ -224,7 +224,7 @@ function Profile() {
                       <p>
                         Self termination implies that you no longer subscribe to
                         and therefore sieze being a member of Bweyogerere
-                        Tuberebumu sacco. If you’re sure that you want to
+                        Tuberebumu sacco. If you're sure that you want to
                         terminate your membership, click terminate to terminate
                         to proceed.
                       </p>
