@@ -13,7 +13,7 @@ import LoanPayModal from "../../components/Modals/LoanPayModal";
 
 export default function LoanPaymentApplications() {
   useEffect(() => {
-    getApplications();
+    // getApplications();
     supabase.rpc("fetch_payment_applications")
     .then(({data, error}) => {
       if(error) throw error

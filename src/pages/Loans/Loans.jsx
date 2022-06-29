@@ -1,39 +1,41 @@
-import { loanHistory } from "../../helpers/mockData"
-import { Pagination } from "../../components"
-import { useEffect, useState } from "react"
-import { supabase } from "../../helpers/supabase"
-import { FaEllipsisV } from 'react-icons/fa'
-import { LoansContext } from "../../components"
-import { LoanModal } from "../../components"
-import { useOutletContext } from "react-router-dom"
-import Loader from "../../components/Loader"
-import moment from "moment"
+import { loanHistory } from "../../helpers/mockData";
+import { Pagination } from "../../components";
+import { useEffect, useState } from "react";
+import { supabase } from "../../helpers/supabase";
+import { FaEllipsisV } from "react-icons/fa";
+import { LoansContext } from "../../components";
+import { LoanModal } from "../../components";
+import { useOutletContext } from "react-router-dom";
+import moment from "moment";
+import { Helmet } from "react-helmet";
+import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { Spinner, NothingShown } from "../../components";
 
 export default function Loan() {
-  const [{ id }] = useOutletContext()
+  const [{ id }] = useOutletContext();
 
   useEffect(() => {
-    document.title = 'Loans - Bweyogere tuberebumu'
+    document.title = "Loans - Bweyogere tuberebumu";
 
-    supabase.rpc("fetch_loans", {})
-    .then(({ data, error }) => {
-      if( error ) { 
-        setLoading(false)
-        console.log(error)
-      } else {
-        setLoans(data)
-        setLoading(false)
-      }
-    }) 
-    .catch( error => console.log(error))
+    supabase
+      .rpc("fetch_loans", {})
+      .then(({ data, error }) => {
+        if (error) {
+          setLoading(false);
+          console.log(error);
+        } else {
+          setLoans(data);
+          setLoading(false);
+        }
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
-  }, [])
-
-  const [ loans, setLoans] = useState([])
-  const [ loanModal, setLoanModal ] = useState(false)
-  const [ status, setStatus ] = useState('')
-  const [ date, setDate ] = useState(null)
-  const [ loading, setLoading ] = useState(true)
+  const [loans, setLoans] = useState([]);
+  const [loanModal, setLoanModal] = useState(false);
+  const [status, setStatus] = useState("");
+  const [date, setDate] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -135,11 +137,17 @@ export default function Loan() {
                         {moment(loan.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">
-                        {currencyFormatter(loan.outstanding_balance +
-                          0.05 * loan.outstanding_balance)}
+                        {currencyFormatter(
+                          loan.outstanding_balance +
+                            0.05 * loan.outstanding_balance
+                        )}
                       </td>
-                      <td className="px-6 py-3">{ currencyFormatter(loan.amount_paid)}</td>
-                      <td className="px-6 py-3">{currencyFormatter(loan.outstanding_balance)}</td>
+                      <td className="px-6 py-3">
+                        {currencyFormatter(loan.amount_paid)}
+                      </td>
+                      <td className="px-6 py-3">
+                        {currencyFormatter(loan.outstanding_balance)}
+                      </td>
                       <td className="px-6 py-3">5</td>
                       <td className={`px-6 py-3`}>
                         <span

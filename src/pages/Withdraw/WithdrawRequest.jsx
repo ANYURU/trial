@@ -9,15 +9,18 @@ import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 
 function WithdrawRequest() {
-  const { user: { id: applicants_id } } = useAuth()
-  const [ { fullname: applicants_name } ] = useOutletContext()
-  
+  const {
+    user: { id: applicants_id },
+  } = useAuth();
+  const [{ fullname: applicants_name }] = useOutletContext();
+  const [loading, setLoading] = useState(false);
+
   const initialValues = {
-    account_type: '',
-    amount:'',
-    particulars:'',
-    cashout_method: ''
-  }
+    account_type: "",
+    amount: "",
+    particulars: "",
+    cashout_method: "",
+  };
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
@@ -37,51 +40,45 @@ function WithdrawRequest() {
           initialValues={initialValues}
           validationSchema={withdrawRequestValidationSchema}
           onSubmit={async (values, { resetForm }) => {
-            console.log(values)
-            const { account_type, amount, particulars, cashout_method } = values
-            console.log(values)
+            console.log(values);
+            const { account_type, amount, particulars, cashout_method } =
+              values;
+            console.log(values);
             try {
-              const { error } = await supabase
-                .from('applications')
-                .insert(
-                  [
-                    {
-                      _type: "withdraw",
-                      created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                      updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                      reviewed: false,
-                      application_meta: {
-                        applicants_id,
-                        applicants_name,
-                        account_type,
-                        amount,
-                        particulars,
-                        cashout_method
-                      }
-                    }
-                  ]
-                )
-              
-              if( error ) throw error
-              toast.success(`Request submitted for review.`, {position: 'top-center'})
-              resetForm({ values: initialValues })
-            } catch (error) {
-              console.log(error)
-              toast.error(`${error?.message}`, {position: 'top-center'})
-            }
+              const { error } = await supabase.from("applications").insert([
+                {
+                  _type: "withdraw",
+                  created_at: new Date()
+                    .toISOString()
+                    .toLocaleString("en-GB", { timeZone: "UTC" }),
+                  updated_at: new Date()
+                    .toISOString()
+                    .toLocaleString("en-GB", { timeZone: "UTC" }),
+                  reviewed: false,
+                  application_meta: {
+                    applicants_id,
+                    applicants_name,
+                    account_type,
+                    amount,
+                    particulars,
+                    cashout_method,
+                  },
+                },
+              ]);
 
-              if (error) {
-                setLoading(false)
-                throw error;
-              }
-
+              if (error) throw error;
               toast.success(`Request submitted for review.`, {
                 position: "top-center",
               });
-              setLoading(false)
               resetForm({ values: initialValues });
-            } 
-          }
+              setLoading(false);
+            } catch (error) {
+              console.log(error);
+              setLoading(false);
+              toast.error(`${error?.message}`, { position: "top-center" });
+            }
+            
+          }}
         >
           {({
             values,

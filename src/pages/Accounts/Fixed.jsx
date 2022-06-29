@@ -1,7 +1,6 @@
 import { supabase } from "../../helpers/supabase";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Helmet } from "react-helmet";
 import { useAuth } from "../../auth/AuthContext";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import moment from "moment";
@@ -11,8 +10,15 @@ function Fixed() {
   const {
     user: { id },
   } = useAuth();
+
+  useEffect(() => {
+    document.title = "Fixed Accounts - Bweyogere tuberebumu";
+    getAccount();
+
+    return () => {};
+  }, []);
+
   const [account, setAccount] = useState({});
-  const [loading, setLoading] = useState(true);
 
   const getAccount = async () => {
     const { data, error } = await supabase
@@ -22,27 +28,6 @@ function Fixed() {
       .single();
     setAccount(data ? data : null);
   };
-
-  const [ fixed, setFixed ] = useState({})
-
-  useEffect(() => {
-    document.title = 'Fixed Accounts - Bweyogere tuberebumu'
-    getFixed()
-      .then(data => {
-        if (data) {
-          console.log(data)
-          setFixed(data)
-          setLoading(false)
-        }
-        else {
-          setLoading(false)
-          setFixed(null)
-        }
-      })
-      .catch(error => console.log(error))
-
-    return () => {}
-  }, [])
 
   const create_account = async () => {
     try {
@@ -61,22 +46,8 @@ function Fixed() {
     }
   };
 
-  const getFixed = async () => {
-    const { data, error } = await supabase
-      .from('fixed_deposit_accounts')
-      .select()
-      .eq('member_id', id)
-      .single()
-
-    if( error ) throw error
-    return data
-  }
-
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-60px)]">
-      <Helmet>
-        <title>Fixed Account - Bweyogere tuberebumu</title>
-      </Helmet>
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Fixed Account
       </h1>
@@ -89,7 +60,9 @@ function Fixed() {
             </div>
             <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Owned by:</p>
-              <p className="font-bold col-span-3">{account.account_meta.owners_name}</p>
+              <p className="font-bold col-span-3">
+                {account.account_meta.owners_name}
+              </p>
             </div>
             <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Account Balance:</p>
@@ -105,9 +78,7 @@ function Fixed() {
             </div>
             <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Account Status:</p>
-              <p className="font-bold col-span-3">
-                {account.account_status}
-              </p>
+              <p className="font-bold col-span-3">{account.account_status}</p>
             </div>
           </div>
         ) : account === null && account !== {} ? (
