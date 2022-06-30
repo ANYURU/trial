@@ -23,16 +23,9 @@ body {
   /* box-shadow: 0 3px 2px -2px rgba(0, 0, 0, 0.1); */
 }
 
-/* .mini-navbar {
-  width: calc(100vw - 80px);
-  width: 100vw;
-  box-shadow: 0 3px 2px -2px rgba(0, 0, 0, 0.1);
-} */
-
 
 
 .mobile-navbar {
-  z-index: 1;
   box-shadow: 0 3px 2px -2px rgba(0, 0, 0, 0.1);
 }
 
@@ -64,7 +57,12 @@ body {
 
 
 .sidebar{
-  width: 260px;
+  /* width: 260px; */
+  box-shadow: 1px 0 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.minibar{
+  /* width: 80px; */
   box-shadow: 1px 0 2px -1px rgba(0, 0, 0, 0.1);
 }
 

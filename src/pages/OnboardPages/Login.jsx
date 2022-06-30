@@ -5,7 +5,7 @@ import { Formik, Form } from "formik";
 import { validationSchema } from "../../helpers/validator";
 import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer } from 'react-toastify'
-import { Loader } from "../../components";
+import { Loader, Spinner } from "../../components";
 import { supabase } from "../../helpers/supabase";
 import { useEffect, useState } from "react";
 
@@ -20,8 +20,8 @@ export default function Login() {
   const [ loading, setLoading ] = useState(false)
 
   const handleSubmit = async (event, values) => {
-    event.preventDefault()
     setLoading(true)
+    event.preventDefault()
     const { phoneNo, password } = values
 
     supabase.rpc('check_phone', { phone: `256${phoneNo.slice(1)}`, _at:'login'})
@@ -50,20 +50,19 @@ export default function Login() {
   }
 
   return (
-    <div className={`${darkMode ? "dark" : ""}`}>
-      {loading 
-      ?
-       <div className="w-screen h-screen">
-         <Loader />
-       </div>
-      :
-      <div className={`inline-flex justify-center items-center w-screen dark:bg-dark-bg  h-screen font-montserrat`}>
+      <div className={`inline-flex justify-center items-center w-screen  h-screen font-montserrat ${darkMode ? "dark" : ""}`}>
           <ToastContainer/>
+          
           <Formik initialValues={{ phoneNo: '', password: ''}} validationSchema={validationSchema}>
             {({values, errors, touched, isValid, dirty, handleChange, handleBlur}) => {
               return (
-                <Form onSubmit={(event) => handleSubmit(event, values)} className='w-11/12 p-10 sm:w-8/12 md:w-6/12 lg:w-4/12 bg-white dark:bg-dark-bg-700 dark:text-secondary-text shadow-myShadow flex justify-center items-center flex-col rounded-lg'>
-                  <img src={logo} alt='SACCO logo' width={150} />
+                <Form onSubmit={(event) => handleSubmit(event, values)} className='relative w-11/12 p-10 sm:w-8/12 md:w-6/12 lg:w-4/12 bg-white dark:bg-dark-bg-700 dark:text-secondary-text shadow-myShadow flex justify-center items-center flex-col rounded-lg'>
+                  {loading && 
+                    <div className="absolute z-10 bg-white dark:bg-dark-bg-700 dark:bg-opacity-90 bg-opacity-90 w-full h-full rounded-lg">
+                      <Spinner />
+                    </div>
+                  }
+                  <img src={logo} alt='SACCO logo' width={120} />
                   <h1 className='block text-center font-bold text-2xl uppercase dark:text-white'>login</h1>
                   <PhoneTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
                   <PasswordTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
@@ -77,7 +76,5 @@ export default function Login() {
             }}
           </Formik>
       </div>
-      }
-    </div>
   )
 }

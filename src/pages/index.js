@@ -23,6 +23,7 @@ import LoanVerify from './Loans/LoanVerify'
 import { LoanAdmin } from './Loans'
 import MemberLoans from './Loans/MemberLoans'
 import { LoanPaymentApplications } from './Loans'
+import { VerifyPayment } from './Loans'
 
 // withdraw
 import Withdraw from './Withdraw/Withdraw'
@@ -45,9 +46,15 @@ import MemberApplication from './Applications/MemberApplication'
 import Members from './Members/Members'
 import ApplicantApproval from './Members/ApplicantApproval'
 
+// admins
+import Admins from './Admins'
+import AdminInfo from './Admins/AdminInfo'
+
+import SuperAdDashboard from './Dashboard/SuperAdDashboard'
+
 
 // exports
-export { Loans, LoanHistory, LoanPayment, LoanRequest, DepositAdmin, LoanAdmin, LoanPaymentApplications }
+export { Loans, LoanHistory, LoanPayment, LoanRequest, DepositAdmin, LoanAdmin, LoanPaymentApplications, VerifyPayment }
 
 export { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers}
 
@@ -56,3 +63,5 @@ export { Accounts, Savings, Mwana, Fixed, Shares, MemberLoans}
 export { Members, DepositVerify, LoanVerify, WithdrawVerify, Applications, MemberApplication, ApplicantApproval }
 
 export { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, Deposit, Profile, DepositHistory, MakeDeposit }
+
+export { Admins, AdminInfo, SuperAdDashboard }
