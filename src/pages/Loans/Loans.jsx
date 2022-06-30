@@ -5,12 +5,10 @@ import { supabase } from "../../helpers/supabase"
 import { FaEllipsisV } from 'react-icons/fa'
 import { LoansContext } from "../../components"
 import { LoanModal } from "../../components"
-import { useOutletContext } from "react-router-dom"
 import Loader from "../../components/Loader"
 import moment from "moment"
 
 export default function Loan() {
-  const [{ id }] = useOutletContext()
 
   useEffect(() => {
     document.title = 'Loans - Bweyogere tuberebumu'
@@ -27,18 +25,6 @@ export default function Loan() {
 
     return () => supabase.removeSubscription(mySubscription) 
 
-    // supabase.rpc("fetch_loans", {})
-    // .then(({ data, error }) => {
-    //   if( error ) { 
-    //     setLoading(false)
-    //     console.log(error)
-    //   } else {
-    //     setLoans(data)
-    //     setLoading(false)
-    //   }
-    // }) 
-    // .catch( error => console.log(error))
-
   }, [])
 
   const [ loans, setLoans] = useState([])
@@ -53,7 +39,7 @@ export default function Loan() {
   const indexOfLastPage = currentPage * loansPerPage
   const indexOfFirstPage = indexOfLastPage - loansPerPage
 
-  const loan = loanHistory.slice(indexOfFirstPage, indexOfLastPage)
+  let loansToDisplay = loans.slice(indexOfFirstPage, indexOfLastPage)
 
   const [ activeIndex, setActiveIndex ] = useState(null)
   const [ show, setShow ] = useState(false)
@@ -103,7 +89,7 @@ export default function Loan() {
             : 
             <div>
               {
-                loans?.length > 0 
+                loansToDisplay?.length > 0 
                 ? 
                 (
                   <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
@@ -155,7 +141,7 @@ export default function Loan() {
           {loans?.length > 0 && (
               <div className="flex justify-between px-6 my-5">
                 <Pagination
-                  pages={Math.ceil(loanHistory.length/loansPerPage)}
+                  pages={Math.ceil(loans.length/loansPerPage)}
                   setCurrentPage={setCurrentPage}
                   indexOfFirstPage={indexOfFirstPage}
                   indexOfLastPage={indexOfLastPage}

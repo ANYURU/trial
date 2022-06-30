@@ -12,19 +12,30 @@ import { useLocation } from "react-router-dom"
 
 export default function Members() {
   useEffect(() => {
-    supabase.rpc("fetch_members")
-      .then(({data, error}) => {
-        if ( error ) throw error
-        if ( data ) {
-          console.log(data)
-          const dataArray = data.filter(member => member.roles)
-          dataArray.length === 0 ? setMembers(null) : setMembers(dataArray)
-        }
-      })
-      .catch( error => console.log(error))
+    // Fetch members on component render
+    fetch_members().catch( error => console.log(error))
 
-    document.title = 'Members - Bweyogere tuberebumu'
+    // Realtime
+    const mySubscription = supabase
+      .from('new_members')
+      .on('*', async payload => {
+        console.log(payload)
+        await fetch_members().catch(error => console.log(error))
+      })
+      .subscribe()
+    
+      document.title = 'Members - Bweyogere tuberebumu'
   }, [])
+
+  const fetch_members = async () => {
+    const { data, error } = await supabase.rpc("fetch_members")
+    if( error ) throw error
+    if( data ) { 
+      console.log( data )
+      const dataArray = data.filter( member => member.roles )
+      dataArray.length === 0 ? setMembers( null ) : setMembers( dataArray )
+    }
+  }
 
   
 

@@ -60,10 +60,7 @@ export default function DepositAdmin() {
   const approved = Math.round((approvedDeposits.length/deposits.length) * 100)
   const pending = Math.round((pendingDeposits.length/deposits.length) * 100)
   const rejected = Math.round((rejectedDeposits.length/deposits.length) * 100)
-
-
   
-
   let shownDeposits = deposits.slice(indexOfFirstPage, indexOfLastPage)
 
   shownDeposits = shownDeposits.filter(deposit => !account || deposit?.application_meta.account_type === account)

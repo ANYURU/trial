@@ -23,7 +23,7 @@ export default function Withdrawy() {
 
   loans = filterByStatus(loans, "account", account)
 
-  const [ withdraw, setWithraw ] = useState([])
+  const [ withdraws, setWithraw ] = useState([])
 
   const getApplications = async () => {
     const { error, data } = await supabase

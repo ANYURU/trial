@@ -39,7 +39,7 @@ export default function MemberLoans() {
   const indexOfLastPage = currentPage * loansPerPage
   const indexOfFirstPage = indexOfLastPage - loansPerPage
 
-  const loan = loanHistory.slice(indexOfFirstPage, indexOfLastPage)
+  let LoansToDisplay = loans.slice(indexOfFirstPage, indexOfLastPage)
 
   const fetch_member_loans = async () => {
     const { data, error } = await supabase.rpc("fetch_member_loans")
@@ -93,7 +93,7 @@ export default function MemberLoans() {
               </tr>
             </thead>
             <tbody>
-              {loans.map((loan, index) => (
+              {LoansToDisplay.map((loan, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600`} key={index}>
                   {loanModal && activeIndex === index && <LoanModal setLoanModal={setLoanModal} loan={loan} />}
                   <td className='px-6 py-3'>{moment(loan.start_date).format("DD-MM-YYYY")}</td><td className='px-6 py-3'>{loan.id}</td><td className='px-6 py-3'>{loan.loan_meta.applicants_name}</td><td className='px-6 py-3'>{loan.outstanding_balance}</td><td className='px-6 py-3'>{loan.amount_paid}</td><td className='px-6 py-3'>{loan.amount_issued}</td><td className='px-6 py-3'>{loan.interest_rate || '3%'}</td>
@@ -125,7 +125,7 @@ export default function MemberLoans() {
         </div>
         <div className="flex justify-between px-6 my-5">
           <Pagination
-            pages={Math.ceil(loanHistory.length/loansPerPage)}
+            pages={Math.ceil(loans.length/loansPerPage)}
             setCurrentPage={setCurrentPage}
             indexOfFirstPage={indexOfFirstPage}
             indexOfLastPage={indexOfLastPage}
