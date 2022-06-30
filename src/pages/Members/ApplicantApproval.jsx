@@ -9,20 +9,16 @@ export default function ApplicantApproval() {
   const { id } = useParams();
 
   useEffect(() => {
-    getApplication();
-  }, []);
+    supabase.rpc("fetch_membership_applications")
+      .then(({data, error}) => {
+        if (error) throw error
+        const [ application ] = data.filter( application => application.application_id === id)
+        setApplication(application)
+      })
+      .catch(error => console.log(error))
+  }, [])
 
-  const [application, setApplication] = useState(null);
-  const navigate = useNavigate();
-
-  const getApplication = async () => {
-    const { error, data } = await supabase
-      .from("applications")
-      .select()
-      .eq("_type", "membership")
-      .eq("application_id", id);
-    setApplication(data[0]);
-  };
+  const [ application, setApplication ] = useState(null)
 
   const approveMember = async () => {
     console.log("here");

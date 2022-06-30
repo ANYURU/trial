@@ -16,8 +16,19 @@ export default function Deposit() {
   const [account, setAccount] = useState("");
 
   useEffect(() => {
-    getApplications();
-  }, []);
+    document.title = 'Deposit - Bweyogere tuberebumu'
+    getApplications()
+    
+    const mySubscription = supabase
+      .from('applications')
+      .on('*', async ( payload ) => {
+        console.log(payload)
+        await getApplications()
+      })
+      .subscribe()
+
+    return () => supabase.removeSubscription(mySubscription)
+  }, [])
 
   const navigate = useNavigate();
 

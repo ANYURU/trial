@@ -5,24 +5,24 @@ import { FaEllipsisV } from "react-icons/fa";
 import { LoansContext } from "../../components";
 import { LoanModal } from "../../components";
 import moment from "moment";
-import { Helmet } from "react-helmet";
 import { Spinner, NothingShown } from "../../components";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function MemberLoans() {
   useEffect(() => {
-    document.title = "Member Loans - Bweyogere tuberebumu";
-    supabase
-      .rpc("fetch_member_loans", {})
-      .then(({ data, error }) => {
-        if (error) {
-          console.log(error);
-        } else {
-          setLoans(data);
-        }
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    fetch_member_loans().catch(error => console.log(error))
+    
+    const mySubscription = supabase
+    .from('loans')
+    .on('*', async ( payload ) => {
+      console.log(payload)
+      await fetch_member_loans().catch(error => console.log(error))
+    })
+    .subscribe()
+    
+    document.title = 'Loans - Bweyogere tuberebumu'
+    return () => supabase.removeSubscription(mySubscription)
+  }, [])
 
   const [searchText, setSearchText] = useState("");
 
@@ -81,14 +81,18 @@ export default function MemberLoans() {
       if (!event.target.matches(".dialog")) {
         setShow(false);
       }
-    };
+    }
+  }
+
+  const fetch_member_loans = async () => {
+    const { data, error } = await supabase.rpc("fetch_member_loans")
+    if ( error ) throw error 
+    setLoans(data)
   }
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
-      <Helmet>
-        <title>Loans - Bweyogere tuberebumu</title>
-      </Helmet>
+
       <div className="flex flex-col justify-between pb-3 md:h-[110px]">
         <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
           Member's Loans

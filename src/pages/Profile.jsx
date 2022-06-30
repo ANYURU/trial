@@ -7,36 +7,42 @@ import { supabase } from "../helpers/supabase";
 import { toast, ToastContainer } from "react-toastify";
 import EditModal from "../components/EditModal";
 import { Spinner } from "../components";
+import { useAuth } from "../auth/AuthContext";
 
 function Profile() {
   useEffect(() => {
     document.title = "Profile - Bweyogere tuberebumu";
   }, []);
 
-  const [popUp, setPopUp] = useState(false);
-  const [editPop, setEditPop] = useState(false);
-  const [profile] = useOutletContext();
-  const { id } = supabase.auth.user();
+  const [ popUp, setPopUp ] = useState(false)
+  const [ editPop, setEditPop ] = useState(false)
+  const [ profile ] = useOutletContext()
+  const initialValues = {
+    ...profile,
+    password:''
+  }
+  const { id } = supabase.auth.user()
+  const { signOut } = useAuth()
 
   const handleTermination = (event, values) => {
-    event.preventDefault();
-    supabase
-      .rpc("check_password", {
-        current_password: values.password,
-        _user_id: id,
-      })
-      .then(async ({ data }) => {
-        if (data) {
-          setPopUp(true);
-        } else {
-          toast.error(`Wrong password.`, { position: "top-center" });
-        }
-      })
-      .catch((error) => {
-        console.log(`Error ${error}`);
-      });
-    document.terminationForm.reset();
-  };
+    event.preventDefault()
+    console.log(values)
+    supabase.rpc('check_password', { current_password: values.password, _user_id: id })
+        .then(({ data, error })  => {
+          if(error) {
+            console.log(error)
+          }
+
+          if ( data ) {
+            setPopUp(true)
+          } else {
+            toast.error(`Wrong password.`, {position: "top-center"})
+          }})
+          .catch(error => {
+            console.log(`Error ${error}`)
+          })
+    document.terminationForm.reset()
+  }
 
   const handleChangePassword = (event, values) => {
     event.preventDefault();
@@ -68,8 +74,29 @@ function Profile() {
           console.log(`Error ${error}`);
         });
     }
-    document.changePasswordForm.reset();
-  };
+    document.changePasswordForm.reset()
+  }
+
+  const teminate = async () => {
+    const { data: result, error } = await supabase
+      .from("users")
+      .update({deleted: true})
+      .match({id: id})
+      .single()
+    
+    if ( error ) throw error
+    if ( result ) {      
+      const { phone_number } = result
+
+      console.log(phone_number.slice(3))
+      const {data, error} = await supabase.auth.update({ phone: `${phone_number.slice(3)}000`})
+      if (error) throw console.log(error)
+      await signOut()
+    }
+  }
+
+
+
 
   return (
     <div className="mx-5 mt-2 h-[calc(100vh-70px)]">
@@ -267,7 +294,9 @@ function Profile() {
                               >
                                 Cancel
                               </button>
-                              <button className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white">
+                              <button className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white"
+                              onClick={() => teminate().then((response) => console.log(response))}
+                              >
                                 Terminate
                               </button>
                             </div>
