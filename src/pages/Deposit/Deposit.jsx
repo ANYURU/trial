@@ -15,17 +15,17 @@ export default function Deposit() {
 
   useEffect(() => {
     document.title = 'Deposit - Bweyogere tuberebumu'
-    getApplications()
-    
+    getDeposits()
+
     const mySubscription = supabase
-      .from('applications')
-      .on('*', async ( payload ) => {
+      .from('transactions')
+      .on('*', async payload => {
         console.log(payload)
-        await getApplications()
+        await getDeposits()
       })
       .subscribe()
 
-    return () => supabase.removeSubscription(mySubscription)
+      return () => supabase.removeSubscription(mySubscription) 
   }, [])
 
   const navigate = useNavigate()
@@ -35,17 +35,14 @@ export default function Deposit() {
   
   const [ date, setDate ] = useState(null)
 
-  const getApplications = async () => {
-    const { error, data } = await supabase
-    .from("applications")
-    .select()
-    .eq("_type", "deposit")
-    .order("created_at",  { ascending: false })
-    .range(indexOfFirstPage, indexOfLastPage)
-
-    const personData = data.filter(deposit => deposit.application_meta.applicants_id === profile.id)
-
-    setDeposits(personData)
+  const getDeposits = async () => {
+    const { data, error } = await supabase.rpc("fetch_deposits")
+      if( error ) {
+        throw error
+      } else {
+        console.log(data)
+        setDeposits(data)
+      }
   }
 
   // pagination
@@ -115,10 +112,10 @@ export default function Deposit() {
             <tbody>
               {filteredDeposits.map((deposit, index) => (
                 <tr className={`${index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""} hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`} key={index}>
-                  <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.application_id}</td><td className='px-6 py-3'>{deposit.application_meta.account_type}</td><td className='px-6 py-3'>{deposit.application_meta.amount}</td>
+                  <td className='px-6 py-3'>{new Date(deposit.created_at).toISOString().split('T')[0]}</td><td className='px-6 py-3'>{deposit.transaction_id}</td><td className='px-6 py-3'>{deposit.transaction_meta.account_type}</td><td className='px-6 py-3'>{deposit.amount}</td>
 
                   <td className={`px-6 py-3`}>
-                    <span className={` py-1 px-2 rounded-xl text-white ${deposit.reviewed ? deposit.application_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
+                    <span className={` py-1 px-2 rounded-xl text-white ${deposit.reviewed ? deposit.transaction_meta.review_status === "approved" ? "bg-green-400" : "bg-red-400" : "bg-yellow-400"}`}>
                     {deposit.reviewed ?
                       deposit.application_meta.review_status === "approved" ? "Approved" : "Rejected"
                     : "Pending"}

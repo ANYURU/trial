@@ -15,17 +15,29 @@ export default function Loan() {
   useEffect(() => {
     document.title = 'Loans - Bweyogere tuberebumu'
 
-    supabase.rpc("fetch_loans", {})
-    .then(({ data, error }) => {
-      if( error ) { 
-        setLoading(false)
-        console.log(error)
-      } else {
-        setLoans(data)
-        setLoading(false)
-      }
-    }) 
-    .catch( error => console.log(error))
+    fetch_loans().catch(error => console.log(error))
+
+    const mySubscription = supabase
+      .from('loans')
+      .on('*', async payload => {
+        console.log(payload)
+        await fetch_loans().catch(error => console.log(error))
+      })
+      .subscribe()
+
+    return () => supabase.removeSubscription(mySubscription) 
+
+    // supabase.rpc("fetch_loans", {})
+    // .then(({ data, error }) => {
+    //   if( error ) { 
+    //     setLoading(false)
+    //     console.log(error)
+    //   } else {
+    //     setLoans(data)
+    //     setLoading(false)
+    //   }
+    // }) 
+    // .catch( error => console.log(error))
 
   }, [])
 
@@ -50,6 +62,17 @@ export default function Loan() {
         if (!event.target.matches('.dialog')) {
             setShow(false)
         }
+    }
+  }
+
+  const fetch_loans = async () => {
+    const { data, error } = await supabase.rpc("fetch_loans")
+    if ( error ) {
+      setLoading( false )
+      throw error
+    } else {
+      setLoans( data )
+      setLoading( false )
     }
   }
 

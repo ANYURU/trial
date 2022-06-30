@@ -26,6 +26,8 @@ export default function Members() {
     document.title = 'Members - Bweyogere tuberebumu'
   }, [])
 
+  
+
   const [ members, setMembers ] = useState([])
   const navigate = useNavigate()
   const location = useLocation()
