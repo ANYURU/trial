@@ -16,21 +16,19 @@ export default function Deposit() {
   const [account, setAccount] = useState("");
 
   useEffect(() => {
-    document.title = 'Deposit - Bweyogere tuberebumu'
-    getApplications()
-    
+    document.title = "Deposit - Bweyogere tuberebumu";
+    getApplications();
+
     const mySubscription = supabase
-      .from('applications')
-      .on('*', async ( payload ) => {
-        console.log(payload)
-        await getApplications()
+      .from("applications")
+      .on("*", async (payload) => {
+        console.log(payload);
+        await getApplications();
       })
-      .subscribe()
+      .subscribe();
 
-    return () => supabase.removeSubscription(mySubscription)
-  }, [])
-
-  const navigate = useNavigate();
+    return () => supabase.removeSubscription(mySubscription);
+  }, []);
 
   const [profile] = useOutletContext();
 
@@ -43,6 +41,7 @@ export default function Deposit() {
       .eq("_type", "deposit")
       .order("created_at", { ascending: false })
       .eq("created_by", profile.id);
+
     setDeposits(data && data.length > 0 ? data : null);
   };
 
