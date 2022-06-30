@@ -4,14 +4,17 @@ import { useEffect, useState } from 'react'
 import { supabase } from "../../helpers/supabase"
 import Spinner from "../Loaders/Spinner"
 
-export default function AccSummary() {
+export default function AccSummary({ setMyShares }) {
   const matches = useMediaQuery('(min-width: 800px)')
   // console.log(currencyFormatter(accounts?.fixed?.balance))
   
   const [ accounts, setAccounts ] = useState(null)
   useEffect(() => {
     get_account_information().then(data => {
-      if( data ) setAccounts(data)
+      if( data ){
+        setAccounts(data)
+        setMyShares(data?.shares?.balance)
+      }
     })
     .catch( error => console.log(error))
       

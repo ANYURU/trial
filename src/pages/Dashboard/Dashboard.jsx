@@ -13,22 +13,16 @@ import { Spinner } from "../../components";
 export default function Dashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
   const [profile] = useOutletContext();
-  const [accounts, setAccounts] = useState({})
+  const [myShares, setMyShares] = useState(0)
+  const [saccosShares, setSaccosShares] = useState(0)
 
   useEffect(() => {
     document.title = "Dashboard - Bweyogere tuberebumu";
-    get_account_information()
-      .then((data) => {
-        if (data) {
-          setAccounts(data);
-          // setLoading(false);
-        }
-      })
-      .catch((error) => console.log(error));
+    get_total_shares().then( shares => setSaccosShares(shares))
   }, []);
 
-  const get_account_information = async () => {
-    const { data, error } = await supabase.rpc("get_accounts_information");
+  const get_total_shares = async () => {
+    const { data, error } = await supabase.rpc("fetch_total_shares");
     if (error) throw error;
     console.log(data)
     return data;
@@ -39,7 +33,7 @@ export default function Dashboard() {
     responsive: true,
     datasets: [
       {
-        data: [300, 50],
+        data: [saccosShares, myShares],
         backgroundColor: chartColors,
         hoverBackgroundColor: chartColors,
       },
@@ -105,7 +99,7 @@ export default function Dashboard() {
             <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
               Dashboard
             </h1>
-            <AccSummary accounts={accounts} />
+            <AccSummary setMyShares={setMyShares} />
           </div>
           <div className="flex flex-col flex-grow mt-5 mb-5 overflow-x-hidden">
             <h1 className="text-center font-semibold mb-5 dark:text-secondary-text">
