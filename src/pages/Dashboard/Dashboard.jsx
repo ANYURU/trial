@@ -38,7 +38,7 @@ export default function Dashboard() {
     responsive: true,
     datasets: [
       {
-        data: [300, 50],
+        data: [300, accounts?.shares?.balance],
         backgroundColor: chartColors,
         hoverBackgroundColor: chartColors,
       },

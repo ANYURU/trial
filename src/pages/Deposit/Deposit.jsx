@@ -62,12 +62,14 @@ export default function Deposit() {
     };
   }
 
-  let filteredDeposits =
-    !deposits ||
-    deposits.filter(
+  let filteredDeposits = deposits ? deposits : [];
+
+  filteredDeposits =
+    !filteredDeposits ||
+    filteredDeposits.filter(
       (deposit) => !date || deposit.created_at.substring(0, 10) === date
     ).length > 0
-      ? deposits.filter(
+      ? filteredDeposits.filter(
           (deposit) => !date || deposit.created_at.substring(0, 10) === date
         )
       : null;
@@ -210,7 +212,7 @@ export default function Deposit() {
               />
             </div>
           </>
-        ) : deposits?.length !== 0 && filteredDeposits === null ? (
+        ) : deposits === null || deposits?.length !== 0 && filteredDeposits === null ? (
           <NothingShown />
         ) : (
           <Spinner />

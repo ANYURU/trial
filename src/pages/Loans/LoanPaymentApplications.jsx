@@ -2,7 +2,6 @@ import { supabase } from "../../helpers/supabase";
 import { useEffect, useState, useParams } from "react";
 import { Spinner, NothingShown } from "../../components";
 import { useNavigate } from "react-router-dom";
-import { MdOutlineSearch } from "react-icons/md";
 import { Pagination } from "../../components";
 import { FaEllipsisV } from "react-icons/fa";
 import { AiFillCheckSquare } from "react-icons/ai";
@@ -14,15 +13,15 @@ import LoanPayModal from "../../components/Modals/LoanPayModal";
 export default function LoanPaymentApplications() {
   useEffect(() => {
     // getApplications();
-    supabase.rpc("fetch_payment_applications")
-    .then(({data, error}) => {
-      if(error) throw error
-      if(data) {
-        console.log(data)
-        setLoans(data)
-      }
-    })
-    .catch(error => console.log(error))
+    supabase
+      .rpc("fetch_payment_applications")
+      .then(({ data, error }) => {
+        if (error) throw error;
+        if (data) {
+          setLoans(data);
+        }
+      })
+      .catch((error) => console.log(error));
     document.title = "Loan Applications - Bweyogere tuberebumu";
   });
 
@@ -44,9 +43,9 @@ export default function LoanPaymentApplications() {
     navigate(`/loans/verify-payment/${id}`);
   };
 
-  const handleLoanPayment = loanPaymentId => {
-    navigate(`/loans/applications/${loanPaymentId}`)
-  }
+  const handleLoanPayment = (loanPaymentId) => {
+    navigate(`/loans/applications/${loanPaymentId}`);
+  };
 
   const [status, setStatus] = useState("");
   const [account, setAccount] = useState("");
@@ -60,8 +59,6 @@ export default function LoanPaymentApplications() {
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage;
 
   let shownLoans = !loans || loans.slice(indexOfFirstPage, indexOfLastPage);
-
-  // const filteredLoans = loans.filter(member => member.fullname.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
 
   shownLoans =
     !loans ||
@@ -141,7 +138,6 @@ export default function LoanPaymentApplications() {
             placeholder="Search by name..."
             onChange={(event) => setSearchText(event.target.value)}
           />
-          {/* <MdOutlineSearch className="search_icon" /> */}
         </div>
 
         <div className="flex my-1 justify-between gap-5">
@@ -212,7 +208,10 @@ export default function LoanPaymentApplications() {
                       key={index}
                     >
                       {loanModal && activeIndex === index && (
-                        <LoanPayModal setLoanModal={setLoanModal} loan={deposit} />
+                        <LoanPayModal
+                          setLoanModal={setLoanModal}
+                          loan={deposit}
+                        />
                       )}
                       <td className="px-6 py-3">
                         {moment(deposit.created_at).format("DD-MM-YYYY")}
@@ -276,7 +275,7 @@ export default function LoanPaymentApplications() {
                             <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {
-                                setLoanModal(true)
+                                setLoanModal(true);
                               }}
                             >
                               <MdInfo /> Details

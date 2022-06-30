@@ -1,6 +1,6 @@
 import { supabase } from "../../helpers/supabase";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
 import { useAuth } from "../../auth/AuthContext";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
@@ -55,6 +55,7 @@ function Savings() {
       <Helmet>
         <title>Savings Account - Bweyogere tuberebumu</title>
       </Helmet>
+      <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Savings Account
       </h1>

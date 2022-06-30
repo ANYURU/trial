@@ -1,6 +1,6 @@
 import { supabase } from "../../helpers/supabase";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../auth/AuthContext";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import moment from "moment";
@@ -48,6 +48,7 @@ function Fixed() {
 
   return (
     <div className="flex-grow mx-5 mt-2 h-[calc(100vh-70px)]">
+      <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Fixed Account
       </h1>

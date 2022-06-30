@@ -7,36 +7,28 @@ import { ConfirmModal } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../helpers/supabase";
 import { Spinner, NothingShown } from "../../components";
-import { Helmet } from "react-helmet";
-import { useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom";
 
 export default function Members() {
   useEffect(() => {
-    supabase.rpc("fetch_members")
-      .then(({data, error}) => {
-        if ( error ) throw error
-        if ( data ) {
-          console.log(data)
-          const dataArray = data.filter(member => member.roles)
-          dataArray.length === 0 ? setMembers(null) : setMembers(dataArray)
+    supabase
+      .rpc("fetch_members")
+      .then(({ data, error }) => {
+        if (error) throw error;
+        if (data) {
+          const dataArray = data.filter((member) => member.roles);
+          dataArray.length === 0 ? setMembers(null) : setMembers(dataArray);
         }
       })
-      .catch( error => console.log(error))
+      .catch((error) => console.log(error));
 
-    document.title = 'Members - Bweyogere tuberebumu'
-  }, [])
+    document.title = "Members - Bweyogere tuberebumu";
+  }, []);
 
   const [members, setMembers] = useState([]);
   const [date, setDate] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation()
-
-  const getMembers = async () => {
-    const { error, data } = await supabase.from("_member_profiles").select();
-
-    const dataArray = data.filter((member) => member.roles);
-    dataArray.length === 0 ? setMembers(null) : setMembers(dataArray);
-  };
+  const location = useLocation();
 
   const [status, setStatus] = useState(null);
   const [activeIndex, setActiveIndex] = useState(null);
@@ -80,13 +72,8 @@ export default function Members() {
     };
   }
 
-  // console.log(members);
-
   return (
     <div className="mx-5 my-2 md:h-[calc(100vh-70px)]">
-      <Helmet>
-        <title>Members - Bweyogere tuberebumu</title>
-      </Helmet>
       <div className="flex flex-col justify-between pb-3 md:h-[150px]">
         <h1 className="mb-3 mt-2 font-bold uppercase dark:text-white">
           Members
@@ -101,7 +88,7 @@ export default function Members() {
           <button
             className=" px-4 bg-primary py-2 text-white rounded-md flex justify-center items-center"
             onClick={() => {
-              navigate('/application', { state: { from: location.pathname }} )
+              navigate("/application", { state: { from: location.pathname } });
             }}
           >
             {/* <MdAdd />  */}

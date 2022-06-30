@@ -78,21 +78,15 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
                 </div>
               )}
               {showSidebar && role !== "super_admin" && (
-                <IconContext.Provider
-                  value={{
-                    className: `font-bold text-lg dark:text-secondary-text`,
-                  }}
-                >
-                  {index !== 0 && index < menuData[`${role}`].length - 1 && (
+                  index !== 0 && index < menuData[`${role}`].length - 1 && (
                     <i
                       className={`${
                         index === selectedIndex ? "rotate-180" : ""
-                      } transition ease-in-out`}
+                      } transition ease-in-out font-bold flex justify-center items-center`}
                     >
                       <MdKeyboardArrowDown />
                     </i>
-                  )}
-                </IconContext.Provider>
+                  )
               )}
             </NavLink>
           </div>
