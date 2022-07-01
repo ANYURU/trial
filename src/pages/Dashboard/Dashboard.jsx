@@ -15,10 +15,24 @@ export default function Dashboard() {
   const [profile] = useOutletContext();
   const [myShares, setMyShares] = useState(0)
   const [saccosShares, setSaccosShares] = useState(0)
+  const [weeklyShares, setWeeklyShares] = useState(
+    {
+      "Mon":0,
+      "Tue":0,
+      "Wed":0,
+      "Thu":0,
+      "Fri":0,
+      "Sat":0,
+      "Sun":0
+    }
+  )
 
   useEffect(() => {
     document.title = "Dashboard - Bweyogere tuberebumu";
     get_total_shares().then( shares => setSaccosShares(shares))
+    get_weekly_shares().then(weekly_shares => {
+      setWeeklyShares(weekly_shares)
+    })
   }, []);
 
   const get_total_shares = async () => {
@@ -27,6 +41,30 @@ export default function Dashboard() {
     console.log(data)
     return data;
   };
+
+  const get_weekly_shares = async () => {
+    const { data, error } = await supabase.rpc("fetch_weekly_shares")
+    if (error) throw error
+    if( data?.length > 0){
+      let obj = {
+        "Mon":0,
+        "Tue":0,
+        "Wed":0,
+        "Thu":0,
+        "Fri":0,
+        "Sat":0,
+        "Sun":0
+      } 
+
+      for( let deposit of data) {
+        if (deposit && deposit?.shares ) {
+          obj[deposit.day] += deposit.shares
+        }
+      }
+      // console.log(Object.values(obj))
+      return obj
+    }
+  }
 
   const data = {
     maintainAspectRatio: true,
@@ -42,11 +80,11 @@ export default function Dashboard() {
   };
 
   const data2 = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    labels: Object.keys(weeklyShares),
     datasets: [
       {
         label: "Performance",
-        data: [33, 53, 85, 41, 44, 65, 34],
+        data: Object.values(weeklyShares),
         fill: false,
         borderColor: "#27427A",
       },

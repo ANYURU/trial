@@ -5,7 +5,6 @@ export const currencyFormatter = (amount, currency='UGX', ISOLanguageCode='en-US
       // style: 'currency',
       currency: currency,
   });
-  console.log(formatter.format(amount))
 
   return formatter.format(amount)
 }
