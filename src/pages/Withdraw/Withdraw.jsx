@@ -9,7 +9,6 @@ import WithdrawModal from "../../components/Modals/WithdrawModal";
 import { Helmet } from "react-helmet";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
-import { useOutletContext } from "react-router-dom";
 
 export default function Withdrawy() {
   useEffect(() => {
@@ -21,7 +20,6 @@ export default function Withdrawy() {
   const [account, setAccount] = useState("");
   const [withdrawModal, setWithdrawModal] = useState(false);
   const [show, setShow] = useState(false);
-  const [profile] = useOutletContext();
 
   let loans = filterByStatus(depositHistory, "status", status);
 
@@ -30,12 +28,22 @@ export default function Withdrawy() {
   const [withdraws, setWithraws] = useState([]);
 
   const getApplications = async () => {
-    const { error, data } = await supabase
+    getWithdraws().catch((error) => console.log(error));
+
+    const mySubscription = supabase
       .from("transactions")
-      .select()
-      .eq("_type", "withdraw")
-      .order("created_at", { ascending: false })
-      .eq("created_by", profile.id);
+      .on("*", async (payload) => {
+        console.log(payload);
+        await getWithdraws().catch((error) => console.log(error));
+      })
+      .subscribe();
+
+    return () => supabase.removeSubscription(mySubscription);
+  };
+
+  const getWithdraws = async () => {
+    const { data, error } = await supabase.rpc("fetch_withdraws");
+    if (error) throw error;
     setWithraws(data && data.length > 0 ? data : null);
   };
 
@@ -58,12 +66,12 @@ export default function Withdrawy() {
     };
   }
 
-  if(show === true){
-    window.onclick = function(event) {
-        if (!event.target.matches('.dialog')) {
-            setShow(false)
-        }
-    }
+  if (show === true) {
+    window.onclick = function (event) {
+      if (!event.target.matches(".dialog")) {
+        setShow(false);
+      }
+    };
   }
 
   return (
@@ -149,11 +157,15 @@ export default function Withdrawy() {
                         {moment(withdraw.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">{withdraw.transaction_id}</td>
-                      <td className="px-6 py-3">{withdraw.account_type}</td>
+                      <td className="px-6 py-3">
+                        {withdraw.transaction_meta.account_type}
+                      </td>
                       <td className="px-6 py-3">
                         {currencyFormatter(withdraw.amount)}
                       </td>
-                      <td className="px-6 py-3">{withdraw.depositMethod}</td>
+                      <td className="px-6 py-3">
+                        {withdraw.transaction_meta.cashout_method}
+                      </td>
 
                       <td className="px-6 py-3">
                         <div className="relative">

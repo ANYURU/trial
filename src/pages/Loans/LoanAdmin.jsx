@@ -14,17 +14,31 @@ import LoanAppModal from "../../components/Modals/LoanAppModal";
 
 export default function LoanAdmin() {
   useEffect(() => {
-    supabase.rpc("fetch_loan_applications", {})
-    .then(({ data, error }) => {
-      if( error ) { 
-        throw error
-      } else {
-        setLoans(data)
-      }
-    }) 
-    .catch( error => console.log(error))
+    fetch_loan_applications().catch(error => console.log(error))
+
+    const mySubscription = supabase
+      .from('applications')
+      .on('*', async payload => {
+        console.log('Change received!', payload)
+        await fetch_loan_applications().catch(error => console.log(error))
+      })
+      .subscribe()
+
+    
+    // supabase.rpc("fetch_loan_applications", {})
+    // .then(({ data, error }) => {
+    //   if( error ) { 
+    //     throw error
+    //   } else {
+    //     setLoans(data)
+    //   }
+    // }) 
+    // .catch( error => console.log(error))
+
 
     document.title = 'Loan Applications - Bweyogere tuberebumu'
+
+    return () => supabase.removeSubscription(mySubscription)
   }, [])
 
   const [loans, setLoans] = useState([]);
@@ -53,6 +67,15 @@ export default function LoanAdmin() {
   const [searchText, setSearchText] = useState("");
   const [date, setDate] = useState(null);
   const [filterName, setFilterName] = useState("");
+
+  const fetch_loan_applications = async () => {
+    const { data, error } = await supabase.rpc("fetch_loan_applications")
+    if ( error ) {
+      throw error
+    } else {
+      setLoans(data)
+    } 
+  }
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);

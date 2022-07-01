@@ -10,9 +10,19 @@ import { Spinner, NothingShown } from "../../components";
 
 export default function Applications() {
   useEffect(() => {
-    getApplications();
-    document.title = "Membership Application - Bweyogere tuberebumu";
-  }, []);
+    // getApplications()
+    supabase.rpc("fetch_membership_applications")
+      .then(({data, error}) => {
+        if ( error ) throw error
+        if ( data ) {
+          setApplications(data)
+        }
+      })
+      .catch(error => console.log(error))
+    document.title = "Membership Application - Bweyogere tuberebumu"
+  }, [])
+
+ 
 
   const [applications, setApplications] = useState([]);
   const [date, setDate] = useState(null);

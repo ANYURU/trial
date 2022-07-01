@@ -1,8 +1,6 @@
 import { Pagination, Spinner, NothingShown } from "../../components";
 import { useState, useEffect, Fragment } from "react";
 import { supabase } from "../../helpers/supabase";
-import { useOutletContext } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { FaEllipsisV } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
 import { Helmet } from "react-helmet";
@@ -11,80 +9,87 @@ import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function Deposit() {
+
   const [deposits, setDeposits] = useState([]);
   const [depositModal, setDepositModal] = useState(false);
   const [account, setAccount] = useState("");
 
   useEffect(() => {
-    getApplications();
-  }, []);
+    document.title = 'Deposit - Bweyogere tuberebumu'
+    getDeposits()
 
-  const navigate = useNavigate();
+    const mySubscription = supabase
+      .from('transactions')
+      .on('*', async payload => {
+        console.log(payload)
+        await getDeposits()
+      })
+      .subscribe()
 
-  const [profile] = useOutletContext();
+      return () => supabase.removeSubscription(mySubscription) 
+  }, [])
 
-  const [date, setDate] = useState(null);
+  const [ date, setDate ] = useState(null)
 
-  const getApplications = async () => {
-    const { data } = await supabase
-      .from("transactions")
-      .select()
-      .eq("_type", "deposit")
-      .order("created_at", { ascending: false })
-      .eq("created_by", profile.id);
-    setDeposits(data && data.length > 0 ? data : null);
-  };
-
-  // pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [depositsPerPage, setDepositsPerPage] = useState(10);
-  const indexOfLastPage = currentPage * depositsPerPage;
-  const indexOfFirstPage = indexOfLastPage - depositsPerPage;
-
-  const [show, setShow] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(false);
-
-  if (show === true) {
-    window.onclick = function (event) {
-      if (!event.target.matches(".dialog")) {
-        setShow(false);
+  const getDeposits = async () => {
+    const { data, error } = await supabase.rpc("fetch_deposits")
+      if( error ) {
+        throw error
+      } else {
+        setDeposits(data)
       }
-    };
   }
 
-  let filteredDeposits =
-    !deposits ||
-    deposits.filter(
-      (deposit) => !date || deposit.created_at.substring(0, 10) === date
-    ).length > 0
-      ? deposits.filter(
-          (deposit) => !date || deposit.created_at.substring(0, 10) === date
-        )
-      : null;
-
-  filteredDeposits =
-    !filteredDeposits ||
-    filteredDeposits.filter(
-      (deposit) =>
-        !account || deposit?.transaction_meta.account_type === account
-    );
-
-  return (
-    <div className="mx-5 my-2 h-[calc(100vh-70px)]">
-      <Helmet>
-        <title>Deposit - Bweyogere tuberebumu</title>
-      </Helmet>
-      <div className="flex flex-col justify-between pb-3 md:h-[110px]">
-        <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
-          My Deposits
-        </h1>
-
-        <div className="flex my-3 justify-between gap-5">
-          <div className="flex flex-col w-56">
-            <select
-              name="account"
-              id=""
-              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [depositsPerPage, setDepositsPerPage] = useState(10);
+    const indexOfLastPage = currentPage * depositsPerPage;
+    const indexOfFirstPage = indexOfLastPage - depositsPerPage;
+  
+    const [show, setShow] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(false);
+  
+    if (show === true) {
+      window.onclick = function (event) {
+        if (!event.target.matches(".dialog")) {
+          setShow(false);
+        }
+      };
+    }
+  
+    let filteredDeposits =
+      !deposits ||
+      deposits.filter(
+        (deposit) => !date || deposit.created_at.substring(0, 10) === date
+      ).length > 0
+        ? deposits.filter(
+            (deposit) => !date || deposit.created_at.substring(0, 10) === date
+          )
+        : null;
+  
+    filteredDeposits =
+      !filteredDeposits ||
+      filteredDeposits.filter(
+        (deposit) =>
+          !account || deposit?.transaction_meta.account_type === account
+      );
+  
+    return (
+      <div className="mx-5 my-2 h-[calc(100vh-70px)]">
+        <Helmet>
+          <title>Deposit - Bweyogere tuberebumu</title>
+        </Helmet>
+        <div className="flex flex-col justify-between pb-3 md:h-[110px]">
+          <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
+            My Deposits
+          </h1>
+  
+          <div className="flex my-3 justify-between gap-5">
+            <div className="flex flex-col w-56">
+              <select
+                name="account"
+                id=""
+                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
               onChange={(event) => setAccount(event.target.value)}
             >
               <option value="">Account</option>

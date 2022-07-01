@@ -15,9 +15,18 @@ export default function DepositAdmin() {
   const [depositModal, setDepositModal] = useState(false);
 
   useEffect(() => {
-    getApplications();
-    document.title = "Deposit Applications - Bweyogere tuberebumu";
-  }, []);
+    getApplications().catch(error => console.log(error))
+
+    const mySubscription = supabase
+      .from('applications')
+      .on('*', async ( payload ) => {
+        await getApplications()
+      })
+      .subscribe()
+    document.title = 'Deposit Applications - Bweyogere tuberebumu'
+
+    return () => supabase.removeSubscription(mySubscription)
+  }, [])
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,15 +35,14 @@ export default function DepositAdmin() {
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage;
 
   const getApplications = async () => {
-    const { error, data } = await supabase
-      .from("applications")
-      .select()
-      .eq("_type", "deposit")
-      .order("created_at", { ascending: false })
-      .range(indexOfFirstPage, indexOfLastPage);
+    const { data, error } = await supabase.rpc("fetch_deposit_applications")
 
-    setDeposits(data);
-  };
+    if ( error ) {
+      throw error
+    } else {
+      setDeposits(data)
+    }
+  }
 
   const navigate = useNavigate();
 

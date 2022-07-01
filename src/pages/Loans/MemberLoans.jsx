@@ -11,18 +11,20 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function MemberLoans() {
   useEffect(() => {
-    document.title = "Member Loans - Bweyogere tuberebumu";
-    supabase
-      .rpc("fetch_member_loans", {})
-      .then(({ data, error }) => {
-        if (error) {
-          console.log(error);
-        } else {
-          setLoans(data);
-        }
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    fetch_member_loans().catch(error => console.log(error))
+    
+    // Realtime.
+    const mySubscription = supabase
+    .from('loans')
+    .on('*', async ( payload ) => {
+      console.log(payload)
+      await fetch_member_loans().catch(error => console.log(error))
+    })
+    .subscribe()
+    
+    // CleanUp.
+    return () => supabase.removeSubscription(mySubscription)
+  }, [])
 
   const [searchText, setSearchText] = useState("");
 
@@ -82,6 +84,12 @@ export default function MemberLoans() {
         setShow(false);
       }
     };
+  }
+
+  const fetch_member_loans = async () => {
+    const { data, error } = await supabase.rpc("fetch_member_loans")
+    if ( error ) throw error 
+    setLoans(data)
   }
 
   return (

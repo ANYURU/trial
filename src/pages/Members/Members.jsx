@@ -12,24 +12,41 @@ import { useLocation } from "react-router-dom"
 
 export default function Members() {
   useEffect(() => {
-    getMembers();
-  }, []);
+    // Fetch members on component render
+    fetch_members().catch( error => console.log(error))
 
-  const [members, setMembers] = useState([]);
-  const [date, setDate] = useState(null);
-  const navigate = useNavigate();
+    // Realtime
+    const mySubscription = supabase
+      .from('new_members')
+      .on('*', async payload => {
+        console.log(payload)
+        await fetch_members().catch(error => console.log(error))
+      })
+      .subscribe()
+    
+  }, [])
+
+  const fetch_members = async () => {
+    const { data, error } = await supabase.rpc("fetch_members")
+    if( error ) throw error
+    if( data ) { 
+      console.log( data )
+      const dataArray = data.filter( member => member.roles )
+      dataArray.length === 0 ? setMembers( null ) : setMembers( dataArray )
+    }
+  }
+
+  
+
+  const [ members, setMembers ] = useState([])
+  const [ date, setDate ] = useState(null)
+  const navigate = useNavigate()
   const location = useLocation()
 
-  const getMembers = async () => {
-    const { error, data } = await supabase.from("_member_profiles").select();
 
-    const dataArray = data.filter((member) => member.roles);
-    dataArray.length === 0 ? setMembers(null) : setMembers(dataArray);
-  };
-
-  const [status, setStatus] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [show, setShow] = useState(false);
+  const [ status, setStatus ] = useState(null)
+  const [ activeIndex, setActiveIndex ] = useState(null)
+  const [ show, setShow ] = useState(false)
 
   const [memberModal, setMemberModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);

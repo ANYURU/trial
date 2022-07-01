@@ -2,7 +2,7 @@ const  africastalking = require('africastalking')
 require('dotenv').config()
 
 // Destructuring africa's talking API environment variables.
-const { AFRICASTALKING_USERNAME, AFRICASTALKING_APIKEY, AFRICASTALKING_SENDER_ID } = process.env
+const { AFRICASTALKING_USERNAME, AFRICASTALKING_APIKEY } = process.env
 
 /**
  * @typedef {Object} Africastalking
@@ -30,7 +30,6 @@ const sendCodeToPhone = (phone, msg, country_code="+256") => {
     return client.SMS.send({
         to: phone_number,
         message: msg,
-        from: AFRICASTALKING_SENDER_ID,
     })
 }
 
