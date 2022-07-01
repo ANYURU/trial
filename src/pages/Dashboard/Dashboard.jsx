@@ -31,7 +31,7 @@ export default function Dashboard() {
     document.title = "Dashboard - Bweyogere tuberebumu";
 
     get_total_shares().then( shares => setSaccosShares(shares)).catch(error => console.log(error))
-    get_weekly_shares().then(weekly_shares => setWeeklyShares(weekly_shares)).catch(error => console.log(error))
+    get_weekly_shares().then( weekly_shares => setWeeklyShares(weekly_shares)).catch(error => console.log(error))
 
     // Realtime
     const mySubscription = supabase
