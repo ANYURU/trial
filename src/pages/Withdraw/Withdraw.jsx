@@ -6,7 +6,6 @@ import { Pagination, Spinner, NothingShown } from "../../components";
 import { FaEllipsisV } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
 import WithdrawModal from "../../components/Modals/WithdrawModal";
-import { Helmet } from "react-helmet";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { useOutletContext } from "react-router-dom";
@@ -49,21 +48,12 @@ export default function Withdrawy() {
     !withdraws || withdraws.slice(indexOfFirstPage, indexOfLastPage);
 
   const [activeIndex, setActiveIndex] = useState(false);
-
   if (show === true) {
     window.onclick = function (event) {
       if (!event.target.matches(".dialog")) {
         setShow(false);
       }
     };
-  }
-
-  if(show === true){
-    window.onclick = function(event) {
-        if (!event.target.matches('.dialog')) {
-            setShow(false)
-        }
-    }
   }
 
   return (

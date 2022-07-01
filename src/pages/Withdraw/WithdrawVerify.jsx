@@ -23,6 +23,7 @@ export default function WithdrawVerify() {
       .eq("_type", "withdraw")
       .eq("application_id", id);
     setWithdraw(data[0]);
+
   };
 
   const approveWithdrawTransaction = async () => {
@@ -72,10 +73,6 @@ export default function WithdrawVerify() {
       toast.error(`Try again later`, { position: "top-center" });
     }
   };
-
-  console.log(withdraw);
-
-  console.log(withdraw)
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">

@@ -39,9 +39,9 @@ export default function Deposit() {
       .from("transactions")
       .select()
       .eq("_type", "deposit")
+      .eq("created_by", profile.id)
       .order("created_at", { ascending: false })
-      .eq("created_by", profile.id);
-
+      console.log(data)
     setDeposits(data && data.length > 0 ? data : null);
   };
 

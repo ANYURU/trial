@@ -29,7 +29,7 @@ function Shares() {
 
   const create_account = async () => {
     try {
-      const { error } = await supabase.rpc("create_fixed_deposit_account", {});
+      const { error } = await supabase.rpc("create_shares_account", {});
       if (error) throw error;
       console.log("success")
       toast.success(`Account successfully opened`, { position: "top-center" });

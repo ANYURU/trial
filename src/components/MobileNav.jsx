@@ -23,8 +23,24 @@ function MobileNav({ user }) {
       }
     };
   }
+
+  const [scrolled, setScrolled] = useState(false);
+  window.addEventListener("scroll", (e) => {
+    if (window.pageYOffset > 0) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  });
+
+  console.log(scrolled);
+
   return (
-    <div className="fixed flex justify-between z-30 top-0 right-0 left-0 h-[70px] items-center mobile-navbar bg-white dark:bg-dark-bg-700 dark:text-white">
+    <div
+      className={`fixed flex justify-between z-30 top-0 right-0 left-0 h-[70px] items-center ${
+        scrolled ? "mobile-navbar" : ""
+      } bg-white dark:bg-dark-bg-700 dark:text-white`}
+    >
       <div
         onClick={() => {
           setShowMenu(!showMenu);

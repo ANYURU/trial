@@ -25,7 +25,7 @@ export default function Members() {
     document.title = "Members - Bweyogere tuberebumu";
   }, []);
 
-  const [ profile ] = useOutletContext()
+  const [profile] = useOutletContext();
 
   const [members, setMembers] = useState([]);
   const [date, setDate] = useState(null);
@@ -88,15 +88,19 @@ export default function Members() {
             placeholder="Search"
             onChange={(event) => setSearchText(event.target.value)}
           />
-          <button
-            className=" px-4 bg-primary py-2 text-white rounded-md flex justify-center items-center"
-            onClick={() => {
-              navigate("/application", { state: { from: location.pathname } });
-            }}
-          >
-            {/* <MdAdd />  */}
-            Add Member
-          </button>
+          {!profile.roles.includes("super_admin") && (
+            <button
+              className=" px-4 bg-primary py-2 text-white rounded-md flex justify-center items-center"
+              onClick={() => {
+                navigate("/application", {
+                  state: { from: location.pathname },
+                });
+              }}
+            >
+              {/* <MdAdd />  */}
+              Add Member
+            </button>
+          )}
         </div>
 
         <div className="flex justify-between my-3 m-1">
@@ -155,11 +159,10 @@ export default function Members() {
 
                       {deleteModal && activeIndex === index && (
                         <ConfirmModal setPopUp={setDeleteModal}>
-                          <h1 className="font-bold">
-                            Are you sure?
-                          </h1>
+                          <h1 className="font-bold">Are you sure?</h1>
                           <p>
-                            If you terminate this account, {member.fullname.toUpperCase()} can't recover it.
+                            If you terminate this account,{" "}
+                            {member.fullname.toUpperCase()} can't recover it.
                           </p>
                           <div className="flex justify-end gap-3 mt-3">
                             <button
@@ -179,12 +182,10 @@ export default function Members() {
                       )}
                       {suspendModal && activeIndex === index && (
                         <ConfirmModal setPopUp={setSuspendModal}>
-                          <h1 className="font-bold">
-                            Are you sure?
-                          </h1>
+                          <h1 className="font-bold">Are you sure?</h1>
                           <p>
-                          {member.fullname.toUpperCase()} won't be able
-                            to use it until you unsuspend.
+                            {member.fullname.toUpperCase()} won't be able to use
+                            it until you unsuspend.
                           </p>
                           <div className="flex justify-end gap-3 mt-3">
                             <button
@@ -211,7 +212,10 @@ export default function Members() {
                         </ConfirmModal>
                       )}
                       {promoteModal && activeIndex === index && (
-                          <PromoteModal setPromoteModal={setPromoteModal} member={member} />
+                        <PromoteModal
+                          setPromoteModal={setPromoteModal}
+                          member={member}
+                        />
                       )}
                       <td className="px-6 py-3">{member.fullname}</td>
                       <td className="px-6 py-3">{member.id}</td>

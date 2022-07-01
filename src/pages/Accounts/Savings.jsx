@@ -35,7 +35,7 @@ function Savings() {
 
   const create_account = async () => {
     try {
-      const { error } = await supabase.rpc("create_fixed_deposit_account", {});
+      const { error } = await supabase.rpc("create_savings_account", {});
       if (error) throw error;
       toast.success(`Account successfully opened`, { position: "top-center" });
     } catch (error) {
