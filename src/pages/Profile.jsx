@@ -110,7 +110,7 @@ function Profile() {
         </h1>
       </div>
       <ToastContainer />
-      <div className="bg-white p-6 overflow-y-auto  md:h-[calc(100%-65px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-6 overflow-y-auto dark:text-secondary-text  md:h-[calc(100%-65px)] dark:bg-dark-bg-700">
         {profile?.fullname ? (
           <>
             <h1 className="font-semibold mb-3">Profile Details</h1>

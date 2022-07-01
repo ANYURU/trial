@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../helpers/supabase";
-import { Spinner, NothingShown } from "../../components";
-import { date } from "yup";
+import { Spinner, NothingShown, ConfirmModal } from "../../components";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FaIdCardAlt } from "react-icons/fa";
+import { MdNoAccounts } from "react-icons/md";
+import { MemberModal } from "../../components";
 
 export default function Members() {
   useEffect(() => {
@@ -13,13 +16,17 @@ export default function Members() {
 
   const [admins, setAdmins] = useState([]);
   const [date, setDate] = useState(null);
-  const navigate = useNavigate();
+
+  const [adminModal, setAdminModal] = useState(false);
+  const [demoteModal, setDemoteModal] = useState(false);
+  const [suspendModal, setSuspendModal] = useState(false);
 
   const getMembers = async () => {
     const { error, data } = await supabase.from("_member_profiles").select();
-    console.log(data)
 
-    const dataArray = data.filter((member) => member.roles && member?.roles.includes("admin"));
+    const dataArray = data.filter(
+      (member) => member.roles && member?.roles.includes("admin")
+    );
     dataArray.length === 0 ? setAdmins(null) : setAdmins(dataArray);
   };
 
@@ -92,6 +99,70 @@ export default function Members() {
                       } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
                       key={index}
                     >
+                      {adminModal && activeIndex === index && (
+                        <MemberModal
+                          member={activeIndex === index && admin}
+                          setMemberModal={setAdminModal}
+                          memberModal={adminModal}
+                        />
+                      )}
+                      {demoteModal && activeIndex === index && (
+                        <ConfirmModal setPopUp={setDemoteModal}>
+                          <h1 className="font-bold">
+                            Are you sure?
+                          </h1>
+                          <p>
+                            You are demoting {admin.fullname.toUpperCase()}.
+                          </p>
+                          <div className="flex justify-end gap-3 mt-3">
+                            <button
+                              className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
+                              onClick={() => setDemoteModal(false)}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              className="bg-accent-red px-3 py-1 outline outline-1  rounded-md text-white"
+                              onClick={() => setDemoteModal(false)}
+                            >
+                              Demote
+                            </button>
+                          </div>
+                        </ConfirmModal>
+                      )}
+                      {suspendModal && activeIndex === index && (
+                        <ConfirmModal setPopUp={setSuspendModal}>
+                          <h1 className="font-bold">
+                            Are you sure?
+                          </h1>
+                          <p>
+                            {admin.fullname.toUpperCase()} won't be able
+                            to use it until you unsuspend.
+                          </p>
+                          <div className="flex justify-end gap-3 mt-3">
+                            <button
+                              className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
+                              onClick={() => {
+                                setSuspendModal(false);
+                              }}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              className="bg-accent-red px-3 py-1 outline outline-1  rounded-md text-white"
+                              onClick={async () => {
+                                await supabase
+                                  .from("users")
+                                  .update({ suspended: true })
+                                  .eq("id", admin.id);
+                                setSuspendModal(false);
+                              }}
+                            >
+                              Suspend
+                            </button>
+                          </div>
+                        </ConfirmModal>
+                      )}
                       <td className="px-6 py-3">{admin.fullname}</td>
                       <td className="px-6 py-3">{admin.id}</td>
                       <td className="px-6 py-3">{admin.phone_number}</td>
@@ -120,16 +191,32 @@ export default function Members() {
                           >
                             <FaEllipsisV />
                           </button>
-                          {/* <ContextMenu
-                            activeIndex={activeIndex}
-                            show={show}
-                            index={index}
-                            setShow={setShow}
-                            setMemberModal={setMemberModal}
-                            deleteModal={deleteModal}
-                            setDeleteModal={setDeleteModal}
-                            member={activeIndex === index ? member : null}
-                          /> */}
+                          <ul
+                            className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
+                              index === activeIndex && show ? "" : "hidden"
+                            }`}
+                          >
+                            <li
+                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                              onClick={() => {
+                                setAdminModal(true)
+                              }}
+                            >
+                              <FaIdCardAlt /> Details
+                            </li>
+                            <li
+                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                              onClick={() => setSuspendModal(true)}
+                            >
+                              <MdNoAccounts /> Suspend
+                            </li>
+                            <li
+                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                              onClick={() => setDemoteModal(true)}
+                            >
+                              <RiDeleteBin6Line /> Demote
+                            </li>
+                          </ul>
                         </div>
                       </td>
                     </tr>

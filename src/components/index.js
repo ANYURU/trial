@@ -23,6 +23,7 @@ import Stepper from "./Stepper";
 import Spinner from "./Loaders/Spinner";
 import TubeIcon from "./Icons/TubeIcon";
 import Transactions from "./Dashboard/Transactions";
+import PromoteModal from "./Modals/PromoteModal";
 
 export {
   ConfirmModal,
@@ -50,4 +51,5 @@ export {
   Spinner,
   TubeIcon,
   Transactions,
+  PromoteModal
 };

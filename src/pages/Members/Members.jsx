@@ -3,11 +3,11 @@ import { FaEllipsisV } from "react-icons/fa";
 import { ContextMenu } from "../../components";
 import { MemberModal } from "../../components";
 import { Pagination } from "../../components";
-import { ConfirmModal } from "../../components";
+import { ConfirmModal, PromoteModal } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../helpers/supabase";
 import { Spinner, NothingShown } from "../../components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 
 export default function Members() {
   useEffect(() => {
@@ -25,6 +25,8 @@ export default function Members() {
     document.title = "Members - Bweyogere tuberebumu";
   }, []);
 
+  const [ profile ] = useOutletContext()
+
   const [members, setMembers] = useState([]);
   const [date, setDate] = useState(null);
   const navigate = useNavigate();
@@ -37,6 +39,7 @@ export default function Members() {
   const [memberModal, setMemberModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [suspendModal, setSuspendModal] = useState(false);
+  const [promoteModal, setPromoteModal] = useState(false);
   const [searchText, setSearchText] = useState("");
 
   //pagination
@@ -153,11 +156,10 @@ export default function Members() {
                       {deleteModal && activeIndex === index && (
                         <ConfirmModal setPopUp={setDeleteModal}>
                           <h1 className="font-bold">
-                            Are you sure you want to delete{" "}
-                            {member.fullname.toUpperCase()}?
+                            Are you sure?
                           </h1>
                           <p>
-                            If you terminate this account, you can't recover it.
+                            If you terminate this account, {member.fullname.toUpperCase()} can't recover it.
                           </p>
                           <div className="flex justify-end gap-3 mt-3">
                             <button
@@ -178,11 +180,10 @@ export default function Members() {
                       {suspendModal && activeIndex === index && (
                         <ConfirmModal setPopUp={setSuspendModal}>
                           <h1 className="font-bold">
-                            Are you sure you want to suspend{" "}
-                            {member.fullname.toUpperCase()}?
+                            Are you sure?
                           </h1>
                           <p>
-                            If you supsend this account, the owner won't be able
+                          {member.fullname.toUpperCase()} won't be able
                             to use it until you unsuspend.
                           </p>
                           <div className="flex justify-end gap-3 mt-3">
@@ -208,6 +209,9 @@ export default function Members() {
                             </button>
                           </div>
                         </ConfirmModal>
+                      )}
+                      {promoteModal && activeIndex === index && (
+                          <PromoteModal setPromoteModal={setPromoteModal} member={member} />
                       )}
                       <td className="px-6 py-3">{member.fullname}</td>
                       <td className="px-6 py-3">{member.id}</td>
@@ -245,7 +249,9 @@ export default function Members() {
                             setMemberModal={setMemberModal}
                             setDeleteModal={setDeleteModal}
                             setSuspendModal={setSuspendModal}
+                            setPromoteModal={setPromoteModal}
                             member={activeIndex === index ? member : null}
+                            profile={profile}
                           />
                         </div>
                       </td>
