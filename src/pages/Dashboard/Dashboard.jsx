@@ -29,10 +29,21 @@ export default function Dashboard() {
 
   useEffect(() => {
     document.title = "Dashboard - Bweyogere tuberebumu";
-    get_total_shares().then( shares => setSaccosShares(shares))
-    get_weekly_shares().then(weekly_shares => {
-      setWeeklyShares(weekly_shares)
-    })
+
+    get_total_shares().then( shares => setSaccosShares(shares)).catch(error => console.log(error))
+    get_weekly_shares().then(weekly_shares => setWeeklyShares(weekly_shares)).catch(error => console.log(error))
+
+    // Realtime
+    const mySubscription = supabase
+      .from('transactions')
+      .on('*', async payload => {
+        console.log(payload)
+        await get_total_shares().then( shares => setSaccosShares(shares)).catch(error => console.log(error))
+        await get_weekly_shares().then( weekly_shares => setWeeklyShares(weekly_shares)).catch(error => console.log(error))
+      })
+      .subscribe()
+
+      return () => supabase.removeSubscription(mySubscription) 
   }, []);
 
   const get_total_shares = async () => {
@@ -61,7 +72,6 @@ export default function Dashboard() {
           obj[deposit.day] += deposit.shares
         }
       }
-      // console.log(Object.values(obj))
       return obj
     }
   }
