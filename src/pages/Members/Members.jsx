@@ -8,8 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../../helpers/supabase";
 import { Spinner, NothingShown } from "../../components";
 import { useLocation, useOutletContext } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 export default function Members() {
+
+  const [members, setMembers] = useState([]);
   useEffect(() => {
     supabase
       .rpc("fetch_members")
@@ -23,11 +26,10 @@ export default function Members() {
       .catch((error) => console.log(error));
 
     document.title = "Members - Bweyogere tuberebumu";
-  }, []);
+  }, [members]);
 
   const [profile] = useOutletContext();
 
-  const [members, setMembers] = useState([]);
   const [date, setDate] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -77,6 +79,7 @@ export default function Members() {
 
   return (
     <div className="mx-5 my-2 md:h-[calc(100vh-70px)]">
+      <ToastContainer />
       <div className="flex flex-col justify-between pb-3 md:h-[150px]">
         <h1 className="mb-3 mt-2 font-bold uppercase dark:text-white">
           Members

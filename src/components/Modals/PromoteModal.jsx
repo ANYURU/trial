@@ -1,16 +1,21 @@
 import ConfirmModal from "./ConfirmModal";
 import { useState, useEffect } from "react";
 import { supabase } from "../../helpers/supabase";
+import { toast } from "react-toastify";
 
 function PromoteModal({ setPromoteModal, member }) {
   const promoteMember = async () => {
     const { error, data } = await supabase
-      .from("_member_profiles")
-      .update("roles", ["member", "admin"])
+      .from("new_members")
+      .update({"roles": ["member", "admin"]})
       .eq("id", member.id);
 
-    console.log(data);
-    console.log(error);
+    if (error){
+      toast.error(`Promotion Failed.`, { position: "top-center" });
+    }
+    else {
+      toast.success(`Promoted ${member.fullname}.`, { position: "top-center" });
+    }
   };
 
   return (

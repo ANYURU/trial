@@ -7,15 +7,16 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaIdCardAlt } from "react-icons/fa";
 import { MdNoAccounts } from "react-icons/md";
 import { MemberModal } from "../../components";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Members() {
+  const [admins, setAdmins] = useState([]);
+  const [date, setDate] = useState(null);
+  
   useEffect(() => {
     getMembers();
     document.title = "Admins - Bweyogere tuberebumu";
-  }, []);
-
-  const [admins, setAdmins] = useState([]);
-  const [date, setDate] = useState(null);
+  }, [admins]);
 
   const [adminModal, setAdminModal] = useState(false);
   const [demoteModal, setDemoteModal] = useState(false);
@@ -69,8 +70,26 @@ export default function Members() {
     };
   }
 
+  const demoteMember = async (admin) => {
+    const { error, data } = await supabase
+      .from("new_members")
+      .update({ roles: ["member"] })
+      .eq("id", admin.id);
+
+    if (error) {
+      toast.error(`Failed to demote ${admin.fullname}.`, {
+        position: "top-center",
+      });
+    } else {
+      toast.success(`Demoted ${admin.fullname}.`, { position: "top-center" });
+    }
+
+    setDemoteModal(false);
+  };
+
   return (
     <div className="mx-2 md:mx-5 md:mt-2 h-[calc(100vh-70px)] flex flex-col">
+      <ToastContainer />
       <div className="flex flex-col justify-between  md:h-[50px]">
         <h1 className="mt-2 font-bold uppercase dark:text-white">
           Administrators
@@ -108,9 +127,7 @@ export default function Members() {
                       )}
                       {demoteModal && activeIndex === index && (
                         <ConfirmModal setPopUp={setDemoteModal}>
-                          <h1 className="font-bold">
-                            Are you sure?
-                          </h1>
+                          <h1 className="font-bold">Are you sure?</h1>
                           <p>
                             You are demoting {admin.fullname.toUpperCase()}.
                           </p>
@@ -123,7 +140,7 @@ export default function Members() {
                             </button>
                             <button
                               className="bg-accent-red px-3 py-1 outline outline-1  rounded-md text-white"
-                              onClick={() => setDemoteModal(false)}
+                              onClick={() => demoteMember(admin)}
                             >
                               Demote
                             </button>
@@ -132,12 +149,10 @@ export default function Members() {
                       )}
                       {suspendModal && activeIndex === index && (
                         <ConfirmModal setPopUp={setSuspendModal}>
-                          <h1 className="font-bold">
-                            Are you sure?
-                          </h1>
+                          <h1 className="font-bold">Are you sure?</h1>
                           <p>
-                            {admin.fullname.toUpperCase()} won't be able
-                            to use it until you unsuspend.
+                            {admin.fullname.toUpperCase()} won't be able to use
+                            it until you unsuspend.
                           </p>
                           <div className="flex justify-end gap-3 mt-3">
                             <button
@@ -199,7 +214,7 @@ export default function Members() {
                             <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {
-                                setAdminModal(true)
+                                setAdminModal(true);
                               }}
                             >
                               <FaIdCardAlt /> Details

@@ -173,7 +173,11 @@ function Profile() {
               <div className="grid grid-cols-5 gap-2 mb-2">
                 <p className=" col-span-2">Position in the SACCO</p>
                 <p className="font-bold col-span-3">
-                  {profile?.position_in_sacco}
+                  {profile.roles.includes("super_admin")
+                    ? "Super Admin"
+                    : profile.roles.includes("admin")
+                    ? "Admin"
+                    : "Member"}
                 </p>
               </div>
             </section>

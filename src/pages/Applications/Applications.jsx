@@ -5,7 +5,7 @@ import { supabase } from "../../helpers/supabase";
 import { Pagination } from "../../components";
 import { ContextMenu } from "../../components";
 import { MemberModal } from "../../components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Spinner, NothingShown } from "../../components";
 
 export default function Applications() {
@@ -25,6 +25,7 @@ export default function Applications() {
   const [applications, setApplications] = useState([]);
   const [date, setDate] = useState(null);
   const [searchText, setSearchText] = useState("")
+  const [ profile ] = useOutletContext()
 
   const navigate = useNavigate();
 
@@ -218,6 +219,7 @@ export default function Applications() {
                             deleteModal={deleteModal}
                             setDeleteModal={setDeleteModal}
                             member={activeIndex === index ? application : null}
+                            profile={profile}
                           />
                         </div>
                       </td>

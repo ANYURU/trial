@@ -81,7 +81,7 @@ function SuperAdDashboard() {
           }`}
         >
           <div
-            className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col h-[calc(100%-50px)] mr-2 md:mr-0 px-2 py-5 shadow-sm rounded-md items-center`}
+            className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col h-[calc(100%-50px)] mr-2 md:mr-0 px-2 py-5 shadow rounded-md items-center`}
           >
             {admins && admins.length > 0 ? (
               <>
@@ -111,7 +111,7 @@ function SuperAdDashboard() {
             )}
           </div>
           <div
-            className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md items-center h-[calc(100%-50px)] w-full shadow-sm mr-2 md:mr-0`}
+            className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md items-center h-[calc(100%-50px)] w-full shadow mr-2 md:mr-0`}
           >
             <h1>Accounts Summary</h1>
             <table className="w-full">
