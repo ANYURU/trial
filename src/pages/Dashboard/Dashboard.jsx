@@ -13,68 +13,76 @@ import { Spinner } from "../../components";
 export default function Dashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
   const [profile] = useOutletContext();
-  const [myShares, setMyShares] = useState(0)
-  const [saccosShares, setSaccosShares] = useState(0)
-  const [weeklyShares, setWeeklyShares] = useState(
-    {
-      "Mon":0,
-      "Tue":0,
-      "Wed":0,
-      "Thu":0,
-      "Fri":0,
-      "Sat":0,
-      "Sun":0
-    }
-  )
+  const [myShares, setMyShares] = useState(0);
+  const [saccosShares, setSaccosShares] = useState(0);
+  const [weeklyShares, setWeeklyShares] = useState({
+    Mon: 0,
+    Tue: 0,
+    Wed: 0,
+    Thu: 0,
+    Fri: 0,
+    Sat: 0,
+    Sun: 0,
+  });
 
   useEffect(() => {
     document.title = "Dashboard - Bweyogere tuberebumu";
 
-    get_total_shares().then( shares => setSaccosShares(shares)).catch(error => console.log(error))
-    get_weekly_shares().then( weekly_shares => setWeeklyShares(weekly_shares)).catch(error => console.log(error))
+    get_total_shares()
+      .then((shares) => setSaccosShares(shares))
+      .catch((error) => console.log(error));
+    get_weekly_shares()
+      .then((weekly_shares) => setWeeklyShares(weekly_shares))
+      .catch((error) => console.log(error));
 
     // Realtime
     const mySubscription = supabase
-      .from('transactions')
-      .on('*', async payload => {
-        console.log(payload)
-        await get_total_shares().then( shares => setSaccosShares(shares)).catch(error => console.log(error))
-        await get_weekly_shares().then( weekly_shares => setWeeklyShares(weekly_shares)).catch(error => console.log(error))
+      .from("transactions")
+      .on("*", async (payload) => {
+        console.log(payload);
+        await get_total_shares()
+          .then((shares) => setSaccosShares(shares))
+          .catch((error) => console.log(error));
+        await get_weekly_shares()
+          .then((weekly_shares) => setWeeklyShares(weekly_shares))
+          .catch((error) => console.log(error));
       })
-      .subscribe()
+      .subscribe();
 
-      return () => supabase.removeSubscription(mySubscription) 
+    return () => supabase.removeSubscription(mySubscription);
   }, []);
 
   const get_total_shares = async () => {
     const { data, error } = await supabase.rpc("fetch_total_shares");
     if (error) throw error;
-    console.log(data)
+    console.log(data);
     return data;
   };
 
   const get_weekly_shares = async () => {
-    const { data, error } = await supabase.rpc("fetch_weekly_shares")
-    if (error) throw error
-    if( data?.length > 0){
-      let obj = {
-        "Mon":0,
-        "Tue":0,
-        "Wed":0,
-        "Thu":0,
-        "Fri":0,
-        "Sat":0,
-        "Sun":0
-      } 
+    const { data, error } = await supabase.rpc("fetch_weekly_shares");
+    if (error) throw error;
+    console.log(data);
+    let obj = {
+      Mon: 0,
+      Tue: 0,
+      Wed: 0,
+      Thu: 0,
+      Fri: 0,
+      Sat: 0,
+      Sun: 0,
+    };
 
-      for( let deposit of data) {
-        if (deposit && deposit?.shares ) {
-          obj[deposit.day] += deposit.shares
+    if (data?.length > 0) {
+      for (let deposit of data) {
+        if (deposit && deposit?.shares) {
+          obj[deposit.day] += deposit.shares;
         }
       }
-      return obj
     }
-  }
+
+    return obj;
+  };
 
   const data = {
     maintainAspectRatio: true,
@@ -137,12 +145,18 @@ export default function Dashboard() {
     cutoutPercentage: 25,
   };
 
-  if(profile.roles){
-    if(!profile?.roles.includes("super_admin")){
+  if (profile.roles) {
+    if (!profile?.roles.includes("super_admin")) {
       return (
-        <div className={`mx-5 mb-2 my-2 md:h-[calc(100vh-70px)] ${matches && "overflow-y-hidden"}`}>
+        <div
+          className={`mx-5 mb-2 my-2 md:h-[calc(100vh-70px)] ${
+            matches && "overflow-y-hidden"
+          }`}
+        >
           {/* Account Summaries */}
-          {Object.keys(profile).length > 0 && !profile?.fullname && <RegistrationModal />}
+          {Object.keys(profile).length > 0 && !profile?.fullname && (
+            <RegistrationModal />
+          )}
           <div className="">
             <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
               Dashboard
@@ -176,19 +190,10 @@ export default function Dashboard() {
           </div>
         </div>
       );
-    }
-    else {
-      return (
-        <SuperAdDashboard />
-      )
+    } else {
+      return <SuperAdDashboard />;
     }
   } else {
-    return (
-      <Spinner />
-    )
+    return <Spinner />;
   }
-
-  
-
-  
 }

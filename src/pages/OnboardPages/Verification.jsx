@@ -15,7 +15,7 @@ function Verification() {
   const navigate = useNavigate()
   const location = useLocation()
   const type = location?.state?.type
-  const [ loading, setLoading ] = useState(true)
+  const [ loading, setLoading ] = useState(false)
   const [ otp, setOtp ] = useState(["", "", "", "", "", ""])
   const darkMode = localStorage.getItem("darkMode")
  
