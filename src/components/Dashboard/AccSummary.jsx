@@ -35,7 +35,7 @@ export default function AccSummary({ setMyShares }) {
   const get_account_information = async () => {
     const { data, error } = await supabase.rpc("get_accounts_information");
     if (error) throw error;
-    console.log(data);
+    // console.log(data);
     return data;
   };
 

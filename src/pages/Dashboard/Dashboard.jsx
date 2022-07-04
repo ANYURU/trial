@@ -145,8 +145,6 @@ export default function Dashboard() {
     cutoutPercentage: 25,
   };
 
-  // document.body.style.position = 'fixed'
-
   if (profile.roles) {
     if (!profile?.roles.includes("super_admin")) {
       return (
