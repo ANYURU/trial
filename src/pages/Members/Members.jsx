@@ -26,6 +26,8 @@ export default function Members() {
     
   }, [])
 
+  const [profile] = useOutletContext()
+
   const fetch_members = async () => {
     const { data, error } = await supabase.rpc("fetch_members")
     if( error ) throw error
