@@ -28,7 +28,7 @@ export default function WithdrawMembers() {
 
   useEffect(() => {
     getApplications().catch(error => console.log(error))
-
+    
     const mySubscription = supabase
       .from('applications')
       .on('*', async ( payload ) => {
@@ -44,9 +44,7 @@ export default function WithdrawMembers() {
     if (error) throw error;
 
     setWithraws(data);
-  }
-
-  const [show, setShow] = useState(false);
+  };
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);

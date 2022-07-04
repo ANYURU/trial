@@ -16,13 +16,15 @@ export default function Withdrawy() {
     const mySubscription = supabase
       .from("transactions")
       .on("*", async (payload) => {
-        // console.log(payload);
+        console.log(payload);
         await getWithdraws().catch((error) => console.log(error));
       })
       .subscribe();
 
     document.title = "Withdraws - Bweyogere tuberebumu";
     return () => supabase.removeSubscription(mySubscription);
+
+
   }, []);
 
   const [status, setStatus] = useState("");
