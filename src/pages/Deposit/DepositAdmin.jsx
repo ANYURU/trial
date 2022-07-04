@@ -20,7 +20,7 @@ export default function DepositAdmin() {
     const mySubscription = supabase
       .from('applications')
       .on('*', async ( payload ) => {
-        await getApplications()
+        await getApplications().catch(error => console.log(error))
       })
       .subscribe()
     document.title = 'Deposit Applications - Bweyogere tuberebumu'

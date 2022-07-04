@@ -12,8 +12,20 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function Withdrawy() {
   useEffect(() => {
-    getApplications();
+    getWithdraws().catch((error) => console.log(error));
+
+    const mySubscription = supabase
+      .from("transactions")
+      .on("*", async (payload) => {
+        console.log(payload);
+        await getWithdraws().catch((error) => console.log(error));
+      })
+      .subscribe();
+
     document.title = "Withdraws - Bweyogere tuberebumu";
+    return () => supabase.removeSubscription(mySubscription);
+
+
   }, []);
 
   const [status, setStatus] = useState("");
@@ -26,20 +38,6 @@ export default function Withdrawy() {
   loans = filterByStatus(loans, "account", account);
 
   const [withdraws, setWithraws] = useState([]);
-
-  const getApplications = async () => {
-    getWithdraws().catch((error) => console.log(error));
-
-    const mySubscription = supabase
-      .from("transactions")
-      .on("*", async (payload) => {
-        console.log(payload);
-        await getWithdraws().catch((error) => console.log(error));
-      })
-      .subscribe();
-
-    return () => supabase.removeSubscription(mySubscription);
-  };
 
   const getWithdraws = async () => {
     const { data, error } = await supabase.rpc("fetch_withdraws");
