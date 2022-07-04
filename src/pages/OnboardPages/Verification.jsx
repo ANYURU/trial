@@ -26,9 +26,10 @@ function Verification() {
     
     verifyOTP( phoneNumber, code, verification_key )
       .then( response => response.json() )
-      .then((data) => {console.log(data); return data})
-      .then( data => data?.Status === "Failure" ? toast.error(`${data.Details}`, {position: "top-center"}) : data?.Status === "Success" && navigate('/set-password', { state: { type: type } }) )
-      .catch( error => console.log(error) )
+      .then((data) => { return data})
+      .then( data => { data?.Status === "Failure" ? toast.error(`${data.Details}`, {position: "top-center"}) : data?.Status === "Success" && navigate('/set-password', { state: { type: type } }); setLoading(false) })
+      .catch( error => { console.log(error); setLoading(false); setOtp(["", "", "", "", "", ""]) })
+    
   }
 
   return (

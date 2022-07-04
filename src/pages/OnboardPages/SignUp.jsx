@@ -25,9 +25,10 @@ export default function SignUp() {
     .then(({ data }) => {
       if ( data ) {
         toast.error(`Phone number has already been registered.`, {position: "top-center"})
+        setLoading(false)
       }
       else {
-
+        setLoading(false)
         localStorage.setItem('phone_number', phoneNo)
         navigate('/verify', { state: { type: "signup" } })
         
