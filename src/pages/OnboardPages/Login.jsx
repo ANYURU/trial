@@ -29,7 +29,6 @@ export default function Login() {
       if ( error ) {
         setLoading(false)
         toast.error(`${error?.message}`, {position: "top-center"})
-        console.log(error)
       } else if ( data ) {
         const { error } = await signIn({
           phone: '256' + phoneNo.slice(1),
@@ -43,6 +42,7 @@ export default function Login() {
           navigate('/dashboard')
         }
       } else {
+        setLoading(false)
         toast.error(`User does not exist.`, {position: "top-center"})
       }
     }).catch(error => console.log(error))
