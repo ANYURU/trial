@@ -17,11 +17,12 @@ function Verification() {
   const type = location?.state?.type
   const [ loading, setLoading ] = useState(false)
   const [ otp, setOtp ] = useState(["", "", "", "", "", ""])
-  const darkMode = localStorage.getItem("darkMode")
+  const { darkMode } = useAuth();
  
   const handleSubmit = async (event, values) => {
     event.preventDefault();
   }
+
   return (
     <div
       className={`inline-flex justify-center items-center w-screen h-screen font-montserrat ${
