@@ -36,7 +36,6 @@ function ApplicationPg2({
 
     try {
       if (location.state?.from === "/members") {
-        // console.log("here")
         getOTP(phone_number, "VERIFICATION")
           .then((response) => response.json())
           .then((data) => {
