@@ -23,14 +23,14 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
   const navigate = useNavigate()
 
   const handleSubmit = async ( values ) => {
-    console.log("Values", values)
+    // console.log("Values", values)
     setInitialValues({ ...initialValues, ...values })
     const { fullname: applicants_name, phone_number, ...rest } = values
 
     try {
       if ( location.state?.from === "/members" ) {
 
-        console.log("here")
+        // console.log("here")
         getOTP( phone_number, "VERIFICATION" )
           .then( response => response.json() )
           .then( data => {

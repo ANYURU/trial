@@ -3,7 +3,7 @@ import ApplicationPg1 from "./ApplicationPg1";
 import ApplicationPg2 from "./ApplicationPg2";
 import { supabase } from "../../helpers/supabase";
 import { useAuth } from "../../auth/AuthContext";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { getOTP } from "../../helpers/getotp";
 import PasswordGenerator from "../../components/Form/PasswordGenerator";
@@ -137,6 +137,7 @@ function MemberApplication() {
 
   return (
     <>
+      <ToastContainer />
       <div className="flex-grow sm:mx-2 md:mx-5 my-2 h-[calc(100vh-70px)]">
         <div className="flex flex-col justify-between pb-3 md:h-[60px]">
           <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
