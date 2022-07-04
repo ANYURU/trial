@@ -34,8 +34,8 @@ const PrivateRoute = ({ allowedRoles }) => {
       .catch((error) => console.log(error));
   }, [user?.session]);
 
-  console.log(user)
-  console.log(profile)
+  // console.log(user)
+  // console.log(profile)
 
   return user?.role === "authenticated" ? (
     matches ? (

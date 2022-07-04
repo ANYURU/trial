@@ -16,7 +16,8 @@ function MobileMenu({ user, setShowMenu }) {
 
   const [show, setShow] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [disabled] = useState(!(user || user?.roles));
+  const [disabled] = useState(!user?.roles);
+  // const [disabled] = useState(!(user || user?.roles));
   // const lit = menuData.admin.filter(item => item.sublinks).map(item => item.sublinks)
 
   const lit = menuData[`${role}`]
@@ -30,48 +31,57 @@ function MobileMenu({ user, setShowMenu }) {
       </div>
       {menuData[`${role}`].map((item, index) => (
         <Fragment key={index}>
-          <NavLink
-            key={index}
-            to={`/${item.link}`}
-            className={`flex justify-between mx-2 my-1 px-3 py-1 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600 ${
-              disabled &&
-              item?.link !== "dashboard" &&
-              item?.link !== "profile" &&
-              `disabled-link`
+          <div
+            className={`${
+              disabled && item?.link !== "dashboard" && `cursor-not-allowed`
             }`}
-            onClick={() => {
-              setSelectedIndex(index);
-
-              if (index === 0 || index === menuData[`${role}`].length - 1 || role === "super_admin") {
-                setShowMenu(false);
-              }
-            }}
           >
-            <div className="flex items-center dark:text-secondary-text">
-              <IconContext.Provider value={{ className: `font-bold text-lg` }}>
-                <i className="mx-2">{item.icon}</i>
-              </IconContext.Provider>
-              <span className="font-semibold">{item.label}</span>
-            </div>
-            {role !== "super_admin" && (
-              <IconContext.Provider
-                value={{
-                  className: `font-bold text-lg dark:text-secondary-text`,
-                }}
-              >
-                <i>
-                  {index !== 0 &&
-                    index < menuData[`${role}`].length - 1 &&
-                    (show && index === selectedIndex ? (
-                      <MdKeyboardArrowUp />
-                    ) : (
-                      <MdKeyboardArrowDown />
-                    ))}
-                </i>
-              </IconContext.Provider>
-            )}
-          </NavLink>
-          {index === selectedIndex && role !== "super_admin" &&
+            <NavLink
+              key={index}
+              to={`/${item.link}`}
+              className={`flex justify-between mx-2 my-1 px-3 py-1 rounded-lg hover:bg-accent dark:hover:bg-dark-bg-600 ${
+                disabled && item?.link !== "dashboard" && `disabled-link`
+              }`}
+              onClick={() => {
+                setSelectedIndex(index);
+                if (
+                  index === 0 ||
+                  index === menuData[`${role}`].length - 1 ||
+                  role === "super_admin"
+                ) {
+                  setShowMenu(false);
+                }
+              }}
+            >
+              <div className="flex items-center dark:text-secondary-text">
+                <IconContext.Provider
+                  value={{ className: `font-bold text-lg` }}
+                >
+                  <i className="mx-2">{item.icon}</i>
+                </IconContext.Provider>
+                <span className="font-semibold">{item.label}</span>
+              </div>
+              {role !== "super_admin" && (
+                <IconContext.Provider
+                  value={{
+                    className: `font-bold text-lg dark:text-secondary-text`,
+                  }}
+                >
+                  <i>
+                    {index !== 0 &&
+                      index < menuData[`${role}`].length - 1 &&
+                      (show && index === selectedIndex ? (
+                        <MdKeyboardArrowUp />
+                      ) : (
+                        <MdKeyboardArrowDown />
+                      ))}
+                  </i>
+                </IconContext.Provider>
+              )}
+            </NavLink>
+          </div>
+          {index === selectedIndex &&
+            role !== "super_admin" &&
             index > 0 &&
             index < menuData[`${role}`].length - 1 && (
               <div className="bg-accent dark:bg-dark-bg-600 mx-3 rounded-lg my-2 py-1 px-3 cursor-pointer dark:text-secondary-text">

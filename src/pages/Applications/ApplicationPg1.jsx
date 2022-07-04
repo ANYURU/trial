@@ -3,7 +3,7 @@ import { Form, Formik } from "formik"
 import { member1ValidationSchema } from "../../helpers/validator"
  
 export default function ApplicationPg1({ initialValues, setInitialValues, setPageNumber, pageNumber }) {
-    console.log(initialValues)
+    // console.log(initialValues)
     const { 
         fullname,
         dob, 
