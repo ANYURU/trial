@@ -8,11 +8,13 @@ import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { getOTP } from "../../helpers/getotp";
 import PasswordGenerator from "../../components/Form/PasswordGenerator";
 import ApplicationVerify from "./ApplicationVerify";
+import { Spinner } from "../../components";
 
 function MemberApplication() {
   const [pageNumber, setPageNumber] = useState(1);
   const [profile, setProfile] = useOutletContext();
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -122,8 +124,10 @@ function MemberApplication() {
             .single();
 
           if (error) {
+            setLoading(false)
             throw error;
           } else {
+            setLoading(false)
             setProfile(data);
             navigate("/dashboard");
           }
@@ -131,6 +135,7 @@ function MemberApplication() {
       }
     } catch (error) {
       // handle the errors depending on error status codes & give appropriate messages to the users
+      setLoading(false)
       toast.error(`${error?.message}`, { position: "top-center" });
     }
   };
@@ -146,6 +151,11 @@ function MemberApplication() {
         </div>
 
         <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-80px)] dark:bg-dark-bg-700 p-6">
+        {loading && 
+                    <div className="absolute z-10 bg-white dark:bg-dark-bg-700 dark:bg-opacity-90 bg-opacity-90 w-full h-full rounded-lg">
+                      <Spinner />
+                    </div>
+                  }
         <div className="w-full overflow-x-auto h-full  relative overflow-y-auto p-2">
           <div className="flex flex-grow flex-col min-h-full">
             {pageNumber === 1 && (
@@ -164,6 +174,7 @@ function MemberApplication() {
                 pageNumber={pageNumber}
                 password={password}
                 setPassword={setPassword}
+                setLoading={setLoading}
               />
             )}
             {pageNumber === 3 && (

@@ -2,99 +2,106 @@ import { Nominee } from "../../components";
 import { InputField } from "../../components/Form/CustomInputField";
 import { Formik, Form } from "formik";
 import { member2ValidationSchema } from "../../helpers/validator";
-import { useLocation, useOutletContext, useNavigate } from 'react-router-dom'
-import { supabase } from "../../helpers/supabase"
-import { useAuth } from "../../auth/AuthContext"
-import { getOTP } from "../../helpers/getotp"
-import { toast } from "react-toastify"
+import { useLocation, useOutletContext, useNavigate } from "react-router-dom";
+import { supabase } from "../../helpers/supabase";
+import { useAuth } from "../../auth/AuthContext";
+import { getOTP } from "../../helpers/getotp";
+import { toast } from "react-toastify";
 import { useState } from "react";
-import PasswordGenerator from "../../components/Form/PasswordGenerator"
+import PasswordGenerator from "../../components/Form/PasswordGenerator";
 
-function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNumber, password, setPassword }) {
-    console.log(initialValues)
+function ApplicationPg2({
+  initialValues,
+  setInitialValues,
+  pageNumber,
+  setPageNumber,
+  password,
+  setPassword,
+  setLoading,
+}) {
+  console.log(initialValues);
+  const { proposed_monthly_contributions, amount_in_words } = initialValues;
+
+  const location = useLocation();
   const {
-    proposed_monthly_contributions,
-    amount_in_words,
-  } = initialValues;
+    user: { id: applicants_id },
+  } = useAuth();
+  const [profile, setProfile] = useOutletContext();
+  const navigate = useNavigate();
 
-  const location = useLocation()
-  const { user : { id: applicants_id } } = useAuth()
-  const [ profile, setProfile ] = useOutletContext()
-  const navigate = useNavigate()
-
-  const handleSubmit = async ( values ) => {
-    // console.log("Values", values)
-    setInitialValues({ ...initialValues, ...values })
-    const { fullname: applicants_name, phone_number, ...rest } = values
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    setInitialValues({ ...initialValues, ...values });
+    const { fullname: applicants_name, phone_number, ...rest } = values;
 
     try {
-      if ( location.state?.from === "/members" ) {
-
+      if (location.state?.from === "/members") {
         // console.log("here")
-        getOTP( phone_number, "VERIFICATION" )
-          .then( response => response.json() )
-          .then( data => {
-            localStorage.setItem('verification_key', data?.Details)
-            console.log(values)
-            setPageNumber(pageNumber + 1)
-            return 
+        getOTP(phone_number, "VERIFICATION")
+          .then((response) => response.json())
+          .then((data) => {
+            localStorage.setItem("verification_key", data?.Details);
+            console.log(values);
+            setPageNumber(pageNumber + 1);
+            setLoading(false);
+            return;
           })
-          .catch( error => console.log( error ))     
-
-
-        
-      } 
-
-      else {
+          .catch((error) => console.log(error));
+      } else {
         const { error, data } = await supabase
-          .from('applications')
-          .insert(
-            [
-              {
-                _type: "membership",
-                created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                reviewed: false,
-                application_meta: {
-                  applicants_id,
-                  applicants_name,
-                  ...rest,
-                  ...values
-                }
-              }
-            ]
-          )
-          .single()
+          .from("applications")
+          .insert([
+            {
+              _type: "membership",
+              created_at: new Date()
+                .toISOString()
+                .toLocaleString("en-GB", { timeZone: "UTC" }),
+              updated_at: new Date()
+                .toISOString()
+                .toLocaleString("en-GB", { timeZone: "UTC" }),
+              reviewed: false,
+              application_meta: {
+                applicants_id,
+                applicants_name,
+                ...rest,
+                ...values,
+              },
+            },
+          ])
+          .single();
 
-          console.log(data)
+        console.log(data);
 
-        if (error) { 
-          throw error 
+        if (error) {
+          setLoading(false);
+          throw error;
         } else {
-          setInitialValues({ values: initialValues })
-          toast.success(`Membership submitted for review`, {position:'top-center'})
-          
+          setLoading(false);
+          setInitialValues({ values: initialValues });
+          toast.success(`Membership submitted for review`, {
+            position: "top-center",
+          });
+
           const { data, error } = await supabase
-            .from('_member_profiles')
+            .from("_member_profiles")
             .select()
-            .eq('id', applicants_id)
+            .eq("id", applicants_id)
             .single();
 
-          if( error ) {
-            throw error
+          if (error) {
+            throw error;
           } else {
-            setProfile(data)
-            navigate('/dashboard')  
-          }               
+            setProfile(data);
+            navigate("/dashboard");
+          }
         }
-      } 
-    } catch ( error ) {
+      }
+    } catch (error) {
       // handle the errors depending on error status codes & give appropriate messages to the users
-      toast.error(`${error?.message}`, {position:'top-center'})
-      console.log(error)
+      toast.error(`${error?.message}`, { position: "top-center" });
+      console.log(error);
     }
-  }
-
+  };
 
   return (
     <Formik
@@ -141,7 +148,10 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
                   name="proposed_mode_of_remittances[standing_order]"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  defaultChecked={initialValues.proposed_mode_of_remittances?.standing_order || false}
+                  defaultChecked={
+                    initialValues.proposed_mode_of_remittances
+                      ?.standing_order || false
+                  }
                 />
                 <label htmlFor="">Standing Order</label>
               </div>
@@ -151,7 +161,10 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
                   name="proposed_mode_of_remittances[direct_debit]"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  defaultChecked={initialValues.proposed_mode_of_remittances?.direct_debit || false}
+                  defaultChecked={
+                    initialValues.proposed_mode_of_remittances?.direct_debit ||
+                    false
+                  }
                 />
                 <label htmlFor="">Direct Debit</label>
               </div>
@@ -163,7 +176,9 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
                 reference="proposed_mode_of_remittances[others]"
                 label="Specify Others"
                 placeholder="Enter other modes"
-                defaultValue={initialValues.proposed_mode_of_remittances?.others || ""}
+                defaultValue={
+                  initialValues.proposed_mode_of_remittances?.others || ""
+                }
                 type="text"
               />
               <InputField
@@ -174,7 +189,9 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
                 reference="proposed_mode_of_remittances[date_effective]"
                 label="Effective Date (dd/mm/yyyy)"
                 placeholder="dd/mm/yyyy"
-                defaultValue={initialValues.proposed_mode_of_remittances?.date_effective}
+                defaultValue={
+                  initialValues.proposed_mode_of_remittances?.date_effective
+                }
                 type="date"
               />
             </div>
@@ -186,26 +203,35 @@ function ApplicationPg2({ initialValues, setInitialValues, pageNumber, setPageNu
             handleChange={handleChange}
             handleBlur={handleBlur}
           />
-            {
-              location.state?.from === "/members" && <div><PasswordGenerator password={password} setPassword={setPassword}/></div>
-            }
-            <div className="flex justify-between w-full">
-                <input
-                    type="submit"
-                    value='Previous'
-                    className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                    onClick={(event) => {
-                        event.preventDefault()
-                        setInitialValues({...initialValues, ...values})
-                        setPageNumber(pageNumber - 1)
-                    }}
-                />
-                <button 
-                    type='submit'
-                    className='outline outline-primary outline-2 text-white bg-primary px-4 py-1 rounded-lg cursor-pointer'
-                    disabled={location.state?.from === "/member" && !password ? true : false}
-                >submit</button>
+          {location.state?.from === "/members" && (
+            <div>
+              <PasswordGenerator
+                password={password}
+                setPassword={setPassword}
+              />
             </div>
+          )}
+          <div className="flex justify-between w-full">
+            <input
+              type="submit"
+              value="Previous"
+              className="outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer"
+              onClick={(event) => {
+                event.preventDefault();
+                setInitialValues({ ...initialValues, ...values });
+                setPageNumber(pageNumber - 1);
+              }}
+            />
+            <button
+              type="submit"
+              className="outline outline-primary outline-2 text-white bg-primary px-4 py-1 rounded-lg cursor-pointer"
+              disabled={
+                location.state?.from === "/member" && !password ? true : false
+              }
+            >
+              submit
+            </button>
+          </div>
         </Form>
       )}
     </Formik>
