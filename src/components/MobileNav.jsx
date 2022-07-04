@@ -58,7 +58,7 @@ function MobileNav({ user }) {
                 Hello
                 {user?.fullname !== undefined
                   ? ` ${user?.fullname.split(" ")[0]}`
-                  : ""}
+                  : " You"}
               </p>
               <p
                 className={`text-sm ${
@@ -67,7 +67,7 @@ function MobileNav({ user }) {
                     : "text-accent-red"
                 }`}
               >
-                {user?.member_status ? user.member_status : "status"}
+                {user?.member_status ? user.member_status : "Not Registered"}
               </p>
             </div>
             <div>
