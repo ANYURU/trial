@@ -12,6 +12,7 @@ export default function MemberLoans() {
   useEffect(() => {
     fetch_member_loans().catch(error => console.log(error))
     
+    // Realtime.
     const mySubscription = supabase
     .from('loans')
     .on('*', async ( payload ) => {
@@ -20,7 +21,7 @@ export default function MemberLoans() {
     })
     .subscribe()
     
-    document.title = 'Loans - Bweyogere tuberebumu'
+    // CleanUp.
     return () => supabase.removeSubscription(mySubscription)
   }, [])
 

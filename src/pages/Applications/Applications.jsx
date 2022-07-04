@@ -33,6 +33,14 @@ export default function Applications() {
   const pendingMembers = applications.filter(application => !application.reviewed)
   const rejectedMembers = applications.length - (approvedMembers.length + pendingMembers.length)
 
+  const getApplications = async () => {
+    const { error, data } = await supabase
+      .from("applications")
+      .select()
+      .eq("_type", "membership")
+      .order("created_at", { ascending: false });
+    setApplications(data);
+  };
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);

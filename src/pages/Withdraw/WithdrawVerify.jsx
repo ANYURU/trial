@@ -21,8 +21,10 @@ export default function WithdrawVerify() {
       .from("applications")
       .select()
       .eq("_type", "withdraw")
-      .eq("application_id", id);
-    setWithdraw(data[0]);
+      .eq("application_id", id)
+      .single();
+      
+    setWithdraw(data);
   };
 
   const approveWithdrawTransaction = async () => {
@@ -53,7 +55,7 @@ export default function WithdrawVerify() {
   };
 
   const rejectWithdrawTransaction = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const { data, error } = await supabase.rpc("reject_application", {
         application: id,
@@ -75,7 +77,7 @@ export default function WithdrawVerify() {
 
   console.log(withdraw);
 
-  console.log(withdraw)
+  console.log(withdraw);
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">

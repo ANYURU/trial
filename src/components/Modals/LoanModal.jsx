@@ -4,7 +4,7 @@ import { useAuth } from "../../auth/AuthContext";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import moment from "moment";
 import { IconContext } from "react-icons/lib";
-import AmortizationSchedule from "../AmortizationSchedule"
+import AmortizationSchedule from "../AmortizationSchedule";
 
 export default function LoanModal({ passed, setLoanModal, loan }) {
   const { darkMode } = useAuth();
@@ -53,15 +53,15 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Principal:</p>
-          <p className="font-bold col-span-3">UGX {" "}
-            {currencyFormatter(loan.amount_issued)}
+          <p className="font-bold col-span-3">
+            UGX {currencyFormatter(loan.amount_issued)}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Amount Paid:</p>
-          <p className="font-bold col-span-3">UGX {" "}
-            {currencyFormatter(loan.amount_paid)}
+          <p className="font-bold col-span-3">
+            UGX {currencyFormatter(loan.amount_paid)}
           </p>
         </div>
 
@@ -98,27 +98,41 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
           <p className="font-bold col-span-3">{loan.loan_meta.approved_by}</p>
         </div>
 
-          <h3 className="font-bold">Amortization Schedule</h3>
-          <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
-            <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
-              <tr>
-                <th className="px-3 py-2">Principal</th>
-                <th className="px-3 py-2">Interest</th>
-                <th className="px-3 py-2">Amount to Pay</th>
-                <th className="px-3 py-2">Balance</th>
-              </tr>
-            </thead>
-            {loan.amortization_schedule && 
+        <h3 className="font-bold">Amortization Schedule</h3>
+        <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
+          <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
+            <tr>
+              <th className="px-3 py-2">Principal</th>
+              <th className="px-3 py-2">Interest</th>
+              <th className="px-3 py-2">Amount to Pay</th>
+              <th className="px-3 py-2">Balance</th>
+            </tr>
+          </thead>
+          {loan.amortization_schedule &&
             loan.amortization_schedule.map((amort, index) => (
               <tr key={index}>
-                <td className="px-3 py-2">{currencyFormatter(Math.round(amort.principal * 100)/100)}</td>
-                <td className="px-3 py-2">{currencyFormatter(Math.round(amort.interest * 100)/100)}</td>
-                <td className="px-3 py-2">{currencyFormatter(Math.round(amort.repayment_amount * 100)/100)}</td>
-                <td className="px-3 py-2">{amort.outstanding_balance <=0 ? "0.00" : currencyFormatter(Math.round(amort.outstanding_balance * 100)/100)}</td>
+                <td className="px-3 py-2">
+                  {currencyFormatter(Math.round(amort.principal * 100) / 100)}
+                </td>
+                <td className="px-3 py-2">
+                  {currencyFormatter(Math.round(amort.interest * 100) / 100)}
+                </td>
+                <td className="px-3 py-2">
+                  {currencyFormatter(
+                    Math.round(amort.repayment_amount * 100) / 100
+                  )}
+                </td>
+                <td className="px-3 py-2">
+                  {amort.outstanding_balance <= 0
+                    ? "0.00"
+                    : currencyFormatter(
+                        Math.round(amort.outstanding_balance * 100) / 100
+                      )}
+                </td>
               </tr>
             ))}
-          </table>
-        </div>
+        </table>
+      </div>
     </div>,
     document.getElementById("portal")
   );

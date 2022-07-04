@@ -13,24 +13,75 @@ import { Spinner } from "../../components";
 export default function Dashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
   const [profile] = useOutletContext();
-  const [accounts, setAccounts] = useState({})
+  const [myShares, setMyShares] = useState(0);
+  const [saccosShares, setSaccosShares] = useState(0);
+  const [weeklyShares, setWeeklyShares] = useState({
+    Mon: 0,
+    Tue: 0,
+    Wed: 0,
+    Thu: 0,
+    Fri: 0,
+    Sat: 0,
+    Sun: 0,
+  });
 
   useEffect(() => {
     document.title = "Dashboard - Bweyogere tuberebumu";
-    get_account_information()
-      .then((data) => {
-        if (data) {
-          setAccounts(data);
-          // setLoading(false);
-        }
-      })
+
+    get_total_shares()
+      .then((shares) => setSaccosShares(shares))
       .catch((error) => console.log(error));
+    get_weekly_shares()
+      .then((weekly_shares) => setWeeklyShares(weekly_shares))
+      .catch((error) => console.log(error));
+
+    // Realtime
+    const mySubscription = supabase
+      .from("transactions")
+      .on("*", async (payload) => {
+        console.log(payload);
+        await get_total_shares()
+          .then((shares) => setSaccosShares(shares))
+          .catch((error) => console.log(error));
+        await get_weekly_shares()
+          .then((weekly_shares) => setWeeklyShares(weekly_shares))
+          .catch((error) => console.log(error));
+      })
+      .subscribe();
+
+    return () => supabase.removeSubscription(mySubscription);
   }, []);
 
-  const get_account_information = async () => {
-    const { data, error } = await supabase.rpc("get_accounts_information", {});
+  const get_total_shares = async () => {
+    const { data, error } = await supabase.rpc("fetch_total_shares");
     if (error) throw error;
+    console.log(data);
     return data;
+  };
+
+  const get_weekly_shares = async () => {
+    const { data, error } = await supabase.rpc("fetch_weekly_shares");
+    if (error) throw error;
+    console.log(data);
+    let obj = {
+      Mon: 0,
+      Tue: 0,
+      Wed: 0,
+      Thu: 0,
+      Fri: 0,
+      Sat: 0,
+      Sun: 0,
+    };
+
+    if (data?.length > 0) {
+      for (let deposit of data) {
+        if (deposit && deposit?.shares) {
+          obj[deposit.day] += deposit.shares;
+        }
+      }
+    }
+
+    return obj;
   };
 
   const data = {
@@ -38,7 +89,7 @@ export default function Dashboard() {
     responsive: true,
     datasets: [
       {
-        data: [300, 50],
+        data: [saccosShares, myShares],
         backgroundColor: chartColors,
         hoverBackgroundColor: chartColors,
       },
@@ -47,11 +98,11 @@ export default function Dashboard() {
   };
 
   const data2 = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    labels: Object.keys(weeklyShares),
     datasets: [
       {
         label: "Performance",
-        data: [33, 53, 85, 41, 44, 65, 34],
+        data: Object.values(weeklyShares),
         fill: false,
         borderColor: "#27427A",
       },
@@ -94,17 +145,23 @@ export default function Dashboard() {
     cutoutPercentage: 25,
   };
 
-  if(profile.roles){
-    if(!profile?.roles.includes("super_admin")){
+  if (profile.roles) {
+    if (!profile?.roles.includes("super_admin")) {
       return (
-        <div className={`mx-5 mb-2 my-2 md:h-[calc(100vh-70px)] ${matches && "overflow-y-hidden"}`}>
+        <div
+          className={`mx-5 mb-2 my-2 md:h-[calc(100vh-70px)] ${
+            matches && "overflow-y-hidden"
+          }`}
+        >
           {/* Account Summaries */}
-          {Object.keys(profile).length > 0 && !profile?.fullname && <RegistrationModal />}
+          {Object.keys(profile).length > 0 && !profile?.fullname && (
+            <RegistrationModal />
+          )}
           <div className="">
             <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
               Dashboard
             </h1>
-            <AccSummary accounts={accounts} />
+            <AccSummary setMyShares={setMyShares} />
           </div>
           <div className="flex flex-col flex-grow mt-5 mb-5 overflow-x-hidden">
             <h1 className="text-center font-semibold mb-5 dark:text-secondary-text">
@@ -133,19 +190,10 @@ export default function Dashboard() {
           </div>
         </div>
       );
-    }
-    else {
-      return (
-        <SuperAdDashboard />
-      )
+    } else {
+      return <SuperAdDashboard />;
     }
   } else {
-    return (
-      <Spinner />
-    )
+    return <Spinner />;
   }
-
-  
-
-  
 }

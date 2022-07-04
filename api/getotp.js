@@ -84,6 +84,7 @@ export default async (req, res) => {
                 
                 sendCodeToPhone(phone_number, phone_message)
                     .then( data => {
+                        console.log(data)
                         return res.json( { "Status": "Success", "Details": encoded } ) 
 
                     })
