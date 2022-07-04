@@ -16,7 +16,7 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
     : "member";
 
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [disabled] = useState(!(user || user?.roles));
+  const [disabled] = useState(!user?.roles);
   const lit = menuData[`${role}`]
     .filter((item) => item.sublinks && item.sublinks)
     .map((item) => item.sublinks && item.sublinks);
@@ -29,7 +29,11 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
     >
       {menuData[`${role}`].map((item, index) => (
         <React.Fragment key={index}>
-          <div className="px-2">
+          <div
+            className={`${
+              disabled && item?.link !== "dashboard" && `cursor-not-allowed`
+            }`}
+          >
             <NavLink
               key={item.link}
               to={`/${item.link}`}
@@ -44,7 +48,6 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
                 setSelectedIndex(index);
               }}
             >
-              
               <div className="flex items-center dark:text-secondary-text ">
                 <IconContext.Provider
                   value={{ className: `font-bold text-lg` }}
@@ -55,13 +58,14 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
                   <span className="font-semibold">{item.label}</span>
                 )}
               </div>
-              
+
               {!showSidebar && (
                 <div className="relative hidden group-hover:block">
                   <div className="absolute text-white left-[12px] -top-2 bg-black z-50 rounded p-1 bg-opacity-90 before:block before:absolute before:-inset-1 before:rotate-45 before:w-2 before:h-2 before:top-3 before:-left-1	 before:bg-black before:bg-opacity-90 before:z-90">
                     <div className="px-2">{item.label}</div>
 
-                    {index > 0 && role !== "super_admin" &&
+                    {index > 0 &&
+                      role !== "super_admin" &&
                       index < menuData[`${role}`].length - 1 &&
                       lit[index - 1].map((item, index) => (
                         <div className="mx-2 rounded-md py-1 px-2 cursor-pointer dark:text-secondary-text text-sm">
@@ -90,7 +94,8 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
               )}
             </NavLink>
           </div>
-          {showSidebar && role !== "super_admin" &&
+          {showSidebar &&
+            role !== "super_admin" &&
             index === selectedIndex &&
             index > 0 &&
             index < menuData[`${role}`].length - 1 && (
@@ -108,24 +113,24 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
             )}
         </React.Fragment>
       ))}
-        <div
-          className={`fixed bottom-0 flex h-14 justify-center items-center gap-4 dark:text-secondary-text cursor-pointer hover:bg-accent ${
-            showSidebar ? "w-[260px]" : "w-[80px]"
-          } dark:hover:bg-dark-bg-600 border-t-2 border-t-accent dark:border-t-dark-bg-600`}
-          onClick={() => {
-            localStorage.setItem("sidebarCollapsed", showSidebar);
-            setShowSidebar(!showSidebar);
-          }}
+      <div
+        className={`fixed bottom-0 flex h-14 justify-center items-center gap-4 dark:text-secondary-text cursor-pointer hover:bg-accent ${
+          showSidebar ? "w-[260px]" : "w-[80px]"
+        } dark:hover:bg-dark-bg-600 border-t-2 border-t-accent dark:border-t-dark-bg-600`}
+        onClick={() => {
+          localStorage.setItem("sidebarCollapsed", showSidebar);
+          setShowSidebar(!showSidebar);
+        }}
+      >
+        <i
+          className={`${
+            showSidebar ? "" : "rotate-180"
+          } transition ease-in-out`}
         >
-          <i
-            className={`${
-              showSidebar ? "" : "rotate-180"
-            } transition ease-in-out`}
-          >
-            <HiOutlineChevronDoubleLeft />
-          </i>
-          {showSidebar && <p>Collapse sidebar</p>}
-        </div>
+          <HiOutlineChevronDoubleLeft />
+        </i>
+        {showSidebar && <p>Collapse sidebar</p>}
+      </div>
     </div>
   );
 }

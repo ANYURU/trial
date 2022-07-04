@@ -1,11 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/images/tube-no-bg.png'
-import { PhoneTextField, PasswordTextField, Submit } from "../../components";
+import { PhoneTextField, PasswordTextField, Submit, Spinner } from "../../components";
 import { Formik, Form } from "formik";
 import { validationSchema } from "../../helpers/validator";
 import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer } from 'react-toastify'
-import { Loader, Spinner } from "../../components";
 import { supabase } from "../../helpers/supabase";
 import { useEffect, useState } from "react";
 
@@ -29,7 +28,6 @@ export default function Login() {
       if ( error ) {
         setLoading(false)
         toast.error(`${error?.message}`, {position: "top-center"})
-        console.log(error)
       } else if ( data ) {
         const { error } = await signIn({
           phone: '256' + phoneNo.slice(1),
@@ -43,6 +41,7 @@ export default function Login() {
           navigate('/dashboard')
         }
       } else {
+        setLoading(false)
         toast.error(`User does not exist.`, {position: "top-center"})
       }
     }).catch(error => console.log(error))

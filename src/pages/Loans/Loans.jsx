@@ -16,19 +16,19 @@ export default function Loan() {
   useEffect(() => {
     document.title = "Loans - Bweyogere tuberebumu";
 
-    supabase
-      .rpc("fetch_loans", {})
-      .then(({ data, error }) => {
-        if (error) {
-          setLoading(false);
-          console.log(error);
-        } else {
-          setLoans(data);
-          setLoading(false);
-        }
+    fetch_loans().catch(error => console.log(error))
+
+    const mySubscription = supabase
+      .from('loans')
+      .on('*', async payload => {
+        console.log(payload)
+        await fetch_loans().catch(error => console.log(error))
       })
-      .catch((error) => console.log(error));
-  }, []);
+      .subscribe()
+
+    return () => supabase.removeSubscription(mySubscription) 
+
+  }, [])
 
   const [loans, setLoans] = useState([]);
   const [loanModal, setLoanModal] = useState(false);
@@ -68,6 +68,17 @@ export default function Loan() {
         setShow(false);
       }
     };
+  }
+
+  const fetch_loans = async () => {
+    const { data, error } = await supabase.rpc("fetch_loans")
+    if ( error ) {
+      setLoading( false )
+      throw error
+    } else {
+      setLoans( data )
+      setLoading( false )
+    }
   }
 
   return (

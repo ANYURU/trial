@@ -3,7 +3,7 @@ import { Form, Formik } from "formik"
 import { member1ValidationSchema } from "../../helpers/validator"
  
 export default function ApplicationPg1({ initialValues, setInitialValues, setPageNumber, pageNumber }) {
-    console.log(initialValues)
+    // console.log(initialValues)
     const { 
         fullname,
         dob, 
@@ -99,7 +99,7 @@ export default function ApplicationPg1({ initialValues, setInitialValues, setPag
                                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][gross_monthly_income]" label="Enter gross income" placeholder="Gross Monthly Income" defaultValue={gross_employed}/>
                                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][appointment_date]" label="Appointment Date" placeholder="07/04/2022" defaultValue={appointment_date} type="date"/>
                                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][payroll_number]" label="Payroll Number" placeholder="Enter payroll No." defaultValue={payroll_number}/>
-                                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][source_of_income]" label="Source of Income" placeholder="-- Select source --" defaultValue={source_of_income}/>
+                                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="income_sources[employed][source_of_income]" label="Source of Income" placeholder="Salary" defaultValue={source_of_income}/>
                                 </div>
                             </div>
                         </>
