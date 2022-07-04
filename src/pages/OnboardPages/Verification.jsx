@@ -12,16 +12,38 @@ import { OTPBox } from "../../components";
 import { Spinner } from "../../components";
 
 function Verification() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const type = location?.state?.type
-  const [ loading, setLoading ] = useState(false)
-  const [ otp, setOtp ] = useState(["", "", "", "", "", ""])
+  const navigate = useNavigate();
+  const location = useLocation();
+  const type = location?.state?.type;
+  const [loading, setLoading] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const { darkMode } = useAuth();
- 
-  const handleSubmit = async (event, values) => {
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  }
+
+    const phoneNumber = localStorage.getItem("phone_number");
+    const verification_key = localStorage.getItem("verification_key");
+    const code = otp.join("");
+
+    verifyOTP(phoneNumber, code, verification_key)
+      .then((response) => response.json())
+      .then((data) => {
+        return data;
+      })
+      .then((data) => {
+        data?.Status === "Failure"
+          ? toast.error(`${data.Details}`, { position: "top-center" })
+          : data?.Status === "Success" &&
+            navigate("/set-password", { state: { type: type } });
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+        setOtp(["", "", "", "", "", ""]);
+      });
+  };
 
   return (
     <div

@@ -20,27 +20,33 @@ export default function WithdrawMembers() {
 
   const navigate = useNavigate();
 
-  const [withdraws, setWithraw] = useState([]);
+  const [withdraws, setWithraws] = useState([]);
 
   const handleWithdraw = (withdrawID) => {
     navigate(`/withdraw/members/${withdrawID}`);
   };
 
   useEffect(() => {
-    getApplications();
+    getApplications().catch(error => console.log(error))
+
+    const mySubscription = supabase
+      .from('applications')
+      .on('*', async ( payload ) => {
+        await getApplications().catch(error => console.log(error))
+      })
+      .subscribe()
+
+    return () => supabase.removeSubscription(mySubscription)
   }, []);
 
-  const [show, setShow] = useState(false);
-
   const getApplications = async () => {
-    const { error, data } = await supabase
-      .from("applications")
-      .select()
-      .eq("_type", "withdraw")
-      .order("created_at", { ascending: false });
+    const { data, error } = await supabase.rpc("fetch_withdraws");
+    if (error) throw error;
 
-    setWithraw(data);
-  };
+    setWithraws(data);
+  }
+
+  const [show, setShow] = useState(false);
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
