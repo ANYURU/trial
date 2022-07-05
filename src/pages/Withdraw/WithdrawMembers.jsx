@@ -45,7 +45,7 @@ export default function WithdrawMembers() {
     const { data, error } = await supabase.rpc("fetch_withdraws");
     if (error) throw error;
 
-    setWithraws(data);
+    setWithraws([] ?? data);
   };
 
   //pagination

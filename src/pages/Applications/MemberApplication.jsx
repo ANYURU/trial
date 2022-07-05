@@ -74,6 +74,7 @@ function MemberApplication() {
 
     try {
       if ( location.state.from === "/members" ) {
+
         getOTP( phone_number, "VERIFICATION" )
           .then( response => response.json() )
           .then( data => {
@@ -87,7 +88,8 @@ function MemberApplication() {
       } 
 
       else {
-        const { error } = await supabase
+        console.log('Else started')
+        const { error, data } = await supabase
           .from('applications')
           .insert(
             [
@@ -105,11 +107,14 @@ function MemberApplication() {
             ]
           )
           .single()
+          
 
         if (error) { 
           throw error 
         } else {
+          console.log(data)
           setInitialValues({ values: initialValues })
+          // setLoading(false)
           toast.success(`Membership submitted for review`, {position:'top-center'})
           
           const { data, error } = await supabase

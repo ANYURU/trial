@@ -12,7 +12,21 @@ function SuperAdDashboard() {
     getDeposits();
     getLoans();
     getWithdraws();
-    document.title = "Dashboard - Bweyogere tuberebumu";
+
+    const mySubscription = supabase
+      .from('*')
+      .on('*', async payload => {
+        console.log(payload)
+        await getDeposits()
+        await getMembers()
+        await getLoans()
+        await getWithdraws
+      })
+      .subscribe()
+
+      document.title = "Dashboard - Bweyogere tuberebumu";
+      
+      return () => supabase.removeSubscription(mySubscription) 
   }, []);
 
   const navigate = useNavigate();

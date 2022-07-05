@@ -40,7 +40,7 @@ export default function DepositAdmin() {
     if ( error ) {
       throw error
     } else {
-      setDeposits(data)
+      setDeposits([] ?? data)
     }
   }
 
