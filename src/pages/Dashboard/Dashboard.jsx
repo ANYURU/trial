@@ -55,14 +55,14 @@ export default function Dashboard() {
   const get_total_shares = async () => {
     const { data, error } = await supabase.rpc("fetch_total_shares");
     if (error) throw error;
-    console.log(data);
+    // console.log(data);
     return data;
   };
 
   const get_weekly_shares = async () => {
     const { data, error } = await supabase.rpc("fetch_weekly_shares");
     if (error) throw error;
-    console.log(data);
+    // console.log(data);
     let obj = {
       Mon: 0,
       Tue: 0,
@@ -153,7 +153,7 @@ export default function Dashboard() {
             matches && "overflow-y-hidden"
           }`}
         >
-          {/* Account Summaries */}
+
           {Object.keys(profile).length > 0 && !profile?.fullname && (
             <RegistrationModal />
           )}
@@ -193,7 +193,54 @@ export default function Dashboard() {
     } else {
       return <SuperAdDashboard />;
     }
-  } else {
-    return <Spinner />;
+  }
+  else {
+    if(profile?.error) {
+      return (
+        <div
+          className={`mx-5 mb-2 my-2 md:h-[calc(100vh-70px)] ${
+            matches && "overflow-y-hidden"
+          }`}
+        >
+
+          {Object.keys(profile).length > 0 && !profile?.fullname && (
+            <RegistrationModal />
+          )}
+          <div className="">
+            <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
+              Dashboard
+            </h1>
+            <AccSummary setMyShares={setMyShares} />
+          </div>
+          <div className="flex flex-col flex-grow mt-5 mb-5 overflow-x-hidden">
+            <h1 className="text-center font-semibold mb-5 dark:text-secondary-text">
+              Member Performance
+            </h1>
+            <div
+              className={`flex gap-5 flex-grow ${
+                !matches && "flex-col w-full justify-center"
+              }`}
+            >
+              <div
+                className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md justify-center items-center`}
+              >
+                <div>
+                  <Line data={data2} options={options2} />
+                </div>
+              </div>
+              <div
+                className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md justify-center items-center`}
+              >
+                <div>
+                  <Doughnut data={data} options={options} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return <Spinner />;
+    }
   }
 }

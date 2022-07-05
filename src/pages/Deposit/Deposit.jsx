@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import DepositModal from "../../components/Modals/DepositModal";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { useOutletContext } from "react-router-dom";
 
 export default function Deposit() {
 
@@ -15,10 +16,18 @@ export default function Deposit() {
   const [account, setAccount] = useState("");
 
   useEffect(() => {
-    document.title = 'Deposit - Bweyogere tuberebumu'
-    getDeposits()
+    document.title = "Deposit - Bweyogere tuberebumu";
+    getApplications();
 
     const mySubscription = supabase
+      .from("applications")
+      .on("*", async (payload) => {
+        console.log(payload);
+        await getApplications();
+      })
+    getDeposits()
+
+    const mySubscriptions = supabase
       .from('transactions')
       .on('*', async payload => {
         console.log(payload)
@@ -26,10 +35,25 @@ export default function Deposit() {
       })
       .subscribe()
 
-      return () => supabase.removeSubscription(mySubscription) 
-  }, [])
 
-  const [ date, setDate ] = useState(null)
+    return () => supabase.removeSubscription(mySubscription);
+  }, []);
+
+  const [profile] = useOutletContext();
+
+  const [date, setDate] = useState(null);
+
+  const getApplications = async () => {
+    const { data } = await supabase
+      .from("transactions")
+      .select()
+      .eq("_type", "deposit")
+      .eq("created_by", profile.id)
+      .order("created_at", { ascending: false })
+      console.log(data)
+    setDeposits(data && data.length > 0 ? data : null);
+  };
+
 
   const getDeposits = async () => {
     const { data, error } = await supabase.rpc("fetch_deposits")
@@ -205,7 +229,7 @@ export default function Deposit() {
               />
             </div>
           </>
-        ) : deposits?.length !== 0 && filteredDeposits === null ? (
+        ) : deposits === null || deposits?.length !== 0 && filteredDeposits === null ? (
           <NothingShown />
         ) : (
           <Spinner />

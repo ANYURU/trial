@@ -79,22 +79,22 @@ export default function MemberModal({
         )}
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Member ID:</p>
-          <p className="font-bold col-span-3">{member.id}</p>
+          <p className="col-span-2">Member ID</p>
+          <p className="font-bold col-span-3">: {member.id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Email:</p>
-          <p className="font-bold col-span-3">{member.email_address}</p>
+          <p className="col-span-2">Email</p>
+          <p className="font-bold col-span-3">: {member.email_address}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Phone Number:</p>
-          <p className="font-bold col-span-3">{member.phone_number}</p>
+          <p className="col-span-2">Phone Number</p>
+          <p className="font-bold col-span-3">: {member.phone_number}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 w-full">
-          <p className="col-span-2">Member Status:</p>
+          <p className="col-span-2">Member Status</p>
           <p className="font-bold col-span-3">
             <span
               className={` py-1 px-2 rounded-xl text-white ${
@@ -109,18 +109,18 @@ export default function MemberModal({
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 w-full">
-          <p className="col-span-2">Marital Status:</p>
-          <p className="font-bold col-span-3">{member.marital_status}</p>
+          <p className="col-span-2">Marital Status</p>
+          <p className="font-bold col-span-3">: {member.marital_status}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 w-full">
-          <p className="col-span-2">Gender:</p>
-          <p className="font-bold col-span-3">{member.gender}</p>
+          <p className="col-span-2">Gender</p>
+          <p className="font-bold col-span-3">: {member.gender}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 w-full">
-          <p className="col-span-2">NIN/passport:</p>
-          <p className="font-bold col-span-3">{member.id_passport_number}</p>
+          <p className="col-span-2">NIN/passport</p>
+          <p className="font-bold col-span-3">: {member.id_passport_number}</p>
         </div>
       </div>
     </div>,

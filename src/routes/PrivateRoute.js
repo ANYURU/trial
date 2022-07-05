@@ -64,7 +64,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         </div>
                       ) : (
                         <ErrorBoundary>
-                          <Outlet context={[profile, setProfile]} />
+                          <Outlet context={[user, profile, setProfile]} />
                         </ErrorBoundary>
                       )
                     ) : (

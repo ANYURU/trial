@@ -1,22 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowDown, MdNotifications } from "react-icons/md";
 import { useAuth } from "../auth/AuthContext";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import ProfileModal from "./Modals/ProfileModal";
 import logo from "../assets/images/tube.svg";
 import { object } from "yup";
+import NotificationContext from "./Modals/NotificationContext";
 
 function Navbar({ user, showSidebar }) {
   const [show, setShow] = useState(false);
+  const [showNote, setShowNote] = useState(false);
   const { darkMode, toggleDarkMode } = useAuth();
   const navigate = useNavigate();
   const [imageLoad, setImageLoad] = useState(false);
 
-  if (show) {
+  if (show || showNote) {
     window.onclick = (event) => {
       if (!event.target.matches(".dialog")) {
         setShow(false);
+        setShowNote(false);
       }
     };
   }
@@ -25,7 +28,11 @@ function Navbar({ user, showSidebar }) {
     <div
       className={` dark:bg-dark-bg-700 z-20 bg-white fixed top-0 right-0 h-[65px] flex border-b-2 border-b-accent dark:border-b-dark-bg-600 navbar justify-between items-center p-2`}
     >
-      <div className={`${!imageLoad && "animate-pulse bg-accent"} pl-4 w-[80px] h-10 `}>
+      <div
+        className={`${
+          !imageLoad && "animate-pulse bg-accent"
+        } pl-4 w-[80px] h-10 `}
+      >
         <img
           src={logo}
           alt="tube"
@@ -46,13 +53,23 @@ function Navbar({ user, showSidebar }) {
         </div>
       )}
       <div className="flex items-center">
-        <div className="mx-3">
+        <div className="mx-2">
           <DarkModeSwitch
             style={{ marginBottom: "0" }}
             checked={darkMode}
             onChange={() => toggleDarkMode()}
-            size={30}
+            size={25}
           />
+        </div>
+        <div
+          className="mx-3 cursor-pointer relative dark:text-white"
+          onClick={(event) => {
+            setShowNote(!showNote);
+            event.stopPropagation();
+          }}
+        >
+          <MdNotifications size={25} />
+          <NotificationContext show={showNote} />
         </div>
         <div
           className="flex items-end relative mr-5"

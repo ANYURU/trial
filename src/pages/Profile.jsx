@@ -7,6 +7,7 @@ import { supabase } from "../helpers/supabase";
 import { toast, ToastContainer } from "react-toastify";
 import EditModal from "../components/EditModal";
 import { Spinner } from "../components";
+import { useAuth } from "../auth/AuthContext";
 
 function Profile() {
   useEffect(() => {
@@ -16,16 +17,26 @@ function Profile() {
   const [popUp, setPopUp] = useState(false);
   const [editPop, setEditPop] = useState(false);
   const [profile] = useOutletContext();
+  const initialValues = {
+    ...profile,
+    password: "",
+  };
   const { id } = supabase.auth.user();
+  const { signOut } = useAuth();
 
   const handleTermination = (event, values) => {
     event.preventDefault();
+    console.log(values);
     supabase
       .rpc("check_password", {
         current_password: values.password,
         _user_id: id,
       })
-      .then(async ({ data }) => {
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+
         if (data) {
           setPopUp(true);
         } else {
@@ -71,6 +82,26 @@ function Profile() {
     document.changePasswordForm.reset();
   };
 
+  const teminate = async () => {
+    const { data: result, error } = await supabase
+      .from("users")
+      .update({ deleted: true })
+      .match({ id: id })
+      .single();
+
+    if (error) throw error;
+    if (result) {
+      const { phone_number } = result;
+
+      console.log(phone_number.slice(3));
+      const { data, error } = await supabase.auth.update({
+        phone: `${phone_number.slice(3)}000`,
+      });
+      if (error) throw console.log(error);
+      await signOut();
+    }
+  };
+
   return (
     <div className="mx-5 mt-2 h-[calc(100vh-70px)]">
       <div className="flex flex-col justify-between pb-3 h-[60px]">
@@ -79,7 +110,7 @@ function Profile() {
         </h1>
       </div>
       <ToastContainer />
-      <div className="bg-white p-6 overflow-y-auto  md:h-[calc(100%-65px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-6 overflow-y-auto dark:text-secondary-text  md:h-[calc(100%-65px)] dark:bg-dark-bg-700">
         {profile?.fullname ? (
           <>
             <h1 className="font-semibold mb-3">Profile Details</h1>
@@ -142,7 +173,11 @@ function Profile() {
               <div className="grid grid-cols-5 gap-2 mb-2">
                 <p className=" col-span-2">Position in the SACCO</p>
                 <p className="font-bold col-span-3">
-                  {profile?.position_in_sacco}
+                  {profile.roles.includes("super_admin")
+                    ? "Super Admin"
+                    : profile.roles.includes("admin")
+                    ? "Admin"
+                    : "Member"}
                 </p>
               </div>
             </section>
@@ -267,7 +302,14 @@ function Profile() {
                               >
                                 Cancel
                               </button>
-                              <button className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white">
+                              <button
+                                className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white"
+                                onClick={() =>
+                                  teminate().then((response) =>
+                                    console.log(response)
+                                  )
+                                }
+                              >
                                 Terminate
                               </button>
                             </div>

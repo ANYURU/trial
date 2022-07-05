@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowDown, MdNotifications } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoCloseSharp } from "react-icons/io5";
 import MobileMenu from "./MobileMenu";
@@ -8,23 +8,39 @@ import ProfileModal from "./Modals/ProfileModal";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { useAuth } from "../auth/AuthContext";
 import { IconContext } from "react-icons/lib";
+import NotificationContext from "./Modals/NotificationContext";
 
 function MobileNav({ user }) {
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState(false);
+  const [showNote, setShowNote] = useState(false);
   const { darkMode, toggleDarkMode } = useAuth();
 
   const [show, setShow] = useState(false);
-  if (show === true) {
+  if (show || showNote) {
     window.onclick = function (event) {
       if (!event.target.matches(".dialog")) {
         setShow(false);
       }
     };
   }
+
+  const [scrolled, setScrolled] = useState(false);
+  window.addEventListener("scroll", (e) => {
+    if (window.pageYOffset > 0) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  });
+
   return (
-    <div className="fixed flex justify-between z-30 top-0 right-0 left-0 h-[70px] items-center mobile-navbar bg-white dark:bg-dark-bg-700 dark:text-white">
+    <div
+      className={`fixed flex justify-between z-30 top-0 right-0 left-0 h-[70px] items-center ${
+        scrolled ? "mobile-navbar" : ""
+      } bg-white dark:bg-dark-bg-700 dark:text-white`}
+    >
       <div
         onClick={() => {
           setShowMenu(!showMenu);
@@ -46,6 +62,16 @@ function MobileNav({ user }) {
           />
         </div>
         <div
+          className="mx-3 cursor-pointer relative dark:text-white"
+          onClick={(event) => {
+            setShowNote(!showNote);
+            event.stopPropagation();
+          }}
+        >
+          <MdNotifications size={25} />
+          <NotificationContext show={showNote} />
+        </div>
+        <div
           className="flex items-end relative mr-2 dialog"
           onClick={(event) => {
             setShow(!show);
@@ -58,7 +84,7 @@ function MobileNav({ user }) {
                 Hello
                 {user?.fullname !== undefined
                   ? ` ${user?.fullname.split(" ")[0]}`
-                  : ""}
+                  : " You"}
               </p>
               <p
                 className={`text-sm ${
@@ -67,7 +93,7 @@ function MobileNav({ user }) {
                     : "text-accent-red"
                 }`}
               >
-                {user?.member_status ? user.member_status : "status"}
+                {user?.member_status ? user.member_status : "Not Registered"}
               </p>
             </div>
             <div>

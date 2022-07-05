@@ -39,8 +39,6 @@ export default function WithdrawMembers() {
     return () => supabase.removeSubscription(mySubscription)
   }, []);
 
-  const [show, setShow] = useState(false);
-
   const getApplications = async () => {
     const { data, error } = await supabase.rpc("fetch_withdraws");
     if (error) throw error;
