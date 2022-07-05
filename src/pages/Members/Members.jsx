@@ -23,7 +23,8 @@ export default function Members() {
         await fetch_members().catch(error => console.log(error))
       })
       .subscribe()
-    
+
+    return () => supabase.removeSubscription(mySubscription)
   }, [])
 
   const fetch_members = async () => {
@@ -31,7 +32,7 @@ export default function Members() {
     if( error ) throw error
     if( data ) { 
       console.log( data )
-      const dataArray = data.filter( member => member.roles )
+      const dataArray = data.filter( member => member.roles && member.roles.includes('member') )
       dataArray.length === 0 ? setMembers( null ) : setMembers( dataArray )
     }
   }

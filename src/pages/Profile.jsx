@@ -7,6 +7,7 @@ import { supabase } from "../helpers/supabase";
 import { toast, ToastContainer } from "react-toastify";
 import EditModal from "../components/EditModal";
 import { Spinner } from "../components";
+import { useAuth } from "../auth/AuthContext";
 
 function Profile() {
   useEffect(() => {
@@ -17,6 +18,7 @@ function Profile() {
   const [editPop, setEditPop] = useState(false);
   const [profile] = useOutletContext();
   const { id } = supabase.auth.user();
+  const { signOut } = useAuth();
 
   const handleTermination = (event, values) => {
     event.preventDefault();
@@ -267,7 +269,24 @@ function Profile() {
                               >
                                 Cancel
                               </button>
-                              <button className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white">
+                              <button 
+                                className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white"
+                                onClick={async (event) => {
+                                  event.preventDefault()
+                                  console.log('Termination started')
+                                  const { data, error } = await supabase.rpc("self_terminate")
+                                  if ( error ) { 
+                                    console.log(error) 
+                                  } else {
+                                    console.log( data )
+                                    if( data?.data ) {
+                                      // signout
+                                      setPopUp(false)
+                                      await signOut()
+                                    }
+                                  }
+                                }}
+                              >
                                 Terminate
                               </button>
                             </div>
