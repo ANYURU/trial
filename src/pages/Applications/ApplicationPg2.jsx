@@ -75,7 +75,9 @@ function ApplicationPg2({
   const {
     user: { id: applicants_id },
   } = useAuth();
-  const {1:profile, 2:setProfile} = useOutletContext();
+  const [user, profile, setProfile] = useOutletContext();
+  console.log(profile)
+  console.log(setProfile)
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {

@@ -7,7 +7,7 @@ import { useOutletContext } from "react-router-dom"
 
 export default function LoanPaymentVerify() {
   const { id } = useParams()
-  const { 1: profile } = useOutletContext() 
+  const [ user, profile] = useOutletContext() 
   const [ loanPaymentApplication, setLoanPaymentApplication ] = useState(null)
   const [ imageURL, setImageURL ] = useState('')
 

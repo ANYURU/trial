@@ -17,8 +17,8 @@ export default function WithdrawMembers() {
   const [searchText, setSearchText] = useState("");
   const [date, setDate] = useState(null);
   const [withdrawModal, setWithdrawModal] = useState(false);
-
-  const [show, setShow ] = useState(false);
+  const [show, setShow ] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const navigate = useNavigate();
 
@@ -46,6 +46,7 @@ export default function WithdrawMembers() {
     if (error) throw error;
 
     setWithraws([] ?? data);
+    setLoading(false)
   };
 
   //pagination
@@ -329,7 +330,7 @@ export default function WithdrawMembers() {
               />
             </div>
           </>
-        ) : withdraws.length === 0 && withdraws !== null ? (
+        ) : loading ? (
           <Spinner />
         ) : (
           <NothingShown />

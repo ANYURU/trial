@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import { InputField } from "./Form/CustomInputField";
 
 function EditModal({ setEditPop }) {
-  const { 1: profile } = useOutletContext();
+  const [user, profile, setProfile ]= useOutletContext();
   const initialValues = {
     ...profile,
     password: "",

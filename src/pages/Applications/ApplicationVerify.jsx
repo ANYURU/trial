@@ -11,7 +11,7 @@ function ApplicationVerify({ values, password, setPassword, setInitialValues }) 
     console.log(values)
     const [ otp, setOtp ] = useState(["", "", "", "", "", ""])
     const { phone_number } = values
-    const {1: { fullname: administrator }} = useOutletContext()
+    const [user, { fullname: administrator } ]= useOutletContext()
     const navigate = useNavigate()
     const defaultInitialValues = {
         fullname:'',

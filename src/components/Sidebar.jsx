@@ -6,7 +6,7 @@ import { IconContext } from "react-icons/lib";
 import { useMediaQuery } from "../hooks";
 import { HiOutlineChevronDoubleLeft } from "react-icons/hi";
 
-export default function Sidebar({ user, showSidebar, setShowSidebar }) {
+export default function Sidebar({ user, showSidebar, setShowSidebar, disabled }) {
   const role = !user
     ? "member"
     : user?.roles && user?.roles.includes("admin")
@@ -15,18 +15,10 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
     ? "super_admin"
     : "member";
 
-  useEffect(() => {
-    setDisabled(!(user?.roles?.length > 0))
-  }, [user])
-
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [disabled, setDisabled ] = useState(true);
   const lit = menuData[`${role}`]
     .filter((item) => item.sublinks && item.sublinks)
     .map((item) => item.sublinks && item.sublinks);
-
-  console.log(disabled)
-  console.log('disabled value', !user?.roles?.length > 0)
 
   return (
     <div

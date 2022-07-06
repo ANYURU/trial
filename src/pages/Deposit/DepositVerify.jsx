@@ -10,7 +10,7 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function DepositVerify() {
   const { id } = useParams();
-  const {1: profile} = useOutletContext();
+  const [user, profile] = useOutletContext();
   const [deposit, setDeposit] = useState(null);
 
   useEffect(() => {

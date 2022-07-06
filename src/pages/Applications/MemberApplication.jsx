@@ -12,7 +12,7 @@ import { Spinner } from "../../components";
 
 function MemberApplication() {
   const [pageNumber, setPageNumber] = useState(1);
-  const {2:setProfile} = useOutletContext();
+  const [user, profile, setProfile] = useOutletContext();
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false)
 

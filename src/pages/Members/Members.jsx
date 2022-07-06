@@ -27,7 +27,7 @@ export default function Members() {
     return () => supabase.removeSubscription(mySubscription)
   }, [])
 
-  const { 1: profile }  = useOutletContext()
+  const [user,  profile ]  = useOutletContext()
 
   const fetch_members = async () => {
     const { data, error } = await supabase.rpc("fetch_members")

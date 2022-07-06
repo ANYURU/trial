@@ -121,7 +121,7 @@ function Profile() {
                 </p>
               </div>
               <div className="grid grid-cols-5 gap-2 mb-2">
-                <p className=" col-span-2">Member Status</p>
+                <p className=" col-span-2">{`${profile?.roles.includes("super_admin") ? 'Super Admin' : 'Member'} Status`}</p>
                 <div className=" col-span-3 flex justify-start">
                   <p
                     className={`${

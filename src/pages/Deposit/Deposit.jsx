@@ -39,7 +39,7 @@ export default function Deposit() {
     return () => supabase.removeSubscription(mySubscription);
   }, []);
 
-  const {1:profile} = useOutletContext();
+  const [user, profile] = useOutletContext();
 
   const [date, setDate] = useState(null);
 

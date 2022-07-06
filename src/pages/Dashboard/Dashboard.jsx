@@ -12,7 +12,7 @@ import { Spinner } from "../../components";
 
 export default function Dashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
-  const [ profile ] = useOutletContext();
+  const [user, profile ] = useOutletContext();
   const [myShares, setMyShares] = useState(0);
   const [saccosShares, setSaccosShares] = useState(0);
   const [weeklyShares, setWeeklyShares] = useState({

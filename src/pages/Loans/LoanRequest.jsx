@@ -13,7 +13,7 @@ import { Stepper } from "../../components";
 
 function LoanRequest() {
   const [pageNumber, setPageNumber] = useState(1);
-  const {1: profile} = useOutletContext();
+  const [user, profile] = useOutletContext();
 
   const [initialValues, setInitialValues] = useState({
     applicant_name: profile.fullname,
