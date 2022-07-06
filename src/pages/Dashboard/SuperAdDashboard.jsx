@@ -5,13 +5,10 @@ import { supabase } from "../../helpers/supabase";
 import { useNavigate } from "react-router-dom";
 import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 import { useAuth } from "../../auth/AuthContext";
-import { useOutletContext } from "react-router-dom";
 
 function SuperAdDashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
   const { user } = useAuth()
-  const { 0: profile } = useOutletContext()
-  console.log('here')
 
   useEffect(() => {
     getMembers();
@@ -22,7 +19,6 @@ function SuperAdDashboard() {
     const mySubscription = supabase
       .from('*')
       .on('*', async payload => {
-        console.log(payload)
         await getDeposits()
         await getMembers()
         await getLoans()
@@ -71,7 +67,7 @@ function SuperAdDashboard() {
       (member) => member.roles && member?.roles.includes("admin")
     );
     dataArray.length === 0 ? setAdmins(null) : setAdmins(dataArray);
-    setMembers(data.length);
+    setMembers(data.length - dataArray.length);
   };
 
   return (

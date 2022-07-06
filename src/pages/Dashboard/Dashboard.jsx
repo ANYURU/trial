@@ -13,7 +13,6 @@ import { Spinner } from "../../components";
 export default function Dashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
   const [ profile ] = useOutletContext();
-  console.log(profile)
   const [myShares, setMyShares] = useState(0);
   const [saccosShares, setSaccosShares] = useState(0);
   const [weeklyShares, setWeeklyShares] = useState({
@@ -40,7 +39,6 @@ export default function Dashboard() {
     const mySubscription = supabase
       .from("transactions")
       .on("*", async (payload) => {
-        console.log(payload);
         await get_total_shares()
           .then((shares) => setSaccosShares(shares))
           .catch((error) => console.log(error));
@@ -56,14 +54,12 @@ export default function Dashboard() {
   const get_total_shares = async () => {
     const { data, error } = await supabase.rpc("fetch_total_shares");
     if (error) throw error;
-    // console.log(data);
     return data;
   };
 
   const get_weekly_shares = async () => {
     const { data, error } = await supabase.rpc("fetch_weekly_shares");
     if (error) throw error;
-    // console.log(data);
     let obj = {
       Mon: 0,
       Tue: 0,
@@ -146,12 +142,8 @@ export default function Dashboard() {
     cutoutPercentage: 25,
   };
 
-  console.log("running")
-  console.log(profile.roles)
   if (profile?.roles) {
-    console.log("here")
     if (!profile?.roles.includes("super_admin")) {
-      console.log("if run")
       return (
         <div
           className={`mx-5 mb-2 my-2 md:h-[calc(100vh-70px)] ${
@@ -196,7 +188,6 @@ export default function Dashboard() {
         </div>
       );
     } else {
-      console.log('else run')
       return <SuperAdDashboard />;
     }
   }
