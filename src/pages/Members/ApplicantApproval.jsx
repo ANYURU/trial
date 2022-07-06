@@ -3,6 +3,7 @@ import { supabase } from "../../helpers/supabase";
 import { useState, useEffect } from "react";
 import { Spinner } from "../../components";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function ApplicantApproval() {
   const { id } = useParams();

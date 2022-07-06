@@ -18,6 +18,8 @@ export default function WithdrawMembers() {
   const [date, setDate] = useState(null);
   const [withdrawModal, setWithdrawModal] = useState(false);
 
+  const [show, setShow ] = useState(false);
+
   const navigate = useNavigate();
 
   const [withdraws, setWithraws] = useState([]);
@@ -38,8 +40,6 @@ export default function WithdrawMembers() {
 
     return () => supabase.removeSubscription(mySubscription)
   }, []);
-
-  const [show, setShow] = useState(false);
 
   const getApplications = async () => {
     const { data, error } = await supabase.rpc("fetch_withdraws");

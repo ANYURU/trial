@@ -1,4 +1,4 @@
-import { useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../helpers/supabase";
 import { toast, ToastContainer } from "react-toastify";
@@ -8,7 +8,6 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function WithdrawVerify() {
   const { id } = useParams();
-  const [profile] = useOutletContext();
   const [withdraw, setWithdraw] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -23,8 +22,8 @@ export default function WithdrawVerify() {
       .eq("_type", "withdraw")
       .eq("application_id", id)
       .single();
-      
-    setWithdraw(data);
+
+    setWithdraw(data[0]);
   };
 
   const approveWithdrawTransaction = async () => {
@@ -74,10 +73,6 @@ export default function WithdrawVerify() {
       toast.error(`Try again later`, { position: "top-center" });
     }
   };
-
-  console.log(withdraw);
-
-  console.log(withdraw);
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">

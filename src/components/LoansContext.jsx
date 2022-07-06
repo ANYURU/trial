@@ -8,7 +8,7 @@ export default function LoansContext({
   id,
   setLoanModal,
 }) {
-  const [profile] = useOutletContext();
+  const {1: profile} = useOutletContext();
   const navigate = useNavigate();
 
   return (

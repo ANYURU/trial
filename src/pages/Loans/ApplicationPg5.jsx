@@ -6,7 +6,7 @@ import { getOTP } from '../../helpers/getotp'
 
 
 export default function ApplicationPg5({ fullname, initialValues, setInitialValues, setPageNumber }) {
-    const [{ phone_number }] = useOutletContext()
+    const {1:{ phone_number }} = useOutletContext()
     return (
         <Formik
         initialValues={initialValues}

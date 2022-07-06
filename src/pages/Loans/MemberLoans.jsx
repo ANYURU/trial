@@ -5,7 +5,6 @@ import { FaEllipsisV } from "react-icons/fa";
 import { LoansContext } from "../../components";
 import { LoanModal } from "../../components";
 import moment from "moment";
-import { Helmet } from "react-helmet";
 import { Spinner, NothingShown } from "../../components";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 
@@ -83,7 +82,7 @@ export default function MemberLoans() {
       if (!event.target.matches(".dialog")) {
         setShow(false);
       }
-    };
+    }
   }
 
   const fetch_member_loans = async () => {
@@ -94,9 +93,7 @@ export default function MemberLoans() {
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
-      <Helmet>
-        <title>Loans - Bweyogere tuberebumu</title>
-      </Helmet>
+
       <div className="flex flex-col justify-between pb-3 md:h-[110px]">
         <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
           Member's Loans

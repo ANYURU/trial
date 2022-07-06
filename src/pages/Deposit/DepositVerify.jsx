@@ -10,45 +10,38 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function DepositVerify() {
   const { id } = useParams();
-  const [profile] = useOutletContext();
+  const {1: profile} = useOutletContext();
   const [deposit, setDeposit] = useState(null);
 
   useEffect(() => {
     getApplication();
 
-    // if (deposit) {
-    //     downloadFile(
-    //       deposit.application_meta.files[0].file_url.substring(9),
-    //       "deposits"
-    //     )
-    //       .then((data) => setImageURL(data.avatar_url))
-    //       .catch((error) => error);
-    //   }
   }, []);
 
   const [imageURL, setImageURL] = useState("");
+  const [imageLoad, setImageLoad] = useState(false);
 
-  useEffect(() => {
-    if( !deposit ) {
-      getApplication()
-      .then( async ( data ) => {
-        if( data ) {
-          setDeposit( data )
-          // Downloading the image.
-          if( !imageURL ) {
-            const { data: file, error } = await supabase.storage  
-              .from("deposits")
-              .download(await data.application_meta.files[0].file_url.substring(9))
+  // useEffect(() => {
+  //   if( !deposit ) {
+  //     getApplication()
+      // .then( async ( data ) => {
+      //   if( data ) {
+      //     setDeposit( data )
+      //     // Downloading the image.
+      //     if( !imageURL ) {
+      //       const { data: file, error } = await supabase.storage  
+      //         .from("deposits")
+      //         .download(await data.application_meta.files[0].file_url.substring(9))
 
-            if( error ) throw error
-            const url = URL.createObjectURL(file)
-            setImageURL(url)
-          }
-        }
-      })
-      .catch(error => console.log(error))     
-    }
-  }, [])
+      //       if( error ) throw error
+      //       const url = URL.createObjectURL(file)
+      //       setImageURL(url)
+      //     }
+      //   }
+      // })
+      // .catch(error => console.log(error))     
+  //   }
+  // }, [])
 
   const getApplication = async () => {
     const { error, data } = await supabase.rpc("fetch_deposit_applications")
@@ -117,19 +110,19 @@ export default function DepositVerify() {
           <div className="flex flex-grow flex-col min-h-full">
             <div className="mb-3">
               <h1 className="font-semibold mb-3">
-                {deposit.application_meta.applicants_name}'s Deposit Details
+                {deposit.application_meta && deposit.application_meta.applicants_name}'s Deposit Details
                 <span
                   className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
                     !deposit.reviewed
                       ? "bg-yellow-400"
-                      : deposit.application_meta.review_status === "approved"
+                      : deposit.application_meta && deposit.application_meta.review_status === "approved"
                       ? "bg-green-400"
                       : "bg-red-400"
                   }`}
                 >
                   {!deposit.reviewed
                     ? "Pending"
-                    : deposit.application_meta.review_status === "approved"
+                    : deposit.application_meta && deposit.application_meta.review_status === "approved"
                     ? "Approved"
                     : "Rejected"}
                 </span>
@@ -150,13 +143,13 @@ export default function DepositVerify() {
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Amount</p>
                   <p className="font-bold col-span-3">
-                    : UGX {currencyFormatter(deposit.application_meta.amount)}
+                    : UGX {currencyFormatter(deposit.application_meta && deposit.application_meta.amount)}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Shares</p>
                   <p className="font-bold col-span-3">
-                    : {deposit.application_meta.account_type}
+                    : {deposit.application_meta && deposit.application_meta.account_type}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -177,14 +170,16 @@ export default function DepositVerify() {
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Proof of payment</p>
-                  <p className="font-bold col-span-3">
+                  <div className={`${!imageLoad && "animate-pulse bg-accent"} font-bold col-span-3 w-[200px] h-[250px]`}>
                     <img
                       src={imageURL}
-                      width={200}
+                      // width={200}
+                      className=" w-full h-full"
                       alt="receipt"
                       loading="lazy"
+                      onLoad={() => setImageLoad(true)}
                     />
-                  </p>
+                  </div>
                 </div>
               </div>
             </div>

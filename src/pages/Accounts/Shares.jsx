@@ -1,6 +1,6 @@
 import { supabase } from "../../helpers/supabase";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
 import { useAuth } from "../../auth/AuthContext";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
@@ -29,10 +29,12 @@ function Shares() {
 
   const create_account = async () => {
     try {
-      const { error } = await supabase.rpc("create_fixed_deposit_account", {});
+      const { error } = await supabase.rpc("create_shares_account", {});
       if (error) throw error;
+      console.log("success")
       toast.success(`Account successfully opened`, { position: "top-center" });
     } catch (error) {
+      console.log("failed ", error)
       toast.error(
         `${
           error?.code === "23505"
@@ -49,6 +51,7 @@ function Shares() {
       <Helmet>
         <title>Shares Account - Bweyogere tuberebumu</title>
       </Helmet>
+      <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Shares Account
       </h1>

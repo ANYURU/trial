@@ -14,7 +14,7 @@ function MakeDeposit() {
   const {
     user: { id: applicants_id },
   } = useAuth();
-  const [{ fullname: applicants_name }] = useOutletContext();
+  const {1:{ fullname: applicants_name }} = useOutletContext();
 
   const initialValues = {
     account_type: "",

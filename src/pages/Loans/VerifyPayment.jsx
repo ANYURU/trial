@@ -10,7 +10,7 @@ import moment from "moment";
 
 export default function VerifyPayment() {
   const { id } = useParams();
-  const [profile] = useOutletContext();
+  const {1: profile} = useOutletContext();
 
   useEffect(() => {
     getApplication();

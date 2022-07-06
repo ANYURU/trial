@@ -5,11 +5,14 @@ import { supabase } from "../../helpers/supabase";
 import { useNavigate } from "react-router-dom";
 import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 import { useAuth } from "../../auth/AuthContext";
+import { useOutletContext } from "react-router-dom";
 
 function SuperAdDashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
   const { user } = useAuth()
-  console.log(user)
+  const { 0: profile } = useOutletContext()
+  console.log('here')
+
   useEffect(() => {
     getMembers();
     getDeposits();
@@ -98,7 +101,7 @@ function SuperAdDashboard() {
           }`}
         >
           <div
-            className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col h-[calc(100%-50px)] mr-2 md:mr-0 px-2 py-5 rounded-md items-center`}
+            className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col h-[calc(100%-50px)] mr-2 md:mr-0 px-2 py-5 shadow rounded-md items-center`}
           >
             {admins && admins.length > 0 ? (
               <>
@@ -110,7 +113,6 @@ function SuperAdDashboard() {
                   <tbody>
                     {admins?.map((admin, index) => (
                       <tr className="text-left">
-                        {console.log(admin)}
                         <td className="py-2 px-1">{admin.fullname}</td>
                         <td>{admin.phone_number}</td>
                       </tr>
@@ -129,7 +131,7 @@ function SuperAdDashboard() {
             )}
           </div>
           <div
-            className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md items-center h-[calc(100%-50px)] w-full mr-2 md:mr-0`}
+            className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md items-center h-[calc(100%-50px)] w-full shadow mr-2 md:mr-0`}
           >
             <h1>Accounts Summary</h1>
             <table className="w-full">

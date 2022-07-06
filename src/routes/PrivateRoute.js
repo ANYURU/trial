@@ -26,6 +26,7 @@ const PrivateRoute = ({ allowedRoles }) => {
       .then((data) => {
         if (data) {
           const { roles } = data;
+          console.log(data)
           setRoles(roles);
           setProfile(data);
         }
@@ -33,7 +34,7 @@ const PrivateRoute = ({ allowedRoles }) => {
       .then(() => setLoading(false))
       .catch((error) => console.log(error));
   }, [user?.session]);
-
+  
   return user?.role === "authenticated" ? (
     matches ? (
       <div className={`${darkMode ? "dark" : ""}`}>
@@ -64,7 +65,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         </div>
                       ) : (
                         <ErrorBoundary>
-                          <Outlet context={[profile, setProfile]} />
+                          <Outlet context={[user, profile, setProfile]} />
                         </ErrorBoundary>
                       )
                     ) : (

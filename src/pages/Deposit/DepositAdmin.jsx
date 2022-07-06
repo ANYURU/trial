@@ -15,8 +15,6 @@ export default function DepositAdmin() {
   const [depositModal, setDepositModal] = useState(false);
 
   useEffect(() => {
-    getApplications().catch(error => console.log(error))
-
     const mySubscription = supabase
       .from('applications')
       .on('*', async ( payload ) => {

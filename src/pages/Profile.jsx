@@ -14,9 +14,9 @@ function Profile() {
     document.title = "Profile - Bweyogere tuberebumu";
   }, []);
 
-  const [popUp, setPopUp] = useState(false);
-  const [editPop, setEditPop] = useState(false);
-  const [profile] = useOutletContext();
+  const [ popUp, setPopUp ] = useState(false);
+  const [ editPop, setEditPop ] = useState(false);
+  const { 1: profile } = useOutletContext();
   const { id } = supabase.auth.user();
   const { signOut } = useAuth();
 

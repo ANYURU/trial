@@ -97,13 +97,6 @@ function Accounts() {
                     <td className="px-6 py-4">
                       {accounts?.mwana?.account_status}
                     </td>
-                    {/* <td className="px-5 py-4">
-                      <div className="relative">
-                        <button className="block p-2 rounded-md dialog cursor-context-menu">
-                          <FaEllipsisV />
-                        </button>
-                      </div>
-                    </td> */}
                   </tr>
                 )}
                 {accounts?.fixed && (
@@ -116,13 +109,6 @@ function Accounts() {
                     <td className="px-6 py-4">
                       {accounts?.fixed?.account_status}
                     </td>
-                    {/* <td className="px-5 py-4">
-                      <div className="relative">
-                        <button className="block p-2 rounded-md dialog cursor-context-menu">
-                          <FaEllipsisV />
-                        </button>
-                      </div>
-                    </td> */}
                   </tr>
                 )}
               </tbody>

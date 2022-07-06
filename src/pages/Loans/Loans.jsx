@@ -7,12 +7,11 @@ import { LoansContext } from "../../components";
 import { LoanModal } from "../../components";
 import { useOutletContext } from "react-router-dom";
 import moment from "moment";
-import { Helmet } from "react-helmet";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { Spinner, NothingShown } from "../../components";
 
 export default function Loan() {
-  const [{ id }] = useOutletContext();
+  const {1: { id }} = useOutletContext();
 
   useEffect(() => {
     document.title = "Loans - Bweyogere tuberebumu";
@@ -84,9 +83,6 @@ export default function Loan() {
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
-      <Helmet>
-        <title>Loans - Bweyogere tuberebumu</title>
-      </Helmet>
       <div className="flex flex-col justify-between pb-3 md:h-[110px]">
         <h1 className="mb-5 font-bold uppercase dark:text-white">My Loans</h1>
 

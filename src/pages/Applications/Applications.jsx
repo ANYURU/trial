@@ -5,7 +5,7 @@ import { supabase } from "../../helpers/supabase";
 import { Pagination } from "../../components";
 import { ContextMenu } from "../../components";
 import { MemberModal } from "../../components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Spinner, NothingShown } from "../../components";
 
 export default function Applications() {
@@ -22,12 +22,17 @@ export default function Applications() {
     document.title = "Membership Application - Bweyogere tuberebumu"
   }, [])
 
- 
-
   const [applications, setApplications] = useState([]);
   const [date, setDate] = useState(null);
+  const [searchText, setSearchText] = useState("")
+  const {1: profile } = useOutletContext()
 
   const navigate = useNavigate();
+
+  const [ status, setStatus ] = useState("")
+  const approvedMembers = applications.filter(application => application.application_meta.review_status)
+  const pendingMembers = applications.filter(application => !application.reviewed)
+  const rejectedMembers = applications.length - (approvedMembers.length + pendingMembers.length)
 
   const getApplications = async () => {
     const { error, data } = await supabase
@@ -37,18 +42,6 @@ export default function Applications() {
       .order("created_at", { ascending: false });
     setApplications(data);
   };
-
-  const [status, setStatus] = useState("");
-  const [searchText, setSearchText] = useState("");
-
-  const approvedMembers = applications.filter(
-    (application) => application.application_meta.review_status
-  );
-  const pendingMembers = applications.filter(
-    (application) => !application.reviewed
-  );
-  const rejectedMembers =
-    applications.length - (approvedMembers.length + pendingMembers.length);
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -234,6 +227,7 @@ export default function Applications() {
                             deleteModal={deleteModal}
                             setDeleteModal={setDeleteModal}
                             member={activeIndex === index ? application : null}
+                            profile={profile}
                           />
                         </div>
                       </td>
