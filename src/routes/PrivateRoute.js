@@ -9,6 +9,7 @@ import ErrorBoundary from "../components/ErrorBoundary";
 
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
+  const [ disabled, setDisabled ] = useState(true)
 
   const [showSidebar, setShowSidebar] = useState(
     !JSON.parse(localStorage.getItem("sidebarCollapsed")) || false
@@ -28,12 +29,13 @@ const PrivateRoute = ({ allowedRoles }) => {
           const { roles } = data;
           setRoles(roles);
           setProfile(data);
+          setDisabled(!(roles && roles?.length > 0))
         }
       })
       .then(() => setLoading(false))
       .catch((error) => console.log(error));
   }, [user?.session]);
-
+  
   return user?.role === "authenticated" ? (
     matches ? (
       <div className={`${darkMode ? "dark" : ""}`}>
@@ -48,6 +50,7 @@ const PrivateRoute = ({ allowedRoles }) => {
               user={profile}
               showSidebar={showSidebar}
               setShowSidebar={setShowSidebar}
+              disabled={disabled}
             />
             <div
               className={`${
@@ -82,7 +85,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         <Spinner />
                       ) : (
                         <ErrorBoundary>
-                          <Outlet context={[profile, setProfile]} />
+                          <Outlet context={[user, profile, setProfile]} />
                         </ErrorBoundary>
                       )}
                     </div>
@@ -93,7 +96,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                       <Spinner />
                     ) : (
                       <ErrorBoundary>
-                        <Outlet context={[profile, setProfile]} />
+                        <Outlet context={[user, profile, setProfile]} />
                       </ErrorBoundary>
                     )}
                   </div>

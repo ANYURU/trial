@@ -41,7 +41,7 @@ export default function MemberLoans() {
   let shownloans = !loans || loans.slice(indexOfFirstPage, indexOfLastPage);
 
   shownloans =
-    shownloans.filter((loan) => !status || loan.loan_status === status).length >
+    shownloans?.length && shownloans.filter((loan) => !status || loan.loan_status === status).length >
     0
       ? shownloans.filter((loan) => !status || loan.loan_status === status)
       : null;

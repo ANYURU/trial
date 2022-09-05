@@ -12,7 +12,7 @@ import { Spinner } from "../../components";
 
 export default function Dashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
-  const [profile] = useOutletContext();
+  const [user, profile ] = useOutletContext();
   const [myShares, setMyShares] = useState(0);
   const [saccosShares, setSaccosShares] = useState(0);
   const [weeklyShares, setWeeklyShares] = useState({
@@ -39,7 +39,6 @@ export default function Dashboard() {
     const mySubscription = supabase
       .from("transactions")
       .on("*", async (payload) => {
-        console.log(payload);
         await get_total_shares()
           .then((shares) => setSaccosShares(shares))
           .catch((error) => console.log(error));
@@ -55,14 +54,12 @@ export default function Dashboard() {
   const get_total_shares = async () => {
     const { data, error } = await supabase.rpc("fetch_total_shares");
     if (error) throw error;
-    // console.log(data);
     return data;
   };
 
   const get_weekly_shares = async () => {
     const { data, error } = await supabase.rpc("fetch_weekly_shares");
     if (error) throw error;
-    // console.log(data);
     let obj = {
       Mon: 0,
       Tue: 0,
@@ -145,7 +142,7 @@ export default function Dashboard() {
     cutoutPercentage: 25,
   };
 
-  if (profile.roles) {
+  if (profile?.roles) {
     if (!profile?.roles.includes("super_admin")) {
       return (
         <div

@@ -1,4 +1,4 @@
-import { useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../helpers/supabase";
 import { toast, ToastContainer } from "react-toastify";
@@ -8,7 +8,6 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function WithdrawVerify() {
   const { id } = useParams();
-  const [profile] = useOutletContext();
   const [withdraw, setWithdraw] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +22,7 @@ export default function WithdrawVerify() {
       .eq("_type", "withdraw")
       .eq("application_id", id)
       .single();
-      
+
     setWithdraw(data[0]);
   };
 

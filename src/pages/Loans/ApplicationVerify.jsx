@@ -12,7 +12,7 @@ import { generate_amortization_schedule } from "../../helpers/generateAmortizati
 
 function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
   
-  const [ { phone_number, fullname: applicants_name, user_role } ] = useOutletContext()
+  const [user, { phone_number, fullname: applicants_name, user_role }] = useOutletContext()
   const { user: { id: applicants_id } } = useAuth()
   const { amount, months } = initialValues
   const rate = 3;

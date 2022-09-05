@@ -58,7 +58,7 @@ function Accounts() {
                         "DD-MM-YYYY"
                       )}
                     </td>
-                    <td className="px-6 py-4">{accounts?.savings?.balance}</td>
+                    <td className="px-6 py-4">{accounts?.savings?.account_status}</td>
                     <td className="px-5 py-4">
                       <div className="relative">
                         <button className="block p-2 rounded-md dialog cursor-context-menu">
@@ -77,7 +77,7 @@ function Accounts() {
                         "DD-MM-YYYY"
                       )}
                     </td>
-                    <td className="px-6 py-4">{accounts?.shares?.balance}</td>
+                    <td className="px-6 py-4">{accounts?.shares?.account_status}</td>
                     <td className="px-5 py-4">
                       <div className="relative">
                         <button className="block p-2 rounded-md dialog cursor-context-menu">

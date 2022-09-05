@@ -9,6 +9,7 @@ import { getOTP } from "../../helpers/getotp";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import PasswordGenerator from "../../components/Form/PasswordGenerator";
+import { addMember } from "../../helpers/addMember";
 
 function ApplicationPg2({
   initialValues,
@@ -17,36 +18,107 @@ function ApplicationPg2({
   setPageNumber,
   password,
   setPassword,
-  setLoading,
 }) {
   console.log(initialValues);
+  const defaultInitialValues = {
+    fullname:'',
+    dob:'',
+    gender:'',
+    present_address:'',
+    email_address:'',
+    phone_number:'',
+    id_passport_number:'',
+    marital_status:'',
+    fathers_name:'',
+    fathers_address:'',
+    income_sources: {
+      status:'',
+      employed:{
+        employers_name: '',
+        employers_address:'',
+        position:'',
+        work_station:'',
+        gross_monthly_income:'',
+        appointment_date:'',
+        payroll_number:'',
+        source_of_income:''  
+      }, 
+      business: {
+        business_name: '',
+        business_address: '',
+        business_location: '',
+        other_income_sources: '',
+      }
+    },
+    nominees: [
+      {
+        name:'',
+        id:'',
+        contact:'',
+        dob:'',
+        percentage:''
+      }
+    ],
+    proposed_mode_of_remittances: {
+      standing_order:false,
+      direct_debit:false,
+      date_effective: '',
+      others: ''
+    },
+    proposed_monthly_contributions:'', 
+    amount_in_words:'',
+  }
+
   const { proposed_monthly_contributions, amount_in_words } = initialValues;
 
   const location = useLocation();
   const {
     user: { id: applicants_id },
   } = useAuth();
-  const [profile, setProfile] = useOutletContext();
+  const [user, profile, setProfile] = useOutletContext();
+  console.log(profile)
+  console.log(setProfile)
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    setLoading(true);
+    console.log("Values", values);
     setInitialValues({ ...initialValues, ...values });
     const { fullname: applicants_name, phone_number, ...rest } = values;
 
     try {
       if (location.state?.from === "/members") {
-        getOTP(phone_number, "VERIFICATION")
+        const  { fullname: administrator } = profile
+        // getOTP(phone_number, "VERIFICATION")
+        //   .then((response) => response.json())
+        //   .then((data) => {
+        //     localStorage.setItem("verification_key", data?.Details);
+        //     console.log(values);
+        //     setPageNumber(pageNumber + 1);
+        //     return;
+        //   })
+        //   .catch((error) => console.log(error));
+
+        addMember(
+          `256${phone_number.slice(1)}`,
+          password,
+          values,
+          administrator
+        )
           .then((response) => response.json())
           .then((data) => {
-            localStorage.setItem("verification_key", data?.Details);
-            console.log(values);
-            setPageNumber(pageNumber + 1);
-            setLoading(false);
-            return;
+            console.log(data);
+            toast.success(`Member has successfully been created.`, {
+              position: "top-center",
+            });
+            setPassword("");
+            setInitialValues(defaultInitialValues);
+            navigate(-1);
           })
           .catch((error) => console.log(error));
+
+        // console.log(data);
       } else {
+        console.log("else started");
         const { error, data } = await supabase
           .from("applications")
           .insert([
@@ -68,14 +140,12 @@ function ApplicationPg2({
             },
           ])
           .single();
-
         console.log(data);
 
         if (error) {
-          setLoading(false);
+          console.log(error);
           throw error;
         } else {
-          setLoading(false);
           setInitialValues({ values: initialValues });
           toast.success(`Membership submitted for review`, {
             position: "top-center",

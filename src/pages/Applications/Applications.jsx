@@ -25,7 +25,7 @@ export default function Applications() {
   const [applications, setApplications] = useState([]);
   const [date, setDate] = useState(null);
   const [searchText, setSearchText] = useState("")
-  const [ profile ] = useOutletContext()
+  const [ user, profile, setProfile] = useOutletContext()
 
   const navigate = useNavigate();
 

@@ -17,7 +17,7 @@ export default function Deposit() {
 
   useEffect(() => {
     document.title = "Deposit - Bweyogere tuberebumu";
-    getApplications();
+    getDeposits();
 
     const mySubscription = supabase
       .from("applications")
@@ -39,7 +39,7 @@ export default function Deposit() {
     return () => supabase.removeSubscription(mySubscription);
   }, []);
 
-  const [profile] = useOutletContext();
+  const [user, profile] = useOutletContext();
 
   const [date, setDate] = useState(null);
 
@@ -60,7 +60,7 @@ export default function Deposit() {
       if( error ) {
         throw error
       } else {
-        setDeposits(data)
+        setDeposits(data ?? null)
       }
   }
 
@@ -82,10 +82,10 @@ export default function Deposit() {
     }
   
     let filteredDeposits =
-      !deposits ||
+      deposits &&
       deposits.filter(
         (deposit) => !date || deposit.created_at.substring(0, 10) === date
-      ).length > 0
+      )?.length > 0
         ? deposits.filter(
             (deposit) => !date || deposit.created_at.substring(0, 10) === date
           )

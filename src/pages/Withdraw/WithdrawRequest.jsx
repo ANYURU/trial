@@ -12,7 +12,7 @@ function WithdrawRequest() {
   const {
     user: { id: applicants_id },
   } = useAuth();
-  const [{ fullname: applicants_name }] = useOutletContext();
+  const [user, { fullname: applicants_name }] = useOutletContext();
   const [loading, setLoading] = useState(false);
 
   const initialValues = {

@@ -12,19 +12,20 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function DepositAdmin() {
   const [deposits, setDeposits] = useState([]);
-  const [depositModal, setDepositModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    getApplications().catch((error) => console.log(error));
     const mySubscription = supabase
-      .from('applications')
-      .on('*', async ( payload ) => {
-        await getApplications().catch(error => console.log(error))
+      .from("applications")
+      .on("*", async (payload) => {
+        await getApplications().catch((error) => console.log(error));
       })
-      .subscribe()
-    document.title = 'Deposit Applications - Bweyogere tuberebumu'
+      .subscribe();
+    document.title = "Deposit Applications - Bweyogere tuberebumu";
 
-    return () => supabase.removeSubscription(mySubscription)
-  }, [])
+    return () => supabase.removeSubscription(mySubscription);
+  }, []);
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,14 +34,15 @@ export default function DepositAdmin() {
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage;
 
   const getApplications = async () => {
-    const { data, error } = await supabase.rpc("fetch_deposit_applications")
+    const { data, error } = await supabase.rpc("fetch_deposit_applications");
 
-    if ( error ) {
-      throw error
+    if (error) {
+      throw error;
     } else {
-      setDeposits(data)
+      setDeposits([] ?? data);
+      setLoading(false);
     }
-  }
+  };
 
   const navigate = useNavigate();
 
@@ -205,7 +207,6 @@ export default function DepositAdmin() {
         </div>
         {/* </div> */}
       </div>
-
       <div className="bg-white pb-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {deposits !== null && shownDeposits.length > 0 ? (
           <>
@@ -323,7 +324,7 @@ export default function DepositAdmin() {
               />
             </div>
           </>
-        ) : deposits && deposits.length > 0 ? (
+        ) : !loading > 0 ? (
           <NothingShown />
         ) : (
           <Spinner />

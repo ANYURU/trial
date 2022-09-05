@@ -4,15 +4,31 @@ import { Spinner, Transactions } from "../../components";
 import { supabase } from "../../helpers/supabase";
 import { useNavigate } from "react-router-dom";
 import { HiOutlineChevronDoubleRight } from "react-icons/hi";
+import { useAuth } from "../../auth/AuthContext";
 
 function SuperAdDashboard() {
   const matches = useMediaQuery("(min-width: 800px)");
+  const { user } = useAuth()
+
   useEffect(() => {
     getMembers();
     getDeposits();
     getLoans();
     getWithdraws();
-    document.title = "Dashboard - Bweyogere tuberebumu";
+
+    const mySubscription = supabase
+      .from('*')
+      .on('*', async payload => {
+        await getDeposits()
+        await getMembers()
+        await getLoans()
+        await getWithdraws()
+      })
+      .subscribe()
+
+      document.title = "Dashboard - Bweyogere tuberebumu";
+
+      return () => supabase.removeSubscription(mySubscription) 
   }, []);
 
   const navigate = useNavigate();
@@ -45,13 +61,13 @@ function SuperAdDashboard() {
   };
 
   const getMembers = async () => {
-    const { error, data } = await supabase.from("_member_profiles").select();
+    const { data } = await supabase.from("new_members").select().not('id', 'eq', user.id);
 
     const dataArray = data.filter(
       (member) => member.roles && member?.roles.includes("admin")
     );
     dataArray.length === 0 ? setAdmins(null) : setAdmins(dataArray);
-    setMembers(data.length);
+    setMembers(data.length - dataArray.length);
   };
 
   return (

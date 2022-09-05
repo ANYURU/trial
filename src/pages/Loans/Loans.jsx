@@ -11,7 +11,7 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { Spinner, NothingShown } from "../../components";
 
 export default function Loan() {
-  const [{ id }] = useOutletContext();
+  const [user, { id }] = useOutletContext();
 
   useEffect(() => {
     document.title = "Loans - Bweyogere tuberebumu";

@@ -1,12 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { menuData } from "../helpers/menuData";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IconContext } from "react-icons/lib";
 import { useMediaQuery } from "../hooks";
 import { HiOutlineChevronDoubleLeft } from "react-icons/hi";
 
-export default function Sidebar({ user, showSidebar, setShowSidebar }) {
+export default function Sidebar({ user, showSidebar, setShowSidebar, disabled }) {
   const role = !user
     ? "member"
     : user?.roles && user?.roles.includes("admin")
@@ -16,7 +16,6 @@ export default function Sidebar({ user, showSidebar, setShowSidebar }) {
     : "member";
 
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [disabled] = useState(!user?.roles);
   const lit = menuData[`${role}`]
     .filter((item) => item.sublinks && item.sublinks)
     .map((item) => item.sublinks && item.sublinks);

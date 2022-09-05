@@ -14,29 +14,20 @@ function Profile() {
     document.title = "Profile - Bweyogere tuberebumu";
   }, []);
 
-  const [popUp, setPopUp] = useState(false);
-  const [editPop, setEditPop] = useState(false);
-  const [profile] = useOutletContext();
-  const initialValues = {
-    ...profile,
-    password: "",
-  };
+  const [ popUp, setPopUp ] = useState(false);
+  const [ editPop, setEditPop ] = useState(false);
+  const { 1: profile } = useOutletContext();
   const { id } = supabase.auth.user();
   const { signOut } = useAuth();
 
   const handleTermination = (event, values) => {
     event.preventDefault();
-    console.log(values);
     supabase
       .rpc("check_password", {
         current_password: values.password,
         _user_id: id,
       })
-      .then(({ data, error }) => {
-        if (error) {
-          console.log(error);
-        }
-
+      .then(async ({ data }) => {
         if (data) {
           setPopUp(true);
         } else {
@@ -82,26 +73,6 @@ function Profile() {
     document.changePasswordForm.reset();
   };
 
-  const teminate = async () => {
-    const { data: result, error } = await supabase
-      .from("users")
-      .update({ deleted: true })
-      .match({ id: id })
-      .single();
-
-    if (error) throw error;
-    if (result) {
-      const { phone_number } = result;
-
-      console.log(phone_number.slice(3));
-      const { data, error } = await supabase.auth.update({
-        phone: `${phone_number.slice(3)}000`,
-      });
-      if (error) throw console.log(error);
-      await signOut();
-    }
-  };
-
   return (
     <div className="mx-5 mt-2 h-[calc(100vh-70px)]">
       <div className="flex flex-col justify-between pb-3 h-[60px]">
@@ -110,7 +81,7 @@ function Profile() {
         </h1>
       </div>
       <ToastContainer />
-      <div className="bg-white p-6 overflow-y-auto dark:text-secondary-text  md:h-[calc(100%-65px)] dark:bg-dark-bg-700">
+      <div className="bg-white p-6 overflow-y-auto  md:h-[calc(100%-65px)] dark:bg-dark-bg-700">
         {profile?.fullname ? (
           <>
             <h1 className="font-semibold mb-3">Profile Details</h1>
@@ -150,7 +121,7 @@ function Profile() {
                 </p>
               </div>
               <div className="grid grid-cols-5 gap-2 mb-2">
-                <p className=" col-span-2">Member Status</p>
+                <p className=" col-span-2">{`${profile?.roles.includes("super_admin") ? 'Super Admin' : 'Member'} Status`}</p>
                 <div className=" col-span-3 flex justify-start">
                   <p
                     className={`${
@@ -173,11 +144,7 @@ function Profile() {
               <div className="grid grid-cols-5 gap-2 mb-2">
                 <p className=" col-span-2">Position in the SACCO</p>
                 <p className="font-bold col-span-3">
-                  {profile.roles.includes("super_admin")
-                    ? "Super Admin"
-                    : profile.roles.includes("admin")
-                    ? "Admin"
-                    : "Member"}
+                  {profile?.position_in_sacco}
                 </p>
               </div>
             </section>
@@ -302,13 +269,23 @@ function Profile() {
                               >
                                 Cancel
                               </button>
-                              <button
+                              <button 
                                 className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white"
-                                onClick={() =>
-                                  teminate().then((response) =>
-                                    console.log(response)
-                                  )
-                                }
+                                onClick={async (event) => {
+                                  event.preventDefault()
+                                  console.log('Termination started')
+                                  const { data, error } = await supabase.rpc("self_terminate")
+                                  if ( error ) { 
+                                    console.log(error) 
+                                  } else {
+                                    console.log( data )
+                                    if( data?.data ) {
+                                      // signout
+                                      setPopUp(false)
+                                      await signOut()
+                                    }
+                                  }
+                                }}
                               >
                                 Terminate
                               </button>

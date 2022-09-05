@@ -23,19 +23,20 @@ export default function Members() {
         await fetch_members().catch(error => console.log(error))
       })
       .subscribe()
-    
+
+    return () => supabase.removeSubscription(mySubscription)
   }, [])
 
-  const [profile] = useOutletContext()
+  const [user,  profile ]  = useOutletContext()
 
   const fetch_members = async () => {
     const { data, error } = await supabase.rpc("fetch_members")
     if( error ) throw error
     if( data ) { 
-      console.log( data )
-      const dataArray = data.filter( member => member.roles )
-      dataArray.length === 0 ? setMembers( null ) : setMembers( dataArray )
-    }
+      const dataArray = data.filter( member => member.roles && member.roles.includes('member') )
+      console.log(dataArray)
+      dataArray.length > 0 ? setMembers( dataArray ) : setMembers( null ); 
+    } 
   }
 
   
@@ -45,12 +46,7 @@ export default function Members() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const getMembers = async () => {
-    const { error, data } = await supabase.from("_member_profiles").select();
-
-    const dataArray = data.filter((member) => member.roles);
-    dataArray.length === 0 ? setMembers(null) : setMembers(dataArray);
-  };
+  
 
   const [status, setStatus] = useState(null);
   const [activeIndex, setActiveIndex] = useState(null);
@@ -109,7 +105,8 @@ export default function Members() {
             placeholder="Search"
             onChange={(event) => setSearchText(event.target.value)}
           />
-          {!profile.roles.includes("super_admin") && (
+          {console.log(profile)}
+          {!profile?.roles.includes("super_admin") && (
             <button
               className=" px-4 bg-primary py-2 text-white rounded-md flex justify-center items-center"
               onClick={() => {

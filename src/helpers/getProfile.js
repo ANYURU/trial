@@ -7,7 +7,7 @@ export const getProfile = async ( user ) => {
             if(error) {
                 return { error: error }
             } else if( data ) {
-                 return data;
+                return data;
             } 
 
         } catch (error) {

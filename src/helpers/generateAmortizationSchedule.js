@@ -1,24 +1,32 @@
 export const generate_amortization_schedule = (principal, interest_rate, period) => {
-    const rate = interest_rate / 100 / 12;
-    const EMI = Math.ceil((principal * rate) / (1 - Math.pow(1 + rate, -period)));
-    let interest = 0;
-    let repayment = 0;
-    let amortizationSchedule = [];
-  
-    for (let counter = 1; counter <= period; counter++) {
-      let monthly_summary = {};
-      monthly_summary.month = counter;
-      monthly_summary.principal = principal;
-      monthly_summary.emi = EMI;
-      interest = principal * rate;
-      repayment = EMI - interest;
-      monthly_summary.interest = interest;
-      monthly_summary.repayment_amount = repayment;
-      principal = principal - repayment;
-      monthly_summary.outstanding_balance = principal;
-  
-      amortizationSchedule.push(monthly_summary);
-    }
+  const rate = interest_rate / 100
+  const principal_installment = principal / period
+  let interest = principal * rate
 
-    return { amortizationSchedule, total: EMI*period };
+  let reducing_balance = principal
+  let amortization_schedule = []
+  let total = 0
+
+  let repayment_amount = 0
+
+  console.log(`Installment: ${principal_installment}`)
+  for (let counter = 1; counter <= period; counter++) {
+    interest = reducing_balance * rate
+    reducing_balance -= principal_installment
+    repayment_amount = interest + principal_installment
+
+    amortization_schedule.push({
+      reducing_balance,
+      interest,
+      principal_installment,
+      repayment_amount,
+      month: counter
+    })
+
+    total += repayment_amount
+
+  }
+
+  return {total:total, amortization_schedule: amortization_schedule}
+
 }

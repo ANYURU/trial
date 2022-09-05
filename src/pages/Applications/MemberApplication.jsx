@@ -12,7 +12,7 @@ import { Spinner } from "../../components";
 
 function MemberApplication() {
   const [pageNumber, setPageNumber] = useState(1);
-  const [profile, setProfile] = useOutletContext();
+  const [user, profile, setProfile] = useOutletContext();
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false)
 
@@ -77,46 +77,50 @@ function MemberApplication() {
     console.log(values);
 
     try {
-      if (location.state.from === "/members") {
-        getOTP(phone_number, "VERIFICATION")
-          .then((response) => response.json())
-          .then((data) => {
-            localStorage.setItem("verification_key", data?.Details);
-            console.log(values);
-            setPageNumber(pageNumber + 1);
-            return;
+      if ( location.state.from === "/members" ) {
+
+        getOTP( phone_number, "VERIFICATION" )
+          .then( response => response.json() )
+          .then( data => {
+            localStorage.setItem('verification_key', data?.Details)
+            console.log(values)
+            setPageNumber(pageNumber + 1)
+            return 
           })
-          .catch((error) => console.log(error));
-      } else {
-        const { error } = await supabase
-          .from("applications")
-          .insert([
-            {
-              _type: "membership",
-              created_at: new Date()
-                .toISOString()
-                .toLocaleString("en-GB", { timeZone: "UTC" }),
-              updated_at: new Date()
-                .toISOString()
-                .toLocaleString("en-GB", { timeZone: "UTC" }),
-              reviewed: false,
-              application_meta: {
-                applicants_id,
-                applicants_name,
-                ...rest,
-              },
-            },
-          ])
-          .single();
+          .catch( error => console.log( error ))     
+        
+      } 
+
+      else {
+        console.log('Else started')
+        const { error, data } = await supabase
+          .from('applications')
+          .insert(
+            [
+              {
+                _type: "membership",
+                created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                reviewed: false,
+                application_meta: {
+                  applicants_id,
+                  applicants_name,
+                  ...rest
+                }
+              }
+            ]
+          )
+          .single()
+          
 
         if (error) {
           throw error;
         } else {
-          setInitialValues({ values: initialValues });
-          toast.success(`Membership submitted for review`, {
-            position: "top-center",
-          });
-
+          console.log(data)
+          setInitialValues({ values: initialValues })
+          // setLoading(false)
+          toast.success(`Membership submitted for review`, {position:'top-center'})
+          
           const { data, error } = await supabase
             .from("_member_profiles")
             .select()
