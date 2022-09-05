@@ -35,7 +35,6 @@ export default function AccSummary({ setMyShares }) {
   const get_account_information = async () => {
     const { data, error } = await supabase.rpc("get_accounts_information");
     if (error) throw error;
-    // console.log(data);
     return data;
   };
 
@@ -59,15 +58,15 @@ export default function AccSummary({ setMyShares }) {
       </div>
       <div className="bg-white w-3/12 flex flex-col py-7 rounded-md justify-center items-center dark:bg-dark-bg-700">
         <h1 className="font-bold text-2xl">
-          {accounts && accounts?.mwana?.balance
+          {accounts && accounts?.mwana == null ? 'No account' :  (accounts?.mwana?.balance
             ? currencyFormatter(accounts?.mwana?.balance)
-            : 0}
+            : 0)}
         </h1>
         <h1 className="font-semibold">Mwana</h1>
       </div>
       <div className="bg-white w-3/12 flex flex-col py-7 rounded-md justify-center items-center dark:bg-dark-bg-700">
         <h1 className="font-bold text-2xl">
-          {accounts && accounts?.fixed?.balance
+          {accounts && accounts.mwana == null ? 'No account' : accounts?.fixed?.balance
             ? currencyFormatter(accounts?.fixed?.balance)
             : 0}
         </h1>
