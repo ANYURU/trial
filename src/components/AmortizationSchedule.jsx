@@ -3,6 +3,7 @@ import moment from "moment";
 
 function AmortizationSchedule({ amortization_schedule, start_date }) {
   const rate = 3;
+  console.log(amortization_schedule)
   return (
     <div className="mb-3">
       <h1 className="font-semibold my-3">Amortization Schedule</h1>

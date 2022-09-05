@@ -1,41 +1,39 @@
 import { MdOutlineSettings } from "react-icons/md";
 import { BsCheckLg } from "react-icons/bs";
-import { IoClose } from 'react-icons/io5'
+import { IoClose } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import { supabase } from '../../helpers/supabase'
+import { supabase } from "../../helpers/supabase";
 
 function NotificationContext({ show }) {
-  const [ notifications, setNotifications ] = useState([])
-  const { id } = supabase.auth.user()
+  const [notifications, setNotifications] = useState([]);
+  const { id } = supabase.auth.user();
 
   useEffect(() => {
-    getNotifications().catch(error => console.log(error))
+    getNotifications().catch((error) => console.log(error));
     const mySubscription = supabase
-      .from('notications')
-      .on('*', (payload) => {
-        getNotifications().catch(error => console.log(error))
+      .from("notications")
+      .on("*", (payload) => {
+        getNotifications().catch((error) => console.log(error));
       })
-      .subscribe()
-    
-    return () => supabase.removeSubscription(mySubscription)
-  }, [])
+      .subscribe();
 
-  const getNotifications = async() => {
-    const {data, error } = await supabase   
-    .from('notifications')
-    .select()
-    .match({receiver: id})
-    .order('created_at', { ascending: false})
+    return () => supabase.removeSubscription(mySubscription);
+  }, []);
 
-    if (error ) {
-      throw error
+  const getNotifications = async () => {
+    const { data, error } = await supabase
+      .from("notifications")
+      .select()
+      .match({ receiver: id })
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw error;
     } else {
-      
-      setNotifications(data)
-      console.log(data)
-    } 
-  }
-
+      setNotifications(data);
+      console.log(data);
+    }
+  };
 
   return (
     <div
@@ -50,21 +48,29 @@ function NotificationContext({ show }) {
 
       <hr />
       <ul>
-        { 
-          (notifications && notifications?.length) > 0 && notifications.map((notification, index) => {
-            console.log(notification)
+        {(notifications && notifications?.length) > 0 &&
+          notifications.map((notification, index) => {
             return (
-              <li className="py-5 px-2 h-16 flex items-center hover:bg-accent dark:hover:bg-dark-bg-600">
+              <li 
+                key={index}
+                className="py-5 px-2 h-16 flex items-center hover:bg-accent dark:hover:bg-dark-bg-600"
+                onClick={() => {
+                  console.log('here')
+                }}
+              >
                 <div className="rounded-full bg-green-100 w-10 h-10 mr-2 flex justify-center items-center text-green-700 ">
-                  {notification.status === 'approved' ? <BsCheckLg /> : <IoClose size={20} />}
+                  {notification.status === "approved" ? (
+                    <BsCheckLg />
+                  ) : (
+                    <IoClose size={20} />
+                  )}
                 </div>
                 <div className="w-5/6 h-8 overflow-hidden">
                   {notification?.message}
                 </div>
               </li>
-            )
-          })
-        }
+            );
+          })}
       </ul>
     </div>
   );

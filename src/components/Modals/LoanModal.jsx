@@ -8,6 +8,7 @@ import AmortizationSchedule from "../AmortizationSchedule";
 
 export default function LoanModal({ passed, setLoanModal, loan }) {
   const { darkMode } = useAuth();
+  console.log(loan.amortization_schedule)
 
   return ReactDOM.createPortal(
     <div
@@ -112,7 +113,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
             loan.amortization_schedule.map((amort, index) => (
               <tr key={index}>
                 <td className="px-3 py-2">
-                  {currencyFormatter(Math.round(amort.principal * 100) / 100)}
+                  {currencyFormatter(Math.round(amort.principal_installment * 100) / 100)}
                 </td>
                 <td className="px-3 py-2">
                   {currencyFormatter(Math.round(amort.interest * 100) / 100)}
@@ -126,7 +127,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
                   {amort.outstanding_balance <= 0
                     ? "0.00"
                     : currencyFormatter(
-                        Math.round(amort.outstanding_balance * 100) / 100
+                        Math.round(amort.reducing_balance * 100) / 100
                       )}
                 </td>
               </tr>
