@@ -49,46 +49,46 @@ function LoanPayment() {
 
         console.log(amount)
 
-      //   try {
-      //     const { Key: url } = await uploadFile(evidence, "loans");
-      //     const { error, data } = await supabase.from("applications").insert([
-      //       {
-      //         _type: "payment",
-      //         created_at: new Date()
-      //           .toISOString()
-      //           .toLocaleString("en-GB", { timeZone: "UTC" }),
-      //         updated_at: new Date()
-      //           .toISOString()
-      //           .toLocaleString("en-GB", { timeZone: "UTC" }),
-      //         reviewed: false,
-      //         application_meta: {
-      //           applicants_id,
-      //           applicants_name,
-      //           account_type,
-      //           // later use
-      //           // loan_id,
-      //           amount,
-      //           phone_number,
-      //           files: [
-      //             {
-      //               file_url: url,
-      //             },
-      //           ],
-      //           particulars,
-      //         },
-      //       },
-      //     ]);
+        try {
+          const { Key: url } = await uploadFile(evidence, "loans");
+          const { error, data } = await supabase.from("applications").insert([
+            {
+              _type: "payment",
+              created_at: new Date()
+                .toISOString()
+                .toLocaleString("en-GB", { timeZone: "UTC" }),
+              updated_at: new Date()
+                .toISOString()
+                .toLocaleString("en-GB", { timeZone: "UTC" }),
+              reviewed: false,
+              application_meta: {
+                applicants_id,
+                applicants_name,
+                account_type,
+                // later use
+                // loan_id,
+                amount,
+                phone_number,
+                files: [
+                  {
+                    file_url: url,
+                  },
+                ],
+                particulars,
+              },
+            },
+          ]);
 
-      //     if (error) throw error;
+          if (error) throw error;
 
-      //     console.log(data);
-      //     resetForm({ values: initialValues });
-      //     toast.success(`Request submitted for review.`, {
-      //       position: "top-center",
-      //     });
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
+          console.log(data);
+          resetForm({ values: initialValues });
+          toast.success(`Request submitted for review.`, {
+            position: "top-center",
+          });
+        } catch (error) {
+          console.log(error);
+        }
       }}
     >
       {({

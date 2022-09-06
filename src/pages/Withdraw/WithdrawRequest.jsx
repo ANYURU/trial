@@ -7,6 +7,7 @@ import { nonEvidencedRequestValidationSchema as withdrawRequestValidationSchema 
 import { InputField } from "../../components/Form/CustomInputField";
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import { add_separator, remove_separator } from '../../helpers/thousand_separator'
 
 function WithdrawRequest() {
   const {
@@ -40,10 +41,9 @@ function WithdrawRequest() {
           initialValues={initialValues}
           validationSchema={withdrawRequestValidationSchema}
           onSubmit={async (values, { resetForm }) => {
-            console.log(values);
             const { account_type, amount, particulars, cashout_method } =
               values;
-            console.log(values);
+
             try {
               const { error } = await supabase.from("applications").insert([
                 {
@@ -88,6 +88,7 @@ function WithdrawRequest() {
             handleBlur,
             dirty,
             isValid,
+            setFieldValue
           }) => {
             return (
               <Form className="flex flex-grow flex-col min-h-full p-6">
@@ -117,17 +118,30 @@ function WithdrawRequest() {
                         </div>
                       )}
                     </div>
-
-                    <InputField
-                      errors={errors}
-                      touched={touched}
-                      handleChange={handleChange}
-                      handleBlur={handleBlur}
-                      reference="amount"
-                      id="amount"
-                      label="Enter amount to withdraw"
-                      placeholder="Enter amount"
-                    />
+                    <div className="flex flex-col w-56 ">
+                      <label htmlFor="amount" className=" text-sm">
+                        Enter Amount
+                      </label>
+                      <input
+                        type="text"
+                        name="amount"
+                        id="amount"
+                        placeholder="Enter amount to withdraw"
+                        className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
+                        onChange={(event) => {
+                          let formatted_string = add_separator(remove_separator(event.target.value))
+                          event.target.value = formatted_string
+                          setFieldValue(event.target.name, parseFloat(remove_separator(event.target.value)))
+                        }}
+                        onBlur={handleBlur}
+                      />
+                      {touched?.amount && errors?.amount && (
+                        <div className="error text-red-600 text-xs">
+                          {errors?.amount}
+                        </div>
+                      )}
+                    </div>
+                  
                   </div>
                 </div>
 
