@@ -49,47 +49,47 @@ function MakeDeposit() {
 
             console.log(amount)
 
-            // try {
-            //   const { Key: url } = await uploadFile(evidence, "deposits");
-            //   const { error, data } = await supabase
-            //     .from("applications")
-            //     .insert([
-            //       {
-            //         _type: "deposit",
-            //         created_at: new Date()
-            //           .toISOString()
-            //           .toLocaleString("en-GB", { timeZone: "UTC" }),
-            //         updated_at: new Date()
-            //           .toISOString()
-            //           .toLocaleString("en-GB", { timeZone: "UTC" }),
-            //         reviewed: false,
-            //         application_meta: {
-            //           applicants_id,
-            //           applicants_name,
-            //           account_type,
-            //           amount,
-            //           phone_number,
-            //           files: [
-            //             {
-            //               file_url: url,
-            //             },
-            //           ],
-            //           particulars,
-            //         },
-            //       },
-            //     ]);
+            try {
+              const { Key: url } = await uploadFile(evidence, "deposits");
+              const { error, data } = await supabase
+                .from("applications")
+                .insert([
+                  {
+                    _type: "deposit",
+                    created_at: new Date()
+                      .toISOString()
+                      .toLocaleString("en-GB", { timeZone: "UTC" }),
+                    updated_at: new Date()
+                      .toISOString()
+                      .toLocaleString("en-GB", { timeZone: "UTC" }),
+                    reviewed: false,
+                    application_meta: {
+                      applicants_id,
+                      applicants_name,
+                      account_type,
+                      amount,
+                      phone_number,
+                      files: [
+                        {
+                          file_url: url,
+                        },
+                      ],
+                      particulars,
+                    },
+                  },
+                ]);
 
-            //   if (error) throw error;
+              if (error) throw error;
 
-            //   resetForm({ values: initialValues });
-            //   setLoading(false);
-            //   toast.success(`Request submitted for review.`, {
-            //     position: "top-center",
-            //   });
-            // } catch (error) {
-            //   setLoading(false);
-            //   toast.error(`${error?.message}`, { position: "top-center" });
-            // }
+              resetForm({ values: initialValues });
+              setLoading(false);
+              toast.success(`Request submitted for review.`, {
+                position: "top-center",
+              });
+            } catch (error) {
+              setLoading(false);
+              toast.error(`${error?.message}`, { position: "top-center" });
+            }
           }}
           validationSchema={depositRequestValidationSchema}
         >
