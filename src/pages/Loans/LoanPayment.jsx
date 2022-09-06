@@ -34,6 +34,7 @@ function LoanPayment() {
 
   const getApplications = async () => {
     const { error, data } = await supabase.from("loans").select().eq("id", id);
+    console.log(loan)
     setLoan(data[0]);
   };
 
@@ -107,7 +108,7 @@ function LoanPayment() {
                 <label>
                   Total Amount To Pay:{" "}
                   <span className="font-bold">
-                    {currencyFormatter(loan.outstanding_balance)}
+                    {currencyFormatter(loan?.outstanding_balance)}
                   </span>
                 </label>
               </div>

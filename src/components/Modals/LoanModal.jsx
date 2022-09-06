@@ -8,7 +8,6 @@ import AmortizationSchedule from "../AmortizationSchedule";
 
 export default function LoanModal({ passed, setLoanModal, loan }) {
   const { darkMode } = useAuth();
-  console.log(loan.amortization_schedule)
 
   return ReactDOM.createPortal(
     <div
@@ -39,17 +38,17 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
             </h1>
           </div>
 
-          <div
+          <button
             className="dark:hover:bg-dark-bg-600 hover:bg-accent p-2 rounded-full cursor-pointer"
             onClick={() => setLoanModal(false)}
           >
             <IoCloseSharp />
-          </div>
+          </button>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Loan ID:</p>
-          <p className="font-bold col-span-3">{loan.loan_id}</p>
+          <p className="font-bold col-span-3">{loan.id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
