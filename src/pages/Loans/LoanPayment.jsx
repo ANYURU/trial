@@ -8,6 +8,7 @@ import { useAuth } from "../../auth/AuthContext";
 import { evidencedRequestValidationSchema as loanPaymentRequestValidationSchema } from "../../helpers/validator";
 import { useEffect, useState } from "react";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { add_separator, remove_separator } from '../../helpers/thousand_separator'
 
 function LoanPayment() {
   // Will be used later
@@ -46,46 +47,48 @@ function LoanPayment() {
         const { account_type, amount, phone_number, particulars, evidence } =
           values;
 
-        try {
-          const { Key: url } = await uploadFile(evidence, "loans");
-          const { error, data } = await supabase.from("applications").insert([
-            {
-              _type: "payment",
-              created_at: new Date()
-                .toISOString()
-                .toLocaleString("en-GB", { timeZone: "UTC" }),
-              updated_at: new Date()
-                .toISOString()
-                .toLocaleString("en-GB", { timeZone: "UTC" }),
-              reviewed: false,
-              application_meta: {
-                applicants_id,
-                applicants_name,
-                account_type,
-                // later use
-                // loan_id,
-                amount,
-                phone_number,
-                files: [
-                  {
-                    file_url: url,
-                  },
-                ],
-                particulars,
-              },
-            },
-          ]);
+        console.log(amount)
 
-          if (error) throw error;
+      //   try {
+      //     const { Key: url } = await uploadFile(evidence, "loans");
+      //     const { error, data } = await supabase.from("applications").insert([
+      //       {
+      //         _type: "payment",
+      //         created_at: new Date()
+      //           .toISOString()
+      //           .toLocaleString("en-GB", { timeZone: "UTC" }),
+      //         updated_at: new Date()
+      //           .toISOString()
+      //           .toLocaleString("en-GB", { timeZone: "UTC" }),
+      //         reviewed: false,
+      //         application_meta: {
+      //           applicants_id,
+      //           applicants_name,
+      //           account_type,
+      //           // later use
+      //           // loan_id,
+      //           amount,
+      //           phone_number,
+      //           files: [
+      //             {
+      //               file_url: url,
+      //             },
+      //           ],
+      //           particulars,
+      //         },
+      //       },
+      //     ]);
 
-          console.log(data);
-          resetForm({ values: initialValues });
-          toast.success(`Request submitted for review.`, {
-            position: "top-center",
-          });
-        } catch (error) {
-          console.log(error);
-        }
+      //     if (error) throw error;
+
+      //     console.log(data);
+      //     resetForm({ values: initialValues });
+      //     toast.success(`Request submitted for review.`, {
+      //       position: "top-center",
+      //     });
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
       }}
     >
       {({
@@ -96,6 +99,7 @@ function LoanPayment() {
         handleBlur,
         isValid,
         dirty,
+        setFieldValue
       }) => {
         return (
           <Form className="mx-5 my-2 h-[calc(100vh-70px)]">
@@ -124,9 +128,13 @@ function LoanPayment() {
                     id="amount"
                     placeholder="Enter Amount"
                     className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
-                    onChange={handleChange}
+                    onChange={(event) => {
+                      let formatted_string = add_separator(remove_separator(event.target.value))
+                      event.target.value = formatted_string
+                      setFieldValue(event.target.name, parseFloat(remove_separator(event.target.value)))
+                    }}
                     onBlur={handleBlur}
-                    value={values.amount}
+                    // value={values.amount}
                   />
                   {touched?.amount && errors?.amount && (
                     <div className="error text-red-600 text-xs">
