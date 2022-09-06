@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { evidencedRequestValidationSchema as depositRequestValidationSchema } from "../../helpers/validator";
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import { add_separator, remove_separator } from '../../helpers/thousand_separator'
 
 function MakeDeposit() {
   const [loading, setLoading] = useState(false);
@@ -46,47 +47,49 @@ function MakeDeposit() {
               evidence,
             } = values;
 
-            try {
-              const { Key: url } = await uploadFile(evidence, "deposits");
-              const { error, data } = await supabase
-                .from("applications")
-                .insert([
-                  {
-                    _type: "deposit",
-                    created_at: new Date()
-                      .toISOString()
-                      .toLocaleString("en-GB", { timeZone: "UTC" }),
-                    updated_at: new Date()
-                      .toISOString()
-                      .toLocaleString("en-GB", { timeZone: "UTC" }),
-                    reviewed: false,
-                    application_meta: {
-                      applicants_id,
-                      applicants_name,
-                      account_type,
-                      amount,
-                      phone_number,
-                      files: [
-                        {
-                          file_url: url,
-                        },
-                      ],
-                      particulars,
-                    },
-                  },
-                ]);
+            console.log(amount)
 
-              if (error) throw error;
+            // try {
+            //   const { Key: url } = await uploadFile(evidence, "deposits");
+            //   const { error, data } = await supabase
+            //     .from("applications")
+            //     .insert([
+            //       {
+            //         _type: "deposit",
+            //         created_at: new Date()
+            //           .toISOString()
+            //           .toLocaleString("en-GB", { timeZone: "UTC" }),
+            //         updated_at: new Date()
+            //           .toISOString()
+            //           .toLocaleString("en-GB", { timeZone: "UTC" }),
+            //         reviewed: false,
+            //         application_meta: {
+            //           applicants_id,
+            //           applicants_name,
+            //           account_type,
+            //           amount,
+            //           phone_number,
+            //           files: [
+            //             {
+            //               file_url: url,
+            //             },
+            //           ],
+            //           particulars,
+            //         },
+            //       },
+            //     ]);
 
-              resetForm({ values: initialValues });
-              setLoading(false);
-              toast.success(`Request submitted for review.`, {
-                position: "top-center",
-              });
-            } catch (error) {
-              setLoading(false);
-              toast.error(`${error?.message}`, { position: "top-center" });
-            }
+            //   if (error) throw error;
+
+            //   resetForm({ values: initialValues });
+            //   setLoading(false);
+            //   toast.success(`Request submitted for review.`, {
+            //     position: "top-center",
+            //   });
+            // } catch (error) {
+            //   setLoading(false);
+            //   toast.error(`${error?.message}`, { position: "top-center" });
+            // }
           }}
           validationSchema={depositRequestValidationSchema}
         >
@@ -98,6 +101,7 @@ function MakeDeposit() {
             handleBlur,
             isValid,
             dirty,
+            setFieldValue
           }) => {
             return (
               <Form>
@@ -132,14 +136,17 @@ function MakeDeposit() {
                     <div className="flex flex-col w-56 ">
                       <label className=" text-sm">Enter Amount</label>
                       <input
-                        type="number"
+                        type="text"
                         name="amount"
                         id="amount"
                         placeholder="Enter amount"
                         className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
-                        onChange={handleChange}
+                        onChange={(event) => {
+                          let formatted_string = add_separator(remove_separator(event.target.value))
+                          event.target.value = formatted_string
+                          setFieldValue(event.target.name, parseFloat(remove_separator(formatted_string)))
+                        }}
                         onBlur={handleBlur}
-                        value={values.amount}
                       />
                       {touched?.amount && errors?.amount && (
                         <div className="error text-red-600 text-xs">
