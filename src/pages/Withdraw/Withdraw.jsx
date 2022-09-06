@@ -3,8 +3,6 @@ import { supabase } from "../../helpers/supabase";
 import { useState, useEffect } from "react";
 import { filterByStatus } from "../../helpers/utilites";
 import { Pagination, Spinner, NothingShown } from "../../components";
-import { FaEllipsisV } from "react-icons/fa";
-import { MdInfo } from "react-icons/md";
 import WithdrawModal from "../../components/Modals/WithdrawModal";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
@@ -122,71 +120,48 @@ export default function Withdrawy() {
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
                     <th className="px-6 py-4">Account</th>
-                    <th className="px-6 py-4">Amount</th>
+                    <th className="px-6 py-4">Amount (UGX)</th>
                     <th className="px-6 py-4">Cashout Method</th>
-                    <th className="px-6 py-4">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {shownWithdraw.map((withdraw, index) => (
-                    <tr
-                      className={`${
-                        index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
-                      key={index}
-                    >
-                      {withdrawModal && index === activeIndex && (
-                        <WithdrawModal
-                          withdraw={withdraw}
-                          setWithdrawModal={setWithdrawModal}
-                        />
-                      )}
-                      <td className="px-6 py-3">
-                        {moment(withdraw.created_at).format("DD-MM-YYYY")}
-                      </td>
-                      <td className="px-6 py-3">{withdraw.transaction_id}</td>
-                      <td className="px-6 py-3">
-                        {withdraw.transaction_meta.account_type}
-                      </td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(withdraw.amount)}
-                      </td>
-                      <td className="px-6 py-3">
-                        {withdraw.transaction_meta.cashout_method}
-                      </td>
+                    <>
+                      {
+                        withdrawModal && activeIndex == index && (
+                          <WithdrawModal 
+                            withdraw={withdraw}
+                            setWithdrawModal={setWithdrawModal}
+                          
+                          />
+                        )
+                      }
+                      <tr
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
+                        } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
+                        key={index}
+                        onClick={() => {
+                          setWithdrawModal(true)
+                          setActiveIndex(index)
 
-                      <td className="px-6 py-3">
-                        <div className="relative">
-                          <button
-                            className="block p-2 rounded-md dialog cursor-context-menu"
-                            onClick={(event) => {
-                              setActiveIndex(index);
-                              setShow(!show);
-                              event.stopPropagation();
-                            }}
-                          >
-                            <FaEllipsisV />
-                          </button>
-
-                          <ul
-                            className={`absolute right-0 py-2 mt-2 z-50 bg-white shadow-lg dark:bg-dark-bg-700 ${
-                              index === activeIndex && show
-                                ? "w-48"
-                                : "w-0 invisible"
-                            } ease-in-out duration-100 overflow-hidden`}
-                          >
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                setWithdrawModal(true);
-                              }}
-                            >
-                              <MdInfo /> Details
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
+                        }}
+                      >
+                        <td className="px-6 py-3">
+                          {moment(withdraw.created_at).format("DD-MM-YYYY")}
+                        </td>
+                        <td className="px-6 py-3">{withdraw.transaction_id}</td>
+                        <td className="px-6 py-3">
+                          {withdraw.transaction_meta.account_type}
+                        </td>
+                        <td className="px-6 py-3">
+                          {currencyFormatter(withdraw.amount)}
+                        </td>
+                        <td className="px-6 py-3">
+                          {withdraw.transaction_meta.cashout_method}
+                        </td>
+                      </tr>
+                    </>
                   ))}
                 </tbody>
               </table>

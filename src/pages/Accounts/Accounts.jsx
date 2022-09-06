@@ -42,7 +42,7 @@ function Accounts() {
               <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                 <tr>
                   <th className="px-6 py-4">Account Type</th>
-                  <th className="px-6 py-4">Amount</th>
+                  <th className="px-6 py-4">Amount (UGX)</th>
                   <th className="px-6 py-4">Created At</th>
                   <th className="px-6 py-4">Status</th>
                   {/* <th>Actions</th> */}

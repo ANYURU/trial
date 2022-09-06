@@ -5,6 +5,8 @@ import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function WithdrawModal({ passed, setWithdrawModal, withdraw }) {
+  console.log(withdraw)
+
   const { darkMode } = useAuth();
 
   return ReactDOM.createPortal(
