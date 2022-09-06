@@ -150,7 +150,6 @@ export default function Deposit() {
                     <th className="px-6 py-4">Account</th>
                     <th className="px-6 py-4">Amount(UGX)</th>
                     <th className="px-6 py-4">Approved By</th>
-                    <th className="px-6 py-4">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,13 +160,11 @@ export default function Deposit() {
                           index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
                         } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                         key={index}
+                        onClick={() => {
+                          setDepositModal(true)
+                          setActiveIndex(index)
+                        }}
                       >
-                        {depositModal && index === activeIndex && (
-                          <DepositModal
-                            deposit={deposit}
-                            setDepositModal={setDepositModal}
-                          />
-                        )}
                         <td className="px-6 py-3">
                           {moment(deposit.created_at).format("DD-MM-YYYY")}
                         </td>
@@ -181,38 +178,15 @@ export default function Deposit() {
                         <td className="px-6 py-3">
                           {deposit.transaction_meta.approved_by}
                         </td>
-
-                        <td className="px-6 py-2">
-                          <div className="relative">
-                            <button
-                              className="block p-2 rounded-md dialog"
-                              onClick={(event) => {
-                                setActiveIndex(index);
-                                setShow(!show);
-                                event.stopPropagation();
-                              }}
-                            >
-                              <FaEllipsisV />
-                            </button>
-
-                            <ul
-                              className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
-                                index === activeIndex && show ? "" : "hidden"
-                              }`}
-                            >
-                              <li
-                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
-                                onClick={() => {
-                                  setDepositModal(true);
-                                }}
-                              >
-                                <MdInfo /> Details
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
                       </tr>
+                      {depositModal && index === activeIndex && (
+                        <DepositModal
+                          deposit={deposit}
+                          setDepositModal={setDepositModal}
+                        />
+                      )}
                     </Fragment>
+                    
                   ))}
                 </tbody>
               </table>

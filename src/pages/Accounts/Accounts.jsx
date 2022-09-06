@@ -59,13 +59,13 @@ function Accounts() {
                       )}
                     </td>
                     <td className="px-6 py-4">{accounts?.savings?.account_status}</td>
-                    <td className="px-5 py-4">
+                    {/* <td className="px-5 py-4">
                       <div className="relative">
                         <button className="block p-2 rounded-md dialog cursor-context-menu">
                           <FaEllipsisV />
                         </button>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 )}
                 {accounts?.shares !== null && (
@@ -78,13 +78,13 @@ function Accounts() {
                       )}
                     </td>
                     <td className="px-6 py-4">{accounts?.shares?.account_status}</td>
-                    <td className="px-5 py-4">
+                    {/* <td className="px-5 py-4">
                       <div className="relative">
                         <button className="block p-2 rounded-md dialog cursor-context-menu">
                           <FaEllipsisV />
                         </button>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 )}
                 {accounts?.mwana && (
