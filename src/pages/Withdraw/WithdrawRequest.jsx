@@ -193,7 +193,7 @@ function WithdrawRequest() {
                   </div>
                 </div>   
                 <div className="my-3">
-                  <h1 className="font-semibold">particulars</h1>
+                  <h1 className="font-semibold">Particulars</h1>
                   <textarea
                     name="particulars"
                     id="particulars"
