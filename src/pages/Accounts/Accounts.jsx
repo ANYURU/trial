@@ -41,7 +41,8 @@ function Accounts() {
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                 <tr>
-                  <th className="px-6 py-4">Account Type</th>
+                  <th></th>
+                  <th className="pr-6 py-4">Account Type</th>
                   <th className="px-6 py-4">Amount (UGX)</th>
                   <th className="px-6 py-4">Created At</th>
                   <th className="px-6 py-4">Status</th>
@@ -51,7 +52,8 @@ function Accounts() {
               <tbody>
                 {accounts?.savings !== null && (
                   <tr className="hover:bg-gray-100 dark:hover:bg-dark-bg-600">
-                    <td className="px-6 py-4">Savings</td>
+                    <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                    <td className="py-4">Savings</td>
                     <td className="px-6 py-4">{accounts?.savings?.balance}</td>
                     <td className="px-6 py-4">
                       {moment(accounts?.savings?.created_at).format(
@@ -70,7 +72,8 @@ function Accounts() {
                 )}
                 {accounts?.shares !== null && (
                   <tr className="hover:bg-gray-100 dark:hover:bg-dark-bg-600">
-                    <td className="px-6 py-4">Shares</td>
+                    <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                    <td className="py-4">Shares</td>
                     <td className="px-6 py-4">{accounts?.shares?.balance}</td>
                     <td className="px-6 py-4">
                       {moment(accounts?.shares?.created_at).format(
@@ -89,7 +92,8 @@ function Accounts() {
                 )}
                 {accounts?.mwana && (
                   <tr className="hover:bg-gray-100 dark:hover:bg-dark-bg-600">
-                    <td className="px-6 py-4">Mwana</td>
+                    <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                    <td className="py-4">Mwana</td>
                     <td className="px-6 py-4">{accounts?.mwana?.balance}</td>
                     <td className="px-6 py-4">
                       {moment(accounts?.mwana?.created_at).format("DD-MM-YYYY")}
@@ -101,7 +105,8 @@ function Accounts() {
                 )}
                 {accounts?.fixed && (
                   <tr className="hover:bg-gray-100 dark:hover:bg-dark-bg-600">
-                    <td className="px-6 py-4">Fixed</td>
+                    <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                    <td className="py-4">Fixed</td>
                     <td className="px-6 py-4">{accounts?.fixed?.balance}</td>
                     <td className="px-6 py-4">
                       {moment(accounts?.fixed?.created_at).format("DD-MM-YYYY")}

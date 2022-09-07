@@ -11,19 +11,28 @@ import SuperAdDashboard from "./SuperAdDashboard";
 import { Spinner } from "../../components";
 
 export default function Dashboard() {
+  const today = new Date()
+
   const matches = useMediaQuery("(min-width: 800px)");
   const [user, profile ] = useOutletContext();
   const [myShares, setMyShares] = useState(0);
   const [saccosShares, setSaccosShares] = useState(0);
-  const [weeklyShares, setWeeklyShares] = useState({
-    Mon: 0,
-    Tue: 0,
-    Wed: 0,
-    Thu: 0,
-    Fri: 0,
-    Sat: 0,
-    Sun: 0,
-  });
+  const [monthlyShares, setMonthlyShares] = useState({
+    Jan: 0,
+    Feb: 0,
+    Mar: 0,
+    Apr: 0,
+    May: 0,
+    Jun: 0,
+    Jul: 0,
+    Aug: 0, 
+    Sep: 0,
+    Oct: 0,
+    Nov: 0,
+    Dec: 0
+  })
+  const [ years, setYears ] = useState([])
+  const [ year, setYear ] = useState(today.getFullYear().toString())
 
   useEffect(() => {
     document.title = "Dashboard - Bweyogere tuberebumu";
@@ -31,8 +40,8 @@ export default function Dashboard() {
     get_total_shares()
       .then((shares) => setSaccosShares(shares))
       .catch((error) => console.log(error));
-    get_weekly_shares()
-      .then((weekly_shares) => setWeeklyShares(weekly_shares))
+    get_monthly_shares()
+      .then((monthly_shares) => setMonthlyShares(monthly_shares))
       .catch((error) => console.log(error));
 
     // Realtime
@@ -42,14 +51,14 @@ export default function Dashboard() {
         await get_total_shares()
           .then((shares) => setSaccosShares(shares))
           .catch((error) => console.log(error));
-        await get_weekly_shares()
-          .then((weekly_shares) => setWeeklyShares(weekly_shares))
+        await get_monthly_shares()
+          .then((monthly_shares) => setMonthlyShares(monthly_shares))
           .catch((error) => console.log(error));
       })
       .subscribe();
 
     return () => supabase.removeSubscription(mySubscription);
-  }, []);
+  }, [year]);
 
   const get_total_shares = async () => {
     const { data, error } = await supabase.rpc("fetch_total_shares");
@@ -57,23 +66,34 @@ export default function Dashboard() {
     return data;
   };
 
-  const get_weekly_shares = async () => {
-    const { data, error } = await supabase.rpc("fetch_weekly_shares");
-    if (error) throw error;
+  const get_monthly_shares = async () => {
+    const { data, error } = await supabase.rpc("get_performance");
+
+    if ( error ) throw error
+    const { transactions,  years} = data
+    setYears(years)
+    
+    const filtered_transactions = await transactions.filter(transaction => transaction?.year === year)
+
     let obj = {
-      Mon: 0,
-      Tue: 0,
-      Wed: 0,
-      Thu: 0,
-      Fri: 0,
-      Sat: 0,
-      Sun: 0,
+      Jan: 0,
+      Feb: 0,
+      Mar: 0,
+      Apr: 0,
+      May: 0,
+      Jun: 0,
+      Jul: 0,
+      Aug: 0, 
+      Sep: 0,
+      Oct: 0,
+      Nov: 0,
+      Dec: 0
     };
 
-    if (data?.length > 0) {
-      for (let deposit of data) {
+    if (filtered_transactions?.length > 0) {
+      for (let deposit of filtered_transactions) {
         if (deposit && deposit?.shares) {
-          obj[deposit.day] += deposit.shares;
+          obj[deposit.month] += deposit.shares;
         }
       }
     }
@@ -95,11 +115,11 @@ export default function Dashboard() {
   };
 
   const data2 = {
-    labels: Object.keys(weeklyShares),
+    labels: Object.keys(monthlyShares),
     datasets: [
       {
         label: "Performance",
-        data: Object.values(weeklyShares),
+        data: Object.values(monthlyShares),
         fill: false,
         borderColor: "#27427A",
       },
@@ -169,10 +189,21 @@ export default function Dashboard() {
                 !matches && "flex-col w-full justify-center"
               }`}
             >
+              
               <div
                 className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md justify-center items-center`}
               >
-                <div>
+              <div>
+                <label htmlFor="year" className="capitalize text-base">
+                  year
+                  <select name="year" id="year" onChange={(event) => {
+                    setYear(event.target.value)
+                  }} className="ring-2 ring-primary mx-1 rounded">
+                  {years?.map((year, index) => <option key={index} value={year}>{year}</option>)}
+                  </select>
+                </label>
+              </div>
+                <div className="w-full h-full p-4">
                   <Line data={data2} options={options2} />
                 </div>
               </div>

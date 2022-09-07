@@ -164,11 +164,12 @@ export default function Loan() {
                         <span
                           className={` py-1 px-2 rounded-xl text-white ${
                             loan.loan_status === "pending"
-                            ? "bg-yellow-300"
-            
+                            ? "bg-yellow-400"
                             : loan.loan_status === "cleared"
-                            ? "bg-green-300"
-                            : "bg-red-300"
+                            ? "bg-green-400"
+                            : loan.loan_status === "on going"
+                            ? "bg-blue-400"
+                            : "bg-red-400"
                           }`}
                           >
                           {loan.loan_status}
@@ -187,7 +188,7 @@ export default function Loan() {
                           ?
                           <button 
                             className="bg-red-500 text-white outline outline-offset-2 outline-1 py-1 px-2 rounded-sm w-24 outline-red-300 capitalize">
-                            Over due
+                            arrears
                           </button>
                           :
                           <button 

@@ -117,7 +117,8 @@ export default function Withdrawy() {
               <table className="w-full h-6 text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-4">Date</th>
+                    <th></th>
+                    <th className="pr-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
                     <th className="px-6 py-4">Account</th>
                     <th className="px-6 py-4">Amount (UGX)</th>
@@ -147,9 +148,10 @@ export default function Withdrawy() {
 
                         }}
                       >
-                        <td className="px-6 py-3">
-                          {moment(withdraw.created_at).format("DD-MM-YYYY")}
-                        </td>
+                        <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                      <td className="pr-6 py-3">
+                        {moment(withdraw.created_at).format("DD-MM-YYYY")}
+                      </td>
                         <td className="px-6 py-3">{withdraw.transaction_id}</td>
                         <td className="px-6 py-3">
                           {withdraw.transaction_meta.account_type}

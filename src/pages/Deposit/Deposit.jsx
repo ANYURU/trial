@@ -145,7 +145,8 @@ export default function Deposit() {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-4">Date</th>
+                    <th></th>
+                    <th className="pr-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
                     <th className="px-6 py-4">Account</th>
                     <th className="px-6 py-4">Amount(UGX)</th>
@@ -165,7 +166,8 @@ export default function Deposit() {
                           setActiveIndex(index)
                         }}
                       >
-                        <td className="px-6 py-3">
+                        <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                        <td className="pr-6 py-3">
                           {moment(deposit.created_at).format("DD-MM-YYYY")}
                         </td>
                         <td className="px-6 py-3">{deposit.transaction_id}</td>

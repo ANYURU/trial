@@ -66,7 +66,7 @@ export default function AccSummary({ setMyShares }) {
       </div>
       <div className="bg-white w-3/12 flex flex-col py-7 rounded-md justify-center items-center dark:bg-dark-bg-700">
         <h1 className="font-bold text-2xl">
-          {accounts && accounts.mwana == null ? 'No account' : accounts?.fixed?.balance
+          {accounts && accounts.fixed == null ? 'No account' : accounts?.fixed?.balance
             ? `UGX ${currencyFormatter(accounts?.fixed?.balance)}`
             : `0`}
         </h1>
@@ -96,17 +96,17 @@ export default function AccSummary({ setMyShares }) {
       <div className="flex gap-5">
         <div className="bg-white dark:bg-dark-bg-700 w-6/12 flex flex-col py-7 rounded-md justify-center items-center">
           <h1 className="font-bold text-2xl">
-            {accounts && accounts?.mwana?.balance
-              ? `UGX ${currencyFormatter(accounts?.mwana?.balance)}`
-              : `0`}
+          {accounts && accounts?.mwana == null ? 'No account' :  (accounts?.mwana?.balance
+            ? `UGX ${currencyFormatter(accounts?.mwana?.balance)}`
+            : `0`)}
           </h1>
           <h1 className="font-semibold">Mwana</h1>
         </div>
         <div className="bg-white dark:bg-dark-bg-700 w-6/12 flex flex-col py-7 rounded-md justify-center items-center">
           <h1 className="font-bold text-2xl">
-            {accounts && accounts?.fixed?.balance
-              ? `UGX ${currencyFormatter(accounts?.fixed?.balance)}`
-              : `0`}
+          {accounts && accounts?.fixed == null ? 'No account' :  (accounts?.fixed?.balance
+            ? `UGX ${currencyFormatter(accounts?.fixed?.balance)}`
+            : `0`)}
           </h1>
           <h1 className="font-semibold">Fixed</h1>
         </div>
