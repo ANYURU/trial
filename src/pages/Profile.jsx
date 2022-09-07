@@ -227,8 +227,7 @@ function Profile() {
                         Self termination implies that you no longer subscribe to
                         and therefore sieze being a member of Bweyogerere
                         Tuberebumu sacco. If you're sure that you want to
-                        terminate your membership, click terminate to terminate
-                        to proceed.
+                        terminate your membership, click terminate to proceed.
                       </p>
                       <br />
                       <div className="flex mt-1">
