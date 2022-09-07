@@ -30,7 +30,7 @@ function LoanPayment() {
     amount: "",
     phone_number: "",
     evidence: "",
-    particulars: "",
+    comments: "",
   };
 
   const getApplications = async () => {
@@ -44,7 +44,7 @@ function LoanPayment() {
       initialValues={initialValues}
       validationSchema={loanPaymentRequestValidationSchema}
       onSubmit={async (values, { resetForm }) => {
-        const { account_type, amount, phone_number, particulars, evidence } =
+        const { account_type, amount, phone_number, comments, evidence } =
           values;
 
         console.log(amount)
@@ -74,7 +74,7 @@ function LoanPayment() {
                     file_url: url,
                   },
                 ],
-                particulars,
+                comments,
               },
             },
           ]);
@@ -188,15 +188,15 @@ function LoanPayment() {
                 </div>
               </div>
               <div className="mb-2">
-                <h1 className="font-semibold">Particulars</h1>
+                <h1 className="font-semibold">Comments</h1>
                 <textarea
-                  name="particulars"
-                  id="particulars"
+                  name="comments"
+                  id="comments"
                   cols="20"
                   rows="10"
                   className="outline outline-1 p-2 rounded-md w-full dark:bg-dark-bg-700"
-                  onChange={handleChange("particulars")}
-                  value={values?.particulars}
+                  onChange={handleChange("comments")}
+                  value={values?.comments}
                 ></textarea>
               </div>
               <div className="w-56">

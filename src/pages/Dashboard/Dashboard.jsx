@@ -195,8 +195,8 @@ export default function Dashboard() {
                 className={`bg-white dark:bg-dark-bg-700 lg:w-6/12 md:w-6/12 sm:w-12/12  flex flex-col px-2 py-5 rounded-md justify-center items-center`}
               >
               <div>
-                <label htmlFor="year" className="capitalize text-base font-semibold">
-                  year
+                <label htmlFor="year" className="capitalize text-base font-medium">
+                  year  
                   <select name="year" id="year" onChange={(event) => {
                     setYear(event.target.value)
                   }} className="ring-2 ring-primary mx-1 rounded">

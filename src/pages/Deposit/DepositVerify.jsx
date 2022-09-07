@@ -165,7 +165,7 @@ export default function DepositVerify() {
                   <p className="font-bold col-span-3">
                     :{" "}
                     {deposit.application_meta &&
-                      deposit?.application_meta.particulars}
+                      deposit?.application_meta.comments}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
