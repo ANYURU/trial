@@ -20,7 +20,7 @@ function MakeDeposit() {
   const initialValues = {
     account_type: "",
     amount: "",
-    phone_number: "",
+    // phone_number: "",
     particulars: "",
     evidence: "",
   };
@@ -29,7 +29,7 @@ function MakeDeposit() {
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">Deposit</h1>
-      <div className="flex bg-white overflow-hidden relative dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full w-full justify-center">
+      <div className="flex bg-white overflow-hidden relative dark:bg-dark-bg-700 dark:text-secondary-text p-6 min-h-full w-full justify-start">
         {loading && (
           <div className="absolute z-10 bg-white dark:bg-dark-bg-700 dark:bg-opacity-90 bg-opacity-90 w-full h-full rounded-lg">
             <Spinner />
@@ -104,7 +104,7 @@ function MakeDeposit() {
             setFieldValue
           }) => {
             return (
-              <Form>
+              <Form className="w-full">
                 <div className="flex flex-grow flex-col min-h-full w-full">
                   <ToastContainer />
 
@@ -156,7 +156,7 @@ function MakeDeposit() {
                     </div>
                   </div>
                   <div className="mb-3 flex flex-col md:flex-row gap-5">
-                    <div className="flex flex-col w-56">
+                    {/* <div className="flex flex-col w-56">
                       <label className="text-sm">Enter Phone Number</label>
                       <input
                         type="text"
@@ -173,7 +173,7 @@ function MakeDeposit() {
                           {errors?.phone_number}
                         </div>
                       )}
-                    </div>
+                    </div> */}
                     <div className="flex flex-col w-56 ">
                       <label className=" text-sm">Upload Receipt</label>
                       <input
