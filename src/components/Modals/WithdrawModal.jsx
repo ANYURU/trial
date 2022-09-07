@@ -35,7 +35,7 @@ export default function WithdrawModal({ passed, setWithdrawModal, withdraw }) {
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">withdraw ID:</p>
-          <p className="font-bold col-span-3">:{" "} {withdraw.transaction_id}</p>
+          <p className="font-bold col-span-3">:{" "} {withdraw.trans_id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">

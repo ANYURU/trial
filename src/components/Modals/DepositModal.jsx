@@ -33,7 +33,7 @@ export default function DepositModal({ passed, setDepositModal, deposit }) {
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Deposit ID</p>
-          <p className="font-bold col-span-3">: {deposit.transaction_id}</p>
+          <p className="font-bold col-span-3">: {deposit.trans_id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">

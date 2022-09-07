@@ -170,7 +170,7 @@ export default function Deposit() {
                         <td className="pr-6 py-3">
                           {moment(deposit.created_at).format("DD-MM-YYYY")}
                         </td>
-                        <td className="px-6 py-3">{deposit.transaction_id}</td>
+                        <td className="px-6 py-3">{deposit.trans_id}</td>
                         <td className="px-6 py-3">
                           {deposit.transaction_meta.account_type}
                         </td>

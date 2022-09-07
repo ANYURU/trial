@@ -64,7 +64,7 @@ function Savings() {
           <div className="flex h-full flex-col p-3 w-full">
             <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Account ID:</p>
-              <p className="font-bold col-span-3">{account.account_id}</p>
+              <p className="font-bold col-span-3">{account.account_no}</p>
             </div>
             <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">Owned by:</p>
