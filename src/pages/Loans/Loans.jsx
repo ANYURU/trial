@@ -125,7 +125,7 @@ export default function Loan() {
                     <th className="px-4 py-4">Amount to Pay (UGX)</th>
                     <th className="px-4 py-4">Amount Paid (UGX)</th>
                     <th className="px-4 py-4">Principal (UGX)</th>
-                    <th className="px-4 py-4">Interest Paid (UGX)</th>
+                    <th className="px-4 py-4">Interest (%)</th>
                     <th className="px-4 py-4">Status</th>
                     <th className="px-4 py-4">Action</th>
                   </tr>
@@ -150,7 +150,7 @@ export default function Loan() {
                       <td className="px-6 py-3">
                         {currencyFormatter(
                           loan.outstanding_balance +
-                          0.05 * loan.outstanding_balance
+                          loan.interest_paid/100 * loan.outstanding_balance
                           )}
                       </td>
                       <td className="px-6 py-3">
@@ -159,7 +159,7 @@ export default function Loan() {
                       <td className="px-6 py-3">
                         {currencyFormatter(loan.outstanding_balance)}
                       </td>
-                      <td className="px-6 py-3">{currencyFormatter(loan.interest_paid)}</td>
+                      <td className="px-6 py-3">{currencyFormatter(loan.interest_rate)}</td>
                       <td className={`px-6 py-3`}>
                         <span
                           className={` py-1 px-2 rounded-xl text-white ${

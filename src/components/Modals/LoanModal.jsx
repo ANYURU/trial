@@ -48,7 +48,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Loan ID:</p>
-          <p className="font-bold col-span-3">{loan.id}</p>
+          <p className="font-bold col-span-3">{loan.loan_id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -67,14 +67,19 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Interest Rate:</p>
-          <p className="font-bold col-span-3">5%</p>
+          <p className="font-bold col-span-3">{loan?.interest_rate}%</p>
+        </div>
+
+        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+          <p className="col-span-2">Interest Paid:</p>
+          <p className="font-bold col-span-3">UGX {loan?.interest_paid}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-5 justify-start w-full">
           <p className="col-span-2">Amount to pay:</p>
           <p className="font-bold col-span-3">
             {currencyFormatter(
-              loan.outstanding_balance + 0.05 * loan.outstanding_balance
+              loan.outstanding_balance + (loan.interest_rate/100 * loan.outstanding_balance)
             )}
           </p>
         </div>

@@ -30,6 +30,10 @@ export const menuData = {
                 {
                     label: 'Make Deposit',
                     link: '/deposit/deposit'
+                },
+                {
+                    label:'Requests',
+                    link: '/deposit/requests'
                 }
             ]
         },
@@ -41,6 +45,11 @@ export const menuData = {
                 {
                     label: 'Request Withdraw',
                     link: 'withdraw/request'
+                },
+                {
+                    label: 'Requests',
+                    link: 'withdraw/requests'
+                
                 }
             ]
         },

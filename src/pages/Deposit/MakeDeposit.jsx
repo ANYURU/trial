@@ -74,6 +74,7 @@ function MakeDeposit() {
                         },
                       ],
                       comments,
+                      review_status:'pending'
                     },
                   },
                 ]);

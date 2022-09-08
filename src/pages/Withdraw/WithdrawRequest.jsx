@@ -63,7 +63,8 @@ function WithdrawRequest() {
                     amount,
                     particulars,
                     cashout_method,
-                    phone_number
+                    phone_number,
+                    review_status: "pending"
                   },
                 },
               ]);
