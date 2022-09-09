@@ -32,44 +32,59 @@ export default function DepositModal({ passed, setDepositModal, deposit }) {
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Deposit ID</p>
-          <p className="font-bold col-span-3">: {deposit.trans_id}</p>
+          <p className="col-span-1">Deposit ID</p>
+          <p className="font-bold col-span-3 pl-8">: {deposit?.trans_id || deposit?.app_id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Created At</p>
-          <p className="font-bold col-span-3">
+          <p className="col-span-1">Created At</p>
+          <p className="font-bold col-span-3 pl-8">
             : {moment(deposit.created_at).format("DD-MM-YYYY, hh:mm a")}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Amount</p>
-          <p className="font-bold col-span-3">
-            : UGX {currencyFormatter(deposit.amount)}
+          <p className="col-span-1">Amount</p>
+          <p className="font-bold col-span-3 pl-8">
+            : UGX {currencyFormatter(deposit?.amount || deposit?.application_meta?.amount)}
           </p>
         </div>
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Account</p>
-          <p className="font-bold col-span-3">
-            : {deposit.transaction_meta.account_type}
+          <p className="col-span-1">Account</p>
+          <p className="font-bold col-span-3 pl-8">
+            : {deposit?.transaction_meta?.account_type || deposit?.application_meta?.amount}
           </p>
         </div>
-
+        {
+          deposit?.transaction_meta && 
+          <>
+            <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+              <p className="col-span-1">Approved at</p>
+              <p className="font-bold col-span-3 pl-8">
+                :{" "}
+                {moment(deposit?.transaction_meta?.approved_at).format(
+                  "DD-MM-YYYY, hh:mm a"
+                )}
+              </p>
+            </div>
+            <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+            <p className="col-span-1">Status</p>
+            <p className="font-bold col-span-3 pl-8">
+              : {<span className="bg-green-400 py-1 px-2 rounded-xl text-white">approved</span>}
+            </p>
+          </div>
+        </>
+        }
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Approved at</p>
-          <p className="font-bold col-span-3">
-            :{" "}
-            {moment(deposit.transaction_meta.approved_at).format(
-              "DD-MM-YYYY, hh:mm a"
-            )}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Approved by</p>
-          <p className="font-bold col-span-3">
-            : {deposit.transaction_meta.approved_by}
+          <p className="col-span-1">{deposit?.transaction_meta ? "Approved by" : "Status"}</p>
+          <p className="font-bold col-span-3 pl-8">
+            : {deposit?.transaction_meta ? deposit?.transaction_meta?.approved_by : <span className={` py-1 px-2 rounded-xl text-white ${
+                            deposit?.application_meta?.review_status === "pending"
+                            ? "bg-yellow-400"
+                            : deposit?.application_meta?.review_status === "rejected" ?
+                            "bg-red-400" 
+                            : "bg-green-400"
+                          }`}>{deposit?.application_meta?.review_status}</span>}
           </p>
         </div>
       </div>

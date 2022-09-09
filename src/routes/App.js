@@ -25,8 +25,6 @@ import {
   Withdraw,
   WithdrawHistory,
   WithdrawRequest,
-  WithdrawRequests,
-  DepositRequests, 
   WithdrawMembers,
   DepositVerify,
   WithdrawVerify,
@@ -100,30 +98,6 @@ export default function App() {
             <Route path="admins" element={<Admins />} />
             <Route path="admins/:id" element={<AdminInfo />} />
             {/* <Route path="dashboard" element={<SuperAdDashboard />} /> */}
-          </Route>
-
-          {/* Accessed by members only */}
-          <Route
-            element={<PrivateRoute allowedRoles={["admin", "member"]}/>}
-          >
-            <Route
-              path="/withdraw/requests"
-              element={
-                <ErrorBoundary>
-                  <WithdrawRequests />
-                </ErrorBoundary>
-              }
-            />
-
-            <Route
-              path="/deposit/requests"
-              element={
-                <ErrorBoundary>
-                  <DepositRequests />
-                </ErrorBoundary>
-              }
-            />
-
           </Route>
 
           {/* Accessed by only administrators. */}
@@ -264,7 +238,6 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Route>
-
         </Routes>
       </Router>
     )

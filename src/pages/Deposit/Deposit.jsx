@@ -8,12 +8,16 @@ import DepositModal from "../../components/Modals/DepositModal";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { useOutletContext } from "react-router-dom";
+import { filterByStatus } from "../../helpers/utilites";
 
 export default function Deposit() {
 
   const [deposits, setDeposits] = useState([]);
   const [depositModal, setDepositModal] = useState(false);
   const [account, setAccount] = useState("");
+  const [status, setStatus] = useState("")
+
+
 
   useEffect(() => {
     document.title = "Deposit - Bweyogere tuberebumu";
@@ -60,6 +64,7 @@ export default function Deposit() {
       if( error ) {
         throw error
       } else {
+        console.log(data)
         setDeposits(data ?? null)
       }
   }
@@ -93,11 +98,14 @@ export default function Deposit() {
   
     filteredDeposits =
       !filteredDeposits ||
-      filteredDeposits.filter(
+      filteredDeposits.filter(deposit => !status || status === "" ? deposit : status === 'approved' ? deposit?.transaction_meta : deposit?.application_meta?.review_status === status).filter(
         (deposit) =>
-          !account || deposit?.transaction_meta.account_type === account
-      );
-  
+          !account || (deposit?.transaction_meta ? deposit?.transaction_meta?.account_type === account : deposit?.application_meta?.account_type === account)
+      )
+    
+      
+
+    
     return (
       <div className="mx-5 my-2 h-[calc(100vh-70px)]">
         <Helmet>
@@ -109,6 +117,24 @@ export default function Deposit() {
           </h1>
   
           <div className="flex my-3 justify-between gap-5">
+            <div className="flex flex-col w-56">
+              <select
+                name="status"
+                id=""
+                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+                onChange={(event) => {
+                  setStatus(event.target.value);
+                  console.log(event.target.value)
+                  console.log(filteredDeposits)
+                  
+                }}
+              >
+                <option value="">Status</option>
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
             <div className="flex flex-col w-56">
               <select
                 name="account"
@@ -150,7 +176,7 @@ export default function Deposit() {
                     <th className="px-6 py-4">Transaction ID</th>
                     <th className="px-6 py-4">Account</th>
                     <th className="px-6 py-4">Amount(UGX)</th>
-                    <th className="px-6 py-4">Approved By</th>
+                    <th className="px-6 py-4">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -162,6 +188,7 @@ export default function Deposit() {
                         } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                         key={index}
                         onClick={() => {
+                          console.log(deposit)
                           setDepositModal(true)
                           setActiveIndex(index)
                         }}
@@ -170,15 +197,23 @@ export default function Deposit() {
                         <td className="pr-6 py-3">
                           {moment(deposit.created_at).format("DD-MM-YYYY")}
                         </td>
-                        <td className="px-6 py-3">{deposit.trans_id}</td>
+                        <td className="px-6 py-3">{deposit?.trans_id || deposit?.app_id}</td>
                         <td className="px-6 py-3">
-                          {deposit.transaction_meta.account_type}
+                          {deposit?.transaction_meta?.account_type || deposit?.application_meta?.account_type}
                         </td>
                         <td className="px-6 py-3">
-                          {currencyFormatter(deposit.amount)}
+                          {currencyFormatter(deposit?.amount || deposit?.application_meta?.amount)}
                         </td>
                         <td className="px-6 py-3">
-                          {deposit.transaction_meta.approved_by}
+                          <span className={` py-1 px-2 rounded-xl text-white ${
+                            deposit?.application_meta?.review_status === "pending"
+                            ? "bg-yellow-400"
+                            : deposit?.application_meta?.review_status === "rejected" ?
+                            "bg-red-400" 
+                            : "bg-green-400"
+                          }`}>
+                            {deposit?.application_meta?.review_status || "approved"}
+                          </span>
                         </td>
                       </tr>
                       {depositModal && index === activeIndex && (
@@ -205,7 +240,7 @@ export default function Deposit() {
               />
             </div>
           </>
-        ) : deposits === null || deposits?.length !== 0 && filteredDeposits === null ? (
+        ) : deposits === null || deposits?.length !== 0 || filteredDeposits === null || filteredDeposits?.length === 0 ? (
           <NothingShown />
         ) : (
           <Spinner />
