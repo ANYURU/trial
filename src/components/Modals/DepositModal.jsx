@@ -79,12 +79,12 @@ export default function DepositModal({ passed, setDepositModal, deposit }) {
           <p className="col-span-1">{deposit?.transaction_meta ? "Approved by" : "Status"}</p>
           <p className="font-bold col-span-3 pl-8">
             : {deposit?.transaction_meta ? deposit?.transaction_meta?.approved_by : <span className={` py-1 px-2 rounded-xl text-white ${
-                            deposit?.application_meta?.review_status === "pending"
-                            ? "bg-yellow-400"
-                            : deposit?.application_meta?.review_status === "rejected" ?
-                            "bg-red-400" 
-                            : "bg-green-400"
-                          }`}>{deposit?.application_meta?.review_status}</span>}
+                deposit?.application_meta?.review_status === "pending"
+                ? "bg-yellow-400"
+                : deposit?.application_meta?.review_status === "rejected" ?
+                "bg-red-400" 
+                : "bg-green-400"
+              }`}>{deposit?.application_meta?.review_status}</span>}
           </p>
         </div>
       </div>
