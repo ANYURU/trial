@@ -67,7 +67,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         </div>
                       ) : (
                         <ErrorBoundary>
-                          <Outlet context={[user, profile, setProfile]} />
+                          <Outlet context={[user, profile, setProfile, roles]} />
                         </ErrorBoundary>
                       )
                     ) : (
@@ -85,7 +85,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         <Spinner />
                       ) : (
                         <ErrorBoundary>
-                          <Outlet context={[user, profile, setProfile]} />
+                          <Outlet context={[user, profile, setProfile, roles]} />
                         </ErrorBoundary>
                       )}
                     </div>
@@ -96,7 +96,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                       <Spinner />
                     ) : (
                       <ErrorBoundary>
-                        <Outlet context={[user, profile, setProfile]} />
+                        <Outlet context={[user, profile, setProfile, roles]} />
                       </ErrorBoundary>
                     )}
                   </div>

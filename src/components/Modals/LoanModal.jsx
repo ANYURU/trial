@@ -3,11 +3,17 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useAuth } from "../../auth/AuthContext";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import moment from "moment";
+import { useEffect } from "react";
+import { supabase } from "../../helpers/supabase";
 import { IconContext } from "react-icons/lib";
 import AmortizationSchedule from "../AmortizationSchedule";
 
 export default function LoanModal({ passed, setLoanModal, loan }) {
   const { darkMode } = useAuth();
+  // useEffect(() => {
+
+
+  // }, [])
 
   return ReactDOM.createPortal(
     <div

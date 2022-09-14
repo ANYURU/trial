@@ -7,11 +7,20 @@ import { LoanModal } from "../../components";
 import moment from "moment";
 import { Spinner, NothingShown } from "../../components";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { useOutletContext } from "react-router-dom";
+
+
 
 export default function MemberLoans() {
+  
+  const [ { id }, profile, setProfile, roles] = useOutletContext()
+  console.log(roles)
+  
+
   useEffect(() => {
     fetch_member_loans().catch(error => console.log(error))
-    
+
+  
     // Realtime.
     const mySubscription = supabase
     .from('loans')
@@ -86,9 +95,18 @@ export default function MemberLoans() {
   }
 
   const fetch_member_loans = async () => {
-    const { data, error } = await supabase.rpc("fetch_member_loans")
-    if ( error ) throw error 
-    setLoans(data)
+    // const { data, error } = await supabase.rpc("fetch_member_loans")
+    // if ( error ) throw error 
+    // setLoans(data)
+    const { data, error } = await supabase
+      .from('loans')
+      .select()
+      .order('created_at', {ascending:false})
+      .not('member_id', 'eq', id)
+      // console.log(supabase.auth.user().id)
+      if (error ) throw error
+      console.log(data)
+      setLoans(data)
   }
 
   return (
@@ -180,7 +198,7 @@ export default function MemberLoans() {
                       <td className="px-6 py-3">
                         {currencyFormatter(loan.amount_issued)}
                       </td>
-                      <td className="px-6 py-3">5</td>
+                      <td className="px-6 py-3">{loan.interest_rate}</td>
                       <td className={`px-6 py-3`}>
                         <span
                           className={` py-1 px-2 rounded-xl text-white ${

@@ -71,14 +71,27 @@ export default function Loan() {
   }
 
   const fetch_loans = async () => {
-    const { data, error } = await supabase.rpc("fetch_loans")
-    if ( error ) {
-      setLoading( false )
+    // const { data, error } = await supabase.rpc("fetch_loans")
+    // if ( error ) {
+    //   setLoading( false )
+    //   throw error
+    // } else {
+    //   setLoans( data )
+    //   setLoading( false )
+    // }
+    const {data, error } = await supabase
+      .from('loans')
+      .select()
+      .order('created_at', {ascending: false})
+    
+    if( error ) {
+      setLoading(false)
       throw error
     } else {
       setLoans( data )
-      setLoading( false )
+      setLoading(false)
     }
+
   }
 
   return (
