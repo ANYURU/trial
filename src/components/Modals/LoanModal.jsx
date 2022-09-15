@@ -5,12 +5,14 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
 export default function LoanModal({ passed, setLoanModal, loan: {loan, payments} }) {
   const { darkMode } = useAuth();
   const navigate = useNavigate()
   const [ amortExpand, setAmortExpand ] = useState(true)
   const [ repaymentExpand, setRepaymentExpand] = useState(true)
+  const [ {id: current_user} ] = useOutletContext()
 
   return ReactDOM.createPortal(
     <div
@@ -119,13 +121,29 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
         </div>
               
         <div className="flex justify-between w-[100%]"><span className="font-bold">Amortization Schedule</span> 
-          <button
+          {/* <button
             className="cursor-pointer"
             type="button"
             onClick={() => {
               setAmortExpand(!amortExpand)
             }}
-          >{amortExpand ? "collapse" : "expand"}</button></div>
+          >{amortExpand ? "collapse" : "expand"}</button> */}
+
+          { 
+          
+          loan.amortization_schedule.length > 2 && loan.amortization_schedule.length !== 3 &&
+            <button
+              className="cursor-pointer"
+              type="button"
+              onClick={() => {
+                setAmortExpand(!amortExpand)
+              }}
+            >{amortExpand ? "collapse" : "expand"}</button>
+          }
+        </div> 
+
+
+
         <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
           <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
             <tr>
@@ -169,11 +187,9 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
               ))}
           </tbody>
         </table>
-
-
         <div className="flex justify-between w-[100%]"><span className="font-bold">Repayments</span> 
           {
-            payments?.length > 2 &&
+            payments?.length > 2 && payments.length !== 3 &&
             <button
               className="cursor-pointer"
               type="button"
@@ -228,15 +244,13 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
               }
               </table>
             
-            
             <div className="flex justify-center">
             {
-              loan?.loan_status === "cleared" ? "Thank you for clearing your loan." 
-              : loan?.loan_status === "on going" ? "You are advised to clear your monthly repayments. Thank you."
-              : loan?.loan_status === "pending" ? "Your loan repayment period starting soon."
-              : loan?.loan_status === "defaulted" && "Please clear your arrears." 
+              loan?.loan_status === "cleared" ? (loan?.member_id === current_user ? 'Thank you for clearing your loan.': 'Loan Cleared') 
+              : loan?.loan_status === "on going" ? (loan?.member_id === current_user && 'You are advised to clear your monthly repayments. Thank you.')
+              : loan?.loan_status === "pending" ? (loan?.member_id === current_user ? 'Your loan repayment period starting soon.' : 'loan yet to start')
+              : loan?.loan_status === "defaulted" && (loan?.member_id === current_user ? "Please clear your arrears." : "Please remind the member to clear the loan.")
             }
-              
             </div>
             </>
           :

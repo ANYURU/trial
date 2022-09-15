@@ -95,18 +95,21 @@ export default function MemberLoans() {
   }
 
   const fetch_member_loans = async () => {
-    // const { data, error } = await supabase.rpc("fetch_member_loans")
-    // if ( error ) throw error 
-    // setLoans(data)
-    const { data, error } = await supabase
-      .from('loans')
-      .select()
-      .order('created_at', {ascending:false})
-      .not('member_id', 'eq', id)
-      // console.log(supabase.auth.user().id)
-      if (error ) throw error
-      console.log(data)
-      setLoans(data)
+    const { data, error } = await supabase.rpc("fetch_member_loans")
+    if ( error ) throw error 
+    setLoans(data)
+    // const { data, error } = await supabase
+    //   .from('loans')
+    //   .select()
+    //   .order('created_at', {ascending:false})
+    //   .not('member_id', 'eq', id)
+
+
+    //   console.log(loan)
+    //   // console.log(supabase.auth.user().id)
+    //   if (error ) throw error
+    //   console.log(data)
+    //   setLoans(data)
   }
 
   return (
@@ -173,7 +176,7 @@ export default function MemberLoans() {
                   </tr>
                 </thead>
                 <tbody>
-                  {shownloans.map((loan, index) => (
+                  {shownloans.map(({loan, payments}, index) => (
                     <>
                       <tr
                         className={`${
@@ -260,7 +263,7 @@ export default function MemberLoans() {
                         }
                       </tr>
                       {loanModal && activeIndex === index && (
-                        <LoanModal setLoanModal={setLoanModal} loan={loan} />
+                        <LoanModal setLoanModal={setLoanModal} loan={{loan, payments}} />
                       )}
                     </>
                   ))}
