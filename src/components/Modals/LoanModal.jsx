@@ -178,7 +178,7 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
               className="cursor-pointer"
               type="button"
               onClick={() => {
-                setAmortExpand(!repaymentExpand)
+                setRepaymentExpand(!repaymentExpand)
               }}
             >{repaymentExpand ? "collapse" : "expand"}</button>
           }
