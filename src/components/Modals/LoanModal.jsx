@@ -9,12 +9,12 @@ import { useState } from "react";
 export default function LoanModal({ passed, setLoanModal, loan: {loan, payments} }) {
   const { darkMode } = useAuth();
   const navigate = useNavigate()
-  const [ collapseAmort, setCollapseAmort ] = useState(true)
-  const [ collapseRepayment, setCollapseRepayment] = useState(true)
+  const [ amortExpand, setAmortExpand ] = useState(true)
+  const [ repaymentExpand, setRepaymentExpand] = useState(true)
 
   return ReactDOM.createPortal(
     <div
-      className={`bg-black bg-opacity-30 z-40 w-screen h-screen fixed top-0 left-0 right-0 bottom-0 overflow-scroll flex justify-center items-center max-h-full overflow-y-auto ${
+      className={`bg-black bg-opacity-30 z-40 w-screen h-screen fixed top-0 left-0 right-0 bottom-0 overflow-scroll flex justify-center items-center max-h-full overflow-y-auto${
         darkMode ? "dark" : ""
       } `}
     >
@@ -117,9 +117,75 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
           <p className="col-span-2">Approved by:</p>
           <p className="font-bold col-span-3">{loan.loan_meta.approved_by}</p>
         </div>
-        <details className="w-[100%] mb-10" open>
-          <summary className="list-none flex flex-col cursor-pointer items-center">
-            <h3 className="font-bold">Amortization Schedule</h3>
+              
+        <div className="flex justify-between w-[100%]"><span className="font-bold">Amortization Schedule</span> 
+          <button
+            className="cursor-pointer"
+            type="button"
+            onClick={() => {
+              setAmortExpand(!amortExpand)
+            }}
+          >{amortExpand ? "collapse" : "expand"}</button></div>
+        <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
+          <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
+            <tr>
+              <th className="px-8 py-2">Date</th>
+              <th className="px-8 py-2">Principal</th>
+              <th className="px-8 py-2">Interest Paid</th>
+              <th className="px-8 py-2">Amount To Pay</th>
+              <th className="px-8 py-2">Reducing Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loan.amortization_schedule &&
+              loan.amortization_schedule.map((amort, index) => (
+                <tr key={index} className={`${amortExpand ? "" : "hidden"}`}>
+                  <td className="px-8 py-2">
+                    {console.log(amort)}
+                    {moment(loan.created_at).add(amort.month, "months").format("DD-MM-YYYY")}
+                  </td>
+                  <td className="px-8 py-2">
+                    {currencyFormatter(Math.round(amort.principal_installment * 100) / 100)}
+                  </td>
+                  <td className="px-8 py-2">
+                    {currencyFormatter(Math.round(amort.interest * 100) / 100)}
+                  </td>
+                  <td className="px-8 py-2">
+                    { amort.repayment_balance <= 0
+                      ? "0.00"
+                      : currencyFormatter(
+                      Math.round(amort.repayment_amount * 100) / 100
+                    )}
+                  </td>
+                  <td className="px-8 py-2">
+                    {amort.reducing_balance <= 0
+                      ? "0.00"
+                      : currencyFormatter(
+                          Math.round(amort.reducing_balance * 100) / 100
+                        )}
+
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+
+
+        <div className="flex justify-between w-[100%]"><span className="font-bold">Repayments</span> 
+          {
+            payments?.length > 2 &&
+            <button
+              className="cursor-pointer"
+              type="button"
+              onClick={() => {
+                setAmortExpand(!repaymentExpand)
+              }}
+            >{repaymentExpand ? "collapse" : "expand"}</button>
+          }
+        </div>
+        { 
+          payments && payments?.length > 0 ? 
+          <>
             <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
               <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                 <tr>
@@ -130,87 +196,39 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
                   <th className="px-8 py-2">Reducing Balance</th>
                 </tr>
               </thead>
-            </table>
-          </summary>
-          {loan.amortization_schedule &&
-            loan.amortization_schedule.map((amort, index) => (
-              <tr key={index}>
-                <td className="px-8 py-2">
-                  {console.log(amort)}
-                  {moment(loan.created_at).add(amort.month, "months").format("DD-MM-YYYY")}
-                </td>
-                <td className="px-8 py-2">
-                  {currencyFormatter(Math.round(amort.principal_installment * 100) / 100)}
-                </td>
-                <td className="px-8 py-2">
-                  {currencyFormatter(Math.round(amort.interest * 100) / 100)}
-                </td>
-                <td className="px-8 py-2">
-                  { amort.repayment_balance <= 0
-                    ? "0.00"
-                    : currencyFormatter(
-                    Math.round(amort.repayment_amount * 100) / 100
-                  )}
-                </td>
-                <td className="px-8 py-2">
-                  {amort.reducing_balance <= 0
-                    ? "0.00"
-                    : currencyFormatter(
-                        Math.round(amort.reducing_balance * 100) / 100
-                      )}
-
-                </td>
-              </tr>
-            ))}
-
-        </details>
-        { 
-          payments && payments?.length > 0 ? 
-          <>
-            <details className="w-[100%] mb-10" open>
-              <summary className="list-none flex flex-col items-center">
-                <h3 className="font-bold">Repayments</h3>
-                <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
-                  <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
-                    <tr>
-                      <th className="px-8 py-2">Date</th>
-                      <th className="px-8 py-2">Principal</th>
-                      <th className="px-8 py-2">Interest Paid</th>
-                      <th className="px-8 py-2">Amount To Pay</th>
-                      <th className="px-8 py-2">Reducing Balance</th>
-                    </tr>
-                  </thead>
-                </table>
-              </summary>
-              <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
-                {
-                  payments.map((payment, index) => (
-                    <tr key={index}>
-                      <td className="px-8 py-2">
-                        {moment(payment.created_at).format("DD-MM-YYYY")}
-                      </td>
-                      <td className="px-8 py-2">
-                        {currencyFormatter(Math.round(payment.amount * 100) / 100)}
-                      </td>
-                      <td className="px-8 py-2">
-                        {currencyFormatter(Math.round(payment?.transaction_meta?.interest_paid * 100) / 100)}
-                      </td>
-                      <td className="px-8 py-2">
-                        {currencyFormatter(
-                          Math.round(payment?.transactions_meta?.amount_to_pay ?? 0 * 100) / 100
+              {
+                payments.map((payment, index) => (
+                  <tr 
+                    key={index}
+                    className={`${repaymentExpand && payments > 3 ? "hidden" : ""}`}
+                  >
+                    <td className="px-8 py-2">
+                      {moment(payment.created_at).format("DD-MM-YYYY")}
+                    </td>
+                    <td className="px-8 py-2">
+                      {currencyFormatter(Math.round(payment.amount * 100) / 100)}
+                    </td>
+                    <td className="px-8 py-2">
+                      {currencyFormatter(Math.round(payment?.transaction_meta?.interest_paid * 100) / 100)}
+                    </td>
+                    <td className="px-8 py-2">
+                      {currencyFormatter(
+                        Math.round(payment?.transactions_meta?.amount_to_pay ?? 0 * 100) / 100
                         )}
-                      </td>
-                      <td className="px-8 py-2">
-                        {payment?.reducing_balance <= 0
-                          ? "0.00"
-                          : currencyFormatter(
-                              Math.round(payment?.reducing_balance ?? 0 * 100) / 100
-                            )}
-                      </td>
-                    </tr>
-                  ))}
+                    </td>
+                    <td className="px-8 py-2">
+                      {payment?.reducing_balance <= 0
+                        ? "0.00"
+                        : currencyFormatter(
+                          Math.round(payment?.reducing_balance ?? 0 * 100) / 100
+                          )}
+                    </td>
+                  </tr>
+                ))
+              }
               </table>
-            </details>
+            
+            
             <div className="flex justify-center">
             {
               loan?.loan_status === "cleared" ? "Thank you for clearing your loan." 
