@@ -71,26 +71,28 @@ export default function Loan() {
   }
 
   const fetch_loans = async () => {
-    // const { data, error } = await supabase.rpc("fetch_loans")
-    // if ( error ) {
-    //   setLoading( false )
-    //   throw error
-    // } else {
-    //   setLoans( data )
-    //   setLoading( false )
-    // }
-    const {data, error } = await supabase
-      .from('loans')
-      .select()
-      .order('created_at', {ascending: false})
-    
-    if( error ) {
-      setLoading(false)
+    const { data, error } = await supabase.rpc("fetch_loans")
+    if ( error ) {
+      setLoading( false )
       throw error
     } else {
+      console.log(data)
       setLoans( data )
-      setLoading(false)
+      setLoading( false )
     }
+    // const {data, error } = await supabase
+    //   .from('loans')
+    //   .select()
+    //   .order('created_at', {ascending: false})
+    
+    // if( error ) {
+    //   setLoading(false)
+    //   throw error
+    // } else {
+    //   console.log(data)
+    //   setLoans( data )
+    //   setLoading(false)
+    // }
 
   }
 
@@ -144,7 +146,7 @@ export default function Loan() {
                   </tr>
                 </thead>
                 <tbody>
-                  {shownloans.map((loan, index) => (
+                  {shownloans.map(({loan, payments}, index) => (
                     <>
                     <tr
                       onClick={() => {
@@ -185,7 +187,7 @@ export default function Loan() {
                             : "bg-red-400"
                           }`}
                           >
-                          {loan.loan_status}
+                          {loan?.loan_status === "defaulted" ? "arrears" : loan.loan_status}
                         </span>
                       </td>
                       <td className="px-6 py-3">
@@ -193,19 +195,19 @@ export default function Loan() {
                           loan?.loan_status === "cleared"
                           ?
                           <button 
-                            className="outline-slate-300 text-white outline outline-offset-2 outline-1 py-1 px-2 rounded-sm w-24 bg-gray-500 capitalize">
+                            className="outline-slate-300 text-white outline-offset-2  py-1 px-2 rounded-sm w-20 bg-gray-500 capitalize">
                             paid
                           </button>
                           :
                           loan?.loan_status === "defaulted"
                           ?
                           <button 
-                            className="bg-red-500 text-white outline outline-offset-2 outline-1 py-1 px-2 rounded-sm w-24 outline-red-300 capitalize">
+                            className="bg-red-500 text-white outline-offset-2 py-1 px-2 rounded-sm w-20 capitalize">
                             arrears
                           </button>
                           :
                           <button 
-                            className="bg-green-500 text-white outline outline-offset-2 outline-1 py-1 px-2 rounded-sm w-24 outline-green-300 capitalize"
+                            className="bg-green-500 text-white outline-offset-2 py-1 px-2 rounded-sm w-20 capitalize"
                             onClick={() => navigate(`/loans/payment/${id}`)}
                           >
                             pay now
@@ -215,7 +217,7 @@ export default function Loan() {
                       </td>
                     </tr>
                     {loanModal && activeIndex === index && (
-                      <LoanModal setLoanModal={setLoanModal} loan={loan} loanModal={loanModal}/>
+                      <LoanModal setLoanModal={setLoanModal} loan={{loan, payments}} loanModal={loanModal}/>
                       )}
                     </>
                   ))}

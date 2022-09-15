@@ -66,11 +66,11 @@ export default function DepositAdmin() {
   );
 
   const approved = Math.round(
-    (approvedDeposits.length / deposits.length) * 100
+    (approvedDeposits?.length ?? 0 / deposits.length) * 100
   );
-  const pending = Math.round((pendingDeposits.length / deposits.length) * 100);
+  const pending = Math.round((pendingDeposits.length ?? 0/ deposits.length) * 100);
   const rejected = Math.round(
-    (rejectedDeposits.length / deposits.length) * 100
+    (rejectedDeposits?.length ?? 0 / deposits.length) * 100
   );
 
   let shownDeposits = deposits.slice(indexOfFirstPage, indexOfLastPage);

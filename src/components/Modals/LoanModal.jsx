@@ -3,55 +3,64 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useAuth } from "../../auth/AuthContext";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import moment from "moment";
-import { useEffect } from "react";
-import { supabase } from "../../helpers/supabase";
-import { IconContext } from "react-icons/lib";
-import AmortizationSchedule from "../AmortizationSchedule";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-export default function LoanModal({ passed, setLoanModal, loan }) {
+export default function LoanModal({ passed, setLoanModal, loan: {loan, payments} }) {
   const { darkMode } = useAuth();
-  // useEffect(() => {
-
-
-  // }, [])
+  const navigate = useNavigate()
+  const [ collapseAmort, setCollapseAmort ] = useState(true)
+  const [ collapseRepayment, setCollapseRepayment] = useState(true)
 
   return ReactDOM.createPortal(
     <div
-      className={`bg-black bg-opacity-30 z-40 w-screen h-screen fixed top-0 left-0 right-0 bottom-0 overflow-scroll flex justify-center items-center ${
+      className={`bg-black bg-opacity-30 z-40 w-screen h-screen fixed top-0 left-0 right-0 bottom-0 overflow-scroll flex justify-center items-center max-h-full overflow-y-auto ${
         darkMode ? "dark" : ""
       } `}
     >
       <div
-        className="bg-white dark:bg-dark-bg dark:text-secondary-text p-10 rounded-md shadow-md flex flex-col items-center mx-2 overflow-x-hidden overflow-y-scroll sm:mt-20 md:mt-10"
+        className="bg-white dark:bg-dark-bg dark:text-secondary-text p-10 rounded-md shadow-md flex flex-col items-center mx-2 overflow-x-hidden overflow-y-scroll max-h-screen sm:mt-20 md:mt-10"
         ref={passed}
       >
         {/* {children} */}
         <div className="flex justify-between items-center w-full mb-5">
-          <div>
-            <h1 className="font-bold text-lg">
+            <h1 className="font-bold text-lg flex flex-1 justify-center items-center">
               Loan Details ({loan.loan_meta.applicants_name})
               <span
                 className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
                   loan.loan_status === "pending"
-                    ? "bg-yellow-400"
-                    : loan.loan_status === "paid"
-                    ? "bg-green-400"
-                    : "bg-red-400"
+                  ? "bg-yellow-400"
+                  : loan.loan_status === "cleared"
+                  ? "bg-green-400"
+                  : loan.loan_status === "on going"
+                  ? "bg-blue-400"
+                  : "bg-red-400"
                 }`}
               >
-                {loan.loan_status}
+                {loan?.loan_status === "defaulted" ? "arrears" : loan.loan_status}
+              </span>
+              <span className='flex flex-1 justify-center'>
+                {
+                  loan?.loan_status !== "cleared" && 
+                  <button
+                    className="bg-green-500 text-white outline-offset-2 px-2 rounded-sm w-22 capitalize font-normal text-base py-1"
+                    onClick = {() => {
+                      navigate(`/loans/payment/${loan.id}`)
+                    }}
+                  >
+                    Pay Now
+                  </button>
+                }
               </span>
             </h1>
-          </div>
-
-          <button
-            className="dark:hover:bg-dark-bg-600 hover:bg-accent p-2 rounded-full cursor-pointer"
-            onClick={() => setLoanModal(false)}
-          >
-            <IoCloseSharp />
-          </button>
+            <button
+              className="dark:hover:bg-dark-bg-600 hover:bg-accent p-2 rounded-full cursor-pointer"
+              onClick={() => setLoanModal(false)}
+            >
+              <IoCloseSharp />
+            </button>
+         
         </div>
-
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Loan ID:</p>
           <p className="font-bold col-span-3">{loan.loan_id}</p>
@@ -108,43 +117,117 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
           <p className="col-span-2">Approved by:</p>
           <p className="font-bold col-span-3">{loan.loan_meta.approved_by}</p>
         </div>
-
-        <h3 className="font-bold">Amortization Schedule</h3>
-        <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
-          <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
-            <tr>
-              <th className="px-3 py-2">Principal</th>
-              <th className="px-3 py-2">Interest</th>
-              <th className="px-3 py-2">Amount to Pay</th>
-              <th className="px-3 py-2">Balance</th>
-            </tr>
-          </thead>
+        <details className="w-[100%] mb-10" open>
+          <summary className="list-none flex flex-col cursor-pointer items-center">
+            <h3 className="font-bold">Amortization Schedule</h3>
+            <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
+              <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
+                <tr>
+                  <th className="px-8 py-2">Date</th>
+                  <th className="px-8 py-2">Principal</th>
+                  <th className="px-8 py-2">Interest Paid</th>
+                  <th className="px-8 py-2">Amount To Pay</th>
+                  <th className="px-8 py-2">Reducing Balance</th>
+                </tr>
+              </thead>
+            </table>
+          </summary>
           {loan.amortization_schedule &&
             loan.amortization_schedule.map((amort, index) => (
               <tr key={index}>
-                <td className="px-3 py-2">
+                <td className="px-8 py-2">
+                  {console.log(amort)}
+                  {moment(loan.created_at).add(amort.month, "months").format("DD-MM-YYYY")}
+                </td>
+                <td className="px-8 py-2">
                   {currencyFormatter(Math.round(amort.principal_installment * 100) / 100)}
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-8 py-2">
                   {currencyFormatter(Math.round(amort.interest * 100) / 100)}
                 </td>
-                <td className="px-3 py-2">
-                  {currencyFormatter(
+                <td className="px-8 py-2">
+                  { amort.repayment_balance <= 0
+                    ? "0.00"
+                    : currencyFormatter(
                     Math.round(amort.repayment_amount * 100) / 100
                   )}
                 </td>
-                <td className="px-3 py-2">
-                  {amort.outstanding_balance <= 0
+                <td className="px-8 py-2">
+                  {amort.reducing_balance <= 0
                     ? "0.00"
                     : currencyFormatter(
                         Math.round(amort.reducing_balance * 100) / 100
                       )}
+
                 </td>
               </tr>
             ))}
-        </table>
-      </div>
-    </div>,
+
+        </details>
+        { 
+          payments && payments?.length > 0 ? 
+          <>
+            <details className="w-[100%] mb-10" open>
+              <summary className="list-none flex flex-col items-center">
+                <h3 className="font-bold">Repayments</h3>
+                <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
+                  <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-8 py-2">Date</th>
+                      <th className="px-8 py-2">Principal</th>
+                      <th className="px-8 py-2">Interest Paid</th>
+                      <th className="px-8 py-2">Amount To Pay</th>
+                      <th className="px-8 py-2">Reducing Balance</th>
+                    </tr>
+                  </thead>
+                </table>
+              </summary>
+              <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
+                {
+                  payments.map((payment, index) => (
+                    <tr key={index}>
+                      <td className="px-8 py-2">
+                        {moment(payment.created_at).format("DD-MM-YYYY")}
+                      </td>
+                      <td className="px-8 py-2">
+                        {currencyFormatter(Math.round(payment.amount * 100) / 100)}
+                      </td>
+                      <td className="px-8 py-2">
+                        {currencyFormatter(Math.round(payment?.transaction_meta?.interest_paid * 100) / 100)}
+                      </td>
+                      <td className="px-8 py-2">
+                        {currencyFormatter(
+                          Math.round(payment?.transactions_meta?.amount_to_pay ?? 0 * 100) / 100
+                        )}
+                      </td>
+                      <td className="px-8 py-2">
+                        {payment?.reducing_balance <= 0
+                          ? "0.00"
+                          : currencyFormatter(
+                              Math.round(payment?.reducing_balance ?? 0 * 100) / 100
+                            )}
+                      </td>
+                    </tr>
+                  ))}
+              </table>
+            </details>
+            <div className="flex justify-center">
+            {
+              loan?.loan_status === "cleared" ? "Thank you for clearing your loan." 
+              : loan?.loan_status === "on going" ? "You are advised to clear your monthly repayments. Thank you."
+              : loan?.loan_status === "pending" ? "Your loan repayment period starting soon."
+              : loan?.loan_status === "defaulted" && "Please clear your arrears." 
+            }
+              
+            </div>
+            </>
+          :
+          <div className="flex flex-col gap-2 items-center">
+              You haven't made any payments yet.
+          </div>
+        }
+        </div>
+      </div>,
     document.getElementById("portal")
   );
 }

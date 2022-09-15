@@ -75,9 +75,9 @@ export default function LoanAdmin() {
     if ( error ) {
       setLoading(false)
       throw error
-    }
-  
-    console.log(data)
+
+    } 
+    
     setLoans(data ?? [])
     setLoading(false)
     
