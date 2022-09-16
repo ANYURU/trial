@@ -49,9 +49,15 @@ Yup.addMethod(Yup.string, 'isNumber', function () {
 export const evidencedRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
   account_type: Yup.string().required('Required!'),
-  particulars: Yup.string(),
-  // phone_number: Yup.string().required('Required!'),
-  evidence: Yup.string().required('Required!')
+  comments: Yup.string(),
+  evidence: Yup.string().required('Required!'),
+  designated_for: Yup.string().required('Required!'),
+  member_id: Yup.string().when(
+    'designated_for', {
+      is: "other",
+      then: Yup.string().required("Member is required!")
+    }
+  )
 })
 
 
@@ -59,12 +65,12 @@ export const nonEvidencedRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
   account_type: Yup.string().required('Required!'),
   phone_number: Yup.string().required('Required !'),
-  particulars: Yup.string(),
+  comments: Yup.string(),
 })
 
 export const loanPaymentValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
-  particulars: Yup.string()
+  comments: Yup.string()
 })
 
 export const loan1ValidationSchema = Yup.object({

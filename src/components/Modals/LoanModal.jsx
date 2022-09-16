@@ -181,7 +181,6 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
                       : currencyFormatter(
                           Math.round(amort.reducing_balance * 100) / 100
                         )}
-
                   </td>
                 </tr>
               ))}
