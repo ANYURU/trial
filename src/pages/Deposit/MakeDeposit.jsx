@@ -78,52 +78,75 @@ function MakeDeposit() {
             const {
               account_type,
               amount,
-              phone_number,
               comments,
               evidence,
-              
 
             } = values;
 
 
             try {
               const { Key: url } = await uploadFile(evidence, "deposits");
-              const { error, data } = await supabase
-                .from("applications")
-                .insert([
-                  {
-                    _type: "deposit",
-                    created_at: new Date()
-                      .toISOString()
-                      .toLocaleString("en-GB", { timeZone: "UTC" }),
-                    updated_at: new Date()
-                      .toISOString()
-                      .toLocaleString("en-GB", { timeZone: "UTC" }),
-                    reviewed: false,
-                    application_meta: {
-                      applicants_id,
-                      applicants_name,
-                      account_type,
-                      amount,
-                      phone_number,
-                      files: [
-                        {
-                          file_url: url,
-                        },
-                      ],
-                      comments,
-                      review_status:'pending'
+
+              if( values.designated_for === "own") {
+                const details = {
+                  ...values,
+                  file_url: url,
+                  _type: "deposit",
+                  created_at: new Date()
+                        .toISOString()
+                        .toLocaleString("en-GB", { timeZone: "UTC" }),
+                  updated_at: new Date()
+                  .toISOString()
+                  .toLocaleString("en-GB", { timeZone: "UTC" })
+                }
+
+                const { data, error } = await supabase.rpc('bingo', {details: JSON.stringify(details)})
+                if (error) throw error
+
+                resetForm({ values: initialValues });
+                setLoading(false);
+                toast.success(`${data?.transaction_meta?.member_name}'s deposit created successfully.`, {
+                  position: "top-center",
+                });
+
+              } else {
+
+                const { error, data } = await supabase
+                  .from("applications")
+                  .insert([
+                    {
+                      _type: "deposit",
+                      created_at: new Date()
+                        .toISOString()
+                        .toLocaleString("en-GB", { timeZone: "UTC" }),
+                      updated_at: new Date()
+                        .toISOString()
+                        .toLocaleString("en-GB", { timeZone: "UTC" }),
+                      reviewed: false,
+                      application_meta: {
+                        applicants_id,
+                        applicants_name,
+                        account_type,
+                        amount,
+                        files: [
+                          {
+                            file_url: url,
+                          },
+                        ],
+                        comments,
+                        review_status:'pending'
+                      },
                     },
-                  },
-                ]);
+                  ]);
 
-              if (error) throw error;
+                if (error) throw error;
 
-              resetForm({ values: initialValues });
-              setLoading(false);
-              toast.success(`Request submitted for review.`, {
-                position: "top-center",
-              });
+                resetForm({ values: initialValues });
+                setLoading(false);
+                toast.success(`Request submitted for review.`, {
+                  position: "top-center",
+                });
+              }
             } catch (error) {
               setLoading(false);
               toast.error(`${error?.message}`, { position: "top-center" });
@@ -172,14 +195,17 @@ function MakeDeposit() {
                           name="member_id"
                           id="member_id"
                           className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-                          onChange={handleChange}
+                          onChange={(event) => {
+                            console.log(event.target.value)
+                            values.member_id = JSON.stringify(event.target.value)
+                          }}
                           onBlur={handleBlur}
-                          value={values.member_id}
+                          // value={values.member_id}
                         >
                           <option value="">--Select Member--</option>
                         {
                           profiles && profiles.map(({fullname, id}, index) => {
-                            return  <option key={index} value={id} className="capitalize">{fullname}</option>
+                            return  <option key={index} value={ id } className="capitalize">{ fullname }</option>
                           })
                         
 
