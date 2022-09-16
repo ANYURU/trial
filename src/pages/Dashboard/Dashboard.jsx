@@ -33,6 +33,7 @@ export default function Dashboard() {
   })
   const [ years, setYears ] = useState([])
   const [ year, setYear ] = useState(today.getFullYear().toString())
+  const [ loading, setLoading ] = useState(true)
 
   useEffect(() => {
     document.title = "Dashboard - Bweyogere tuberebumu";
@@ -69,12 +70,17 @@ export default function Dashboard() {
   const get_monthly_shares = async () => {
     const { data, error } = await supabase.rpc("get_performance");
 
-    if ( error ) throw error
+    if ( error ) {
+      setLoading(false)
+      throw error
+    } 
+
+    setLoading(false)
     const { transactions,  years} = data
-    const sorted_years = years.sort((a, b) => b-a)
+    const sorted_years = (years && years.sort((a, b) => b-a)) ?? []
     setYears(sorted_years)
     
-    const filtered_transactions = await transactions.filter(transaction => transaction?.year === year)
+    const filtered_transactions = await (transactions && transactions.filter(transaction => transaction?.year === year)) ?? []
 
     let obj = {
       Jan: 0,
@@ -224,7 +230,7 @@ export default function Dashboard() {
     }
   }
   else {
-    if(profile?.error) {
+    if(profile?.fullname) {
       return (
         <div
           className={`mx-5 mb-2 my-2 md:h-[calc(100vh-70px)] ${
@@ -269,7 +275,7 @@ export default function Dashboard() {
         </div>
       );
     } else {
-      return <Spinner />;
+      return loading && <Spinner />;
     }
   }
 }
