@@ -14,8 +14,8 @@ function Profile() {
     document.title = "Profile - Bweyogere tuberebumu";
   }, []);
 
-  const [ popUp, setPopUp ] = useState(false);
-  const [ editPop, setEditPop ] = useState(false);
+  const [popUp, setPopUp] = useState(false);
+  const [editPop, setEditPop] = useState(false);
   const { 1: profile } = useOutletContext();
   const { id } = supabase.auth.user();
   const { signOut } = useAuth();
@@ -121,7 +121,13 @@ function Profile() {
                 </p>
               </div>
               <div className="grid grid-cols-5 gap-2 mb-2">
-                <p className=" col-span-2">{`${profile && profile?.roles && profile.roles.includes("super_admin") ? 'Super Admin' : 'Member'} Status`}</p>
+                <p className=" col-span-2">{`${
+                  profile &&
+                  profile?.roles &&
+                  profile.roles.includes("super_admin")
+                    ? "Super Admin"
+                    : "Member"
+                } Status`}</p>
                 <div className=" col-span-3 flex justify-start">
                   <p
                     className={`${
@@ -268,20 +274,22 @@ function Profile() {
                               >
                                 Cancel
                               </button>
-                              <button 
+                              <button
                                 className="bg-accent-red px-3 py-1 outline outline-1 outline-accent-red rounded-md text-white"
                                 onClick={async (event) => {
-                                  event.preventDefault()
-                                  console.log('Termination started')
-                                  const { data, error } = await supabase.rpc("self_terminate")
-                                  if ( error ) { 
-                                    console.log(error) 
+                                  event.preventDefault();
+                                  console.log("Termination started");
+                                  const { data, error } = await supabase.rpc(
+                                    "self_terminate"
+                                  );
+                                  if (error) {
+                                    console.log(error);
                                   } else {
-                                    console.log( data )
-                                    if( data?.data ) {
+                                    console.log(data);
+                                    if (data?.data) {
                                       // signout
-                                      setPopUp(false)
-                                      await signOut()
+                                      setPopUp(false);
+                                      await signOut();
                                     }
                                   }
                                 }}
