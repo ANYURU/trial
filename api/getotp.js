@@ -49,6 +49,10 @@ export default async (req, res) => {
                 const message = require('./helpers/_identityVerification')
                 phone_message = message(otp)
             }
+            else if( type == "MEMBER WITHDRAW") {
+                const message = require('./helpers/_withdrawOnMembersBehalf')
+                phone_message = message(otp)
+            }
             else {
                 const response = {"Status": "Failure", "Details": "Incorrect Type Provided"}
                 return res.status(400).send(response)
