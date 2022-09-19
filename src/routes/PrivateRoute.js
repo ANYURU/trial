@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getProfile } from "../helpers/getProfile";
 import { Spinner } from "../components";
 import ErrorBoundary from "../components/ErrorBoundary";
+import Chat from '../components/Chat/Chat'
 
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
@@ -40,7 +41,7 @@ const PrivateRoute = ({ allowedRoles }) => {
     matches ? (
       <div className={`${darkMode ? "dark" : ""}`}>
         <div
-          className={`flex flex-col min-h-screen  w-screen bg-back dark:bg-dark-bg`}
+          className={`flex flex-col min-h-screen  w-screen bg-back dark:bg-dark-bg border-red-200 border-2`}
         >
           <Navbar user={profile} showSidebar={showSidebar} />
           <div
@@ -101,8 +102,9 @@ const PrivateRoute = ({ allowedRoles }) => {
                     )}
                   </div>
                 ))}
-            </div>
+            </div> 
           </div>
+          <Chat />
         </div>
       </div>
     ) : (
