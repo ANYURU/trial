@@ -40,7 +40,7 @@ function Chat({user, profile}) {
         const { data, error } = await supabase
             .from('messenger')
             .select()
-            .match({ sender_id: my_id })
+            .or(`sender_id.eq.${my_id},receiver_id.eq.${my_id}`)
 
         if(error) throw error
         return data
@@ -74,7 +74,7 @@ function Chat({user, profile}) {
 
     const get_conversation = ( id ) => {
 
-        const filtered_conversation = conversations.filter(message => message.receiver_id === id )
+        const filtered_conversation = conversations.filter(message => message.receiver_id === id && message.sender_id == my_id )
         console.log("here", filtered_conversation)
         setConversation(filtered_conversation)
     }
