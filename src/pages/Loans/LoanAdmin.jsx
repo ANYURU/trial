@@ -43,6 +43,8 @@ export default function LoanAdmin() {
 
   const [loans, setLoans] = useState([]);
   const [loanModal, setLoanModal] = useState(false);
+  const [loading, setLoading] = useState(true)
+
 
   const getApplications = async () => {
     const { error, data } = await supabase
@@ -50,7 +52,7 @@ export default function LoanAdmin() {
       .select()
       .eq("_type", "loan")
       .order("created_at", { ascending: false });
-    setLoans(data);
+    setLoans(data ?? []);
   };
 
   const handleDeposit = (loanID) => {
@@ -71,10 +73,14 @@ export default function LoanAdmin() {
   const fetch_loan_applications = async () => {
     const { data, error } = await supabase.rpc("fetch_loan_applications")
     if ( error ) {
+      setLoading(false)
       throw error
-    } else {
-      setLoans(data)
+
     } 
+    
+    setLoans(data ?? [])
+    setLoading(false)
+    
   }
 
   //pagination
@@ -107,7 +113,7 @@ export default function LoanAdmin() {
   const approvedMembers = loans.filter(
     (member) => member.application_meta.review_status === "approved"
   );
-  const pendingMembers = loans.filter((member) => !member.reviewed);
+  const pendingMembers =  loans.filter((member) => !member.reviewed);
   const rejectedMembers = loans.filter(
     (member) =>
       member.reviewed && member.application_meta.review_status !== "approved"
@@ -116,9 +122,9 @@ export default function LoanAdmin() {
   // loans = filterByStatus(loans, "account", account)
   // loans = loans.filter(loan => !date || loan.date === date)
 
-  const approved = Math.round((approvedMembers.length / loans.length) * 100);
-  const pending = Math.round((pendingMembers.length / loans.length) * 100);
-  const rejected = Math.round((rejectedMembers.length / loans.length) * 100);
+  const approved = Math.round((approvedMembers.length /  loans && loans?.length || 0) * 100);
+  const pending = Math.round((pendingMembers.length /  loans && loans?.length || 0) * 100);
+  const rejected = Math.round((rejectedMembers.length / loans && loans?.length || 0) * 100);
 
   //context
   const [show, setShow] = useState(false);
@@ -365,7 +371,8 @@ export default function LoanAdmin() {
         ) : loans && loans.length > 0 ? (
           <NothingShown />
         ) : (
-          <Spinner />
+          loading ? 
+          <Spinner /> : <NothingShown/>
         )}
       </div>
     </div>

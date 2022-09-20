@@ -7,6 +7,7 @@ import { nonEvidencedRequestValidationSchema as withdrawRequestValidationSchema 
 import { InputField } from "../../components/Form/CustomInputField";
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import { add_separator, remove_separator } from '../../helpers/thousand_separator'
 
 function WithdrawRequest() {
   const {
@@ -20,6 +21,7 @@ function WithdrawRequest() {
     amount: "",
     particulars: "",
     cashout_method: "",
+    phone_number: ""
   };
 
   return (
@@ -40,10 +42,9 @@ function WithdrawRequest() {
           initialValues={initialValues}
           validationSchema={withdrawRequestValidationSchema}
           onSubmit={async (values, { resetForm }) => {
-            console.log(values);
-            const { account_type, amount, particulars, cashout_method } =
+            const { account_type, amount, particulars, cashout_method, phone_number } =
               values;
-            console.log(values);
+
             try {
               const { error } = await supabase.from("applications").insert([
                 {
@@ -62,6 +63,8 @@ function WithdrawRequest() {
                     amount,
                     particulars,
                     cashout_method,
+                    phone_number,
+                    review_status: "pending"
                   },
                 },
               ]);
@@ -88,6 +91,7 @@ function WithdrawRequest() {
             handleBlur,
             dirty,
             isValid,
+            setFieldValue
           }) => {
             return (
               <Form className="flex flex-grow flex-col min-h-full p-6">
@@ -117,31 +121,78 @@ function WithdrawRequest() {
                         </div>
                       )}
                     </div>
-
-                    <InputField
-                      errors={errors}
-                      touched={touched}
-                      handleChange={handleChange}
-                      handleBlur={handleBlur}
-                      reference="amount"
-                      id="amount"
-                      label="Enter amount to withdraw"
-                      placeholder="Enter amount"
-                    />
+                    <div className="flex flex-col w-56 ">
+                      <label htmlFor="amount" className=" text-sm">
+                        Enter Amount
+                      </label>
+                      <input
+                        type="text"
+                        name="amount"
+                        id="amount"
+                        placeholder="Enter amount to withdraw"
+                        className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
+                        onChange={(event) => {
+                          let formatted_string = add_separator(remove_separator(event.target.value))
+                          event.target.value = formatted_string
+                          setFieldValue(event.target.name, parseFloat(remove_separator(event.target.value)))
+                        }}
+                        onBlur={handleBlur}
+                      />
+                      {touched?.amount && errors?.amount && (
+                        <div className="error text-red-600 text-xs">
+                          {errors?.amount}
+                        </div>
+                      )}
+                    </div>
+                  
                   </div>
                 </div>
-
-                <InputField
-                  errors={errors}
-                  touched={touched}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  reference="cashout_method"
-                  id="cashout_method"
-                  label="Cashout Method"
-                  placeholder="Enter method"
-                />
-
+                <div className="flex flex-wrap gap-5">
+                  <div className="flex flex-col w-56">
+                    <label className="text-sm">
+                      Cashout Method
+                    </label>
+                    <select
+                      name="cashout_method"
+                      id="cashout_method"
+                      className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.cashout_method}
+                    >
+                      <option value="">--Select Method--</option>
+                      <option value="Cash">Cash</option>
+                      <option value="Mobile Money">Mobile Money</option>
+                      <option value="Airtel Money">Airtel Money</option>
+                      <option value="Cheque">Mwana</option>
+                      <option value="EFT">EFT</option>
+                      <option value="RTGS">RTS</option>
+                    </select>
+                    {touched?.account_type && errors?.account_type && (
+                      <div className="error text-red-600 text-xs">
+                        {errors?.account_type}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-col w-56">
+                    <label className="text-sm">Enter Phone Number</label>
+                    <input
+                      type="text"
+                      name="phone_number"
+                      id="phone_number"
+                      placeholder="Enter phone number"
+                      className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.phone_number}
+                    />
+                    {touched?.phone_number && errors?.phone_number && (
+                      <div className="error text-red-600 text-xs">
+                        {errors?.phone_number}
+                      </div>
+                    )}
+                  </div>
+                </div>   
                 <div className="my-3">
                   <h1 className="font-semibold">Particulars</h1>
                   <textarea

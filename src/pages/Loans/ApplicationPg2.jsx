@@ -2,6 +2,8 @@ import { Formik, Form }  from 'formik'
 import { useState } from 'react'
 import { InputField } from '../../components/Form/CustomInputField'
 import { loan2ValidationSchema, loan3ValidationSchema } from '../../helpers/validator'
+import { remove_separator, add_separator } from '../../helpers/thousand_separator'
+import { AmountInputField } from '../../components/Form/AmountInputField'
 
 function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
     const [ employed, setEmployed ] = useState(true)
@@ -13,6 +15,7 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
           onSubmit={async ( values ) => {
               setInitialValues(values)
               setPageNumber(3)
+              console.log(values)
           }}
           validationSchema={employed === true ? loan2ValidationSchema : loan3ValidationSchema}
         >
@@ -141,8 +144,18 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
                     }}
                 />
                 </div>
+                {/* <div className='flex flex-col w-56 '>
+                <label className=' text-sm'>Supporting files</label>
+                <input type="text" name="amount" className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600'
+                    onInput={(event) => {
+                        let formatted_string = add_separator(remove_separator(event.target.value))
+                        event.target.value = formatted_string
+                        setFieldValue(event.target.name, parseFloat(remove_separator(event.target.value)))
+                    }}
+                />
+                </div> */}
 
-                <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount"  label="Amount in figures" placeholder="Enter loan amount" defaultValue={initialValues.amount} />
+                <AmountInputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount"  label="Amount in figures" placeholder="Enter loan amount" defaultValue={initialValues.amount} setFieldValue={setFieldValue} />
 
                 <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount_in_words"  label="Amount in words" placeholder="Enter amount" defaultValue={initialValues.amount_in_words} />
 

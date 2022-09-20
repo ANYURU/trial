@@ -219,6 +219,7 @@ export default function App() {
               element={<VerifyPayment />}
             />
             <Route path="loans/request" element={<LoanRequest />} />
+            {/* <Route path="loans/payments" element={}/> */}
 
             <Route path="deposit" element={<Deposit />} />
             <Route path="deposit/history" element={<DepositHistory />} />

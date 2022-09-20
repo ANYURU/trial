@@ -2,16 +2,16 @@ import { loanHistory } from "../../helpers/mockData";
 import { Pagination } from "../../components";
 import { useEffect, useState } from "react";
 import { supabase } from "../../helpers/supabase";
-import { FaEllipsisV } from "react-icons/fa";
-import { LoansContext } from "../../components";
 import { LoanModal } from "../../components";
 import { useOutletContext } from "react-router-dom";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { Spinner, NothingShown } from "../../components";
+import { useNavigate } from 'react-router-dom'
 
 export default function Loan() {
   const [user, { id }] = useOutletContext();
+  const navigate = useNavigate()
 
   useEffect(() => {
     document.title = "Loans - Bweyogere tuberebumu";
@@ -76,9 +76,24 @@ export default function Loan() {
       setLoading( false )
       throw error
     } else {
+      console.log(data)
       setLoans( data )
       setLoading( false )
     }
+    // const {data, error } = await supabase
+    //   .from('loans')
+    //   .select()
+    //   .order('created_at', {ascending: false})
+    
+    // if( error ) {
+    //   setLoading(false)
+    //   throw error
+    // } else {
+    //   console.log(data)
+    //   setLoans( data )
+    //   setLoading(false)
+    // }
+
   }
 
   return (
@@ -120,34 +135,38 @@ export default function Loan() {
               <table className="w-full h-6 text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-4">Date</th>
-                    <th className="px-6 py-4">Amount to Pay</th>
-                    <th className="px-6 py-4">Amount Paid</th>
-                    <th className="px-6 py-4">Principal</th>
-                    <th className="px-6 py-4">Interest (%)</th>
-                    <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4">Action</th>
+                    <th></th>
+                    <th className="pr-6 py-4">Date</th>
+                    <th className="px-4 py-4">Amount to Pay (UGX)</th>
+                    <th className="px-4 py-4">Amount Paid (UGX)</th>
+                    <th className="px-4 py-4">Principal (UGX)</th>
+                    <th className="px-4 py-4">Interest (%)</th>
+                    <th className="px-4 py-4">Status</th>
+                    <th className="px-4 py-4">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {shownloans.map((loan, index) => (
+                  {shownloans.map(({loan, payments}, index) => (
+                    <>
                     <tr
+                      onClick={() => {
+                        setLoanModal(true)
+                        setActiveIndex(index)
+                      }}
                       className={`${
                         index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
+                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                       key={index}
-                    >
-                      {loanModal && activeIndex === index && (
-                        <LoanModal setLoanModal={setLoanModal} loan={loan} />
-                      )}
-                      <td className="px-6 py-3">
+                      >
+                      <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                      <td className="pr-6 py-3">
                         {moment(loan.created_at).format("DD-MM-YYYY")}
                       </td>
                       <td className="px-6 py-3">
                         {currencyFormatter(
                           loan.outstanding_balance +
-                            0.05 * loan.outstanding_balance
-                        )}
+                          loan.interest_paid/100 * loan.outstanding_balance
+                          )}
                       </td>
                       <td className="px-6 py-3">
                         {currencyFormatter(loan.amount_paid)}
@@ -155,46 +174,54 @@ export default function Loan() {
                       <td className="px-6 py-3">
                         {currencyFormatter(loan.outstanding_balance)}
                       </td>
-                      <td className="px-6 py-3">5</td>
+                      <td className="px-6 py-3">{currencyFormatter(loan.interest_rate)}</td>
                       <td className={`px-6 py-3`}>
                         <span
                           className={` py-1 px-2 rounded-xl text-white ${
                             loan.loan_status === "pending"
-                              ? "bg-yellow-400"
-                              : loan.loan_status === "paid"
-                              ? "bg-green-400"
-                              : "bg-red-400"
+                            ? "bg-yellow-400"
+                            : loan.loan_status === "cleared"
+                            ? "bg-green-400"
+                            : loan.loan_status === "on going"
+                            ? "bg-blue-400"
+                            : "bg-red-400"
                           }`}
-                        >
-                          {loan.loan_status}
+                          >
+                          {loan?.loan_status === "defaulted" ? "arrears" : loan.loan_status}
                         </span>
                       </td>
-
                       <td className="px-6 py-3">
-                        <div className="relative">
-                          <button
-                            className="block p-2 rounded-md dialog cursor-context-menu"
-                            onClick={(event) => {
-                              setActiveIndex(index);
-                              setShow(!show);
-                              event.stopPropagation();
-                            }}
-                          >
-                            <FaEllipsisV />
+                        {
+                          loan?.loan_status === "cleared"
+                          ?
+                          <button 
+                            className="outline-slate-300 text-white outline-offset-2  py-1 px-2 rounded-sm w-20 bg-gray-500 capitalize">
+                            paid
                           </button>
-                          <LoansContext
-                            activeIndex={activeIndex}
-                            show={show}
-                            index={index}
-                            setShow={setShow}
-                            member={activeIndex === index ? loan : null}
-                            id={loan.id}
-                            setLoanModal={setLoanModal}
-                          />
-                        </div>
+                          :
+                          loan?.loan_status === "defaulted"
+                          ?
+                          <button 
+                            className="bg-red-500 text-white outline-offset-2 py-1 px-2 rounded-sm w-20 capitalize">
+                            arrears
+                          </button>
+                          :
+                          <button 
+                            className="bg-green-500 text-white outline-offset-2 py-1 px-2 rounded-sm w-20 capitalize"
+                            onClick={() => navigate(`/loans/payment/${id}`)}
+                          >
+                            pay now
+                          </button>
+                        }
+                        
                       </td>
                     </tr>
+                    {loanModal && activeIndex === index && (
+                      <LoanModal setLoanModal={setLoanModal} loan={{loan, payments}} loanModal={loanModal}/>
+                      )}
+                    </>
                   ))}
+                  
                 </tbody>
               </table>
             </div>

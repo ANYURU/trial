@@ -56,7 +56,7 @@ function EditModal({ setEditPop }) {
             .then(async ({ data }) => {
               if (data) {
                 const { error, data } = await supabase
-                  .from("members")
+                  .from("profiles")
                   .update({
                     name: name,
                     dob: dob,

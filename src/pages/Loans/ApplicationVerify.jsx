@@ -9,6 +9,7 @@ import { useAuth } from "../../auth/AuthContext"
 import { uploadFile } from "../../helpers/uploadFile"
 import { OTPBox } from "../../components"
 import { generate_amortization_schedule } from "../../helpers/generateAmortizationSchedule"
+import { remove_separator } from "../../helpers/thousand_separator"
 
 function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
   
@@ -199,6 +200,8 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     const verification_key = localStorage.getItem('loans_application_verification_key')
     // Destructuring files to upload in the loans bucket.
     // const { Key: url } = await uploadFile(evidence, 'deposits')
+    initialValues.amount = parseFloat(remove_separator(initialValues.amount))
+  
     const { amortizationSchedule, total } = generate_amortization_schedule(Number(amount), rate ,Number(months))
 
     verifyOTP( phone_number, one_time_password, verification_key)

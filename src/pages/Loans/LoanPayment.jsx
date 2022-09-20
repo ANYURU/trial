@@ -8,6 +8,7 @@ import { useAuth } from "../../auth/AuthContext";
 import { evidencedRequestValidationSchema as loanPaymentRequestValidationSchema } from "../../helpers/validator";
 import { useEffect, useState } from "react";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { add_separator, remove_separator } from '../../helpers/thousand_separator'
 
 function LoanPayment() {
   // Will be used later
@@ -29,11 +30,12 @@ function LoanPayment() {
     amount: "",
     phone_number: "",
     evidence: "",
-    particulars: "",
+    comments: "",
   };
 
   const getApplications = async () => {
     const { error, data } = await supabase.from("loans").select().eq("id", id);
+    console.log(loan)
     setLoan(data[0]);
   };
 
@@ -42,8 +44,10 @@ function LoanPayment() {
       initialValues={initialValues}
       validationSchema={loanPaymentRequestValidationSchema}
       onSubmit={async (values, { resetForm }) => {
-        const { account_type, amount, phone_number, particulars, evidence } =
+        const { account_type, amount, phone_number, comments, evidence } =
           values;
+
+        console.log(amount)
 
         try {
           const { Key: url } = await uploadFile(evidence, "loans");
@@ -70,7 +74,7 @@ function LoanPayment() {
                     file_url: url,
                   },
                 ],
-                particulars,
+                comments,
               },
             },
           ]);
@@ -95,6 +99,7 @@ function LoanPayment() {
         handleBlur,
         isValid,
         dirty,
+        setFieldValue
       }) => {
         return (
           <Form className="mx-5 my-2 h-[calc(100vh-70px)]">
@@ -107,7 +112,7 @@ function LoanPayment() {
                 <label>
                   Total Amount To Pay:{" "}
                   <span className="font-bold">
-                    {currencyFormatter(loan.outstanding_balance)}
+                    {currencyFormatter(loan?.outstanding_balance)}
                   </span>
                 </label>
               </div>
@@ -123,9 +128,13 @@ function LoanPayment() {
                     id="amount"
                     placeholder="Enter Amount"
                     className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
-                    onChange={handleChange}
+                    onChange={(event) => {
+                      let formatted_string = add_separator(remove_separator(event.target.value))
+                      event.target.value = formatted_string
+                      setFieldValue(event.target.name, parseFloat(remove_separator(event.target.value)))
+                    }}
                     onBlur={handleBlur}
-                    value={values.amount}
+                    // value={values.amount}
                   />
                   {touched?.amount && errors?.amount && (
                     <div className="error text-red-600 text-xs">
@@ -179,15 +188,15 @@ function LoanPayment() {
                 </div>
               </div>
               <div className="mb-2">
-                <h1 className="font-semibold">Particulars</h1>
+                <h1 className="font-semibold">Comments</h1>
                 <textarea
-                  name="particulars"
-                  id="particulars"
+                  name="comments"
+                  id="comments"
                   cols="20"
                   rows="10"
                   className="outline outline-1 p-2 rounded-md w-full dark:bg-dark-bg-700"
-                  onChange={handleChange("particulars")}
-                  value={values?.particulars}
+                  onChange={handleChange("comments")}
+                  value={values?.comments}
                 ></textarea>
               </div>
               <div className="w-56">

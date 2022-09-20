@@ -8,12 +8,16 @@ import DepositModal from "../../components/Modals/DepositModal";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { useOutletContext } from "react-router-dom";
+import { filterByStatus } from "../../helpers/utilites";
 
 export default function Deposit() {
 
   const [deposits, setDeposits] = useState([]);
   const [depositModal, setDepositModal] = useState(false);
   const [account, setAccount] = useState("");
+  const [status, setStatus] = useState("")
+
+
 
   useEffect(() => {
     document.title = "Deposit - Bweyogere tuberebumu";
@@ -60,6 +64,7 @@ export default function Deposit() {
       if( error ) {
         throw error
       } else {
+        console.log(data)
         setDeposits(data ?? null)
       }
   }
@@ -93,11 +98,14 @@ export default function Deposit() {
   
     filteredDeposits =
       !filteredDeposits ||
-      filteredDeposits.filter(
+      filteredDeposits.filter(deposit => !status || status === "" ? deposit : status === 'approved' ? deposit?.transaction_meta : deposit?.application_meta?.review_status === status).filter(
         (deposit) =>
-          !account || deposit?.transaction_meta.account_type === account
-      );
-  
+          !account || (deposit?.transaction_meta ? deposit?.transaction_meta?.account_type === account : deposit?.application_meta?.account_type === account)
+      )
+    
+      
+
+    
     return (
       <div className="mx-5 my-2 h-[calc(100vh-70px)]">
         <Helmet>
@@ -109,6 +117,24 @@ export default function Deposit() {
           </h1>
   
           <div className="flex my-3 justify-between gap-5">
+            <div className="flex flex-col w-56">
+              <select
+                name="status"
+                id=""
+                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+                onChange={(event) => {
+                  setStatus(event.target.value);
+                  console.log(event.target.value)
+                  console.log(filteredDeposits)
+                  
+                }}
+              >
+                <option value="">Status</option>
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
             <div className="flex flex-col w-56">
               <select
                 name="account"
@@ -145,12 +171,12 @@ export default function Deposit() {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-4">Date</th>
+                    <th></th>
+                    <th className="pr-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
                     <th className="px-6 py-4">Account</th>
                     <th className="px-6 py-4">Amount(UGX)</th>
-                    <th className="px-6 py-4">Approved By</th>
-                    <th className="px-6 py-4">Action</th>
+                    <th className="px-6 py-4">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,58 +187,43 @@ export default function Deposit() {
                           index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
                         } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                         key={index}
+                        onClick={() => {
+                          console.log(deposit)
+                          setDepositModal(true)
+                          setActiveIndex(index)
+                        }}
                       >
-                        {depositModal && index === activeIndex && (
-                          <DepositModal
-                            deposit={deposit}
-                            setDepositModal={setDepositModal}
-                          />
-                        )}
-                        <td className="px-6 py-3">
+                        <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                        <td className="pr-6 py-3">
                           {moment(deposit.created_at).format("DD-MM-YYYY")}
                         </td>
-                        <td className="px-6 py-3">{deposit.transaction_id}</td>
+                        <td className="px-6 py-3">{deposit?.trans_id || deposit?.app_id}</td>
                         <td className="px-6 py-3">
-                          {deposit.transaction_meta.account_type}
+                          {deposit?.transaction_meta?.account_type || deposit?.application_meta?.account_type}
                         </td>
                         <td className="px-6 py-3">
-                          {currencyFormatter(deposit.amount)}
+                          {currencyFormatter(deposit?.amount || deposit?.application_meta?.amount)}
                         </td>
                         <td className="px-6 py-3">
-                          {deposit.transaction_meta.approved_by}
-                        </td>
-
-                        <td className="px-6 py-2">
-                          <div className="relative">
-                            <button
-                              className="block p-2 rounded-md dialog"
-                              onClick={(event) => {
-                                setActiveIndex(index);
-                                setShow(!show);
-                                event.stopPropagation();
-                              }}
-                            >
-                              <FaEllipsisV />
-                            </button>
-
-                            <ul
-                              className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
-                                index === activeIndex && show ? "" : "hidden"
-                              }`}
-                            >
-                              <li
-                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
-                                onClick={() => {
-                                  setDepositModal(true);
-                                }}
-                              >
-                                <MdInfo /> Details
-                              </li>
-                            </ul>
-                          </div>
+                          <span className={` py-1 px-2 rounded-xl text-white ${
+                            deposit?.application_meta?.review_status === "pending"
+                            ? "bg-yellow-400"
+                            : deposit?.application_meta?.review_status === "rejected" ?
+                            "bg-red-400" 
+                            : "bg-green-400"
+                          }`}>
+                            {deposit?.application_meta?.review_status || "approved"}
+                          </span>
                         </td>
                       </tr>
+                      {depositModal && index === activeIndex && (
+                        <DepositModal
+                          deposit={deposit}
+                          setDepositModal={setDepositModal}
+                        />
+                      )}
                     </Fragment>
+                    
                   ))}
                 </tbody>
               </table>
@@ -229,7 +240,7 @@ export default function Deposit() {
               />
             </div>
           </>
-        ) : deposits === null || deposits?.length !== 0 && filteredDeposits === null ? (
+        ) : deposits === null || deposits?.length !== 0 || filteredDeposits === null || filteredDeposits?.length === 0 ? (
           <NothingShown />
         ) : (
           <Spinner />

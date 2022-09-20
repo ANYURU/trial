@@ -7,11 +7,20 @@ import { LoanModal } from "../../components";
 import moment from "moment";
 import { Spinner, NothingShown } from "../../components";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function MemberLoans() {
+  
+  const [ { id }, profile, setProfile, roles] = useOutletContext()
+  const navigate = useNavigate()  
+
   useEffect(() => {
     fetch_member_loans().catch(error => console.log(error))
-    
+
+  
     // Realtime.
     const mySubscription = supabase
     .from('loans')
@@ -89,6 +98,18 @@ export default function MemberLoans() {
     const { data, error } = await supabase.rpc("fetch_member_loans")
     if ( error ) throw error 
     setLoans(data)
+    // const { data, error } = await supabase
+    //   .from('loans')
+    //   .select()
+    //   .order('created_at', {ascending:false})
+    //   .not('member_id', 'eq', id)
+
+
+    //   console.log(loan)
+    //   // console.log(supabase.auth.user().id)
+    //   if (error ) throw error
+    //   console.log(data)
+    //   setLoans(data)
   }
 
   return (
@@ -142,7 +163,8 @@ export default function MemberLoans() {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-4">Date</th>
+                    <th className=""></th>
+                    <th className="pr-4 py-4">Date</th>
                     <th className="px-6 py-4">ID</th>
                     <th className="px-6 py-4">Name</th>
                     <th className="px-6 py-4">Amount to Pay</th>
@@ -154,71 +176,96 @@ export default function MemberLoans() {
                   </tr>
                 </thead>
                 <tbody>
-                  {shownloans.map((loan, index) => (
-                    <tr
-                      className={`${
-                        index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
-                      key={index}
-                    >
-                      {loanModal && activeIndex === index && (
-                        <LoanModal setLoanModal={setLoanModal} loan={loan} />
-                      )}
-                      <td className="px-6 py-3">
-                        {moment(loan.created_at).format("DD-MM-YYYY")}
-                      </td>
-                      <td className="px-6 py-3">{loan.id}</td>
-                      <td className="px-6 py-3">
-                        {loan.loan_meta.applicants_name}
-                      </td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(
-                          loan.amount_issued + 0.05 * loan.amount_issued
-                        )}
-                      </td>
-                      <td className="px-6 py-3">{loan.amount_paid}</td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(loan.amount_issued)}
-                      </td>
-                      <td className="px-6 py-3">5</td>
-                      <td className={`px-6 py-3`}>
+                  {shownloans.map(({loan, payments}, index) => (
+                    <>
+                      <tr
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
+                        } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
+                        key={index}
+                        onClick={() => {
+                          setLoanModal(true)
+                          setActiveIndex(index)
+                        }}
+                      >
+                        {/* {loanModal && activeIndex === index && (
+                          <LoanModal setLoanModal={setLoanModal} loan={loan} />
+                        )} */}
+                        <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                        <td className="pr-4 py-3">
+                          {moment(loan.created_at).format("DD-MM-YYYY")}
+                        </td>
+                        <td className="px-6 py-3">{loan.loan_id}</td>
+                        <td className="px-6 py-3">
+                          {loan.loan_meta.applicants_name}
+                        </td>
+                        <td className="px-6 py-3">
+                          {currencyFormatter(
+                            loan.amount_issued + 0.05 * loan.amount_issued
+                          )}
+                        </td>
+                        <td className="px-6 py-3">{loan.amount_paid}</td>
+                        <td className="px-6 py-3">
+                          {currencyFormatter(loan.amount_issued)}
+                        </td>
+                        <td className="px-6 py-3">{loan.interest_rate}</td>
+                        <td className={`px-6 py-3`}>
                         <span
                           className={` py-1 px-2 rounded-xl text-white ${
                             loan.loan_status === "pending"
-                              ? "bg-yellow-400"
-                              : loan.loan_status === "paid"
-                              ? "bg-green-400"
-                              : "bg-red-400"
+                            ? "bg-yellow-400"
+                            : loan.loan_status === "cleared"
+                            ? "bg-green-400"
+                            : loan.loan_status === "on going"
+                            ? "bg-blue-400"
+                            : "bg-red-400"
                           }`}
-                        >
+                          >
                           {loan.loan_status}
                         </span>
                       </td>
 
-                      <td className="px-6 py-3">
-                        <div className="relative">
-                          <button
-                            className="block rounded-md dialog cursor-context-menu"
-                            onClick={(event) => {
-                              setActiveIndex(index);
-                              setShow(!show);
-                              event.stopPropagation();
-                            }}
-                          >
-                            <FaEllipsisV />
-                          </button>
-                          <LoansContext
-                            activeIndex={activeIndex}
-                            show={show}
-                            index={index}
-                            setShow={setShow}
-                            member={activeIndex === index ? loan : null}
-                            id={loan.id}
-                            setLoanModal={setLoanModal}
-                          />
-                        </div>
-                      </td>
-                    </tr>
+                        {/* <td className="px-6 py-3">
+                          <div className="relative">
+                            <button
+                              className="block rounded-md dialog cursor-context-menu"
+                              onClick={(event) => {
+                                setActiveIndex(index);
+                                setShow(!show);
+                                event.stopPropagation();
+                              }}
+                            >
+                              <FaEllipsisV />
+                            </button>
+                            <LoansContext
+                              activeIndex={activeIndex}
+                              show={show}
+                              index={index}
+                              setShow={setShow}
+                              member={activeIndex === index ? loan : null}
+                              id={loan.id}
+                              setLoanModal={setLoanModal}
+                            />
+                          </div>
+                        </td> */}
+                        {
+                          roles.includes("treasurer") && 
+                          <td>
+                            <button
+                              className="bg-green-500 text-white outline-offset-2  py-1 px-1 rounded-sm w-20 outline-green-300 capitalize"
+                              onClick={() => {
+                                navigate(`/loans/payment/${id}`)
+                              }}
+                            > 
+                              Pay Now
+                            </button>
+                          </td>   
+                        }
+                      </tr>
+                      {loanModal && activeIndex === index && (
+                        <LoanModal setLoanModal={setLoanModal} loan={{loan, payments}} />
+                      )}
+                    </>
                   ))}
                 </tbody>
               </table>

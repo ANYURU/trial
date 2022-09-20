@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getProfile } from "../helpers/getProfile";
 import { Spinner } from "../components";
 import ErrorBoundary from "../components/ErrorBoundary";
+import Chat from '../components/Chat/Chat'
 
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
@@ -40,7 +41,7 @@ const PrivateRoute = ({ allowedRoles }) => {
     matches ? (
       <div className={`${darkMode ? "dark" : ""}`}>
         <div
-          className={`flex flex-col min-h-screen  w-screen bg-back dark:bg-dark-bg`}
+          className={`flex flex-col min-h-screen  w-screen bg-back dark:bg-dark-bg border-red-200 border-2`}
         >
           <Navbar user={profile} showSidebar={showSidebar} />
           <div
@@ -67,7 +68,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         </div>
                       ) : (
                         <ErrorBoundary>
-                          <Outlet context={[user, profile, setProfile]} />
+                          <Outlet context={[user, profile, setProfile, roles]} />
                         </ErrorBoundary>
                       )
                     ) : (
@@ -85,7 +86,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                         <Spinner />
                       ) : (
                         <ErrorBoundary>
-                          <Outlet context={[user, profile, setProfile]} />
+                          <Outlet context={[user, profile, setProfile, roles]} />
                         </ErrorBoundary>
                       )}
                     </div>
@@ -96,13 +97,14 @@ const PrivateRoute = ({ allowedRoles }) => {
                       <Spinner />
                     ) : (
                       <ErrorBoundary>
-                        <Outlet context={[user, profile, setProfile]} />
+                        <Outlet context={[user, profile, setProfile, roles]} />
                       </ErrorBoundary>
                     )}
                   </div>
                 ))}
-            </div>
+            </div> 
           </div>
+          <Chat user={user} profile={profile}/>
         </div>
       </div>
     ) : (
