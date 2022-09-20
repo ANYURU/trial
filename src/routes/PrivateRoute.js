@@ -104,7 +104,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                 ))}
             </div> 
           </div>
-          <Chat />
+          <Chat user={user} profile={profile}/>
         </div>
       </div>
     ) : (

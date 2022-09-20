@@ -1,64 +1,112 @@
 import { useState, useEffect, useRef } from 'react'
 import { BsChevronDoubleUp } from 'react-icons/bs'
-import {BiArrowBack } from 'react-icons/bi'
+import {BiArrowBack, BiMessageSquare } from 'react-icons/bi'
 import {BsChevronDoubleDown} from 'react-icons/bs'
 import {FiSend} from 'react-icons/fi'
-import {HiOutlineSearch} from 'react-icons/hi'
 import { supabase } from '../../helpers/supabase'
+import { useOutletContext } from 'react-router-dom'
 
 
-function Chat() {
+
+function Chat({user, profile}) {
 
     const [ collapse, setCollapse ] = useState(false)
-    const [ showChats, setShowChats ] = useState(false)
+    // const [ showChats, setShowChats ] = useState(false)
     const [ chatSelected, setChatSelected ] = useState(false)
-    const [ members, setMembers ] = useState([
-        "David Derrick",
-        "Enoch William",
-        "Anyuru Egwang",
-        "Kizito William",
-        "Henry David",
-        "Ssemugenyi George",
-        "Nakitto Rebecca",
-        "Dorcas Diana"
-    ])
+    const [ members, setMembers ] = useState([])
 
     const [ selectedMember, setSelectedMember ] = useState('')
     const [ filter, setFilter ] = useState("")
-    const [ conversation, setConversation ] = useState([
-        "hello",
-        "hi",
-        "how're you doing?",
-        `I'm okay`,
-        `How're you doing?`,
-        `When are you resuming school?`,
-        `I do not know actually but I'll check and tell you then.`,
-        `Okay I'll be waiting`,
-        `Thank you.`,
-        "how're you doing?",
-        `I'm okay`,
-        `How're you doing?`,
-        `When are you resuming school?`,
-        `I do not know actually but I'll check and tell you then.`,
-        `Okay I'll be waiting`,
-        `Thank you.`,
-        'bingo',
-        'samuel'
-    ])
-    const [message, setMessage] = useState("")
-
+    const [ conversation, setConversation ] = useState([])
+    const [ conversations, setConversations ] = useState([])
+    const [ message, setMessage ] = useState("")
+    const { fullname:senders_name } = profile
+    const { id: my_id } = user
     const scrollToBottom = () => {
         bottom?.current?.scrollIntoView({ 'behavior': "smooth" })
     }
 
-    
-
     const bottom = useRef(null)
 
     useEffect(() => {
+        fetch_members().then(data => setMembers(data)).catch(error => console.log(error))
+        fetch_messages().then(data => setConversations(data)).catch(error => console.log(error))
         
         scrollToBottom()
     }, [conversation])
+
+
+    const fetch_messages = async () => {
+        const { data, error } = await supabase
+            .from('messenger')
+            .select()
+            .match({ sender_id: my_id })
+
+        if(error) throw error
+        return data
+    }
+
+    const send_message = async (event) => {
+        event.preventDefault()
+
+        const { data, error } = await supabase
+            .from('messenger')
+            .insert({
+                sender_id: my_id,
+                receiver_id: selectedMember.receiver_id,
+                message,
+                created_at: new Date()
+                        .toISOString()
+                        .toLocaleString("en-GB", { timeZone: "UTC" }),
+                updated_at: new Date()
+                        .toISOString()
+                        .toLocaleString("en-GB", { timeZone: "UTC" })
+            })
+            .single()
+
+        if(error) throw error
+        setConversation([...conversation, data])
+        setMessage("")
+        document.getElementById('message-form').reset()
+        
+    }
+
+
+    const get_conversation = ( id ) => {
+
+        const filtered_conversation = conversations.filter(message => message.receiver_id === id )
+        console.log("here", filtered_conversation)
+        setConversation(filtered_conversation)
+    }
+
+    const update_seen = async () => {
+        const { data, error } = await supabase
+            .from('messenger')
+            .update(
+                {
+                    seen: true
+                }
+            )
+            .match({
+                seen: false
+            })
+            .single()
+
+        if(error) throw error
+        console.log(data)
+    }
+
+    const fetch_members = async () => {
+        const {data, error} = await supabase.rpc('possible_chats')
+
+        if (error) console.log(error)
+        console.log(data)
+        return data
+    }
+
+    // const fetch_notifications = async () => {
+    //     const {data, error} => 
+    // }
 
   return (
     <div className='absolute bottom-0 right-10 rounded-md shadow-lg'>
@@ -80,7 +128,7 @@ function Chat() {
                     }
                     <div className='rounded-full border border-blue-500 h-10 w-10 capitalize flex justify-center items-center bg-pink-200 text-gray-700'>  
                         {/* This is where the avatar is to be place  */}
-                        {chatSelected ? selectedMember.split(" ")[0][0] + selectedMember.split(" ")[1][0] : "Anyuru David Derrick".split(" ")[0][0] + "Anyuru David Derrick".split(" ")[1][0]}
+                        {chatSelected ? selectedMember?.fullname.split(" ")[0][0] + selectedMember?.fullname.split(" ")[1][0] : (senders_name?.length > 0 && senders_name.split(" ")[0][0] + senders_name.split(" ")[1][0]) || ""}
                     </div>
                 </div>
                 <div className="rounded-full border-1 border-blue-200 h-full w-[h-full] flex justify-center items-center hover:bg-stone-100 opacity-80">
@@ -99,11 +147,12 @@ function Chat() {
                     <>
                         <div className='border flex flex-col flex-1 h-60 overflow-y-scroll'>
                             {/* Display the conversation */}
+                            {console.log(conversations)}
                             {
-                                conversation.map((message, index) => {   
+                                conversations && conversation?.length > 0 && conversation.map(({message, receiver_id}, index) => {   
                                     return (
-                                        <div className={`flex ${index % 2 == 0 ? "justify-start" : "justify-end"} p-4`}>
-                                            <div className={`${index % 2 == 0 ? "bg-blue-400 text-white" : "bg-stone-100"} w-44 px-2 py-1 rounded-md text-xs`}>
+                                        <div className={`flex ${receiver_id ===  my_id ? "justify-start" : "justify-end"} px-4 py-0.5`}>
+                                            <div className={`${receiver_id === my_id ? "bg-[#EFF3F4]" : "bg-[#27427A] text-white"} w-44 px-2 py-1 rounded-md text-xs`}>
                                                 {message}
                                             </div>
                                         </div>
@@ -113,10 +162,10 @@ function Chat() {
                             {/* Scroll to the bottom to see the last message */}
                             <div ref={bottom}></div>
                         </div>
-                        <div className={`absolute h-12 bottom-0 border w-full ${collapse ? "": "hidden"} ${!chatSelected ? "hidden border-none" : "bg-white"} flex justify-between p-3 items-center`}>
+                        <form className={`absolute h-12 bottom-0 border w-full ${collapse ? "": "hidden"} ${!chatSelected ? "hidden border-none" : "bg-white"} flex justify-between p-3 items-center`} id="message-form">
                             <input 
                                 type="text" 
-                                className={`border rounded-2xl w-56 outline-none pl-3 py-1 ${!chatSelected && "hidden"} flex-1 text-sm`}
+                                className={`border rounded-2xl w-56 outline-none px-3 py-1 ${!chatSelected && "hidden"} flex-1 text-xs`}
                                 onChange={(event) => {
                                     setMessage(event.target.value)
 
@@ -124,16 +173,16 @@ function Chat() {
                             />
                             <button 
                                 className={`border rounded-full w-9 h-9 m-2 flex justify-center items-center ml-3 ${message?.length > 0 ? 'bg-primary text-white' : 'text-gray-400 '}`}
-                                type="button"
+                                type="submit"
                                 disabled={message.length < 1}
-                                onClick={()=> {
-                                    setConversation([...conversation, message])
+                                onClick={async (event) => {
+                                    await send_message(event)
                                     setMessage("")
                                 }}
                             > 
                                 <FiSend />
                             </button>
-                        </div>
+                        </form>
                     </>
                     :
                     <>
@@ -145,17 +194,24 @@ function Chat() {
                             onChange={(event)=> setFilter(event.target.value)}
                         />
                        </div>
+                       {members?.length > 0 && console.log(members)}
                         {
-                            members && members.map((member, index) => 
+                            members && members?.length > 0 && members.map((member, index) => 
                                 <div 
                                     key={index} 
-                                    className={`p-3 hover:border hover:border-t-1 hover:border-b-1 hover:border-r-0 hover:border-l-0 hover:bg-stone-50 ${member.toLowerCase().indexOf(filter.toLowerCase()) > -1 ? "" : "hidden"}`}
-                                    onClick={() => {setSelectedMember(member);console.log(selectedMember);console.log(chatSelected);setChatSelected(true)}}
+                                    className={`p-3 hover:border hover:border-t-1 hover:border-b-1 hover:border-r-0 hover:border-l-0 hover:bg-stone-50 flex gap-3 items-center ${member?.fullname.toLowerCase().indexOf(filter.toLowerCase()) > -1 ? "" : "hidden"}`}
+                                    onClick={() => {
+                                        setChatSelected(true)
+                                        setSelectedMember(member);
+                                        console.log(member.receiver_id)
+                                        get_conversation(member.receiver_id);
+                                    }}
                                 >
                                     <div className='rounded-full border border-blue-500 h-10 w-10 capitalize flex justify-center items-center bg-pink-200 text-gray-700'>  
                                             {/* This is where the avatar is to be place  */}
-                                            {member.split(" ")[0][0] + member.split(" ")[1][0]}
+                                            {member?.fullname && member.fullname.split(" ")[0][0] + member?.fullname.split(" ")[1][0]}
                                     </div>
+                                    <div className="capitalize">{member?.fullname}</div>
                                 </div>
                             )
                         }
