@@ -75,7 +75,6 @@ function Chat({user, profile}) {
     const get_conversation = ( id ) => {
 
         const filtered_conversation = conversations.filter(message => message.receiver_id === id && message.sender_id == my_id )
-        console.log("here", filtered_conversation)
         setConversation(filtered_conversation)
     }
 
@@ -87,10 +86,7 @@ function Chat({user, profile}) {
                     seen: true
                 }
             )
-            .match({
-                seen: false
-            })
-            .single()
+            
 
         if(error) throw error
         console.log(data)
@@ -100,7 +96,6 @@ function Chat({user, profile}) {
         const {data, error} = await supabase.rpc('possible_chats')
 
         if (error) console.log(error)
-        console.log(data)
         return data
     }
 
@@ -145,13 +140,12 @@ function Chat({user, profile}) {
                 {
                     chatSelected ?
                     <>
-                        <div className='border flex flex-col flex-1 h-60 overflow-y-scroll'>
+                        <div className='border flex flex-col flex-1 h-60 overflow-y-scroll justify-end'>
                             {/* Display the conversation */}
-                            {console.log(conversations)}
                             {
                                 conversations && conversation?.length > 0 && conversation.map(({message, receiver_id}, index) => {   
                                     return (
-                                        <div className={`flex ${receiver_id ===  my_id ? "justify-start" : "justify-end"} px-4 py-0.5`}>
+                                        <div key={index} className={`flex ${receiver_id ===  my_id ? "justify-start" : "justify-end"} px-4 py-0.5`}>
                                             <div className={`${receiver_id === my_id ? "bg-[#EFF3F4]" : "bg-[#27427A] text-white"} w-44 px-2 py-1 rounded-md text-xs`}>
                                                 {message}
                                             </div>
@@ -168,7 +162,6 @@ function Chat({user, profile}) {
                                 className={`border rounded-2xl w-56 outline-none px-3 py-1 ${!chatSelected && "hidden"} flex-1 text-xs`}
                                 onChange={(event) => {
                                     setMessage(event.target.value)
-
                                 }}
                             />
                             <button 
@@ -194,7 +187,6 @@ function Chat({user, profile}) {
                             onChange={(event)=> setFilter(event.target.value)}
                         />
                        </div>
-                       {members?.length > 0 && console.log(members)}
                         {
                             members && members?.length > 0 && members.map((member, index) => 
                                 <div 
@@ -203,15 +195,15 @@ function Chat({user, profile}) {
                                     onClick={() => {
                                         setChatSelected(true)
                                         setSelectedMember(member);
-                                        console.log(member.receiver_id)
                                         get_conversation(member.receiver_id);
+
                                     }}
                                 >
                                     <div className='rounded-full border border-blue-500 h-10 w-10 capitalize flex justify-center items-center bg-pink-200 text-gray-700'>  
                                             {/* This is where the avatar is to be place  */}
                                             {member?.fullname && member.fullname.split(" ")[0][0] + member?.fullname.split(" ")[1][0]}
                                     </div>
-                                    <div className="capitalize">{member?.fullname}</div>
+                                    <span className="capitalize text-sm">{member?.fullname.toLowerCase()}</span>
                                 </div>
                             )
                         }
