@@ -87,7 +87,7 @@ function MakeDeposit() {
             try {
               const { Key: url } = await uploadFile(evidence, "deposits");
 
-              if( values.designated_for === "own") {
+              if( values.designated_for === "other") {
                 const details = {
                   ...values,
                   file_url: url,
@@ -100,7 +100,7 @@ function MakeDeposit() {
                   .toLocaleString("en-GB", { timeZone: "UTC" })
                 }
 
-                const { data, error } = await supabase.rpc('bingo', {details: JSON.stringify(details)})
+                const { data, error } = await supabase.rpc('deposit_for_member', {details: JSON.stringify(details)})
                 if (error) throw error
 
                 resetForm({ values: initialValues });
@@ -149,6 +149,7 @@ function MakeDeposit() {
               }
             } catch (error) {
               setLoading(false);
+              console.log(error)
               toast.error(`${error?.message}`, { position: "top-center" });
             }
           }}
@@ -306,6 +307,10 @@ function MakeDeposit() {
 
                   <div className="flex justify-end w-full">
                     <div className="w-56">
+                      <button 
+                        type="button"
+                        onClick={() => {console.log("Values: ", values);console.log("Errors: ", errors)}}
+                      >check</button>
                       <Submit value="Submit" disabled={!(isValid && dirty)} />
                     </div>
                   </div>

@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { BsChevronDoubleUp } from 'react-icons/bs'
-import {BiArrowBack, BiMessageSquare } from 'react-icons/bi'
-import {BsChevronDoubleDown} from 'react-icons/bs'
-import {FiSend} from 'react-icons/fi'
+import { BiArrowBack } from 'react-icons/bi'
+import { BsChevronDoubleDown } from 'react-icons/bs'
+import { FiSend } from 'react-icons/fi'
 import { supabase } from '../../helpers/supabase'
-import { useOutletContext } from 'react-router-dom'
 
 
 
@@ -25,15 +24,34 @@ function Chat({user, profile}) {
     const scrollToBottom = () => {
         bottom?.current?.scrollIntoView({ 'behavior': "smooth" })
     }
+    const [ receiverId, setReceiverId] = useState(null)
+    // const [ msg_count, setMsgCount ] = useState(0)
 
     const bottom = useRef(null)
 
     useEffect(() => {
-        fetch_members().then(data => setMembers(data)).catch(error => console.log(error))
-        fetch_messages().then(data => setConversations(data)).catch(error => console.log(error))
+        const fetch_data = async () => {
+            const members = await fetch_members()
+            const conversations = await fetch_messages()
+            
+            setMembers(members)
+            setConversations(conversations)
+        }
+        
+        fetch_data()
+        
+        console.log('here')
+        
+        const mySubscription = supabase
+        .from('messenger')
+        .on('INSERT', (payload) => {
+          console.log('Change received!', payload)
+        })
+        .subscribe()
         
         scrollToBottom()
-    }, [conversation])
+        // return () => supabase.removeSubscription(mySubscription);
+    }, [])
 
 
     const fetch_messages = async () => {
@@ -65,17 +83,21 @@ function Chat({user, profile}) {
             .single()
 
         if(error) throw error
-        setConversation([...conversation, data])
+        if(data.sender_id === my_id) {
+            setConversation([...conversation, data])
+        }
         setMessage("")
         document.getElementById('message-form').reset()
-        
+
     }
 
 
     const get_conversation = ( id ) => {
-
-        const filtered_conversation = conversations.filter(message => message.receiver_id === id && message.sender_id == my_id )
-        setConversation(filtered_conversation)
+        // console.log(`My id: ${my_id}, Their id: ${id}`)
+        const filtered_conversation = conversations.filter(message => (message.receiver_id === id && message.sender_id === my_id) || (message.sender_id === id && message.receiver_id === my_id))
+        // console.log("filtered conversation: ", filtered_conversation)
+        // setConversation(filtered_conversation)
+        return filtered_conversation
     }
 
     const update_seen = async () => {
@@ -89,7 +111,7 @@ function Chat({user, profile}) {
             
 
         if(error) throw error
-        console.log(data)
+        return data
     }
 
     const fetch_members = async () => {
@@ -99,9 +121,7 @@ function Chat({user, profile}) {
         return data
     }
 
-    // const fetch_notifications = async () => {
-    //     const {data, error} => 
-    // }
+    
 
   return (
     <div className='absolute bottom-0 right-10 rounded-md shadow-lg'>
@@ -143,7 +163,7 @@ function Chat({user, profile}) {
                         <div className='border flex flex-col flex-1 h-60 overflow-y-scroll justify-end'>
                             {/* Display the conversation */}
                             {
-                                conversations && conversation?.length > 0 && conversation.map(({message, receiver_id}, index) => {   
+                                conversations && conversation?.length > 0 ? conversation.map(({message, receiver_id}, index) => {   
                                     return (
                                         <div key={index} className={`flex ${receiver_id ===  my_id ? "justify-start" : "justify-end"} px-4 py-0.5`}>
                                             <div className={`${receiver_id === my_id ? "bg-[#EFF3F4]" : "bg-[#27427A] text-white"} w-44 px-2 py-1 rounded-md text-xs`}>
@@ -152,6 +172,10 @@ function Chat({user, profile}) {
                                         </div>
                                     )
                                 })
+                                :
+                                <span className='text-center text-xs'>
+                                    No messages yet
+                                </span>
                             }
                             {/* Scroll to the bottom to see the last message */}
                             <div ref={bottom}></div>
@@ -195,7 +219,8 @@ function Chat({user, profile}) {
                                     onClick={() => {
                                         setChatSelected(true)
                                         setSelectedMember(member);
-                                        get_conversation(member.receiver_id);
+                                        setReceiverId(member.receiver_id)
+                                        setConversation(get_conversation(member.receiver_id));
 
                                     }}
                                 >
