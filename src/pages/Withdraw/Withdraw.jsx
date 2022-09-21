@@ -64,9 +64,9 @@ export default function Deposit() {
       if( error ) {
         throw error
       } else {
-        let data = null
-        if (transactions) data = [...transactions]
-        if (applications) data = [...applications]
+        let data = []
+        if (applications) data.push(...applications)
+        if (transactions) data.push(...transactions)
         setDeposits( data ?? null)
       }
   }
