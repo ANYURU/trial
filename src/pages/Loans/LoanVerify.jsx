@@ -9,6 +9,7 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function LoanVerify() {
   const { id } = useParams();
+  console.log(id)
 
   const [loan, setLoan] = useState(null);
   const [imageURL, setImageURL] = useState("");
@@ -22,9 +23,15 @@ export default function LoanVerify() {
       .from("applications")
       .select()
       .eq("_type", "loan")
-      .eq("application_id", id);
-    setLoan(data[0]);
+      .eq("application_id", id)
+      .single();
+
+      console.log(data)
+    setLoan(data);
   };
+
+
+
 
   // if (loan) {
   //   try {
@@ -38,6 +45,13 @@ export default function LoanVerify() {
   //     console.log("failed");
   //   }
   // }
+
+  const approveLoanPaymentTransaction = async() => {
+    const { data, error } = await supabase.rpc('approve_loan',  {members_id:loan.application_meta.applicant_id, application:loan.application_id})
+
+    if(error) throw error
+    console.log(data)
+  }
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
@@ -97,6 +111,7 @@ export default function LoanVerify() {
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Amount Requested:</p>
                   <p className="font-bold col-span-3">
+                  
                     UGX
                     {loan.application_meta &&
                       currencyFormatter(loan.application_meta.amount)}{" "}
@@ -177,22 +192,72 @@ export default function LoanVerify() {
                     {loan.application_meta?.spouse_profession}
                   </p>
                 </div>
-
-                <img
-                  src={imageURL}
-                  width={200}
-                  className="rounded"
-                  alt="receipt"
-                  loading="lazy"
-                />
-
+                {
+                  loan.application_meta?.bank_settlement_url && (
+                  <>
+                    <p> Bank statement</p>
+                    <img
+                      src={ loan.application_meta?.bank_settlement_url}
+                      width={200}
+                      className="rounded"
+                      alt="receipt"
+                      loading="lazy"
+                    /> 
+                  </>
+                  )
+                }
+                {
+                  loan.application_meta?.a_years_cashflow_url && (
+                  <>
+                    <p> One year's cashflow </p>
+                    <img
+                      src={loan.application_meta?.a_years_cashflow_url}
+                      width={200}
+                      className="rounded"
+                      alt="receipt"
+                      loading="lazy"
+                    /> 
+                  </>
+                  )
+                }
+                {
+                  loan.application_meta?.additional_files_url && (
+                  <>
+                    <p> Additional Files </p>
+                    <img
+                      src={loan.application_meta?.additional_files_url}
+                      width={200}
+                      className="rounded"
+                      alt="receipt"
+                      loading="lazy"
+                    /> 
+                  </>
+                  )
+                }
+                {
+                  loan.application_meta?.supporting_files_url && (
+                    <>
+                      <p> Supporting Files </p>
+                      <img
+                        src={loan.application_meta.supporting_files_url}
+                        width={200}
+                        className="rounded"
+                        alt="receipt"
+                        loading="lazy"
+                      /> 
+                    </>
+                    )
+                }
                 {loan.application_meta.guarantors.map((guarantor, index) => (
                   <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                     <p className="col-span-2">Guarantor {index}:</p>
                     <div className="col-span-3">
                       <p className="font-bold ">{guarantor.name}</p>
                       <p className="font-bold ">{guarantor.contact}</p>
-                      <p className="font-bold ">{guarantor.contact}</p>
+                      {
+                        loan?.financial_statement && loan.financial_statement?.length > 0  &&
+                        <p className="font-bold ">{guarantor?.financial_statement}</p>
+                      }
                     </div>
                   </div>
                 ))}
@@ -207,7 +272,8 @@ export default function LoanVerify() {
               </button>
               <button
                 className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-                // onClick={approveLoanPaymentTransaction}
+                onClick={approveLoanPaymentTransaction}
+                
               >
                 Approve
               </button>

@@ -7,62 +7,52 @@ import { supabase } from '../../helpers/supabase'
 
 
 
-function Chat({user, profile}) {
+function Chat({user, profile, members}) {
 
     const [ collapse, setCollapse ] = useState(false)
-    // const [ showChats, setShowChats ] = useState(false)
     const [ chatSelected, setChatSelected ] = useState(false)
-    const [ members, setMembers ] = useState([])
-
+    // const [ members, setMembers ] = useState([])
     const [ selectedMember, setSelectedMember ] = useState('')
     const [ filter, setFilter ] = useState("")
-    const [ conversation, setConversation ] = useState([])
+    const {id: my_id} = user
     const [ conversations, setConversations ] = useState([])
     const [ message, setMessage ] = useState("")
+    const [ receiverId, setReceiverId] = useState("")
     const { fullname:senders_name } = profile
-    const { id: my_id } = user
+    
     const scrollToBottom = () => {
         bottom?.current?.scrollIntoView({ 'behavior': "smooth" })
     }
-    const [ receiverId, setReceiverId] = useState(null)
-    // const [ msg_count, setMsgCount ] = useState(0)
 
     const bottom = useRef(null)
 
     useEffect(() => {
-        const fetch_data = async () => {
-            const members = await fetch_members()
-            const conversations = await fetch_messages()
-            
-            setMembers(members)
-            setConversations(conversations)
-        }
         
-        fetch_data()
-        
-        console.log('here')
+        // fetch_members()
         
         const mySubscription = supabase
-        .from('messenger')
-        .on('INSERT', (payload) => {
-          console.log('Change received!', payload)
-        })
-        .subscribe()
-        
-        scrollToBottom()
-        // return () => supabase.removeSubscription(mySubscription);
+            .from('messenger')
+            .on('INSERT', (payload) => {
+                console.log('during realtime')
+                console.log('Change received!', payload)
+            })
+            .subscribe()
+
+            scrollToBottom()
+        // return () => supabase.removeSubscription(mySubscription)
+
     }, [])
 
 
-    const fetch_messages = async () => {
-        const { data, error } = await supabase
-            .from('messenger')
-            .select()
-            .or(`sender_id.eq.${my_id},receiver_id.eq.${my_id}`)
+    // const fetch_messages = async () => {
+    //     const { data, error } = await supabase
+    //         .from('chats')
+    //         .select()
+    //         .or(`sender_id.eq.${my_id},receiver_id.eq.${my_id}`)
 
-        if(error) throw error
-        return data
-    }
+    //     if(error) throw error
+    //     return data
+    // }
 
     const send_message = async (event) => {
         event.preventDefault()
@@ -83,43 +73,18 @@ function Chat({user, profile}) {
             .single()
 
         if(error) throw error
-        if(data.sender_id === my_id) {
-            setConversation([...conversation, data])
-        }
         setMessage("")
         document.getElementById('message-form').reset()
-
+        console.log(data)
+        
     }
 
+    // const fetch_members = async () => {
+    //     const {data, error} = await supabase.rpc('possible_chats')
 
-    const get_conversation = ( id ) => {
-        // console.log(`My id: ${my_id}, Their id: ${id}`)
-        const filtered_conversation = conversations.filter(message => (message.receiver_id === id && message.sender_id === my_id) || (message.sender_id === id && message.receiver_id === my_id))
-        // console.log("filtered conversation: ", filtered_conversation)
-        // setConversation(filtered_conversation)
-        return filtered_conversation
-    }
-
-    const update_seen = async () => {
-        const { data, error } = await supabase
-            .from('messenger')
-            .update(
-                {
-                    seen: true
-                }
-            )
-            
-
-        if(error) throw error
-        return data
-    }
-
-    const fetch_members = async () => {
-        const {data, error} = await supabase.rpc('possible_chats')
-
-        if (error) console.log(error)
-        return data
-    }
+    //     if (error) console.log(error)
+    //     setMembers(data)
+    // }
 
     
 
@@ -163,7 +128,7 @@ function Chat({user, profile}) {
                         <div className='border flex flex-col flex-1 h-60 overflow-y-scroll justify-end'>
                             {/* Display the conversation */}
                             {
-                                conversations && conversation?.length > 0 ? conversation.map(({message, receiver_id}, index) => {   
+                                conversations && conversations?.length > 0 ? conversations.filter(message => (message.receiver_id === receiverId && message.sender_id === my_id) || (message.sender_id === receiverId && message.receiver_id === my_id)).map(({message, receiver_id}, index) => { 
                                     return (
                                         <div key={index} className={`flex ${receiver_id ===  my_id ? "justify-start" : "justify-end"} px-4 py-0.5`}>
                                             <div className={`${receiver_id === my_id ? "bg-[#EFF3F4]" : "bg-[#27427A] text-white"} w-44 px-2 py-1 rounded-md text-xs`}>
@@ -220,7 +185,6 @@ function Chat({user, profile}) {
                                         setChatSelected(true)
                                         setSelectedMember(member);
                                         setReceiverId(member.receiver_id)
-                                        setConversation(get_conversation(member.receiver_id));
 
                                     }}
                                 >

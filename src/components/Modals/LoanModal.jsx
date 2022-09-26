@@ -131,7 +131,7 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
 
           { 
           
-          loan.amortization_schedule.length > 2 && loan.amortization_schedule.length !== 3 &&
+          loan.amortization_schedule.length > 2 && loan?.amortization_schedule?.length !== 3 &&
             <button
               className="cursor-pointer"
               type="button"

@@ -16,6 +16,7 @@ export default function Deposit() {
   const [depositModal, setDepositModal] = useState(false);
   const [account, setAccount] = useState("");
   const [status, setStatus] = useState("")
+  const [loading, setLoading ]= useState(true)
 
 
 
@@ -63,15 +64,14 @@ export default function Deposit() {
     const { data: {transactions, applications}, error } = await supabase.rpc("fetch_deposits")
       if( error ) {
         throw error
+        setLoading(false)
       } else {
 
         let data = []
         if (applications) data.push(...applications)
         if (transactions) data.push(...transactions)
-
-        console.log(data)
         setDeposits(data ?? null)
-        console.log(transactions.length)
+        setLoading(false)
       }
   }
 
@@ -249,7 +249,7 @@ export default function Deposit() {
         ) : deposits === null || deposits?.length !== 0 || filteredDeposits === null || filteredDeposits?.length === 0 ? (
           <NothingShown />
         ) : (
-          <Spinner />
+          loading ? <Spinner /> : <NothingShown />
         )}
       </div>
     </div>

@@ -201,8 +201,9 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     // Destructuring files to upload in the loans bucket.
     // const { Key: url } = await uploadFile(evidence, 'deposits')
     initialValues.amount = parseFloat(remove_separator(initialValues.amount))
-  
-    const { amortizationSchedule, total } = generate_amortization_schedule(Number(amount), rate ,Number(months))
+    const amount = parseFloat(remove_separator(initialValues.amount))
+    const { amortization_schedule, total } = generate_amortization_schedule(amount, rate ,Number(months))
+    console.log(amortization_schedule)
 
     verifyOTP( phone_number, one_time_password, verification_key)
       .then( response => response.json() )
@@ -218,21 +219,20 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
               const { data, error } = await supabase
                 .from('applications')
                 .insert(
-                  [
-                    {
-                      _type: "loan",
-                      created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                      updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
-                      reviewed: false,
-                      application_meta: {
-                        applicants_id,
-                        applicants_name,
-                        amortization_schedule: amortizationSchedule,
-                        ...initialValues, 
-                        total
-                      }
+                  {
+                    _type: "loan",
+                    created_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                    updated_at: ((new Date()).toISOString()).toLocaleString('en-GB', { timeZone: 'UTC' }),
+                    reviewed: false,
+                    application_meta: {
+                      applicants_id,
+                      applicants_name,
+                      amortization_schedule,
+                      ...initialValues, 
+                      total,
+                      interest_rate: rate
                     }
-                  ]
+                  }
                 )
     
               if (error) {

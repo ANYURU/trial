@@ -22,7 +22,7 @@ export default function WithdrawMembers() {
 
   const navigate = useNavigate();
 
-  const [withdraws, setWithraws] = useState([]);
+  const [withdraws, setWithdraws] = useState([]);
 
   const handleWithdraw = (withdrawID) => {
     navigate(`/withdraw/members/${withdrawID}`);
@@ -42,11 +42,19 @@ export default function WithdrawMembers() {
   }, []);
 
   const getApplications = async () => {
-    const { data, error } = await supabase.rpc("fetch_withdraws");
-    if (error) throw error;
+    const { data: {transactions, applications}, error } = await supabase.rpc("fetch_withdraws")
+      if( error ) {
+        setLoading(false)
+        throw error
+      } else {
+        console.log(transactions)
 
-    setWithraws([] ?? data);
-    setLoading(false)
+        let data = []
+        if (applications) data.push(...applications)
+        if (transactions) data.push(...transactions)
+        setWithdraws(data ?? null)
+        setLoading(false)
+      }
   };
 
   //pagination
@@ -55,33 +63,34 @@ export default function WithdrawMembers() {
   const indexOfLastPage = currentPage * withdrawPerPage;
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage;
 
-  let filteredWithdraws = withdraws.filter((application) =>
+  let filteredWithdraws =  withdraws && withdraws.filter((application) =>
     status === ""
       ? application
       : status === "pending"
       ? !application.reviewed
       : status === "approved"
-      ? application.application_meta.review_status === status
+      ? application.application_meta?.review_status === status
       : application.reviewed &&
-        application.application_meta.review_status !== "approved"
+        application.application_meta?.review_status !== "approved"
   );
 
   filteredWithdraws = filteredWithdraws.filter(
     (withdraw) =>
-      withdraw.application_meta.applicants_name
+      withdraw.application_meta?.applicants_name
         .toLowerCase()
         .indexOf(searchText.toLowerCase()) > -1
   );
 
+
   const approvedwithdraws = filteredWithdraws.filter(
-    (deposit) => deposit.application_meta.review_status === "approved"
+    (deposit) => deposit.application_meta?.review_status === "approved"
   );
   const pendingwithdraws = filteredWithdraws.filter(
     (deposit) => !deposit.reviewed
   );
   const rejectedwithdraws = filteredWithdraws.filter(
     (deposit) =>
-      deposit.reviewed && deposit.application_meta.review_status !== "approved"
+      deposit.reviewed && deposit.application_meta?.review_status !== "approved"
   );
 
   const approved =
@@ -233,26 +242,26 @@ export default function WithdrawMembers() {
                         />
                       )}
                       <td className="px-6 py-3">
-                        {withdraw.application_meta.applicants_name}
+                        {withdraw.application_meta?.applicants_name || withdraw.transaction_meta?.applicants_name}
                       </td>
                       <td className="px-6 py-3">
                         {moment(withdraw.created_at).format("DD-MM-YYYY")}
                       </td>
-                      <td className="px-6 py-3">{withdraw.application_id}</td>
+                      <td className="px-6 py-3">{withdraw.application_id || withdraw?.transaction_meta?.trans_id}</td>
                       <td className="px-6 py-3">
-                        {withdraw.application_meta.account_type}
+                        {withdraw.application_meta?.account_type || withdraw?.transaction_meta?.account_type}
                       </td>
                       <td className="px-6 py-3">
-                        {currencyFormatter(withdraw.application_meta.amount)}
+                        {currencyFormatter(withdraw.application_meta?.amount)}
                       </td>
                       <td className="px-6 py-3">
-                        {withdraw.application_meta.cashout_method}
+                        {withdraw.application_meta?.cashout_method}
                       </td>
                       <td className={`px-6 py-3`}>
                         <span
                           className={` py-1 px-2 rounded-xl text-white ${
                             withdraw.reviewed
-                              ? withdraw.application_meta.review_status ===
+                              ? withdraw.application_meta?.review_status ===
                                 "approved"
                                 ? "bg-green-400"
                                 : "bg-red-400"
@@ -260,7 +269,7 @@ export default function WithdrawMembers() {
                           }`}
                         >
                           {withdraw.reviewed
-                            ? withdraw.application_meta.review_status ===
+                            ? withdraw.application_meta?.review_status ===
                               "approved"
                               ? "Approved"
                               : "Rejected"

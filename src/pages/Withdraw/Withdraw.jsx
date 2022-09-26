@@ -46,6 +46,7 @@ export default function Deposit() {
   const [user, profile] = useOutletContext();
 
   const [date, setDate] = useState(null);
+  const [ loading, setLoading ] = useState(true)
 
   const getApplications = async () => {
     const { data } = await supabase
@@ -62,12 +63,14 @@ export default function Deposit() {
   const getDeposits = async () => {
     const { data: { transactions, applications}, error } = await supabase.rpc("fetch_withdraws")
       if( error ) {
+        setLoading(false)
         throw error
       } else {
         let data = []
         if (applications) data.push(...applications)
         if (transactions) data.push(...transactions)
         setDeposits( data ?? null)
+        setLoading(false)
       }
   }
 
@@ -249,7 +252,7 @@ export default function Deposit() {
         ) : deposits === null || deposits?.length !== 0 || filteredDeposits === null || filteredDeposits?.length === 0 ? (
           <NothingShown />
         ) : (
-          <Spinner />
+          loading ? <Spinner /> : <NothingShown />
         )}
       </div>
     </div>

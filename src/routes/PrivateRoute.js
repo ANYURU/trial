@@ -7,6 +7,7 @@ import { getProfile } from "../helpers/getProfile";
 import { Spinner } from "../components";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Chat from '../components/Chat/Chat'
+import { supabase } from "../helpers/supabase";
 
 const PrivateRoute = ({ allowedRoles }) => {
   const matches = useMediaQuery("(min-width: 800px)");
@@ -21,9 +22,20 @@ const PrivateRoute = ({ allowedRoles }) => {
   const [roles, setRoles] = useState(null);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
+  const [members, setMembers] = useState([])
+
+
+  const fetch_members = async () => {
+    const {data, error} = await supabase.rpc('possible_chats')
+
+    if (error) console.log(error)
+    setMembers(data)
+}
+
 
   useEffect(() => {
     // Getting information that is required in all components.
+        
     getProfile(user)
       .then((data) => {
         if (data) {
@@ -34,7 +46,9 @@ const PrivateRoute = ({ allowedRoles }) => {
         }
       })
       .then(() => setLoading(false))
+      .then(fetch_members())
       .catch((error) => console.log(error));
+
   }, [user?.session]);
   
   return user?.role === "authenticated" ? (
@@ -104,7 +118,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                 ))}
             </div> 
           </div>
-          <Chat user={user} profile={profile}/>
+          {/* <Chat user={user} profile={profile} members={members}/> */}
         </div>
       </div>
     ) : (

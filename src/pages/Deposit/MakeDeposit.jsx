@@ -307,10 +307,6 @@ function MakeDeposit() {
 
                   <div className="flex justify-end w-full">
                     <div className="w-56">
-                      <button 
-                        type="button"
-                        onClick={() => {console.log("Values: ", values);console.log("Errors: ", errors)}}
-                      >check</button>
                       <Submit value="Submit" disabled={!(isValid && dirty)} />
                     </div>
                   </div>

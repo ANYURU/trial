@@ -36,10 +36,12 @@ export default function DepositAdmin() {
   const getApplications = async () => {
     const { data, error } = await supabase.rpc("fetch_deposit_applications");
 
+    console.log(data)
+
     if (error) {
       throw error;
     } else {
-      setDeposits([] ?? data);
+      setDeposits(data ?? []);
       setLoading(false);
     }
   };
@@ -225,12 +227,14 @@ export default function DepositAdmin() {
                 </thead>
                 <tbody>
                   {shownDeposits.map((deposit, index) => (
+                    
                     <tr
                       className={`${
                         index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
                       } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                       key={index}
                     >
+                      {console.log(shownDeposits)}
                       {/* {depositModal && index === activeIndex && (
                         <DepositModal
                           deposit={deposit}
