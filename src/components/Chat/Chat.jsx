@@ -4,55 +4,51 @@ import { BiArrowBack } from 'react-icons/bi'
 import { BsChevronDoubleDown } from 'react-icons/bs'
 import { FiSend } from 'react-icons/fi'
 import { supabase } from '../../helpers/supabase'
+import { io } from 'socket.io-client'
+import { useCallback } from 'react'
+// const socket = io.connect("http://localhost:3001")
 
-
-
-function Chat({user, profile, members}) {
+function Chat({user, profile, members, conversations, setConversations}) {
 
     const [ collapse, setCollapse ] = useState(false)
     const [ chatSelected, setChatSelected ] = useState(false)
-    // const [ members, setMembers ] = useState([])
     const [ selectedMember, setSelectedMember ] = useState('')
     const [ filter, setFilter ] = useState("")
     const {id: my_id} = user
-    const [ conversations, setConversations ] = useState([])
+    // const [ conversations, setConversations ] = useState([])
+    const [ selectedConversation, setSelectedConversation ] = useState([])
     const [ message, setMessage ] = useState("")
     const [ receiverId, setReceiverId] = useState("")
     const { fullname:senders_name } = profile
-    
-    const scrollToBottom = () => {
-        bottom?.current?.scrollIntoView({ 'behavior': "smooth" })
-    }
+    const [ socket, setSocket ] = useState()
+
+    const setRef = useCallback(node => node && node.scrollIntoView({ smooth: true }))
 
     const bottom = useRef(null)
 
     useEffect(() => {
-        
-        // fetch_members()
-        
-        const mySubscription = supabase
+        const socket = io.connect(
+            "http://localhost:3001",
+            { query: {id: my_id}}
+        )
+        setSocket(socket)
+        socket.on("receive_message", (data) => {
+            // console.log(data)
+            setSelectedConversation([...selectedConversation, data])
+        })
+    }, [ receiverId ])
+
+
+    const fetch_messages = async () => {
+        const { data, error } = await supabase
             .from('messenger')
-            .on('INSERT', (payload) => {
-                console.log('during realtime')
-                console.log('Change received!', payload)
-            })
-            .subscribe()
+            .select()
+            .or(`sender_id.eq.${my_id},receiver_id.eq.${my_id}`)
 
-            scrollToBottom()
-        // return () => supabase.removeSubscription(mySubscription)
-
-    }, [])
-
-
-    // const fetch_messages = async () => {
-    //     const { data, error } = await supabase
-    //         .from('chats')
-    //         .select()
-    //         .or(`sender_id.eq.${my_id},receiver_id.eq.${my_id}`)
-
-    //     if(error) throw error
-    //     return data
-    // }
+        if(error) throw error
+        console.log(data)
+        return data
+    }
 
     const send_message = async (event) => {
         event.preventDefault()
@@ -75,18 +71,9 @@ function Chat({user, profile, members}) {
         if(error) throw error
         setMessage("")
         document.getElementById('message-form').reset()
-        console.log(data)
-        
+        setSelectedConversation([...selectedConversation, data])
+        socket.emit("send_message", {...data})
     }
-
-    // const fetch_members = async () => {
-    //     const {data, error} = await supabase.rpc('possible_chats')
-
-    //     if (error) console.log(error)
-    //     setMembers(data)
-    // }
-
-    
 
   return (
     <div className='absolute bottom-0 right-10 rounded-md shadow-lg'>
@@ -128,9 +115,14 @@ function Chat({user, profile, members}) {
                         <div className='border flex flex-col flex-1 h-60 overflow-y-scroll justify-end'>
                             {/* Display the conversation */}
                             {
-                                conversations && conversations?.length > 0 ? conversations.filter(message => (message.receiver_id === receiverId && message.sender_id === my_id) || (message.sender_id === receiverId && message.receiver_id === my_id)).map(({message, receiver_id}, index) => { 
+                                selectedConversation && ( selectedConversation?.length > 0 ? selectedConversation.map(({message, receiver_id}, index) => { 
+                                    const lastMessage = selectedConversation.length - 1 === index
                                     return (
-                                        <div key={index} className={`flex ${receiver_id ===  my_id ? "justify-start" : "justify-end"} px-4 py-0.5`}>
+                                        <div 
+                                            key={index} 
+                                            className={`flex ${receiver_id ===  my_id ? "justify-start" : "justify-end"} px-4 py-0.5`}
+                                            ref={lastMessage ? setRef() : null}
+                                        >
                                             <div className={`${receiver_id === my_id ? "bg-[#EFF3F4]" : "bg-[#27427A] text-white"} w-44 px-2 py-1 rounded-md text-xs`}>
                                                 {message}
                                             </div>
@@ -141,9 +133,9 @@ function Chat({user, profile, members}) {
                                 <span className='text-center text-xs'>
                                     No messages yet
                                 </span>
+                                )
                             }
                             {/* Scroll to the bottom to see the last message */}
-                            <div ref={bottom}></div>
                         </div>
                         <form className={`absolute h-12 bottom-0 border w-full ${collapse ? "": "hidden"} ${!chatSelected ? "hidden border-none" : "bg-white"} flex justify-between p-3 items-center`} id="message-form">
                             <input 
@@ -182,10 +174,12 @@ function Chat({user, profile, members}) {
                                     key={index} 
                                     className={`p-3 hover:border hover:border-t-1 hover:border-b-1 hover:border-r-0 hover:border-l-0 hover:bg-stone-50 flex gap-3 items-center ${member?.fullname.toLowerCase().indexOf(filter.toLowerCase()) > -1 ? "" : "hidden"}`}
                                     onClick={() => {
+                                        const selectedConversation = conversations && conversations.filter(message => (message.receiver_id === member.receiver_id && message.sender_id === my_id) || (message.sender_id === member.receiver_id && message.receiver_id === my_id))
+                                        
                                         setChatSelected(true)
                                         setSelectedMember(member);
                                         setReceiverId(member.receiver_id)
-
+                                        setSelectedConversation(selectedConversation)
                                     }}
                                 >
                                     <div className='rounded-full border border-blue-500 h-10 w-10 capitalize flex justify-center items-center bg-pink-200 text-gray-700'>  

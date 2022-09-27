@@ -23,6 +23,7 @@ const PrivateRoute = ({ allowedRoles }) => {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const [members, setMembers] = useState([])
+  const [conversations, setConversations] = useState([])
 
 
   const fetch_members = async () => {
@@ -30,7 +31,17 @@ const PrivateRoute = ({ allowedRoles }) => {
 
     if (error) console.log(error)
     setMembers(data)
-}
+  }
+
+  const fetch_conversations = async () => {
+    const { data, error } = await supabase
+        .from('messenger')
+        .select()
+        .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
+
+    if(error) throw error
+    setConversations(data)
+  }
 
 
   useEffect(() => {
@@ -46,6 +57,7 @@ const PrivateRoute = ({ allowedRoles }) => {
         }
       })
       .then(() => setLoading(false))
+      .then(fetch_conversations())
       .then(fetch_members())
       .catch((error) => console.log(error));
 
@@ -118,7 +130,7 @@ const PrivateRoute = ({ allowedRoles }) => {
                 ))}
             </div> 
           </div>
-          {/* <Chat user={user} profile={profile} members={members}/> */}
+          <Chat user={user} profile={profile} members={members} conversations={conversations} setConversations={setConversations}/>
         </div>
       </div>
     ) : (
