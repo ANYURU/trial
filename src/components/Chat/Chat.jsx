@@ -8,36 +8,39 @@ import { io } from 'socket.io-client'
 import { useCallback } from 'react'
 // const socket = io.connect("http://localhost:3001")
 
-function Chat({user, profile, members, conversations, setConversations}) {
+function Chat({user, profile, members,  conversations, setConversations}) {
+
 
     const [ collapse, setCollapse ] = useState(false)
     const [ chatSelected, setChatSelected ] = useState(false)
     const [ selectedMember, setSelectedMember ] = useState('')
     const [ filter, setFilter ] = useState("")
     const {id: my_id} = user
-    // const [ conversations, setConversations ] = useState([])
     const [ selectedConversation, setSelectedConversation ] = useState([])
     const [ message, setMessage ] = useState("")
     const [ receiverId, setReceiverId] = useState("")
     const { fullname:senders_name } = profile
-    const [ socket, setSocket ] = useState()
-
-    const setRef = useCallback(node => node && node.scrollIntoView({ smooth: true }))
-
-    const bottom = useRef(null)
-
-    useEffect(() => {
-        const socket = io.connect(
+    const [ socket, setSocket ] = useState (
+        io.connect(
             "http://localhost:3001",
             { query: {id: my_id}}
         )
+    )
+
+    const setRef = useCallback(node => node && node.scrollIntoView({ smooth: true }))
+
+    useEffect(() => {
+
         setSocket(socket)
         socket.on("receive_message", (data) => {
-            // console.log(data)
-            setSelectedConversation([...selectedConversation, data])
+            console.log(data)
+            setSelectedConversation((selectedConversation) => [...selectedConversation, data])
         })
-    }, [ receiverId ])
 
+        return () => { 
+            socket.off("receive_message")
+        }
+    }, [])
 
     const fetch_messages = async () => {
         const { data, error } = await supabase
@@ -52,6 +55,21 @@ function Chat({user, profile, members, conversations, setConversations}) {
 
     const send_message = async (event) => {
         event.preventDefault()
+        const conversation = { 
+            sender_id: my_id,
+            receiver_id: selectedMember.receiver_id,
+            message,
+            created_at: new Date()
+                    .toISOString()
+                    .toLocaleString("en-GB", { timeZone: "UTC" }),
+            updated_at: new Date()
+                    .toISOString()
+                    .toLocaleString("en-GB", { timeZone: "UTC"
+                 }) 
+        }
+        socket.emit("send_message", conversation)
+        setMessage("")
+        setSelectedConversation((selectedConversation) => [...selectedConversation, conversation])
 
         const { data, error } = await supabase
             .from('messenger')
@@ -70,9 +88,6 @@ function Chat({user, profile, members, conversations, setConversations}) {
 
         if(error) throw error
         setMessage("")
-        document.getElementById('message-form').reset()
-        setSelectedConversation([...selectedConversation, data])
-        socket.emit("send_message", {...data})
     }
 
   return (
@@ -144,6 +159,7 @@ function Chat({user, profile, members, conversations, setConversations}) {
                                 onChange={(event) => {
                                     setMessage(event.target.value)
                                 }}
+                                value={message}
                             />
                             <button 
                                 className={`border rounded-full w-9 h-9 m-2 flex justify-center items-center ml-3 ${message?.length > 0 ? 'bg-primary text-white' : 'text-gray-400 '}`}
@@ -174,12 +190,12 @@ function Chat({user, profile, members, conversations, setConversations}) {
                                     key={index} 
                                     className={`p-3 hover:border hover:border-t-1 hover:border-b-1 hover:border-r-0 hover:border-l-0 hover:bg-stone-50 flex gap-3 items-center ${member?.fullname.toLowerCase().indexOf(filter.toLowerCase()) > -1 ? "" : "hidden"}`}
                                     onClick={() => {
-                                        const selectedConversation = conversations && conversations.filter(message => (message.receiver_id === member.receiver_id && message.sender_id === my_id) || (message.sender_id === member.receiver_id && message.receiver_id === my_id))
+                                        // const selectedConversation = conversations && conversations.filter(message => (message.receiver_id === member.receiver_id && message.sender_id === my_id) || (message.sender_id === member.receiver_id && message.receiver_id === my_id))
                                         
                                         setChatSelected(true)
                                         setSelectedMember(member);
                                         setReceiverId(member.receiver_id)
-                                        setSelectedConversation(selectedConversation)
+                                        // setSelectedConversation(selectedConversation)
                                     }}
                                 >
                                     <div className='rounded-full border border-blue-500 h-10 w-10 capitalize flex justify-center items-center bg-pink-200 text-gray-700'>  
