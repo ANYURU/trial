@@ -5,20 +5,20 @@ import { BsChevronDoubleDown } from 'react-icons/bs'
 import { FiSend } from 'react-icons/fi'
 import { supabase } from '../../helpers/supabase'
 import { io } from 'socket.io-client'
-import { useCallback } from 'react'
-// const socket = io.connect("http://localhost:3001")
+import { getFormattedDate } from '../../helpers/formatDate'
+import moment from 'moment'
+
 
 function Chat({user, profile, members,  conversations, setConversations}) {
-
 
     const [ collapse, setCollapse ] = useState(false)
     const [ chatSelected, setChatSelected ] = useState(false)
     const [ selectedMember, setSelectedMember ] = useState('')
     const [ filter, setFilter ] = useState("")
     const {id: my_id} = user
+    const [ receiverId, setReceiverId] = useState("")
     const [ selectedConversation, setSelectedConversation ] = useState([])
     const [ message, setMessage ] = useState("")
-    const [ receiverId, setReceiverId] = useState("")
     const { fullname:senders_name } = profile
     const [ socket, setSocket ] = useState (
         io.connect(
@@ -26,8 +26,18 @@ function Chat({user, profile, members,  conversations, setConversations}) {
             { query: {id: my_id}}
         )
     )
+    const [ submitting, setSubmitting ] = useState(false)
+    const [ onlineMembers, setOnlineMembers ] = useState([])
+    const [ receiverName, setReceiverName] = useState("")
+    const [ isTyping, setIsTyping ] = useState(null)
 
-    const setRef = useCallback(node => node && node.scrollIntoView({ smooth: true }))
+    
+
+    // const setRef = useCallback(node => node && node.scrollIntoView({ smooth: true }))
+    const bottomRef = useRef(null)
+
+    const scrollToBottom = () => bottomRef?.current?.scrollIntoView({behavior: "smooth"})
+
 
     useEffect(() => {
 
@@ -37,10 +47,28 @@ function Chat({user, profile, members,  conversations, setConversations}) {
             setSelectedConversation((selectedConversation) => [...selectedConversation, data])
         })
 
+        socket.on("receive_typing_status", (data) => {
+            setIsTyping(data)
+        })
+
+
+        socket.on("connect", () => {
+            socket.emit("add_online_user", {sender_id: my_id})
+        })
+
+        socket.on("receive_online_users", (data) => {
+            console.log(data)
+            setOnlineMembers(data)
+        })
+
+        setOnlineStatus()
+
+        scrollToBottom()
+
         return () => { 
             socket.off("receive_message")
         }
-    }, [])
+    }, [selectedConversation, receiverId, socket])
 
     const fetch_messages = async () => {
         const { data, error } = await supabase
@@ -53,8 +81,16 @@ function Chat({user, profile, members,  conversations, setConversations}) {
         return data
     }
 
+    const setOnlineStatus = () => {
+        socket.emit("send_online_status", {member_id: my_id, online: my_id ? true : false})
+    }
+
     const send_message = async (event) => {
         event.preventDefault()
+        setMessage("")
+        setSelectedConversation((selectedConversation) => [...selectedConversation, conversation])
+        setSubmitting(true)
+
         const conversation = { 
             sender_id: my_id,
             receiver_id: selectedMember.receiver_id,
@@ -67,27 +103,17 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                     .toLocaleString("en-GB", { timeZone: "UTC"
                  }) 
         }
+
         socket.emit("send_message", conversation)
-        setMessage("")
-        setSelectedConversation((selectedConversation) => [...selectedConversation, conversation])
+        document.activeElement.blur()
 
         const { data, error } = await supabase
             .from('messenger')
-            .insert({
-                sender_id: my_id,
-                receiver_id: selectedMember.receiver_id,
-                message,
-                created_at: new Date()
-                        .toISOString()
-                        .toLocaleString("en-GB", { timeZone: "UTC" }),
-                updated_at: new Date()
-                        .toISOString()
-                        .toLocaleString("en-GB", { timeZone: "UTC" })
-            })
+            .insert(conversation)
             .single()
 
+
         if(error) throw error
-        setMessage("")
     }
 
   return (
@@ -112,6 +138,9 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                         {/* This is where the avatar is to be place  */}
                         {chatSelected ? selectedMember?.fullname.split(" ")[0][0] + selectedMember?.fullname.split(" ")[1][0] : (senders_name?.length > 0 && senders_name.split(" ")[0][0] + senders_name.split(" ")[1][0]) || ""}
                     </div>
+                    {/* <span>{isTyping && isTyping?.receiver_name }</span> */}
+                    {isTyping && isTyping.typing_status === true && <span className="text-xs">{`${chatSelected ? "typing ..." : `${isTyping.receiver_name.split(" ")[0]} is typing.`}`}</span>}
+                    {onlineMembers?.length > 0 && <span className="text-xs">{onlineMembers.includes(selectedMember.member_id) && "online"}</span>}
                 </div>
                 <div className="rounded-full border-1 border-blue-200 h-full w-[h-full] flex justify-center items-center hover:bg-stone-100 opacity-80">
                     <button 
@@ -123,41 +152,53 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                     </button>
                 </div>
             </div>
-            <div className={`h-72 ${collapse ? "" : "hidden"} overflow-y-scroll scroll-smooth`}>
+            <div className={`h-72 ${collapse ? "" : "hidden"}`}>
                 {
                     chatSelected ?
                     <>
-                        <div className='border flex flex-col flex-1 h-60 overflow-y-scroll justify-end'>
+                        <div className='border flex flex-col flex-1 h-60 overflow-x-scroll justify-end relative'>
                             {/* Display the conversation */}
-                            {
-                                selectedConversation && ( selectedConversation?.length > 0 ? selectedConversation.map(({message, receiver_id}, index) => { 
-                                    const lastMessage = selectedConversation.length - 1 === index
-                                    return (
-                                        <div 
-                                            key={index} 
-                                            className={`flex ${receiver_id ===  my_id ? "justify-start" : "justify-end"} px-4 py-0.5`}
-                                            ref={lastMessage ? setRef() : null}
-                                        >
-                                            <div className={`${receiver_id === my_id ? "bg-[#EFF3F4]" : "bg-[#27427A] text-white"} w-44 px-2 py-1 rounded-md text-xs`}>
-                                                {message}
+                            <div className='flex flex-col absolute max-h-full overflow-auto justify-center w-full overflow-y-scroll'>
+                                {
+                                    selectedConversation && ( selectedConversation?.length > 0 ? selectedConversation.map(({message, receiver_id, created_at}, index) => { 
+                                        // const lastMessage = selectedConversation.length - 1 === index
+                                        return (
+                                            <div 
+                                                key={index} 
+                                                className={`flex ${receiver_id ===  my_id ? "justify-start" : "justify-end"} px-4 py-0.5`}
+                                            >
+                                                <div>
+                                                    <div className={`${receiver_id === my_id ? "bg-[#EFF3F4]" : "bg-[#27427A] text-white"} w-44 px-2 py-1 rounded-md text-xs `}>
+                                                        <span>{message}</span>
+                                                    </div>
+                                                    <span className="text-xs m-0 justify-end">{getFormattedDate(new Date(created_at))}</span>
+                                                </div>     
                                             </div>
-                                        </div>
+                                        )
+                                    })
+                                    :
+                                    <span className='text-center text-xs'>
+                                        No messages yet
+                                    </span>
                                     )
-                                })
-                                :
-                                <span className='text-center text-xs'>
-                                    No messages yet
-                                </span>
-                                )
-                            }
+                                }
+                                <div ref={bottomRef}></div>
+                            </div>
                             {/* Scroll to the bottom to see the last message */}
                         </div>
                         <form className={`absolute h-12 bottom-0 border w-full ${collapse ? "": "hidden"} ${!chatSelected ? "hidden border-none" : "bg-white"} flex justify-between p-3 items-center`} id="message-form">
                             <input 
                                 type="text" 
+                                id="message"
                                 className={`border rounded-2xl w-56 outline-none px-3 py-1 ${!chatSelected && "hidden"} flex-1 text-xs`}
-                                onChange={(event) => {
+                                onChange={async (event) => {
                                     setMessage(event.target.value)
+                                }}
+                                onFocus={() => {
+                                    socket.emit("send_typing_status", {typing_status: true, receiver_id: receiverId, receiver_name: receiverName})
+                                }}
+                                onBlur={() => {
+                                    socket.emit("send_typing_status", {typing_status: false, receiver_id:receiverId, receiver_name: receiverName})
                                 }}
                                 value={message}
                             />
@@ -175,8 +216,8 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                         </form>
                     </>
                     :
-                    <>
-                       <div className="px-2 py-1 w-full flex">
+                    < div className="h-full overflow-y-scroll">
+                       <div className="px-2 py-1 w-full flex ">
                         <input 
                             type="text" 
                             className="border px-2 w-full focus:outline-none border-r-0 border-l-0 border-t-0 border-b-1 focus:border-primary placeholder:text-xs text-sm placeholder:py-2" 
@@ -189,13 +230,14 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                                 <div 
                                     key={index} 
                                     className={`p-3 hover:border hover:border-t-1 hover:border-b-1 hover:border-r-0 hover:border-l-0 hover:bg-stone-50 flex gap-3 items-center ${member?.fullname.toLowerCase().indexOf(filter.toLowerCase()) > -1 ? "" : "hidden"}`}
-                                    onClick={() => {
-                                        // const selectedConversation = conversations && conversations.filter(message => (message.receiver_id === member.receiver_id && message.sender_id === my_id) || (message.sender_id === member.receiver_id && message.receiver_id === my_id))
+                                    onClick={async () => {
+                                        const selectedConversation = await conversations && conversations.filter(message => (message.receiver_id === member.receiver_id && message.sender_id === my_id) || (message.sender_id === member.receiver_id && message.receiver_id === my_id))
+                                        setSelectedConversation(selectedConversation)
                                         
                                         setChatSelected(true)
                                         setSelectedMember(member);
                                         setReceiverId(member.receiver_id)
-                                        // setSelectedConversation(selectedConversation)
+                                        setReceiverName(member.fullname)
                                     }}
                                 >
                                     <div className='rounded-full border border-blue-500 h-10 w-10 capitalize flex justify-center items-center bg-pink-200 text-gray-700'>  
@@ -206,7 +248,7 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                                 </div>
                             )
                         }
-                    </>
+                    </div>
                 }
             </div>
         </div>
