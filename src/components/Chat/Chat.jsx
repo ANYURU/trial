@@ -35,7 +35,6 @@ function Chat({user, profile, members,  conversations, setConversations}) {
 
     // const setRef = useCallback(node => node && node.scrollIntoView({ smooth: true }))
     const bottomRef = useRef(null)
-
     const scrollToBottom = () => bottomRef?.current?.scrollIntoView({behavior: "smooth"})
 
 
@@ -61,6 +60,10 @@ function Chat({user, profile, members,  conversations, setConversations}) {
             setOnlineMembers(data)
         })
 
+        socket.on("diconnect", () => {
+            socket.emit("remove_online_user", {sender_id: my_id})
+        })
+
         setOnlineStatus()
 
         scrollToBottom()
@@ -68,17 +71,11 @@ function Chat({user, profile, members,  conversations, setConversations}) {
         return () => { 
             socket.off("receive_message")
         }
-    }, [selectedConversation, receiverId, socket])
+    }, [selectedConversation, receiverId])
 
-    const fetch_messages = async () => {
-        const { data, error } = await supabase
-            .from('messenger')
-            .select()
-            .or(`sender_id.eq.${my_id},receiver_id.eq.${my_id}`)
-
-        if(error) throw error
-        console.log(data)
-        return data
+    const update_message_seen = async () => {
+        const { data, error } = await supabase.rpc('update_message_seen', {sender: my_id, receiver: receiverId})
+        if(error) {console.log(error); throw error}
     }
 
     const setOnlineStatus = () => {
@@ -128,7 +125,7 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                         >
                             <button 
                                 className='font-bold text-xl'
-                                onClick={() => {setChatSelected(false)}}
+                                onClick={() => {setChatSelected(false);setSelectedConversation([])}}
                             >
                                 <BiArrowBack />
                             </button>
@@ -138,9 +135,17 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                         {/* This is where the avatar is to be place  */}
                         {chatSelected ? selectedMember?.fullname.split(" ")[0][0] + selectedMember?.fullname.split(" ")[1][0] : (senders_name?.length > 0 && senders_name.split(" ")[0][0] + senders_name.split(" ")[1][0]) || ""}
                     </div>
+                    {console.log("Intended receiver: ", selectedMember)}
+                    {console.log("Anticipated receiver: ", isTyping?.sender_id)}
+                    {console.log(selectedMember)}
+
                     {/* <span>{isTyping && isTyping?.receiver_name }</span> */}
-                    {isTyping && isTyping.typing_status === true && <span className="text-xs">{`${chatSelected ? "typing ..." : `${isTyping.receiver_name.split(" ")[0]} is typing.`}`}</span>}
-                    {onlineMembers?.length > 0 && <span className="text-xs">{onlineMembers.includes(selectedMember.member_id) && "online"}</span>}
+                    {((isTyping && isTyping.typing_status === true )? ( 
+                        <span className="text-xs">{`${(chatSelected && isTyping.sender_id === receiverId) ? "typing ..." : `${isTyping.receiver_name.split(" ")[0]} is typing.`}`}</span>
+                    ) 
+                    : 
+                    onlineMembers.find(member => member === selectedMember.receiver_id) && <span className="text-xs text-green-300"> online </span>)}
+                    {/* {(isTyping || onlineMembers) && <span className="text-xs">{`${chatSelected ? `${isTyping ? "typing..." : `${onlineMembers.find(member => member === selectedMember?.receiver_id) && "online"}`}` : `${isTyping?.receiver_name.split(" ")[0]} is typing.`}`}</span>} */}
                 </div>
                 <div className="rounded-full border-1 border-blue-200 h-full w-[h-full] flex justify-center items-center hover:bg-stone-100 opacity-80">
                     <button 
@@ -195,10 +200,10 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                                     setMessage(event.target.value)
                                 }}
                                 onFocus={() => {
-                                    socket.emit("send_typing_status", {typing_status: true, receiver_id: receiverId, receiver_name: receiverName})
+                                    socket.emit("send_typing_status", {typing_status: true, receiver_id: receiverId, receiver_name: receiverName, sender_id: my_id})
                                 }}
                                 onBlur={() => {
-                                    socket.emit("send_typing_status", {typing_status: false, receiver_id:receiverId, receiver_name: receiverName})
+                                    socket.emit("send_typing_status", {typing_status: false, receiver_id:receiverId, receiver_name: receiverName, sender_id:my_id})
                                 }}
                                 value={message}
                             />
@@ -233,7 +238,6 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                                     onClick={async () => {
                                         const selectedConversation = await conversations && conversations.filter(message => (message.receiver_id === member.receiver_id && message.sender_id === my_id) || (message.sender_id === member.receiver_id && message.receiver_id === my_id))
                                         setSelectedConversation(selectedConversation)
-                                        
                                         setChatSelected(true)
                                         setSelectedMember(member);
                                         setReceiverId(member.receiver_id)
