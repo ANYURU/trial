@@ -140,7 +140,7 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                     {console.log(selectedMember)}
 
                     {/* <span>{isTyping && isTyping?.receiver_name }</span> */}
-                    {((isTyping && isTyping.typing_status === true )? ( 
+                    {((isTyping && isTyping.typing_status === true ) ? ( 
                         <span className="text-xs">{`${(chatSelected && isTyping.sender_id === receiverId) ? "typing ..." : `${isTyping.receiver_name.split(" ")[0]} is typing.`}`}</span>
                     ) 
                     : 
