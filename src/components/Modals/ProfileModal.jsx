@@ -5,7 +5,7 @@ import { IoMdPower } from 'react-icons/io'
 import { MdOutlinePersonOutline } from 'react-icons/md'
 
 function ProfileModal({ show, setShow }) {
-  const { signOut } = useAuth()
+  const { signOut, socket, user } = useAuth()
   const navigate = useNavigate()
 
     
@@ -23,6 +23,8 @@ function ProfileModal({ show, setShow }) {
         <p style={{marginBottom: '0'}}
           className='flex cursor-pointer justify-start items-center hover:bg-gray-100 dark:hover:bg-dark-bg-600 p-2'
           onClick={async () => {
+            console.log(user.id)
+            await socket.emit("logout", user.id)
             await signOut()
             navigate('/login')
           }} 

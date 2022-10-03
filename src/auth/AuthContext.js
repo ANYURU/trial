@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect, createContext } from "react";
 import { supabase } from "../helpers/supabase";
+import { io } from 'socket.io-client' 
 
 // create a context for authentication
 const AuthContext = createContext();
@@ -9,17 +10,24 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const theme = localStorage.getItem("darkMode") || false;
   const [darkMode, setDarkMode] = useState(JSON.parse(theme));
+  const [socket, setSocket] = useState(io("ws://localhost:3001", {autoConnect: false}))
 
   useEffect(() => {
     // get session data if there is an active session
     const session = supabase.auth.session();
     setUser(session?.user ?? null);
     setLoading(false);
+
     // listen for changes to auth
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user ?? null);
         setLoading(false);
+        
+        if( event === 'SIGNED_IN' ) {
+          socket.emit("login", session.user.id)
+          setSocket(socket)
+        }
       }
     );
 
@@ -50,6 +58,8 @@ export const AuthProvider = ({ children }) => {
     loading,
     setLoading,
     darkMode,
+    socket,
+    setSocket
   };
 
   // use a provider to pass down the value

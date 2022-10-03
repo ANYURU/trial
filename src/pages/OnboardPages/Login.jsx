@@ -10,12 +10,13 @@ import { useEffect, useState } from "react";
 
 export default function Login() {
   const navigate = useNavigate()
+  
 
   useEffect(() => {
     document.title = 'Bweyogere tuberebumu'
   }, [])
 
-  const { signIn, darkMode } = useAuth()
+  const { signIn, darkMode, socket } = useAuth()
   const [ loading, setLoading ] = useState(false)
 
   const handleSubmit = async (event, values) => {
@@ -29,7 +30,7 @@ export default function Login() {
         setLoading(false)
         toast.error(`${error?.message}`, {position: "top-center"})
       } else if ( data ) {
-        const { error } = await signIn({
+        const {user, error} = await signIn({
           phone: '256' + phoneNo.slice(1),
           password: password
         })
@@ -38,6 +39,8 @@ export default function Login() {
         if (error) {
           toast.error(`${error?.message}`, {position: "top-center"})
         } else { 
+          socket.auth = { username: user.id }
+          socket.connect()
           navigate('/dashboard')
         }
       } else {

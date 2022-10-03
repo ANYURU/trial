@@ -6,10 +6,10 @@ import { FiSend } from 'react-icons/fi'
 import { supabase } from '../../helpers/supabase'
 import { io } from 'socket.io-client'
 import { getFormattedDate } from '../../helpers/formatDate'
-import moment from 'moment'
+import { useAuth } from '../../auth/AuthContext'
 
+function Chat({user, profile, members,  conversations}) {
 
-function Chat({user, profile, members,  conversations, setConversations}) {
 
     const [ collapse, setCollapse ] = useState(false)
     const [ chatSelected, setChatSelected ] = useState(false)
@@ -20,12 +20,7 @@ function Chat({user, profile, members,  conversations, setConversations}) {
     const [ selectedConversation, setSelectedConversation ] = useState([])
     const [ message, setMessage ] = useState("")
     const { fullname:senders_name } = profile
-    const [ socket, setSocket ] = useState (
-        io.connect(
-            "http://localhost:3001",
-            { query: {id: my_id}}
-        )
-    )
+    const { socket } = useAuth()
     const [ submitting, setSubmitting ] = useState(false)
     const [ onlineMembers, setOnlineMembers ] = useState([])
     const [ receiverName, setReceiverName] = useState("")
@@ -40,37 +35,32 @@ function Chat({user, profile, members,  conversations, setConversations}) {
 
     useEffect(() => {
 
-        setSocket(socket)
         socket.on("receive_message", (data) => {
-            console.log(data)
             setSelectedConversation((selectedConversation) => [...selectedConversation, data])
         })
 
         socket.on("receive_typing_status", (data) => {
+            console.log("Typing: ", data)
             setIsTyping(data)
         })
 
-
-        socket.on("connect", () => {
-            socket.emit("add_online_user", {sender_id: my_id})
+        socket.on("online_users", (data) => {
+            setOnlineMembers((onlineMembers) => [...new Set([...onlineMembers, ...data])])
+            console.log([...new Set([...onlineMembers, ...data])])
         })
 
-        socket.on("receive_online_users", (data) => {
-            console.log(data)
+        socket.on("user_disconnected", (data) => {
+            console.log("", data)
             setOnlineMembers(data)
+            console.log("New online members",data)
         })
-
-        socket.on("diconnect", () => {
-            socket.emit("remove_online_user", {sender_id: my_id})
-        })
-
-        setOnlineStatus()
 
         scrollToBottom()
 
         return () => { 
             socket.off("receive_message")
         }
+        
     }, [selectedConversation, receiverId])
 
     const update_message_seen = async () => {
@@ -78,9 +68,9 @@ function Chat({user, profile, members,  conversations, setConversations}) {
         if(error) {console.log(error); throw error}
     }
 
-    const setOnlineStatus = () => {
-        socket.emit("send_online_status", {member_id: my_id, online: my_id ? true : false})
-    }
+    // const setOnlineStatus = () => {
+    //     socket && socket.emit("add_online_user",  my_id)
+    // }
 
     const send_message = async (event) => {
         event.preventDefault()
@@ -137,15 +127,22 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                     </div>
                     {console.log("Intended receiver: ", selectedMember)}
                     {console.log("Anticipated receiver: ", isTyping?.sender_id)}
-                    {console.log(selectedMember)}
+                    {console.log("selectedMember: ", selectedMember.receiver_id)}
+                    {console.log(onlineMembers)}
 
                     {/* <span>{isTyping && isTyping?.receiver_name }</span> */}
                     {((isTyping && isTyping.typing_status === true ) ? ( 
-                        <span className="text-xs">{`${(chatSelected && isTyping.sender_id === receiverId) ? "typing ..." : `${isTyping.receiver_name.split(" ")[0]} is typing.`}`}</span>
+                        <span className="text-xs">
+                            {
+                                chatSelected ?
+                                `${isTyping.sender_id === receiverId ? "typing..." : ``}`
+                                : 
+                                `${isTyping.receiver_name.split(" ")[0]} is typing.`
+                            }
+                        </span>
                     ) 
                     : 
-                    onlineMembers.find(member => member === selectedMember.receiver_id) && <span className="text-xs text-green-300"> online </span>)}
-                    {/* {(isTyping || onlineMembers) && <span className="text-xs">{`${chatSelected ? `${isTyping ? "typing..." : `${onlineMembers.find(member => member === selectedMember?.receiver_id) && "online"}`}` : `${isTyping?.receiver_name.split(" ")[0]} is typing.`}`}</span>} */}
+                    onlineMembers && onlineMembers.find(member => member === selectedMember.receiver_id) && <span className="text-xs text-green-300"> online </span>)}
                 </div>
                 <div className="rounded-full border-1 border-blue-200 h-full w-[h-full] flex justify-center items-center hover:bg-stone-100 opacity-80">
                     <button 
@@ -242,6 +239,7 @@ function Chat({user, profile, members,  conversations, setConversations}) {
                                         setSelectedMember(member);
                                         setReceiverId(member.receiver_id)
                                         setReceiverName(member.fullname)
+                                        socket.emit('check_online', member.receiver_id)
                                     }}
                                 >
                                     <div className='rounded-full border border-blue-500 h-10 w-10 capitalize flex justify-center items-center bg-pink-200 text-gray-700'>  
