@@ -31,6 +31,7 @@ const PrivateRoute = ({ allowedRoles }) => {
     const {data, error} = await supabase.rpc('possible_chats')
 
     if (error) console.log(error)
+    console.log("Members: ", data)
     setMembers(data)
   }
 
