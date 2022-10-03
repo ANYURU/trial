@@ -142,7 +142,15 @@ function Chat({user, profile, members,  conversations}) {
                         </span>
                     ) 
                     : 
-                    onlineMembers.find(member => member === selectedMember.receiver_id) ? <span className="text-xs text-green-300"> online </span> : <span className="text-xs">{(selectedMember?.last_seen) ?? ""}</span>)}
+                    onlineMembers.find(member => member === selectedMember.receiver_id) ? <span className="text-xs text-green-300"> online </span> : <span className="text-xs">
+                        {
+                            selectedMember?.last_seen 
+                            ? 
+                            getFormattedDate(new Date(selectedMember.last_seen))
+                            :
+                            ""
+                        }   
+                    </span>)}
                 </div>
                 <div className="rounded-full border-1 border-blue-200 h-full w-[h-full] flex justify-center items-center hover:bg-stone-100 opacity-80">
                     <button 

@@ -24,8 +24,6 @@ const PrivateRoute = ({ allowedRoles }) => {
   const location = useLocation();
   const [members, setMembers] = useState([])
   const [conversations, setConversations] = useState([])
-  
-
 
   const fetch_members = async () => {
     const {data, error} = await supabase.rpc('possible_chats')

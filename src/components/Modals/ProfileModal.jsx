@@ -3,6 +3,7 @@ import { useAuth } from '../../auth/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { IoMdPower } from 'react-icons/io'
 import { MdOutlinePersonOutline } from 'react-icons/md'
+import { supabase } from '../../helpers/supabase'
 
 function ProfileModal({ show, setShow }) {
   const { signOut, socket, user } = useAuth()
@@ -23,7 +24,17 @@ function ProfileModal({ show, setShow }) {
         <p style={{marginBottom: '0'}}
           className='flex cursor-pointer justify-start items-center hover:bg-gray-100 dark:hover:bg-dark-bg-600 p-2'
           onClick={async () => {
-            console.log(user.id)
+            const { data, error } = await supabase  
+              .from('profiles')
+              .update({
+                last_seen: new Date()
+                        .toISOString()
+                        .toLocaleString("en-GB", { timeZone: "UTC" })
+              })
+              .match({ 'id': user.id})
+              .single()
+
+            if(error) throw error
             await socket.emit("logout", user.id)
             await signOut()
             navigate('/login')
