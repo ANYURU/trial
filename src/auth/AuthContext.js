@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const theme = localStorage.getItem("darkMode") || false;
   const [darkMode, setDarkMode] = useState(JSON.parse(theme));
-  const [socket, setSocket] = useState(io("ws://localhost:3001", {autoConnect: false}))
+  const [socket, setSocket] = useState(io("ws:https://tube-chat-server-1.herokuapp.com/", {autoConnect: false}))
 
   useEffect(() => {
     // get session data if there is an active session
