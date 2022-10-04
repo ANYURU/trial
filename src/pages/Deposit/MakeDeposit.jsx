@@ -105,13 +105,13 @@ function MakeDeposit() {
 
                 resetForm({ values: initialValues });
                 setLoading(false);
-                toast.success(`${data?.transaction_meta?.member_name}'s deposit created successfully.`, {
+                toast.success(`${data?.transaction_meta?.fullname}'s deposit created successfully.`, {
                   position: "top-center",
                 });
 
               } else {
 
-                const { error, data } = await supabase
+                const { error } = await supabase
                   .from("applications")
                   .insert([
                     {
@@ -198,7 +198,7 @@ function MakeDeposit() {
                           className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
                           onChange={(event) => {
                             console.log(event.target.value)
-                            values.member_id = JSON.stringify(event.target.value)
+                            values.member_id = event.target.value
                           }}
                           onBlur={handleBlur}
                           // value={values.member_id}

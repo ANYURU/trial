@@ -66,6 +66,14 @@ export const nonEvidencedRequestValidationSchema = Yup.object({
   account_type: Yup.string().required('Required!'),
   phone_number: Yup.string().required('Required !'),
   comments: Yup.string(),
+  designated_for: Yup.string().required('Required!'),
+  member_id: Yup.string().when(
+    'designated_for', {
+      is: 'other',
+      then: Yup.string().required("member is required!")
+    }
+  ),
+  comments: Yup.string()
 })
 
 export const loanPaymentValidationSchema = Yup.object({

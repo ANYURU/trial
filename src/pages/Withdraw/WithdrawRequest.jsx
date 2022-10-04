@@ -8,21 +8,56 @@ import { InputField } from "../../components/Form/CustomInputField";
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import { add_separator, remove_separator } from '../../helpers/thousand_separator'
+import { useEffect } from "react";
 
 function WithdrawRequest() {
   const {
     user: { id: applicants_id },
   } = useAuth();
-  const [user, { fullname: applicants_name }] = useOutletContext();
+  const [user, { fullname: applicants_name }, setProfile, roles] = useOutletContext();
   const [loading, setLoading] = useState(false);
+  const [profiles, setProfiles] = useState(false);
 
   const initialValues = {
     account_type: "",
     amount: "",
-    particulars: "",
+    comments: "",
     cashout_method: "",
-    phone_number: ""
+    phone_number: "",
+    designated_for: "",
+    member_id:""
   };
+
+
+  useEffect(
+    () => {
+      getProfiles()
+      .then(data => setProfiles(data))
+      .catch(error => console.log(error))
+
+
+      // Realtime setup
+      const mySubscription = supabase
+      .from('_member_profiles')
+      .on('*', async payload => {
+        console.log('Change received!', payload)
+
+        await getProfiles()
+          .then(data => setProfiles(data))
+          .catch(error => console.log(error))
+      })
+      .subscribe()
+
+      // Cleanup
+      return () => supabase.removeSubscription(mySubscription)
+  }, [])
+
+  const getProfiles = async() => {
+    const {data, error } = await supabase.rpc('get_member_profiles') 
+
+    if(error) throw error
+    return data
+  }
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
@@ -42,44 +77,78 @@ function WithdrawRequest() {
           initialValues={initialValues}
           validationSchema={withdrawRequestValidationSchema}
           onSubmit={async (values, { resetForm }) => {
-            const { account_type, amount, particulars, cashout_method, phone_number } =
-              values;
 
-            try {
-              const { error } = await supabase.from("applications").insert([
-                {
-                  _type: "withdraw",
-                  created_at: new Date()
-                    .toISOString()
-                    .toLocaleString("en-GB", { timeZone: "UTC" }),
-                  updated_at: new Date()
-                    .toISOString()
-                    .toLocaleString("en-GB", { timeZone: "UTC" }),
-                  reviewed: false,
-                  application_meta: {
-                    applicants_id,
-                    applicants_name,
-                    account_type,
-                    amount,
-                    particulars,
-                    cashout_method,
-                    phone_number,
-                    review_status: "pending"
-                  },
-                },
-              ]);
+            const { account_type, amount, comments, cashout_method, phone_number, member_id, designated_for  } = values
 
-              if (error) throw error;
-              toast.success(`Request submitted for review.`, {
-                position: "top-center",
-              });
-              resetForm({ values: initialValues });
-              setLoading(false);
-            } catch (error) {
-              console.log(error);
-              setLoading(false);
-              toast.error(`${error?.message}`, { position: "top-center" });
+            if( values.designated_for === 'other') {
+
+              const details = {
+                _type: "withdraw",
+                created_at: new Date()
+                  .toISOString()
+                  .toLocaleString("en-GB", { timeZone: "UTC" }),
+                updated_at: new Date()
+                  .toISOString()
+                  .toLocaleString("en-GB", { timeZone: "UTC" }),
+                reviewed: false,
+                applicants_id,
+                applicants_name,
+                account_type,
+                amount,
+                comments,
+                cashout_method,
+                phone_number,
+                review_status: "pending",
+                member_id, 
+                designated_for
+              }
+
+              // console.log(details)
+
+              const {data, error} = await supabase.rpc('apply_withdraw_for_member', { details: JSON.stringify({...details}) })
+              if(error) throw error
+              console.log("Returned data: ",data)
             }
+
+
+            // const { account_type, amount, comments, cashout_method, phone_number } =
+            //   values;
+
+            // try {
+            //   const { error } = await supabase.from("applications").insert([
+            //     {
+            //       _type: "withdraw",
+            //       created_at: new Date()
+            //         .toISOString()
+            //         .toLocaleString("en-GB", { timeZone: "UTC" }),
+            //       updated_at: new Date()
+            //         .toISOString()
+            //         .toLocaleString("en-GB", { timeZone: "UTC" }),
+            //       reviewed: false,
+            //       application_meta: {
+            //         applicants_id,
+            //         applicants_name,
+            //         account_type,
+            //         amount,
+            //         comments,
+            //         cashout_method,
+            //         phone_number,
+            //         review_status: "pending"
+            //       },
+            //     },
+            //   ]);
+
+            //   if (error) throw error;
+            //   toast.success(`Request submitted for review.`, {
+            //     position: "top-center",
+            //   });
+            //   resetForm({ values: initialValues });
+            //   setLoading(false);
+            // } catch (error) {
+            //   console.log(error);
+            //   setLoading(false);
+            //   toast.error(`${error?.message}`, { position: "top-center" });
+            // }
             
           }}
         >
@@ -96,6 +165,62 @@ function WithdrawRequest() {
             return (
               <Form className="flex flex-grow flex-col min-h-full p-6">
                 <div className="mb-3">
+                  <div className="flex flex-wrap gap-5 mb-1">
+                    <div className="mb-3 flex flex-col md:flex-row gap-5 ">
+                      {
+                        roles && roles.includes('treasurer') && 
+                        <div className='flex flex-col w-56 pb-3'>
+                          <label className='text-sm'>Designated for</label>
+                          <div className='flex justify-between'>
+                              <div className='flex gap-1'>
+                                  <input type="radio" id="own" name="designated_for" value="own" className='w-4 h-4' onChange={handleChange("designated_for")}/>
+                                  <label htmlFor="own" className='text-sm'>My Own</label>
+                              </div>
+                              <div className='flex gap-1'>
+                                  <input type="radio" id="other" name="designated_for" value="other" className='w-4 h-4' onChange={handleChange("designated_for")}/>
+                                  <label htmlFor="other" className='text-sm'>Other Member</label>
+                              </div>
+                          </div>
+                        </div>
+                      }
+                      {
+                        values?.designated_for === "other" && 
+                        <div className="flex flex-col w-56">
+                          <label className="text-sm">
+                            Select Member
+                          </label>
+                          <select
+                            name="member_id"
+                            id="member_id"
+                            className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+                            onChange={(event) => {
+                              values.member_id = event.target.value
+                            }}
+                            onBlur={handleBlur}
+                            // value={values.member_id}
+                          >
+                            <option value="">--Select Member--</option>
+                          {
+                            profiles && profiles.map(({fullname, id}, index) => {
+                              return  <option key={index} value={ id } className="capitalize">{ fullname }</option>
+                            })
+                          
+
+                          }
+                          </select>
+                          {touched?.account_type && errors?.account_type && (
+                            <div className="error text-red-600 text-xs">
+                              {errors?.member_id}
+                            </div>
+                          )}
+                        </div>
+                      }
+                      {
+                        console.log(values.designated_for)
+                      }
+                    </div>
+                  
+                  </div>
                   <div className="flex flex-wrap gap-5">
                     <div className="flex flex-col w-56">
                       <label className="text-sm" htmlFor="account_type">
@@ -121,7 +246,7 @@ function WithdrawRequest() {
                         </div>
                       )}
                     </div>
-                    <div className="flex flex-col w-56 ">
+                    <div className="flex flex-col w-56 mb-3">
                       <label htmlFor="amount" className=" text-sm">
                         Enter Amount
                       </label>
@@ -144,8 +269,7 @@ function WithdrawRequest() {
                         </div>
                       )}
                     </div>
-                  
-                  </div>
+                  </div>  
                 </div>
                 <div className="flex flex-wrap gap-5">
                   <div className="flex flex-col w-56">
@@ -194,20 +318,20 @@ function WithdrawRequest() {
                   </div>
                 </div>   
                 <div className="my-3">
-                  <h1 className="font-semibold">Particulars</h1>
+                  <h1 className="font-semibold">comments</h1>
                   <textarea
-                    name="particulars"
-                    id="particulars"
+                    name="comments"
+                    id="comments"
                     cols="30"
                     rows="10"
                     className="outline outline-1 p-2 rounded-md w-full dark:bg-dark-bg-600"
-                    value={values?.particulars}
+                    value={values?.comments}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   ></textarea>
-                  {touched?.particulars && errors?.particulars && (
+                  {touched?.comments && errors?.comments && (
                     <div className="error text-red-600 text-xs">
-                      {errors?.particulars}
+                      {errors?.comments}
                     </div>
                   )}
                 </div>
