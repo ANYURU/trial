@@ -67,11 +67,11 @@ const PrivateRoute = ({ allowedRoles }) => {
     matches ? (
       <div className={`${darkMode ? "dark" : ""}`}>
         <div
-          className={`flex flex-col min-h-screen  w-screen bg-back dark:bg-dark-bg border-red-200 border-2`}
+          className={`flex flex-col min-h-screen  w-screen bg-back dark:bg-dark-bg border-2`}
         >
           <Navbar user={profile} showSidebar={showSidebar} />
           <div
-            className={`h-[calc(100vh-68px)] overflow-hidden mt-[65px] w-screen flex flex-col`}
+            className={`h-[calc(100vh-68px)] overflow-hidden mt-[65px] w-screen flex flex-col border border-red-800`}
           >
             <Sidebar
               user={profile}
@@ -129,8 +129,8 @@ const PrivateRoute = ({ allowedRoles }) => {
                   </div>
                 ))}
             </div> 
+            <Chat user={user} profile={profile} members={members} conversations={conversations} setConversations={setConversations}/>
           </div>
-          <Chat user={user} profile={profile} members={members} conversations={conversations} setConversations={setConversations}/>
         </div>
       </div>
     ) : (

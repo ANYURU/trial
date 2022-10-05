@@ -24,7 +24,7 @@ function WithdrawRequest() {
     comments: "",
     cashout_method: "",
     phone_number: "",
-    designated_for: "",
+    designated_for: "own",
     member_id:""
   };
 
@@ -64,6 +64,7 @@ function WithdrawRequest() {
       <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Withdraw Request
+        { console.log(Date.now())}
       </h1>
       <div
         className={`flex bg-white relative dark:bg-dark-bg-700 dark:text-secondary-text min-h-full`}
@@ -78,37 +79,84 @@ function WithdrawRequest() {
           validationSchema={withdrawRequestValidationSchema}
           onSubmit={async (values, { resetForm }) => {
 
-            const { account_type, amount, comments, cashout_method, phone_number, member_id, designated_for  } = values
-
-            if( values.designated_for === 'other') {
-
-              const details = {
-                _type: "withdraw",
-                created_at: new Date()
-                  .toISOString()
-                  .toLocaleString("en-GB", { timeZone: "UTC" }),
-                updated_at: new Date()
-                  .toISOString()
-                  .toLocaleString("en-GB", { timeZone: "UTC" }),
-                reviewed: false,
-                applicants_id,
-                applicants_name,
-                account_type,
-                amount,
-                comments,
-                cashout_method,
-                phone_number,
-                review_status: "pending",
-                member_id, 
-                designated_for
+            try {
+              const { account_type, amount, comments, cashout_method, phone_number, member_id, designated_for  } = values
+  
+              if( values.designated_for === 'other') {
+  
+                const details = {
+                  _type: "withdraw",
+                  created_at: new Date()
+                    .toISOString()
+                    .toLocaleString("en-GB", { timeZone: "UTC" }),
+                  updated_at: new Date()
+                    .toISOString()
+                    .toLocaleString("en-GB", { timeZone: "UTC" }),
+                  reviewed: false,
+                  applicants_id,
+                  applicants_name,
+                  account_type,
+                  amount,
+                  comments,
+                  cashout_method,
+                  phone_number,
+                  review_status: "pending",
+                  member_id, 
+                  designated_for
+                } 
+  
+                // console.log(details)
+  
+                const {data, error} = await supabase.rpc('apply_withdraw_for_member', { details: JSON.stringify({...details}) })
+                if(error) throw error
+                console.log("Returned data: ",data)
+                toast.success(`Request has been submitted for review`, {
+                  position: "top-center"
+                })
+               
+              } else {
+                const { error } = await supabase.from("applications").insert(
+                  {
+                    _type: "withdraw",
+                    created_at: new Date()
+                      .toISOString()
+                      .toLocaleString("en-GB", { timeZone: "UTC" }),
+                    updated_at: new Date()
+                      .toISOString()
+                      .toLocaleString("en-GB", { timeZone: "UTC" }),
+                    reviewed: false,
+                    application_meta: {
+                      applicants_id,
+                      applicants_name,
+                      account_type,
+                      amount,
+                      comments,
+                      cashout_method,
+                      phone_number,
+                      review_status: "pending",
+                      designated_for
+                    }
+                  }
+                )
+  
+                if(error) throw error
+                toast.success(`Request submitted for review.`, {
+                  position: "top-center",
+                })
+  
+                resetForm({values: initialValues})
+                setLoading(false)
               }
-
-              // console.log(details)
-
-              const {data, error} = await supabase.rpc('apply_withdraw_for_member', { details: JSON.stringify({...details}) })
-              if(error) throw error
-              console.log("Returned data: ",data)
+            } catch (error) {
+              console.log(error);
+              setLoading(false);
+              toast.error(`${error?.message}`, { position: "top-center" });
             }
+
+
+            
+
+            // 
 
 
             // const { account_type, amount, comments, cashout_method, phone_number } =
@@ -338,6 +386,17 @@ function WithdrawRequest() {
                 <div className="w-56">
                   <Submit value="Submit" disabled={!(dirty && isValid)} />
                 </div>
+
+                {/* <button
+                  type="button"
+                  onClick={(event) => {
+                    event.preventDefault()
+
+                    console.log("values", values)
+                    console.log("errors", errors)
+                    
+                  }}
+                >tryme</button> */}
               </Form>
             );
           }}

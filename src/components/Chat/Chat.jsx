@@ -27,11 +27,40 @@ function Chat({user, profile, members,  conversations}) {
     const [ receiverName, setReceiverName] = useState("")
     const [ isTyping, setIsTyping ] = useState(null)
 
-    
+    // Dragging
+    const [ diffX, setDiffX ] = useState(200)
+    const [ diffY, setDiffY ] = useState(200)
+    const [ dragging, setDragging] = useState(false)
+    const [ styles, setStyles ] = useState({})
 
     // const setRef = useCallback(node => node && node.scrollIntoView({ smooth: true }))
     const bottomRef = useRef(null)
     const scrollToBottom = () => bottomRef?.current?.scrollIntoView({behavior: "smooth"})
+
+    const _dragStart = (event) => {
+        setDiffX(event.screenX - event.currentTarget.getBoundingClientRect().left)
+        setDiffY(event.screenY - event.currentTarget.getBoundingClientRect().top)
+        setDragging(true)
+    }
+
+    const _dragEnd = () => {
+        setDragging(false)
+    }
+
+    const _dragging = (event) => {
+        if( dragging ) {
+            let left = event.screenX - diffX
+            let top = event.screenY - diffY
+            setStyles({
+                top,
+                left
+            })
+        }
+    }
+
+
+
+    
 
 
     useEffect(() => {
@@ -105,21 +134,25 @@ function Chat({user, profile, members,  conversations}) {
     }
 
   return (
-    <div className={`absolute bottom-20 right-10 ${collapse ? "h-18 w-18 rounded-full" : ""}`}>
-
-        {
-            <div className="absolute bg-white right-[-30px] bottom-[-70px] rounded-full border h-14 w-14 p-1 capitalize flex justify-center items-center text-primary border-primary shadow-2xl"
-                onClick={() => {
-                    setCollapse(!collapse)
-                }}
-            >
-                {/* {chatSelected ? selectedMember?.fullname.split(" ")[0][0] + selectedMember?.fullname.split(" ")[1][0] : (senders_name?.length > 0 && senders_name.split(" ")[0][0] + senders_name.split(" ")[1][0]) || ""} */}
-                <AiFillMessage className="w-full h-full"/>
-            </div> 
+    <div className={`absolute  border-red-500 h-full w-full flex`}
+        onMouseMove={event => {_dragging(event);console.log("moving")}}
+        onMouseDown={event => {_dragStart(event)}}
+        onMouseUp={() => {_dragEnd(); console.log("done")}}
+        style={
+            styles
         }
+    > 
+        <div className="bg-white  rounded-full border h-14 w-14 p-1 capitalize flex justify-center items-center text-primary border-primary shadow-2xl absolute bottom-5 right-6"
+            onClick={() => {
+                setCollapse(!collapse)
+            }} 
+            
+            >
+            <AiFillMessage className="w-full h-full"/>
+        </div> 
         {
             !collapse &&
-            <div className={`bg-white w-96 shadow-2xl border-t flex flex-col justify-between `}>
+            <div className={`bg-white w-96 shadow-2xl border-t flex flex-col justify-between absolute bottom-20 right-20`}>
                 <div className={`flex justify-between p-1 py-2 border-b-[1px] items-center`}>
                     <div className='pl-2 justify-center items-center flex h-full gap-1'>
                         {
