@@ -28,14 +28,14 @@ export default function LoanPayModal({ passed, setLoanModal, loan }) {
               Loan Payment Details
               <span
                 className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
-                  !loan.reviewed
-                    ? "bg-yellow-400"
-                    : loan.application_meta.review_status === "approved"
-                    ? "bg-green-400"
-                    : "bg-red-400"
+                  loan?.transaction_meta ? 
+                  'bg-green-400' :
+                  loan?.application_meta?.review_status === 'rejected'
+                  ? 'bg-red-400' :
+                  'bg-yellow-400'
                 }`}
               >
-                {!loan.reviewed ? "Pending" : loan.application_meta.review_status === "approved" ? "Approved" : "Rejected"}
+                {loan?.loan_status === "defaulted" ? "arrears" : loan?.transaction_meta ? "approved" : loan?.loan_status}
               </span>
             </h1>
           </div>
@@ -50,37 +50,37 @@ export default function LoanPayModal({ passed, setLoanModal, loan }) {
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Payment ID:</p>
-          <p className="font-bold col-span-3">{loan.application_id}</p>
+          <p className="font-bold col-span-3">{loan?.application_id || loan?.trans_id || loan?.transaction_id}</p>
         </div>
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Applicant's name:</p>
           <p className="font-bold col-span-3">
-            {loan.application_meta.applicants_name}
+            {loan?.application_meta?.applicants_name || loan?.transaction_meta?.member_name}
           </p>
         </div>
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Amount Paid:</p>
           <p className="font-bold col-span-3">
-            UGX {currencyFormatter(loan.application_meta.amount)}
+            UGX {currencyFormatter(loan?.application_meta?.amount || loan?.amount)}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Account Type:</p>
           <p className="font-bold col-span-3">
-            {loan.application_meta.account_type}
+            {loan?.application_meta?.account_type || loan?.transaction_meta?.account_type}
           </p>
         </div>
-        <div className="grid grid-cols-5 gap-2 mb-5 justify-start w-full">
+        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Phone Number:</p>
           <p className="font-bold col-span-3">
-            {loan.application_meta.phone_number}
+            {loan?.application_meta?.phone_number || loan?.transaction_meta?.phone_number || "Unspecified"}
           </p>
         </div>
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Reason:</p>
           <p className="font-bold col-span-3">
-            {loan.application_meta.particulars}
+            {loan?.application_meta?.comments || loan?.transaction_meta?.comments || "Unspecified"}
           </p>
         </div>
 
@@ -88,20 +88,18 @@ export default function LoanPayModal({ passed, setLoanModal, loan }) {
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Reviewd by:</p>
           <p className="font-bold col-span-3">
-            {loan.application_meta.reviewed_by}
+            {loan?.application_meta.reviewed_by}
           </p>
         </div>
         }
-        {/* 
-          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-              <p className="col-span-2">End Date:</p>
-              <p className="font-bold col-span-3">{moment(loan.end_date).format("DD-MM-YYYY HH:MM")}</p>
-          </div>
-
-          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-              <p className="col-span-2">Approved by:</p>
-              <p className="font-bold col-span-3">{loan.loan_meta.approved_by}</p>
-          </div> */}
+        {loan?.transaction_meta &&
+        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+          <p className="col-span-2">Reviewd by:</p>
+          <p className="font-bold col-span-3">
+            {loan?.transaction_meta?.reviewed_by || "Organisation"}
+          </p>
+        </div>
+        }
       </div>
     </div>,
     document.getElementById("portal")

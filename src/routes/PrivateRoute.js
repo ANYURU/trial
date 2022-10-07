@@ -82,7 +82,7 @@ const PrivateRoute = ({ allowedRoles }) => {
             <div
               className={`${
                 showSidebar ? "ml-[265px]" : "ml-[85px]"
-              } flex-grow border bg-red-50`}
+              } flex-grow border`}
             >
               {profile &&
                 (allowedRoles !== undefined ? (

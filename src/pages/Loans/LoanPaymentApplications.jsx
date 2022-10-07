@@ -14,15 +14,23 @@ export default function LoanPaymentApplications() {
   useEffect(() => {
     // getApplications();
     supabase
-      .rpc("fetch_payment_applications")
-      .then(({ data, error }) => {
+      .rpc("fetch_member_payments")
+      .then(({ data: { applications, transactions }, error }) => {
+        setLoading(false)
+   
+
+
         if (error) {
           setLoading(false)
           throw error
         }
         else {
-          setLoans(data ?? [])
+          let data = []
+          if (applications) data.push(...applications)
+          if (transactions) data.push(...transactions)
+          setLoans(data ?? null)
           setLoading(false)
+          console.log(data)
         }
       })
       .catch((error) => console.log(error));
@@ -196,6 +204,7 @@ export default function LoanPaymentApplications() {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
+                    <th></th>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
                     <th className="px-6 py-4">Name</th>
@@ -219,40 +228,66 @@ export default function LoanPaymentApplications() {
                           loan={deposit}
                         />
                       )}
-                      <td className="px-6 py-3">
+                      <td onClick={() => {
+                        setActiveIndex(index)
+                        setLoanModal(true)
+                      }}><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                      <td className="px-6 py-3"
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setLoanModal(true)
+                        }}
+                      >
                         {moment(deposit.created_at).format("DD-MM-YYYY")}
                       </td>
-                      <td className="px-6 py-3">{deposit.application_id}</td>
-                      <td className="px-6 py-3">
-                        {deposit?.application_meta.applicants_name}
+                      <td className="px-6 py-3"
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setLoanModal(true)
+                        }}
+                      
+                      >{deposit.app_id || deposit?.trans_id || deposit?.transaction_id}</td>
+                      <td className="px-6 py-3"
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setLoanModal(true)
+                        }}
+                      >
+                        {deposit?.application_meta?.applicants_name || deposit?.transaction_meta?.member_name}
                       </td>
-                      <td className="px-6 py-3">
-                        {deposit?.application_meta.account_type}
+                      <td className="px-6 py-3"
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setLoanModal(true)
+                        }}
+                      >
+                        {deposit?.application_meta?.account_type || deposit?.transaction_meta?.account_type}
                       </td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(deposit?.application_meta.amount)}
+                      <td className="px-6 py-3"
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setLoanModal(true)
+                        }}
+                      >
+                        {currencyFormatter(deposit?.application_meta?.amount || deposit?.amount)}
                       </td>
 
-                      <td className={`px-6 py-3`}>
-                        <span
-                          className={` py-1 px-2 rounded-xl text-white ${
-                            deposit.reviewed
-                              ? deposit.application_meta.review_status ===
-                                "approved"
-                                ? "bg-green-400"
-                                : "bg-red-400"
-                              : "bg-yellow-400"
-                          }`}
-                        >
-                          {deposit.reviewed
-                            ? deposit.application_meta.review_status ===
-                              "approved"
-                              ? "Approved"
-                              : "Rejected"
-                            : "Pending"}
+                      <td className="px-6 py-3"
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setLoanModal(true)
+                        }}
+                      >
+                        <span className={` py-1 px-2 rounded-xl text-white ${
+                          deposit?.application_meta?.review_status === "pending"
+                          ? "bg-yellow-400"
+                          : deposit?.application_meta?.review_status === "rejected" ?
+                          "bg-red-400" 
+                          : "bg-green-400"
+                        }`}>
+                          {deposit?.application_meta?.review_status || "approved"}
                         </span>
                       </td>
-
                       <td className="px-6 py-3">
                         <div className="relative">
                           <button
@@ -270,14 +305,17 @@ export default function LoanPaymentApplications() {
                               index === activeIndex && show ? "" : "hidden"
                             }`}
                           >
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                handleDeposit(deposit.application_id);
-                              }}
-                            >
-                              <AiFillCheckSquare /> Verify
-                            </li>
+                            {
+                              deposit?.application_meta && 
+                              <li
+                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                                onClick={() => {
+                                  handleDeposit(deposit.application_id);
+                                }}
+                              >
+                                <AiFillCheckSquare /> Verify
+                              </li>
+                            }
                             <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => {

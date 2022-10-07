@@ -107,10 +107,6 @@ function Chat({user, profile, members,  conversations}) {
         if(error) {console.log(error); throw error}
     }
 
-    // const setOnlineStatus = () => {
-    //     socket && socket.emit("add_online_user",  my_id)
-    // }
-
     const send_message = async (event) => {
         event.preventDefault()
         setMessage("")
@@ -143,26 +139,14 @@ function Chat({user, profile, members,  conversations}) {
     }
 
   return (
-    // <div
-    //     onMouseMove={event => {_dragging(event);console.log("moving")}}
-    //     onMouseDown={event => {_dragStart(event)}}
-    //     onMouseUp={() => {_dragEnd(); console.log("done")}}
+    <div className={`absolute bottom-20 right-10 h-14 w-14` }
+        // onMouseMove={event => {_dragging(event);console.log("moving")}}
+        // onMouseDown={event => {_dragStart(event)}}
+        // onMouseUp={() => {_dragEnd(); console.log("done")}}
 
-    //     style={
-    //         styles
-    //     }
-    //     className="bg-red-500 absolute w-full h-full"
-    // >
-    //     bingo
-    // </div>
-    <div className={`absolute border bottom-10 right-10 h-14 w-14` }
-        onMouseMove={event => {_dragging(event);console.log("moving")}}
-        onMouseDown={event => {_dragStart(event)}}
-        onMouseUp={() => {_dragEnd(); console.log("done")}}
-
-        style={
-            styles
-        }
+        // style={
+        //     styles
+        // }
     > 
         <div className="bg-white  rounded-full border h-14 w-14 p-1 capitalize flex justify-center items-center text-primary border-primary shadow-2xl"
             onClick={() => {

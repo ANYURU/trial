@@ -63,8 +63,8 @@ export default function Deposit() {
   const getDeposits = async () => {
     const { data: {transactions, applications}, error } = await supabase.rpc("fetch_deposits")
       if( error ) {
-        throw error
         setLoading(false)
+        throw error
       } else {
 
         let data = []
