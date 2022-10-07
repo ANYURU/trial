@@ -1,11 +1,18 @@
 import { supabase } from "./supabase"
 
 export const getProfile = async ( user ) => {
-    const { data, error } = await supabase.from('profiles').select().eq('id', user.id);
-    if(error) {
-        return { error: error }
-    } else {
-        const [ profile ] = data
-        return profile;
-    }    
+    if ( user ) {
+        try {
+            const { data, error } = await supabase.from('_member_profiles').select().eq('id', user.id).single();
+            if(error) {
+                return { error: error }
+            } else if( data ) {
+                return data;
+            } 
+
+        } catch (error) {
+            console.log(error)
+        }
+           
+    }
 }

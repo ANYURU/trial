@@ -7,8 +7,7 @@ function PhoneTextField({ errors, touched, handleChange, handleBlur }) {
           <input type="tel" placeholder="Phone Number" name="phoneNo"
             onChange={handleChange('phoneNo')}
             onBlur={handleBlur('phoneNo')}
-            className='mt-1 py-3 focus:outline-none focus:ring-2 focus:ring-inputblue bg-inputblue focus:bg-transparent w-full pl-8'
-            required 
+            className={`mt-1 py-3 focus:outline-none focus:ring-2 focus:ring-inputblue bg-inputblue focus:bg-transparent w-full pl-8 ${errors?.phoneNo && touched?.phoneNo && "ring-1 ring-red-500"}`}
           />
           <i className="absolute left-3"><FaPhoneAlt /></i> 
         </div>

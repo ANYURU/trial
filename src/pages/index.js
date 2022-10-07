@@ -12,6 +12,7 @@ import Profile from './Profile'
 import DepositHistory from './Deposit/DepositHistory'
 import MakeDeposit from './Deposit/MakeDeposit'
 import DepositVerify from './Deposit/DepositVerify'
+import DepositAdmin from './Deposit/DepositAdmin'
 
 // loans
 import Loans from './Loans/Loans'
@@ -19,12 +20,17 @@ import LoanHistory from './Loans/LoanHistory'
 import LoanPayment from './Loans/LoanPayment'
 import LoanRequest from './Loans/LoanRequest'
 import LoanVerify from './Loans/LoanVerify'
+import { LoanAdmin } from './Loans'
+import MemberLoans from './Loans/MemberLoans'
+import { LoanPaymentApplications } from './Loans'
+import { VerifyPayment } from './Loans'
 
 // withdraw
 import Withdraw from './Withdraw/Withdraw'
 import WithdrawHistory from './Withdraw/WithdrawHistory'
 import WithdrawRequest from './Withdraw/WithdrawRequest'
 import WithdrawVerify from './Withdraw/WithdrawVerify'
+import WithdrawMembers from './Withdraw/WithdrawMembers'
 
 // accounts
 import Savings from './Accounts/Savings'
@@ -38,15 +44,24 @@ import MemberApplication from './Applications/MemberApplication'
 
 // members
 import Members from './Members/Members'
+import ApplicantApproval from './Members/ApplicantApproval'
+
+// admins
+import Admins from './Admins'
+import AdminInfo from './Admins/AdminInfo'
+
+import SuperAdDashboard from './Dashboard/SuperAdDashboard'
 
 
 // exports
-export { Loans, LoanHistory, LoanPayment, LoanRequest }
+export { Loans, LoanHistory, LoanPayment, LoanRequest, DepositAdmin, LoanAdmin, LoanPaymentApplications, VerifyPayment }
 
-export { Withdraw, WithdrawHistory, WithdrawRequest}
+export { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers}
 
-export { Accounts, Savings, Mwana, Fixed, Shares}
+export { Accounts, Savings, Mwana, Fixed, Shares, MemberLoans}
 
-export { Members, DepositVerify, LoanVerify, WithdrawVerify, Applications, MemberApplication }
+export { Members, DepositVerify, LoanVerify, WithdrawVerify, Applications, MemberApplication, ApplicantApproval }
 
 export { Login, Dashboard, ForgotPassword, SignUp, Verification, SetPassword, Deposit, Profile, DepositHistory, MakeDeposit }
+
+export { Admins, AdminInfo, SuperAdDashboard }

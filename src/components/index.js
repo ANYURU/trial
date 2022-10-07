@@ -10,8 +10,48 @@ import MobileMenu from "./MobileMenu";
 import VerificationCode from "./Form/VerfificationCode";
 import ConfirmPasswordField from "./Form/ConfirmPasswordField";
 import RegistrationModal from "./Modals/RegistrationModal";
+import MemberModal from "./Modals/MemberModal";
 import Nominee from "./Nominees";
 import ContextMenu from "./ContextMenu";
+import AccSummary from "./Dashboard/AccSummary";
+import Pagination from "./Pagination";
+import LoansContext from "./LoansContext";
+import NothingShown from "./NothingShown";
+import LoanModal from "./Modals/LoanModal";
+import OTPBox from "./OTP/OTP";
+import Stepper from "./Stepper";
+import Spinner from "./Loaders/Spinner";
+import TubeIcon from "./Icons/TubeIcon";
+import Transactions from "./Dashboard/Transactions";
+import PromoteModal from "./Modals/PromoteModal";
+import NotificationContext from "./Modals/NotificationContext";
 
-
-export { ConfirmModal, Loader, PhoneTextField, PasswordTextField, Submit, Sidebar, Navbar, MobileNav, MobileMenu, VerificationCode, ConfirmPasswordField, RegistrationModal, Nominee, ContextMenu }
+export {
+  ConfirmModal,
+  Loader,
+  PhoneTextField,
+  PasswordTextField,
+  Submit,
+  Sidebar,
+  Navbar,
+  MobileNav,
+  MobileMenu,
+  VerificationCode,
+  ConfirmPasswordField,
+  RegistrationModal,
+  Nominee,
+  ContextMenu,
+  MemberModal,
+  AccSummary,
+  Pagination,
+  LoansContext,
+  NothingShown,
+  LoanModal,
+  OTPBox,
+  Stepper,
+  Spinner,
+  TubeIcon,
+  Transactions,
+  PromoteModal,
+  NotificationContext
+};
