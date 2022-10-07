@@ -73,7 +73,7 @@ export default function Members() {
   const demoteMember = async (admin) => {
     const { error, data } = await supabase
       .from("new_members")
-      .update({ roles: ["member"] })
+      .update({ roles: ["member"], position_in_sacco: "member"})
       .eq("id", admin.id);
 
     if (error) {
@@ -103,6 +103,7 @@ export default function Members() {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
+                    <th></th>
                     <th className="px-6 py-4">Admin</th>
                     <th className="px-6 py-4">ID</th>
                     <th className="px-6 py-4">Phone Number</th>
@@ -118,6 +119,12 @@ export default function Members() {
                       } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
                       key={index}
                     >
+                      <td
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setAdminModal(true)
+                        }}
+                      ><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
                       {adminModal && activeIndex === index && (
                         <MemberModal
                           member={activeIndex === index && admin}
@@ -178,11 +185,31 @@ export default function Members() {
                           </div>
                         </ConfirmModal>
                       )}
-                      <td className="px-6 py-3">{admin.fullname}</td>
-                      <td className="px-6 py-3">{admin.id}</td>
-                      <td className="px-6 py-3">{admin.phone_number}</td>
+                      <td className="px-6 py-3" onClick={() => {
+                          setActiveIndex(index)
+                          setAdminModal(true)
+                        }}>{admin.fullname}</td>
+                      <td className="px-6 py-3"
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setAdminModal(true)
+                        }}
+                      
+                      >{admin.id}</td>
+                      <td className="px-6 py-3"
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setAdminModal(true)
+                        }}
+                      
+                      >{admin.phone_number}</td>
 
-                      <td className={`px-6 py-3`}>
+                      <td className={`px-6 py-3`}
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setAdminModal(true)
+                        }}
+                      >
                         <span
                           className={` py-1 px-2 rounded-xl text-white font-bold text-sm ${
                             admin.member_status === "active"
@@ -211,14 +238,6 @@ export default function Members() {
                               index === activeIndex && show ? "" : "hidden"
                             }`}
                           >
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                setAdminModal(true);
-                              }}
-                            >
-                              <FaIdCardAlt /> Details
-                            </li>
                             <li
                               className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
                               onClick={() => setSuspendModal(true)}
