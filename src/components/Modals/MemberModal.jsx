@@ -51,11 +51,11 @@ export default function MemberModal({
           <div className="flex gap-2 items-center">
             {member?.avatar ? (
               <div
-                className="w-16 h-16 bg-accent mx-2 mb-1 overflow-hidden bg-cover"
+                className="w-16 h-16 bg-accent mx-2 mb-1 overflow-hidden bg-cover rounded-full"
                 style={{ backgroundImage: `url(${member?.avatar})` }}
               ></div>
             ) : (
-              <span className="h-16 w-16 bg-accent dark:bg-dark-bg-600 flex justify-center font-bold items-center overflow-hidden mb-2">
+              <span className="h-16 w-16 bg-accent dark:bg-dark-bg-600 flex justify-center font-bold items-center overflow-hidden mb-2 rounded-full">
                 {member?.fullname !== undefined &&
                   member.fullname !== null &&
                   ` ${member?.fullname.split("")[0]}`}
@@ -80,7 +80,7 @@ export default function MemberModal({
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Member ID</p>
-          <p className="font-bold col-span-3">: {member.id}</p>
+          <p className="font-bold col-span-3">: {member.member_id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">

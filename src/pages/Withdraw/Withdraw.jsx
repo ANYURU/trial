@@ -211,7 +211,7 @@ export default function Deposit() {
                           {currencyFormatter(deposit?.amount || deposit?.application_meta?.amount)}
                         </td>
                         <td className="px-6 py-3">
-                          {deposit?.transaction_meta?.cashout_method || deposit?.application_meta?.cashout_method}
+                          {deposit?.transaction_meta?.cashout_method || deposit?.application_meta?.cashout_method || "Unspecified"}
                         </td>
                         <td className="px-6 py-3">
                           <span className={` py-1 px-2 rounded-xl text-white ${

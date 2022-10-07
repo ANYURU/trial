@@ -7,8 +7,10 @@ import { ContextMenu } from "../../components";
 import { MemberModal } from "../../components";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { Spinner, NothingShown } from "../../components";
+// import { useOutletContext } from "react-router-dom";
 
 export default function Applications() {
+
   useEffect(() => {
     // getApplications()
     supabase.rpc("fetch_membership_applications")
@@ -18,14 +20,18 @@ export default function Applications() {
           setApplications(data)
         }
       })
+      .then(() => setLoading(false))
       .catch(error => console.log(error))
     document.title = "Membership Application - Bweyogere tuberebumu"
   }, [])
 
+
+
   const [applications, setApplications] = useState([]);
   const [date, setDate] = useState(null);
   const [searchText, setSearchText] = useState("")
-  const [ user, profile, setProfile] = useOutletContext()
+  const [ user, profile, setProfile, roles] = useOutletContext()
+  const [ loading, setLoading ] = useState(true)
 
   const navigate = useNavigate();
 
@@ -80,6 +86,7 @@ export default function Applications() {
       }
     };
   }
+
 
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
@@ -147,7 +154,8 @@ export default function Applications() {
                     <th className="px-6 py-4">ID</th>
                     <th className="px-6 py-4">Amount</th>
                     <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4">Action</th>
+                    
+                    {/* <th className="px-6 py-4">Action</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -206,7 +214,7 @@ export default function Applications() {
                           </span>
                         </td>
 
-                        <td className="p-2">
+                        { <td className="p-2">
                         <div className="relative">
                           <button
                             className="block p-2 rounded-md dialog"
@@ -230,7 +238,7 @@ export default function Applications() {
                             profile={profile}
                           />
                         </div>
-                      </td>
+                      </td> }
                       </tr>
                     )
                   )}
@@ -254,7 +262,7 @@ export default function Applications() {
         ) : applications && applications.length > 0 ? (
           <NothingShown />
         ) : (
-          <Spinner />
+          loading ? <Spinner /> : <NothingShown />
         )}
       </div>
     </div>

@@ -22,8 +22,10 @@ export default function WithdrawVerify() {
       .eq("_type", "withdraw")
       .eq("application_id", id)
       .single();
+      console.log(data)
 
-    setWithdraw(data[0]);
+
+    setWithdraw(data);
   };
 
   const approveWithdrawTransaction = async () => {
@@ -120,7 +122,7 @@ export default function WithdrawVerify() {
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Application ID:</p>
                   <p className="font-bold col-span-3">
-                    {withdraw.application_id}
+                    {withdraw.app_id}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -142,9 +144,9 @@ export default function WithdrawVerify() {
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-                  <p className="col-span-2">Particulars:</p>
+                  <p className="col-span-2">Comments:</p>
                   <p className="font-bold col-span-3">
-                    {withdraw.application_meta.particulars}
+                    {withdraw.application_meta.comments || "Unspecified"}
                   </p>
                 </div>
 

@@ -19,6 +19,7 @@ export default function WithdrawMembers() {
   const [withdrawModal, setWithdrawModal] = useState(false);
   const [show, setShow ] = useState(false)
   const [loading, setLoading] = useState(true)
+  
 
   const navigate = useNavigate();
 
@@ -42,18 +43,21 @@ export default function WithdrawMembers() {
   }, []);
 
   const getApplications = async () => {
-    const { data: {transactions, applications}, error } = await supabase.rpc("fetch_withdraws")
+    const { data: {transactions, applications}, error } = await supabase.rpc("fetch_member_withdraws")
       if( error ) {
         setLoading(false)
         throw error
       } else {
-        console.log(transactions)
+        console.log('Transactions: ',transactions)
 
+        console.log('Applications: ',applications)
         let data = []
         if (applications) data.push(...applications)
         if (transactions) data.push(...transactions)
         setWithdraws(data ?? null)
         setLoading(false)
+
+        console.log("Here ",data)
       }
   };
 
@@ -63,24 +67,25 @@ export default function WithdrawMembers() {
   const indexOfLastPage = currentPage * withdrawPerPage;
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage;
 
-  let filteredWithdraws =  withdraws && withdraws.filter((application) =>
-    status === ""
-      ? application
-      : status === "pending"
-      ? !application.reviewed
-      : status === "approved"
-      ? application.application_meta?.review_status === status
-      : application.reviewed &&
-        application.application_meta?.review_status !== "approved"
-  );
+  let filteredWithdraws =  withdraws && withdraws.filter((application) => {
+    if( status === "") {
+      return application
+    } else if ( status === "pending") {
+      return application?.application_meta?.review_status === "pending"
+    } else if ( status === "approved") {
+      return application?.transaction_meta
+    } else if (status === "rejected" ) {
+      return application?.application_meta?.review_status === "rejected"
+    }
+
+  });
 
   filteredWithdraws = filteredWithdraws.filter(
     (withdraw) =>
-      withdraw.application_meta?.applicants_name
+      (withdraw?.application_meta?.applicants_name || withdraw?.transaction_meta?.member_name || withdraw?.trans_id)
         .toLowerCase()
         .indexOf(searchText.toLowerCase()) > -1
   );
-
 
   const approvedwithdraws = filteredWithdraws.filter(
     (deposit) => deposit.application_meta?.review_status === "approved"
@@ -217,6 +222,7 @@ export default function WithdrawMembers() {
               <table className="w-full h-6 text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
+                    <th></th>
                     <th className="px-6 py-4">Member</th>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Transactions ID</th>
@@ -224,98 +230,108 @@ export default function WithdrawMembers() {
                     <th className="px-6 py-4">Amount</th>
                     <th className="px-6 py-4">Cashout Method</th>
                     <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4">Action</th>
+                    {/* <th className="px-6 py-4">Action</th> */}
                   </tr>
                 </thead>
                 <tbody>
-                  {shownWithdraw.map((withdraw, index) => (
-                    <tr
-                      className={`${
-                        index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
-                      key={index}
-                    >
-                      {withdrawModal && index === activeIndex && (
-                        <WithdrawModal
-                          withdraw={withdraw}
-                          setWithdrawModal={setWithdrawModal}
-                        />
-                      )}
-                      <td className="px-6 py-3">
-                        {withdraw.application_meta?.applicants_name || withdraw.transaction_meta?.applicants_name}
-                      </td>
-                      <td className="px-6 py-3">
-                        {moment(withdraw.created_at).format("DD-MM-YYYY")}
-                      </td>
-                      <td className="px-6 py-3">{withdraw.application_id || withdraw?.transaction_meta?.trans_id}</td>
-                      <td className="px-6 py-3">
-                        {withdraw.application_meta?.account_type || withdraw?.transaction_meta?.account_type}
-                      </td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(withdraw.application_meta?.amount)}
-                      </td>
-                      <td className="px-6 py-3">
-                        {withdraw.application_meta?.cashout_method}
-                      </td>
-                      <td className={`px-6 py-3`}>
-                        <span
-                          className={` py-1 px-2 rounded-xl text-white ${
-                            withdraw.reviewed
-                              ? withdraw.application_meta?.review_status ===
-                                "approved"
-                                ? "bg-green-400"
-                                : "bg-red-400"
-                              : "bg-yellow-400"
-                          }`}
+
+                  {shownWithdraw.map((withdraw, index) => {
+                    console.log(shownWithdraw)
+                    return (
+                      <>
+                        <tr
+                          className={`${
+                            index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
+                          } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
+                          key={index}
+                          onClick={() => {
+                            setActiveIndex(index)
+                            setWithdrawModal(true)
+                          }}
                         >
-                          {withdraw.reviewed
-                            ? withdraw.application_meta?.review_status ===
-                              "approved"
-                              ? "Approved"
-                              : "Rejected"
-                            : "Pending"}
-                        </span>
-                      </td>
-
-                      <td className="px-6 py-3">
-                        <div className="relative">
-                          <button
-                            className="block p-2 rounded-md dialog cursor-context-menu"
-                            onClick={(event) => {
-                              setActiveIndex(index);
-                              setShow(!show);
-                              event.stopPropagation();
-                            }}
-                          >
-                            <FaEllipsisV />
-                          </button>
-
-                          <ul
-                            className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
-                              index === activeIndex && show ? "" : "hidden"
-                            }`}
-                          >
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                setWithdrawModal(true);
-                              }}
+                          <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                          <td className="px-6 py-3">
+                            {withdraw?.application_meta?.applicants_name || withdraw?.transaction_meta?.member_name}
+                          </td>
+                          <td className="px-6 py-3">
+                            {moment(withdraw.created_at).format("DD-MM-YYYY")}
+                          </td>
+                          <td className="px-6 py-3">{withdraw?.app_id || withdraw?.trans_id}</td>
+                          <td className="px-6 py-3">
+                            {withdraw.application_meta?.account_type || withdraw?.transaction_meta?.account_type}
+                          </td>
+                          <td className="px-6 py-3">
+                            {currencyFormatter(withdraw?.application_meta?.amount || withdraw?.amount)}
+                          </td>
+                          <td className="px-6 py-3">
+                            {withdraw.application_meta?.cashout_method || withdraw?.transaction_meta.cashout_method || "Unknown"}
+                          </td>
+                          <td className={`px-6 py-3`}>
+                            <span
+                              className={` py-1 px-2 rounded-xl text-white ${
+                                withdraw.transaction_meta ? "bg-green-400"
+                                  : withdraw.application_meta?.review_status === "rejected"
+                                  ? "bg-red-400"
+                                  : "bg-yellow-400"
+                              }`}
                             >
-                              <MdInfo /> Details
-                            </li>
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                handleWithdraw(withdraw.application_id);
-                              }}
-                            >
-                              <AiFillCheckSquare /> Verify
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                              {withdraw.transaction_meta ? "Approved"
+                                  : withdraw.application_meta?.review_status === "rejected"
+                                  ? "Rejected"
+                                  : "Pending"}
+                            </span>
+                          </td>
+
+                          {/* <td className="px-6 py-3">
+                            <div className="relative">
+                              <button
+                                className="block p-2 rounded-md dialog cursor-context-menu"
+                                onClick={(event) => {
+                                  setActiveIndex(index);
+                                  setShow(!show);
+                                  event.stopPropagation();
+                                }}
+                              >
+                                <FaEllipsisV />
+                              </button>
+
+                              <ul
+                                className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
+                                  index === activeIndex && show ? "" : "hidden"
+                                }`}
+                              >
+                                <li
+                                  className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
+                                  onClick={() => {
+                                    setWithdrawModal(true);
+                                  }}
+                                >
+                                  <MdInfo /> Details
+                                </li>
+                                {
+                                  withdraw?.application_meta &&
+                                  <li
+                                    className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
+                                    onClick={() => {
+                                      handleWithdraw(withdraw.application_id);
+                                    }}
+                                  >
+                                    <AiFillCheckSquare /> Verify
+                                  </li>
+                                }
+                              </ul>
+                            </div>
+                          </td> */}
+                        </tr>
+                        {withdrawModal && index === activeIndex && (
+                          <WithdrawModal
+                            withdraw={withdraw}
+                            setWithdrawModal={setWithdrawModal}
+                          />
+                          
+                        )}
+                      </>
+                  )})}
                 </tbody>
               </table>
             </div>

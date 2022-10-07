@@ -3,10 +3,11 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
-import moment from "moment";
+import { useOutletContext } from "react-router-dom";
 
 export default function LoanModal({ passed, setLoanModal, loan }) {
   const { darkMode } = useAuth();
+  const [ user, profile, setProfile, roles] = useOutletContext()
 
   const navigate = useNavigate();
   return ReactDOM.createPortal(
@@ -39,7 +40,21 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
                   ? "Approved"
                   : "Rejected"}
               </span>
+              { 
+                roles.includes('c_credits' || 'vc_credits') &&
+                <span className={`py-1 px-2 rounded-lg text-white text-xs ml-1`}>
+                  <button
+                    className="bg-green-500 text-white outline-offset-2 px-1 rounded-sm w-22 capitalize font-normal text-base py-0.5"
+                    onClick = {() => {
+                      navigate(`/loans/members-requests/${loan.application_id}`);
+                    }}
+                  >
+                    Verify
+                  </button>
+                </span>
+              }
             </h1>
+            
           </div>
 
           <div
@@ -80,34 +95,6 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
               <p className="col-span-2">Duration:</p>
               <p className="font-bold col-span-3">{loan.application_meta.months} months</p>
           </div>
-        {/* 
-
-
-
-          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-              <p className="col-span-2">Interest Rate:</p>
-              <p className="font-bold col-span-3">5%</p>
-          </div>
-
-          <div className="grid grid-cols-5 gap-2 mb-5 justify-start w-full">
-              <p className="col-span-2">Amount to pay:</p>
-              <p className="font-bold col-span-3">{currencyFormatter(loan.outstanding_balance + 0.05 * loan.outstanding_balance)}</p>
-          </div>
-
-          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-              <p className="col-span-2">Approved at:</p>
-              <p className="font-bold col-span-3">{moment(loan.loan_meta.approved_at).format("DD-MM-YYYY  HH:MM")}</p>
-          </div>
-
-          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-              <p className="col-span-2">End Date:</p>
-              <p className="font-bold col-span-3">{moment(loan.end_date).format("DD-MM-YYYY HH:MM")}</p>
-          </div>
-
-          <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-              <p className="col-span-2">Approved by:</p>
-              <p className="font-bold col-span-3">{loan.loan_meta.approved_by}</p>
-          </div> */}
       </div>
     </div>,
     document.getElementById("portal")

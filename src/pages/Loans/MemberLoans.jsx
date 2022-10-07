@@ -110,6 +110,8 @@ export default function MemberLoans() {
     //   if (error ) throw error
     //   console.log(data)
     //   setLoans(data)
+
+    console.log("here are the member loans")
   }
 
   return (
@@ -172,7 +174,7 @@ export default function MemberLoans() {
                     <th className="px-6 py-4">Principal</th>
                     <th className="px-6 py-4">Interest Rate(%)</th>
                     <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4">Action</th>
+                    
                   </tr>
                 </thead>
                 <tbody>
@@ -248,19 +250,6 @@ export default function MemberLoans() {
                             />
                           </div>
                         </td> */}
-                        {
-                          roles.includes("treasurer") && 
-                          <td>
-                            <button
-                              className="bg-green-500 text-white outline-offset-2  py-1 px-1 rounded-sm w-20 outline-green-300 capitalize"
-                              onClick={() => {
-                                navigate(`/loans/payment/${id}`)
-                              }}
-                            > 
-                              Pay Now
-                            </button>
-                          </td>   
-                        }
                       </tr>
                       {loanModal && activeIndex === index && (
                         <LoanModal setLoanModal={setLoanModal} loan={{loan, payments}} />

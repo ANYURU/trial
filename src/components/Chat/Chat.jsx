@@ -9,6 +9,7 @@ import { getFormattedDate } from '../../helpers/formatDate'
 import { useAuth } from '../../auth/AuthContext'
 import { AiOutlineClose, AiFillMessage } from 'react-icons/ai'
 
+
 function Chat({user, profile, members,  conversations}) {
 
 
@@ -28,10 +29,11 @@ function Chat({user, profile, members,  conversations}) {
     const [ isTyping, setIsTyping ] = useState(null)
 
     // Dragging
-    const [ diffX, setDiffX ] = useState(200)
-    const [ diffY, setDiffY ] = useState(200)
+    const [ diffX, setDiffX ] = useState(0)
+    const [ diffY, setDiffY ] = useState(0)
     const [ dragging, setDragging] = useState(false)
-    const [ styles, setStyles ] = useState({})
+    const [ styles, setStyles ] = useState({
+    })
 
     // const setRef = useCallback(node => node && node.scrollIntoView({ smooth: true }))
     const bottomRef = useRef(null)
@@ -55,8 +57,15 @@ function Chat({user, profile, members,  conversations}) {
                 top,
                 left
             })
+
+            
+            console.log("left: ",left)
+            console.log("top: ", top)
+    
         }
-    }
+
+        console.log(dragging)
+    } 
 
 
 
@@ -134,20 +143,32 @@ function Chat({user, profile, members,  conversations}) {
     }
 
   return (
-    <div className={`absolute  border-red-500 h-full w-full flex`}
+    // <div
+    //     onMouseMove={event => {_dragging(event);console.log("moving")}}
+    //     onMouseDown={event => {_dragStart(event)}}
+    //     onMouseUp={() => {_dragEnd(); console.log("done")}}
+
+    //     style={
+    //         styles
+    //     }
+    //     className="bg-red-500 absolute w-full h-full"
+    // >
+    //     bingo
+    // </div>
+    <div className={`absolute border bottom-10 right-10 h-14 w-14` }
         onMouseMove={event => {_dragging(event);console.log("moving")}}
         onMouseDown={event => {_dragStart(event)}}
         onMouseUp={() => {_dragEnd(); console.log("done")}}
+
         style={
             styles
         }
     > 
-        <div className="bg-white  rounded-full border h-14 w-14 p-1 capitalize flex justify-center items-center text-primary border-primary shadow-2xl absolute bottom-5 right-6"
+        <div className="bg-white  rounded-full border h-14 w-14 p-1 capitalize flex justify-center items-center text-primary border-primary shadow-2xl"
             onClick={() => {
                 setCollapse(!collapse)
-            }} 
-            
-            >
+            }}
+        >
             <AiFillMessage className="w-full h-full"/>
         </div> 
         {

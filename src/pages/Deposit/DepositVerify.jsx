@@ -7,50 +7,50 @@ import { toast, ToastContainer } from "react-toastify";
 import { useOutletContext } from "react-router-dom";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { NothingShown } from "../../components";
 
 export default function DepositVerify() {
   const { id } = useParams();
   const [user, profile] = useOutletContext();
   const [deposit, setDeposit] = useState(null);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getApplication();
+    getApplication()
+      .then(async ( data ) => {
+        if( data ) {
+          setDeposit( data )
+          // Downloading the image.
+          if( !imageURL ) {
+            const { data: file, error } = await supabase.storage  
+              .from("deposits")
+              .download(await data.application_meta.files[0].file_url.substring(9))
 
+            if( error ) throw error
+            const url = URL.createObjectURL(file)
+            setImageURL(url)
+          }
+        }
+      })
+
+      .catch(error => console.log(error))
   }, []);
 
   const [imageURL, setImageURL] = useState("");
   const [imageLoad, setImageLoad] = useState(false);
 
-  // useEffect(() => {
-  //   if( !deposit ) {
-  //     getApplication()
-      // .then( async ( data ) => {
-      //   if( data ) {
-      //     setDeposit( data )
-      //     // Downloading the image.
-      //     if( !imageURL ) {
-      //       const { data: file, error } = await supabase.storage  
-      //         .from("deposits")
-      //         .download(await data.application_meta.files[0].file_url.substring(9))
-
-      //       if( error ) throw error
-      //       const url = URL.createObjectURL(file)
-      //       setImageURL(url)
-      //     }
-      //   }
-      // })
-      // .catch(error => console.log(error))     
-  //   }
-  // }, [])
-
   const getApplication = async () => {
     const { error, data } = await supabase.rpc("fetch_deposit_applications")
     if(error) throw error
+
     if(data) {
       const [deposit_application] = data.filter( deposit_application => deposit_application.application_id === id)
       return deposit_application
     } 
   }
+  // const getApplication = async () => {
+  //   const { error
+  // }
 
   const approveDepositTransaction = async () => {
     const {
@@ -95,8 +95,6 @@ export default function DepositVerify() {
     }
   };
 
-  console.log(deposit);
-
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
       <ToastContainer />
@@ -113,11 +111,10 @@ export default function DepositVerify() {
                 {deposit.application_meta && deposit.application_meta.applicants_name}'s Deposit Details
                 <span
                   className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
-                    !deposit.reviewed
-                      ? "bg-yellow-400"
-                      : deposit.application_meta && deposit.application_meta.review_status === "approved"
-                      ? "bg-green-400"
-                      : "bg-red-400"
+                    deposit?.transaction_meta ? "bg-green-400"
+                              : deposit?.application_meta?.review_status === "rejected"
+                              ? "bg-red-400"
+                              : "bg-yellow-400"
                   }`}
                 >
                   {!deposit.reviewed
@@ -131,7 +128,7 @@ export default function DepositVerify() {
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Application ID</p>
                   <p className="font-bold col-span-3">
-                    : {deposit.application_id}
+                    : {deposit.app_id}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -153,19 +150,11 @@ export default function DepositVerify() {
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-                  <p className="col-span-2">Mobile Number</p>
-                  <p className="font-bold col-span-3">
-                    :{" "}
-                    {deposit.application_meta &&
-                      deposit?.application_meta.phone_number}
-                  </p>
-                </div>
-                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Reason</p>
                   <p className="font-bold col-span-3">
                     :{" "}
                     {deposit.application_meta &&
-                      deposit?.application_meta.comments}
+                      deposit?.application_meta.comments || "Not Specified"}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -204,7 +193,7 @@ export default function DepositVerify() {
               )}
           </div>
         ) : (
-          <Spinner />
+          loading ? <Spinner /> : <NothingShown />
         )}
       </div>
     </div>

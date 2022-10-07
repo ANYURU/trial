@@ -24,7 +24,7 @@ const PrivateRoute = ({ allowedRoles }) => {
   const location = useLocation();
   const [members, setMembers] = useState([])
   const [conversations, setConversations] = useState([])
-
+  
   const fetch_members = async () => {
     const {data, error} = await supabase.rpc('possible_chats')
 
@@ -71,7 +71,7 @@ const PrivateRoute = ({ allowedRoles }) => {
         >
           <Navbar user={profile} showSidebar={showSidebar} />
           <div
-            className={`h-[calc(100vh-68px)] overflow-hidden mt-[65px] w-screen flex flex-col border border-red-800`}
+            className={`h-[calc(100vh-68px)] overflow-hidden mt-[65px] w-screen flex flex-col`}
           >
             <Sidebar
               user={profile}
@@ -82,7 +82,7 @@ const PrivateRoute = ({ allowedRoles }) => {
             <div
               className={`${
                 showSidebar ? "ml-[265px]" : "ml-[85px]"
-              } flex-grow`}
+              } flex-grow border bg-red-50`}
             >
               {profile &&
                 (allowedRoles !== undefined ? (

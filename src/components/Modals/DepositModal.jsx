@@ -3,9 +3,14 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useAuth } from "../../auth/AuthContext";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function DepositModal({ passed, setDepositModal, deposit }) {
+  console.log(deposit.application_id)
   const { darkMode } = useAuth();
+  const [ user, profile, setProfiles, roles] = useOutletContext()
+  const navigate = useNavigate()
 
   return ReactDOM.createPortal(
     <div
@@ -20,9 +25,19 @@ export default function DepositModal({ passed, setDepositModal, deposit }) {
         {/* {children} */}
         <div className="flex justify-between items-center w-full mb-5">
           <div>
-            <h1 className="font-bold text-lg">Deposit Details</h1>
+            <span className="font-bold text-lg">Deposit Details</span>
+            {
+              deposit?.application_meta && roles.includes('treasurer') &&
+              <button
+                className="bg-green-500 text-white outline-offset-2 px-1 rounded-sm w-22 capitalize font-normal text-base py-0.5 border ml-10"
+                onClick = {() => {
+                  navigate(`/deposit/members/${deposit.application_id}`);
+                }}
+              >
+                Verify
+              </button>
+            }
           </div>
-
           <div
             className="dark:hover:bg-dark-bg-600 hover:bg-accent p-2 rounded-full cursor-pointer"
             onClick={() => setDepositModal(false)}

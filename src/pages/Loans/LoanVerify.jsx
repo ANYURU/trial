@@ -9,13 +9,63 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 
 export default function LoanVerify() {
   const { id } = useParams();
-  console.log(id)
-
   const [loan, setLoan] = useState(null);
-  const [imageURL, setImageURL] = useState("");
+  const [bankStatementURL, setBankStatementURL] = useState("");
+  const [yearsCashflowURL, setCashflowURL] = useState("")
+  const [additionalFilesURL, setAdditionalFilesURL] = useState("")
+  const [supportingFilesURL, setSupportingFilesURL] = useState("")
+
 
   useEffect(() => {
-    getApplication();
+    getApplication()
+    .then(async (data) => {
+      setLoan(data)
+      if ( data?.application_meta?.bank_settlement_url && !bankStatementURL ) {
+        const { data: file, error } = await supabase.storage  
+          .from("loans")
+          .download(await data.application_meta.files[0].file_url.substring(9))
+          console.log(file)
+
+        if( error ) throw error
+        const url = URL.createObjectURL(file)
+        setBankStatementURL(url)
+      } 
+      if ( data?.application_meta?.a_years_cashflow_url && !yearsCashflowURL ) {
+        const { data: file, error } = await supabase.storage  
+          .from("loans")
+          .download(await data.application_meta.files[0].file_url.substring(9))
+
+          console.log(file)
+
+        if( error ) throw error
+        const url = URL.createObjectURL(file)
+        yearsCashflowURL(url)
+      }
+      if ( data?.application_meta?.additional_files_url  && additionalFilesURL ) {
+        const { data: file, error } = await supabase.storage  
+          .from("loans")
+          .download(await data.application_meta.files[0].file_url.substring(9))
+
+          console.log(file)
+
+        if( error ) throw error
+        const url = URL.createObjectURL(file)
+        additionalFilesURL(url)
+
+      }
+      if ( data?.application_meta?.supporting_files_url && supportingFilesURL ) {
+        const { data: file, error } = await supabase.storage  
+          .from("loans")
+          .download(await data.application_meta.files[0].file_url.substring(9))
+
+        console.log(file)
+
+        if( error ) throw error
+        const url = URL.createObjectURL(file)
+        supportingFilesURL(url)
+      }
+    })
+    .catch(error => console.log(error));
   }, []);
 
   const getApplication = async () => {
@@ -26,8 +76,9 @@ export default function LoanVerify() {
       .eq("application_id", id)
       .single();
 
-      console.log(data)
-    setLoan(data);
+      if( error ) throw error;
+
+      return data;
   };
 
 
@@ -94,7 +145,7 @@ export default function LoanVerify() {
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Application ID:</p>
-                  <p className="font-bold col-span-3">{loan.application_id}</p>
+                  <p className="font-bold col-span-3">{loan.app_id}</p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Applicants Name:</p>
@@ -112,7 +163,7 @@ export default function LoanVerify() {
                   <p className="col-span-2">Amount Requested:</p>
                   <p className="font-bold col-span-3">
                   
-                    UGX
+                    UGX {" "}
                     {loan.application_meta &&
                       currencyFormatter(loan.application_meta.amount)}{" "}
                     (
@@ -127,12 +178,6 @@ export default function LoanVerify() {
                     {loan.application_meta.asset1},{" "}
                     {loan.application_meta.asset2},{" "}
                     {loan.application_meta.asset3}
-                  </p>
-                </div>
-                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-                  <p className="col-span-2">Account Type:</p>
-                  <p className="font-bold col-span-3">
-                    {loan.application_meta.account_type}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -193,7 +238,7 @@ export default function LoanVerify() {
                   </p>
                 </div>
                 {
-                  loan.application_meta?.bank_settlement_url && (
+                  bankStatementURL && (
                   <>
                     <p> Bank statement</p>
                     <img
@@ -207,7 +252,7 @@ export default function LoanVerify() {
                   )
                 }
                 {
-                  loan.application_meta?.a_years_cashflow_url && (
+                  yearsCashflowURL && (
                   <>
                     <p> One year's cashflow </p>
                     <img
@@ -221,7 +266,7 @@ export default function LoanVerify() {
                   )
                 }
                 {
-                  loan.application_meta?.additional_files_url && (
+                  additionalFilesURL && (
                   <>
                     <p> Additional Files </p>
                     <img
@@ -235,7 +280,7 @@ export default function LoanVerify() {
                   )
                 }
                 {
-                  loan.application_meta?.supporting_files_url && (
+                  supportingFilesURL && (
                     <>
                       <p> Supporting Files </p>
                       <img
@@ -248,19 +293,6 @@ export default function LoanVerify() {
                     </>
                     )
                 }
-                {loan.application_meta.guarantors.map((guarantor, index) => (
-                  <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-                    <p className="col-span-2">Guarantor {index}:</p>
-                    <div className="col-span-3">
-                      <p className="font-bold ">{guarantor.name}</p>
-                      <p className="font-bold ">{guarantor.contact}</p>
-                      {
-                        loan?.financial_statement && loan.financial_statement?.length > 0  &&
-                        <p className="font-bold ">{guarantor?.financial_statement}</p>
-                      }
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
             <div className="flex gap-10 justify-end items-center mt-3">
@@ -273,7 +305,6 @@ export default function LoanVerify() {
               <button
                 className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
                 onClick={approveLoanPaymentTransaction}
-                
               >
                 Approve
               </button>

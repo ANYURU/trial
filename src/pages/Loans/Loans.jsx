@@ -142,7 +142,6 @@ export default function Loan() {
                     <th className="px-4 py-4">Principal (UGX)</th>
                     <th className="px-4 py-4">Interest (%)</th>
                     <th className="px-4 py-4">Status</th>
-                    <th className="px-4 py-4">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -190,7 +189,7 @@ export default function Loan() {
                           {loan?.loan_status === "defaulted" ? "arrears" : loan.loan_status}
                         </span>
                       </td>
-                      <td className="px-6 py-3">
+                      {/* <td className="px-6 py-3">
                         {
                           loan?.loan_status === "cleared"
                           ?
@@ -214,7 +213,7 @@ export default function Loan() {
                           </button>
                         }
                         
-                      </td>
+                      </td> */}
                     </tr>
                     {loanModal && activeIndex === index && (
                       <LoanModal setLoanModal={setLoanModal} loan={{loan, payments}} loanModal={loanModal}/>

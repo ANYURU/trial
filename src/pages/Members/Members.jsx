@@ -27,7 +27,8 @@ export default function Members() {
     return () => supabase.removeSubscription(mySubscription)
   }, [])
 
-  const [user,  profile ]  = useOutletContext()
+  const [user,  profile, setProfile, roles ]  = useOutletContext()
+  console.log(roles)
 
   const fetch_members = async () => {
     const { data, error } = await supabase.rpc("fetch_members")
@@ -45,9 +46,6 @@ export default function Members() {
   const [ date, setDate ] = useState(null)
   const navigate = useNavigate()
   const location = useLocation()
-
-  
-
   const [status, setStatus] = useState(null);
   const [activeIndex, setActiveIndex] = useState(null);
   const [show, setShow] = useState(false);
@@ -105,7 +103,6 @@ export default function Members() {
             placeholder="Search"
             onChange={(event) => setSearchText(event.target.value)}
           />
-          {console.log(profile)}
           {!profile?.roles.includes("super_admin") && (
             <button
               className=" px-4 bg-primary py-2 text-white rounded-md flex justify-center items-center"
@@ -150,23 +147,158 @@ export default function Members() {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
+                    <th></th>
                     <th className="px-6 py-4">Name</th>
                     <th className="px-6 py-4">ID</th>
                     <th className="px-6 py-4 whitespace-nowrap">
                       Phone Number
                     </th>
                     <th className="px-6 py-4">Status</th>
-                    <th>Actions</th>
+                    {
+                      roles.includes('super_admin') &&
+                      <th>Actions</th>
+                    }
                   </tr>
                 </thead>
                 <tbody>
                   {shownMembers.map((member, index) => (
-                    <tr
-                      className={`${
-                        index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
-                      key={index}
-                    >
+                    <>
+                      <tr
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
+                        } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
+                        key={index}
+                      >
+                        {deleteModal && activeIndex === index && (
+                          <ConfirmModal setPopUp={setDeleteModal}>
+                            <h1 className="font-bold">Are you sure?</h1>
+                            <p>
+                              If you terminate this account,{" "}
+                              {member.fullname.toUpperCase()} can't recover it.
+                            </p>
+                            <div className="flex justify-end gap-3 mt-3">
+                              <button
+                                className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
+                                onClick={() => setDeleteModal(false)}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="bg-accent-red px-3 py-1 outline outline-1  rounded-md text-white"
+                                onClick={() => setDeleteModal(false)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </ConfirmModal>
+                        )}
+                        {suspendModal && activeIndex === index && (
+                          <ConfirmModal setPopUp={setSuspendModal}>
+                            <h1 className="font-bold">Are you sure?</h1>
+                            <p>
+                              {member.fullname.toUpperCase()} won't be able to use
+                              it until you unsuspend.
+                            </p>
+                            <div className="flex justify-end gap-3 mt-3">
+                              <button
+                                className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
+                                onClick={() => {
+                                  setSuspendModal(false);
+                                }}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="bg-accent-red px-3 py-1 outline outline-1  rounded-md text-white"
+                                onClick={async () => {
+                                  await supabase
+                                    .from("users")
+                                    .update({ suspended: true })
+                                    .eq("id", member.id);
+                                  setSuspendModal(false);
+                                }}
+                              >
+                                Suspend
+                              </button>
+                            </div>
+                          </ConfirmModal>
+                        )}
+                        {promoteModal && activeIndex === index && (
+                          <PromoteModal
+                            setPromoteModal={setPromoteModal}
+                            member={member}
+                          />
+                        )}
+                        <td  onClick={() => {
+                          setActiveIndex(index)
+                          setMemberModal(true)
+                        }}><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                        <td className="px-6 py-3"
+                           onClick={() => {
+                            setActiveIndex(index)
+                            setMemberModal(true)
+                          }}
+                        >{member.fullname}</td>
+                        <td className="px-6 py-3"
+                           onClick={() => {
+                            setActiveIndex(index)
+                            setMemberModal(true)
+                          }}
+                        >{member.member_id}</td>
+                        <td className="px-6 py-3"
+                           onClick={() => {
+                            setActiveIndex(index)
+                            setMemberModal(true)
+                          }}
+                        >{member.phone_number}</td>
+
+                        <td className={`px-6 py-3 font-semibold`}
+                           onClick={() => {
+                            setActiveIndex(index)
+                            setMemberModal(true)
+                          }}
+                        >
+                          <span
+                            className={` py-1 px-2 rounded-xl text-white ${
+                              member.member_status === "active"
+                                ? "bg-emerald-600"
+                                : "bg-rose-600"
+                            }`}
+                          >
+                            {member.member_status}
+                          </span>
+                        </td>
+                        {
+                          roles.includes('super_admin') && 
+                          <td className="p-2">
+                            <div className="relative">
+                              <button
+                                className="block p-2 rounded-md dialog"
+                                onClick={(event) => {
+                                  setActiveIndex(index);
+                                  setShow(!show);
+                                  event.stopPropagation();
+                                }}
+                              >
+                                <FaEllipsisV />
+                              </button>
+                              <ContextMenu
+                                activeIndex={activeIndex}
+                                show={show}
+                                index={index}
+                                setShow={setShow}
+                                setMemberModal={setMemberModal}
+                                setDeleteModal={setDeleteModal}
+                                setSuspendModal={setSuspendModal}
+                                setPromoteModal={setPromoteModal}
+                                member={activeIndex === index ? member : null}
+                                profile={profile}
+                              />
+                            </div>
+                          </td>
+                        }
+
+                      </tr>
                       {memberModal && activeIndex === index && (
                         <MemberModal
                           member={activeIndex === index && member}
@@ -174,110 +306,7 @@ export default function Members() {
                           memberModal={memberModal}
                         />
                       )}
-
-                      {deleteModal && activeIndex === index && (
-                        <ConfirmModal setPopUp={setDeleteModal}>
-                          <h1 className="font-bold">Are you sure?</h1>
-                          <p>
-                            If you terminate this account,{" "}
-                            {member.fullname.toUpperCase()} can't recover it.
-                          </p>
-                          <div className="flex justify-end gap-3 mt-3">
-                            <button
-                              className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
-                              onClick={() => setDeleteModal(false)}
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              className="bg-accent-red px-3 py-1 outline outline-1  rounded-md text-white"
-                              onClick={() => setDeleteModal(false)}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </ConfirmModal>
-                      )}
-                      {suspendModal && activeIndex === index && (
-                        <ConfirmModal setPopUp={setSuspendModal}>
-                          <h1 className="font-bold">Are you sure?</h1>
-                          <p>
-                            {member.fullname.toUpperCase()} won't be able to use
-                            it until you unsuspend.
-                          </p>
-                          <div className="flex justify-end gap-3 mt-3">
-                            <button
-                              className="px-3 py-1 outline outline-1 outline-gray-500 rounded-md text-gray-500"
-                              onClick={() => {
-                                setSuspendModal(false);
-                              }}
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              className="bg-accent-red px-3 py-1 outline outline-1  rounded-md text-white"
-                              onClick={async () => {
-                                await supabase
-                                  .from("users")
-                                  .update({ suspended: true })
-                                  .eq("id", member.id);
-                                setSuspendModal(false);
-                              }}
-                            >
-                              Suspend
-                            </button>
-                          </div>
-                        </ConfirmModal>
-                      )}
-                      {promoteModal && activeIndex === index && (
-                        <PromoteModal
-                          setPromoteModal={setPromoteModal}
-                          member={member}
-                        />
-                      )}
-                      <td className="px-6 py-3">{member.fullname}</td>
-                      <td className="px-6 py-3">{member.id}</td>
-                      <td className="px-6 py-3">{member.phone_number}</td>
-
-                      <td className={`px-6 py-3 font-semibold`}>
-                        <span
-                          className={` py-1 px-2 rounded-xl text-white ${
-                            member.member_status === "active"
-                              ? "bg-emerald-600"
-                              : "bg-rose-600"
-                          }`}
-                        >
-                          {member.member_status}
-                        </span>
-                      </td>
-
-                      <td className="p-2">
-                        <div className="relative">
-                          <button
-                            className="block p-2 rounded-md dialog"
-                            onClick={(event) => {
-                              setActiveIndex(index);
-                              setShow(!show);
-                              event.stopPropagation();
-                            }}
-                          >
-                            <FaEllipsisV />
-                          </button>
-                          <ContextMenu
-                            activeIndex={activeIndex}
-                            show={show}
-                            index={index}
-                            setShow={setShow}
-                            setMemberModal={setMemberModal}
-                            setDeleteModal={setDeleteModal}
-                            setSuspendModal={setSuspendModal}
-                            setPromoteModal={setPromoteModal}
-                            member={activeIndex === index ? member : null}
-                            profile={profile}
-                          />
-                        </div>
-                      </td>
-                    </tr>
+                    </>
                   ))}
                 </tbody>
               </table>

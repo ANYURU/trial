@@ -12,7 +12,7 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
   const navigate = useNavigate()
   const [ amortExpand, setAmortExpand ] = useState(true)
   const [ repaymentExpand, setRepaymentExpand] = useState(true)
-  const [ {id: current_user} ] = useOutletContext()
+  const [ {id: current_user}, profile, setProfile, roles ] = useOutletContext()
 
   return ReactDOM.createPortal(
     <div
@@ -42,8 +42,10 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
                 {loan?.loan_status === "defaulted" ? "arrears" : loan.loan_status}
               </span>
               <span className='flex flex-1 justify-center'>
+                {console.log("loan status: ", loan.loan_status)}
                 {
-                  loan?.loan_status !== "cleared" && 
+                  loan?.loan_status !== "cleared" && (
+                  (!roles.includes('admin') && !roles.includes('super_admin')) ? 
                   <button
                     className="bg-green-500 text-white outline-offset-2 px-2 rounded-sm w-22 capitalize font-normal text-base py-1"
                     onClick = {() => {
@@ -52,6 +54,17 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
                   >
                     Pay Now
                   </button>
+                  :
+                  roles.includes('treasurer') && 
+                  <button
+                    className="bg-green-500 text-white outline-offset-2 px-2 rounded-sm w-22 capitalize font-normal text-base py-1"
+                    onClick = {() => {
+                      navigate(`/loans/payment/${loan.id}`)
+                    }}
+                  >
+                    Pay Now
+                  </button>
+                  )
                 }
               </span>
             </h1>
@@ -193,6 +206,7 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
               className="cursor-pointer"
               type="button"
               onClick={() => {
+                console.log(!repaymentExpand)
                 setRepaymentExpand(!repaymentExpand)
               }}
             >{repaymentExpand ? "collapse" : "expand"}</button>
@@ -215,7 +229,7 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
                 payments.map((payment, index) => (
                   <tr 
                     key={index}
-                    className={`${repaymentExpand && payments > 3 ? "hidden" : ""}`}
+                    className={`${repaymentExpand ? "" : "hidden"}`}
                   >
                     <td className="px-8 py-2">
                       {moment(payment.created_at).format("DD-MM-YYYY")}

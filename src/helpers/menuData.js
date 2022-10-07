@@ -112,7 +112,7 @@ export const menuData = {
                     link: '/deposit/deposit'
                 },
                 {
-                    label: 'Deposit Applications',
+                    label: 'Member Deposits',
                     link: '/deposit/members'
                 }
             ]
@@ -127,7 +127,7 @@ export const menuData = {
                     link: 'withdraw/request'
                 },
                 {
-                    label: 'Member Withdraw',
+                    label: 'Member Withdraws',
                     link: 'withdraw/members'
                 }
             ]

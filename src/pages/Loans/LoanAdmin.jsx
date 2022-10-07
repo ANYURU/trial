@@ -80,6 +80,7 @@ export default function LoanAdmin() {
     
     setLoans(data ?? [])
     setLoading(false)
+    console.log(data)
     
   }
 
@@ -253,97 +254,105 @@ export default function LoanAdmin() {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
+                    <th></th>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Transaction ID</th>
                     <th className="px-6 py-4">Name</th>
                     <th className="px-6 py-4">Amount UGX</th>
                     <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4">Actions</th>
+                    {/* <th className="px-6 py-4">Actions</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {shownLoans.map((deposit, index) => (
-                    <tr
-                      className={`cursor-pointer ${
-                        index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
-                      key={index}
-                    >
+                    <>
+                      <tr
+                        className={`cursor-pointer ${
+                          index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
+                        } hover:bg-gray-100 dark:hover:bg-dark-bg-600`}
+                        key={index}
+                        onClick={() => {
+                          setLoanModal(true)
+                          setActiveIndex(index)
+                        }}
+                      >
+                        <td><span className="ml-2 pl-4 px-4 py-3 text-sm">&gt;</span></td>
+                        <td className="px-6 py-3">
+                          {moment(deposit.created_at).format("DD-MM-YYYY")}
+                        </td>
+                        <td className="px-6 py-3">{deposit.application_id}</td>
+                        <td className="px-6 py-3">
+                          {deposit?.application_meta.applicants_name}
+                        </td>
+                        <td className="px-6 py-3">
+                          {currencyFormatter(deposit?.application_meta.amount)}
+                        </td>
+
+                        <td className={`px-6 py-3`}>
+                          <span
+                            className={` py-1 px-2 rounded-xl text-white ${
+                              deposit.reviewed
+                                ? deposit.application_meta.review_status ===
+                                  "approved"
+                                  ? "bg-green-400"
+                                  : "bg-red-400"
+                                : "bg-yellow-400"
+                            }`}
+                          >
+                            {deposit.reviewed
+                              ? deposit.application_meta.review_status ===
+                                "approved"
+                                ? "Approved"
+                                : "Rejected"
+                              : "Pending"}
+                          </span>
+                        </td>
+
+                        {/* <td className="px-6 py-3">
+                          <div className="relative">
+                            <button
+                              className="block p-2 rounded-md dialog cursor-context-menu"
+                              onClick={(event) => {
+                                setActiveIndex(index);
+                                setShow(!show);
+                                event.stopPropagation();
+                              }}
+                            >
+                              <FaEllipsisV />
+                            </button>
+                            <ul
+                              className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
+                                index === activeIndex && show ? "" : "hidden"
+                              }`}
+                            >
+                              <li
+                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                                onClick={() => {
+                                  // setLoanModal(true)
+                                  handleDeposit(deposit.application_id);
+                                }}
+                              >
+                                <AiFillCheckSquare /> Approve
+                              </li>
+                              <li
+                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
+                                onClick={() => {
+                                  setLoanModal(true);
+                                }}
+                              >
+                                <MdInfo /> Details
+                              </li>
+                            </ul>
+                          </div>
+                        </td> */}
+                      </tr>
                       {loanModal && activeIndex === index && (
                         <LoanAppModal
                           setLoanModal={setLoanModal}
                           loan={deposit}
                         />
                       )}
-                      <td className="px-6 py-3">
-                        {moment(deposit.created_at).format("DD-MM-YYYY")}
-                      </td>
-                      <td className="px-6 py-3">{deposit.application_id}</td>
-                      <td className="px-6 py-3">
-                        {deposit?.application_meta.applicants_name}
-                      </td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(deposit?.application_meta.amount)}
-                      </td>
-
-                      <td className={`px-6 py-3`}>
-                        <span
-                          className={` py-1 px-2 rounded-xl text-white ${
-                            deposit.reviewed
-                              ? deposit.application_meta.review_status ===
-                                "approved"
-                                ? "bg-green-400"
-                                : "bg-red-400"
-                              : "bg-yellow-400"
-                          }`}
-                        >
-                          {deposit.reviewed
-                            ? deposit.application_meta.review_status ===
-                              "approved"
-                              ? "Approved"
-                              : "Rejected"
-                            : "Pending"}
-                        </span>
-                      </td>
-
-                      <td className="px-6 py-3">
-                        <div className="relative">
-                          <button
-                            className="block p-2 rounded-md dialog cursor-context-menu"
-                            onClick={(event) => {
-                              setActiveIndex(index);
-                              setShow(!show);
-                              event.stopPropagation();
-                            }}
-                          >
-                            <FaEllipsisV />
-                          </button>
-                          <ul
-                            className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
-                              index === activeIndex && show ? "" : "hidden"
-                            }`}
-                          >
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                // setLoanModal(true)
-                                handleDeposit(deposit.application_id);
-                              }}
-                            >
-                              <AiFillCheckSquare /> Approve
-                            </li>
-                            <li
-                              className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
-                              onClick={() => {
-                                setLoanModal(true);
-                              }}
-                            >
-                              <MdInfo /> Details
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
+                    </>
                   ))}
                 </tbody>
               </table>
