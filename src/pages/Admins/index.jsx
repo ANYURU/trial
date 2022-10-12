@@ -195,7 +195,7 @@ export default function Members() {
                           setAdminModal(true)
                         }}
                       
-                      >{admin.id}</td>
+                      >{admin?.member_id || admin?.id}</td>
                       <td className="px-6 py-3"
                         onClick={() => {
                           setActiveIndex(index)

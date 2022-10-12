@@ -80,9 +80,11 @@ function MakeDeposit() {
               amount,
               comments,
               evidence,
+    
 
             } = values;
 
+            console.log(values)
 
             try {
               const { Key: url } = await uploadFile(evidence, "deposits");

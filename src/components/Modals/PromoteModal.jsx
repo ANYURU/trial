@@ -39,7 +39,7 @@ function PromoteModal({ setPromoteModal, member }) {
   const promoteMember = async () => {
     const { error, data } = await supabase
       .from("new_members")
-      .update({"roles": ["member", "admin", role], "position_in_sacco": role})
+      .update({"roles": ["member", "admin", role], "position_in_sacco": roles[role]})
       .eq("id", member.id);
 
     if (error){

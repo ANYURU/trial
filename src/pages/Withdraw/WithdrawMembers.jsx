@@ -1,16 +1,11 @@
 import { supabase } from "../../helpers/supabase";
 import { useState, useEffect } from "react";
-import { MdOutlineSearch } from "react-icons/md";
 import Pagination from "../../components/Pagination";
 import { Spinner } from "../../components";
-import { useNavigate } from "react-router-dom";
-import { FaEllipsisV } from "react-icons/fa";
-import { AiFillCheckSquare } from "react-icons/ai";
 import { NothingShown } from "../../components";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import WithdrawModal from "../../components/Modals/WithdrawModal2";
-import { MdInfo } from "react-icons/md";
 
 export default function WithdrawMembers() {
   const [status, setStatus] = useState("");
@@ -19,21 +14,22 @@ export default function WithdrawMembers() {
   const [withdrawModal, setWithdrawModal] = useState(false);
   const [show, setShow ] = useState(false)
   const [loading, setLoading] = useState(true)
-  
-
-  const navigate = useNavigate();
 
   const [withdraws, setWithdraws] = useState([]);
 
-  const handleWithdraw = (withdrawID) => {
-    navigate(`/withdraw/members/${withdrawID}`);
-  };
 
   useEffect(() => {
     getApplications().catch(error => console.log(error))
     
     const mySubscription = supabase
       .from('applications')
+      .on('*', async ( payload ) => {
+        await getApplications().catch(error => console.log(error))
+      })
+      .subscribe()
+
+    supabase
+      .from('transactions')
       .on('*', async ( payload ) => {
         await getApplications().catch(error => console.log(error))
       })
@@ -48,16 +44,13 @@ export default function WithdrawMembers() {
         setLoading(false)
         throw error
       } else {
-        console.log('Transactions: ',transactions)
-
-        console.log('Applications: ',applications)
         let data = []
         if (applications) data.push(...applications)
         if (transactions) data.push(...transactions)
-        setWithdraws(data ?? null)
-        setLoading(false)
 
-        console.log("Here ",data)
+        const sorted_data = data.sort((a,b) => new Date(b?.created_at) - new Date(a?.created_at))
+        setWithdraws(sorted_data ?? null)
+        setLoading(false)
       }
   };
 
@@ -77,7 +70,6 @@ export default function WithdrawMembers() {
     } else if (status === "rejected" ) {
       return application?.application_meta?.review_status === "rejected"
     }
-
   });
 
   filteredWithdraws = filteredWithdraws.filter(
@@ -88,14 +80,14 @@ export default function WithdrawMembers() {
   );
 
   const approvedwithdraws = filteredWithdraws.filter(
-    (deposit) => deposit.application_meta?.review_status === "approved"
+    (deposit) => deposit?.transaction_meta
   );
   const pendingwithdraws = filteredWithdraws.filter(
-    (deposit) => !deposit.reviewed
+    (deposit) => deposit?.application_meta?.review_status === 'pending'
   );
   const rejectedwithdraws = filteredWithdraws.filter(
     (deposit) =>
-      deposit.reviewed && deposit.application_meta?.review_status !== "approved"
+      deposit.reviewed && deposit.application_meta?.review_status === "rejected"
   );
 
   const approved =
@@ -236,7 +228,6 @@ export default function WithdrawMembers() {
                 <tbody>
 
                   {shownWithdraw.map((withdraw, index) => {
-                    console.log(shownWithdraw)
                     return (
                       <>
                         <tr
@@ -264,7 +255,7 @@ export default function WithdrawMembers() {
                             {currencyFormatter(withdraw?.application_meta?.amount || withdraw?.amount)}
                           </td>
                           <td className="px-6 py-3">
-                            {withdraw.application_meta?.cashout_method || withdraw?.transaction_meta.cashout_method || "Unknown"}
+                            {withdraw?.application_meta?.cashout_method || withdraw?.transaction_meta?.cashout_method || "Unknown"}
                           </td>
                           <td className={`px-6 py-3`}>
                             <span
@@ -278,7 +269,8 @@ export default function WithdrawMembers() {
                               {withdraw.transaction_meta ? "Approved"
                                   : withdraw.application_meta?.review_status === "rejected"
                                   ? "Rejected"
-                                  : "Pending"}
+                                  : "Pending"
+                              }
                             </span>
                           </td>
 

@@ -19,6 +19,7 @@ export default function DepositVerify() {
     getApplication()
       .then(async ( data ) => {
         if( data ) {
+          console.log("here: ", data)
           setDeposit( data )
           // Downloading the image.
           if( !imageURL ) {
@@ -42,7 +43,7 @@ export default function DepositVerify() {
   const getApplication = async () => {
     const { error, data } = await supabase.rpc("fetch_deposit_applications")
     if(error) throw error
-
+    console.log(data)
     if(data) {
       const [deposit_application] = data.filter( deposit_application => deposit_application.application_id === id)
       return deposit_application
@@ -58,13 +59,13 @@ export default function DepositVerify() {
     } = deposit;
 
     try {
-      const { data, error } = await supabase.rpc("approve_transaction", {
-        members_id: applicants_id,
+      const { data, error } = await supabase.rpc("approve_deposit_application", {
         application: id,
       });
       if (error) {
         throw error;
       } else {
+        console.log(data)
         // handle the alerts and navigation
         toast.success(`Transaction has been approved.`, {
           position: "top-center",

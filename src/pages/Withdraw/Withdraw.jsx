@@ -55,10 +55,8 @@ export default function Deposit() {
       .eq("_type", "deposit")
       .eq("created_by", profile.id)
       .order("created_at", { ascending: false })
-      console.log(data)
-    setDeposits(data && data.length > 0 ? data : null);
+      setDeposits(data && data.length > 0 ? data : null);
   };
-
 
   const getDeposits = async () => {
     const { data: { transactions, applications}, error } = await supabase.rpc("fetch_withdraws")

@@ -43,8 +43,9 @@ export default function DepositAdmin() {
       let data = []
       if (applications) data.push(...applications)
       if (transactions) data.push(...transactions)
-      setDeposits(data ?? null)
-      console.log(data)
+
+      const sorted_data = data.sort((a,b) => new Date(b?.created_at) - new Date(a?.created_at))
+      setDeposits(sorted_data ?? null)      
     }
   };
 
@@ -110,8 +111,6 @@ export default function DepositAdmin() {
         .indexOf(searchText.toLowerCase()) > -1
 
   );
-
-  // console.log("second filter here: ", shownDeposits)
 
   //context
   const [show, setShow] = useState(false);
@@ -233,7 +232,6 @@ export default function DepositAdmin() {
                     <th className="px-6 py-4">Account</th>
                     <th className="px-6 py-4">Amount</th>
                     <th className="px-6 py-4">Status</th>
-                    {/* <th className="px-6 py-4">Action</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -279,46 +277,6 @@ export default function DepositAdmin() {
                             }
                           </span>
                         </td>
-
-                        {/* <td className="px-6 py-3">
-                          <div className="relative">
-                            <button
-                              className="block p-2 rounded-md dialog cursor-context-menu"
-                              onClick={(event) => {
-                                setActiveIndex(index);
-                                setShow(!show);
-                                event.stopPropagation();
-                              }}
-                            >
-                              <FaEllipsisV />
-                            </button>
-                            <ul
-                              className={`absolute right-0 w-48 py-2 mt-2 z-50 bg-white shadow-lg ease-in-out duration-300 dark:bg-dark-bg-700 ${
-                                index === activeIndex && show ? "" : "hidden"
-                              }`}
-                            >
-                              <li
-                                className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer mb-2 hover:bg-accent dark:hover:bg-dark-bg-600"
-                                onClick={() => {
-                                  setDepositModal(true);
-                                }}
-                              >
-                                <MdInfo /> Details
-                              </li>
-                              {
-                                deposit?.application_meta &&
-                                <li
-                                  className="flex gap-1 justify-start items-center px-4 py-2 cursor-pointer hover:bg-accent dark:hover:bg-dark-bg-600"
-                                  onClick={() => {
-                                    handleDeposit(deposit?.application_id);
-                                  }}
-                                >
-                                  <AiFillCheckSquare /> Verify
-                                </li>
-                              }
-                            </ul>
-                          </div>
-                        </td> */}
                       </tr>
                       {depositModal && index === activeIndex && (
                         <DepositModal
