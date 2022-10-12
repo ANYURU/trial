@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { supabase } from "../../helpers/supabase";
 import { useOutletContext, useParams } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { evidencedRequestValidationSchema as loanPaymentRequestValidationSchema } from "../../helpers/validator";
+import { loanPaymentRequestValidationSchema } from "../../helpers/validator";
 import { useEffect, useState } from "react";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { add_separator, remove_separator } from '../../helpers/thousand_separator'
@@ -19,24 +19,22 @@ function LoanPayment() {
   }, []);
 
   const [loan, setLoan] = useState({});
-
-  const {
-    user: { id: applicants_id },
-  } = useAuth();
-  const [user, { fullname: applicants_name }] = useOutletContext();
-
+  const [user, { fullname: applicants_name, id: current_user }] = useOutletContext();
   const initialValues = {
     account_type: "",
     amount: "",
     phone_number: "",
     evidence: "",
     comments: "",
-  };
+    designated_for: loan?.member_id === current_user ? "own": "other",
+    member_id: loan?.member_id
+  }
 
   const getApplications = async () => {
-    const { error, data } = await supabase.from("loans").select().eq("id", id);
-    console.log(loan)
-    setLoan(data[0]);
+    const { error, data } = await supabase.from("loans").select().eq("id", id).single();
+    if (error ) throw error
+    setLoan(data);
+    console.log(data)
   };
 
   return (
@@ -44,51 +42,48 @@ function LoanPayment() {
       initialValues={initialValues}
       validationSchema={loanPaymentRequestValidationSchema}
       onSubmit={async (values, { resetForm }) => {
-        const { account_type, amount, phone_number, comments, evidence } =
-          values;
+        const { account_type, amount, phone_number, comments, evidence, designated_for } = values;
+        console.log(designated_for)
 
-        console.log(amount)
+        // try {
+        //   const { Key: url } = await uploadFile(evidence, "loans");
+        //   const { error, data } = await supabase.from("applications").insert([
+        //     {
+        //       _type: "payment",
+        //       created_at: new Date()
+        //         .toISOString()
+        //         .toLocaleString("en-GB", { timeZone: "UTC" }),
+        //       updated_at: new Date()
+        //         .toISOString()
+        //         .toLocaleString("en-GB", { timeZone: "UTC" }),
+        //       reviewed: false,
+        //       application_meta: {
+        //         applicants_id,
+        //         applicants_name,
+        //         account_type,
+        //         loan_id: id,
+        //         amount,
+        //         phone_number,
+        //         files: [
+        //           {
+        //             file_url: url,
+        //           },
+        //         ],
+        //         comments,
+        //       },
+        //     },
+        //   ]);
 
-        try {
-          const { Key: url } = await uploadFile(evidence, "loans");
-          const { error, data } = await supabase.from("applications").insert([
-            {
-              _type: "payment",
-              created_at: new Date()
-                .toISOString()
-                .toLocaleString("en-GB", { timeZone: "UTC" }),
-              updated_at: new Date()
-                .toISOString()
-                .toLocaleString("en-GB", { timeZone: "UTC" }),
-              reviewed: false,
-              application_meta: {
-                applicants_id,
-                applicants_name,
-                account_type,
-                // later use
-                // loan_id,
-                amount,
-                phone_number,
-                files: [
-                  {
-                    file_url: url,
-                  },
-                ],
-                comments,
-              },
-            },
-          ]);
+        //   if (error) throw error;
 
-          if (error) throw error;
-
-          console.log(data);
-          resetForm({ values: initialValues });
-          toast.success(`Request submitted for review.`, {
-            position: "top-center",
-          });
-        } catch (error) {
-          console.log(error);
-        }
+        //   console.log(data);
+        //   resetForm({ values: initialValues });
+        //   toast.success(`Request submitted for review.`, {
+        //     position: "top-center",
+        //   });
+        // } catch (error) {
+        //   console.log(error);
+        // }
       }}
     >
       {({
@@ -206,6 +201,16 @@ function LoanPayment() {
                   className="bg-primary inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2 w-full mt-1 cursor-pointer"
                 />
               </div>
+              <button
+                onClick={(event) => {
+                  event.preventDefault()
+                  console.log('values: ', values)
+                  console.log('errors: ', errors)
+                }}
+              
+              >
+                try me
+              </button>
             </div>
           </Form>
         );

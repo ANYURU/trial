@@ -13,6 +13,7 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
   const [ amortExpand, setAmortExpand ] = useState(true)
   const [ repaymentExpand, setRepaymentExpand] = useState(true)
   const [ {id: current_user}, profile, setProfile, roles ] = useOutletContext()
+  console.log(loan)
 
   return ReactDOM.createPortal(
     <div
@@ -42,10 +43,12 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
                 {loan?.loan_status === "defaulted" ? "arrears" : loan.loan_status}
               </span>
               <span className='flex flex-1 justify-center'>
-                {console.log("loan status: ", loan.loan_status)}
+                {console.log("member_id: ", loan.member_id)}
+                {console.log("profile_id: ", profile.id)}
+
                 {
-                  loan?.loan_status !== "cleared" && (
-                  (!roles.includes('admin') && !roles.includes('super_admin')) ? 
+                  loan?.loan_status !== 'cleared' &&
+                  (loan?.member_id === profile.id || roles.includes('treasurer') || roles.includes('asst_treasurer')) &&
                   <button
                     className="bg-green-500 text-white outline-offset-2 px-2 rounded-sm w-22 capitalize font-normal text-base py-1"
                     onClick = {() => {
@@ -54,17 +57,6 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
                   >
                     Pay Now
                   </button>
-                  :
-                  roles.includes('treasurer') && 
-                  <button
-                    className="bg-green-500 text-white outline-offset-2 px-2 rounded-sm w-22 capitalize font-normal text-base py-1"
-                    onClick = {() => {
-                      navigate(`/loans/payment/${loan.id}`)
-                    }}
-                  >
-                    Pay Now
-                  </button>
-                  )
                 }
               </span>
             </h1>

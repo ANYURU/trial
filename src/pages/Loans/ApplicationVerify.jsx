@@ -110,18 +110,13 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
         uploadFile(bank_statement, 'loans')
           .then(({ Key: bank_settlement_url}) => {
             if(bank_settlement_url) {
-              initialValues.bank_settlement_url= bank_settlement_url
+              initialValues.bank_settlement_url = bank_settlement_url
               return true
             }
           })
           .catch(error => console.log(error))
 
       )
-
-      // const { Key: bank_statement_url } = await uploadFile(bank_statement, 'loans') 
-      // if ( bank_statement_url ) {
-      //   initialValues.bank_statement = bank_statement_url
-      // }
     }  
     
     // Uploading the cash flow
@@ -137,11 +132,6 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
           .catch(error => console.log(error))
 
       )
-      // const { Key: a_years_cashflow_url } = await uploadFile(a_years_cashflow, 'loans')
-      // if ( a_years_cashflow ) {
-      //   initialValues.a_years_cashflow = a_years_cashflow_url
-      
-      // }
 
     }  
 
@@ -158,11 +148,6 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
           .catch(error => console.log(error))
 
       )
-      // const { Key: additional_files_url } = await uploadFile(additional_files, 'loans')
-      // if ( additional_files_url ) {
-      //   initialValues.additional_files_url = additional_files_url
-        
-      // }
     }  
     
 
@@ -198,8 +183,6 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
 
   const handleSubmit = async (one_time_password) => {
     const verification_key = localStorage.getItem('loans_application_verification_key')
-    // Destructuring files to upload in the loans bucket.
-    // const { Key: url } = await uploadFile(evidence, 'deposits')
     initialValues.amount = parseFloat(remove_separator(initialValues.amount))
     const amount = parseFloat(remove_separator(initialValues.amount))
     const { amortization_schedule, total } = generate_amortization_schedule(amount, rate ,Number(months))

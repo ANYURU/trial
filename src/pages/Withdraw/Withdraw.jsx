@@ -69,6 +69,7 @@ export default function Deposit() {
         if (transactions) data.push(...transactions)
         setDeposits( data ?? null)
         setLoading(false)
+        console.log(data)
       }
   }
 
