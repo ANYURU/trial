@@ -100,7 +100,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Amount to pay:</p>
           <p className="font-bold col-span-3">
-            {currencyFormatter(
+            UGX {currencyFormatter(
               loan?.application_meta?
               loan?.application_meta?.total 
               :
@@ -238,20 +238,22 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
               ))}
           </tbody>
         </table>
-        <div className="flex justify-between w-[100%]"><span className="font-bold">Repayments</span> 
-          {
-            loan?.loan?.payments?.length > 2 && loan?.loan?.payments.length !== 3 &&
-            <button
-              className="cursor-pointer"
-              type="button"
-              onClick={() => {
-                console.log(!repaymentExpand)
-                setRepaymentExpand(!repaymentExpand)
-              }}
-            >{repaymentExpand ? "collapse" : "expand"}</button>
-          }
-        </div>
-
+        {
+          !loan?.application_meta && 
+            <div className="flex justify-between w-[100%]"><span className="font-bold">Repayments</span> 
+              {
+                loan?.loan?.payments?.length > 2 && loan?.loan?.payments.length !== 3 &&
+                <button
+                  className="cursor-pointer"
+                  type="button"
+                  onClick={() => {
+                    console.log(!repaymentExpand)
+                    setRepaymentExpand(!repaymentExpand)
+                  }}
+                >{repaymentExpand ? "collapse" : "expand"}</button>
+              }
+            </div>
+        }
         { 
           loan?.payments && loan?.payments?.length > 0 ? 
           <>
@@ -306,12 +308,15 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
               : loan?.application_meta?.review_status === "rejected" && (loan?.application_meta?.applicants_id === current_user && "Sorry, your loan was rejected.")
             }
             </div>
-            </>
+          </>
           :
+          !loan?.application_meta &&
           <div className="flex flex-col gap-2 items-center">
               You haven't made any payments yet.
           </div>
+          
         }
+
         </div>
       </div>,
     document.getElementById("portal")
