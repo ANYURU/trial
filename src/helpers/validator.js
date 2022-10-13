@@ -64,7 +64,6 @@ export const evidencedRequestValidationSchema = Yup.object({
 export const loanPaymentRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
   evidence: Yup.string().required('Required!'),
-  loan_id: Yup.string().required('Required!'),
   comments: Yup.string(),
   phone_number: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Must be exactly 10 digits').max(10, 'Must be exactly 10 digits').required("Phone Number is required")
 })

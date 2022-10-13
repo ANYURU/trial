@@ -21,13 +21,10 @@ function LoanPayment() {
   const [loan, setLoan] = useState({});
   const [user, { fullname: applicants_name, id: current_user }] = useOutletContext();
   const initialValues = {
-    account_type: "",
     amount: "",
     phone_number: "",
     evidence: "",
     comments: "",
-    designated_for: loan?.member_id === current_user ? "own": "other",
-    member_id: loan?.member_id
   }
 
   const getApplications = async () => {
@@ -42,8 +39,77 @@ function LoanPayment() {
       initialValues={initialValues}
       validationSchema={loanPaymentRequestValidationSchema}
       onSubmit={async (values, { resetForm }) => {
-        const { account_type, amount, phone_number, comments, evidence, designated_for } = values;
-        console.log(designated_for)
+        const { amount, phone_number, comments, evidence} = values;
+        
+        try {
+          const { Key: url } = await uploadFile(evidence, "loans");
+            if (loan.member_id === current_user){
+              const { error, data } = await supabase.from("applications")
+              .insert(
+                {
+                  _type: "payment",
+                  created_at: new Date()
+                    .toISOString()
+                    .toLocaleString("en-GB", { timeZone: "UTC" }),
+                  updated_at: new Date()
+                    .toISOString()
+                    .toLocaleString("en-GB", { timeZone: "UTC" }),
+                  reviewed: false,
+                  application_meta: {
+                    applicants_id: current_user,
+                    applicants_name,
+                    loan_id: id,
+                    amount,
+                    phone_number,
+                    files: [
+                      {
+                        file_url: url,
+                      },
+                    ],
+                    comments,
+                  },
+                },
+              );
+      
+              if (error) throw error;
+              resetForm({ values: initialValues });
+              toast.success(`Request submitted for review.`, {
+                position: "top-center",
+              });
+
+              console.log('Making the payment user own loan.')
+            } else {
+              const details = {
+                _type: "payment",
+                created_at: new Date()
+                  .toISOString()
+                  .toLocaleString("en-GB", { timeZone: "UTC" }),
+                updated_at: new Date()
+                  .toISOString()
+                  .toLocaleString("en-GB", { timeZone: "UTC" }),
+                reviewed: false,
+                applicants_id: current_user,
+                applicants_name,
+                amount,
+                comments,
+                phone_number,
+                review_status: "pending",
+                member_id: loan.member_id, 
+                evidence: url,
+                loan_id: id,
+              } 
+              // Insert the payment transaction in the transactions table.
+              console.log(details)
+              const {data, error} = await supabase.rpc('pay_loan_for_member', { 'details': JSON.stringify(details) })
+              if( error ) throw error
+              console.log(data)
+    
+            }
+          } catch(error) {
+            console.log(error)
+          }
+       
+
 
         // try {
         //   const { Key: url } = await uploadFile(evidence, "loans");

@@ -71,14 +71,19 @@ export default function Loan() {
   }
 
   const fetch_loans = async () => {
-    const { data, error } = await supabase.rpc("fetch_loans")
+    const { data: {current_loans, pending_loans}, error } = await supabase.rpc("fetch_loans")
     if ( error ) {
       setLoading( false )
       throw error
     } else {
-      console.log(data)
+
+      let data = []
+      if( current_loans ) data.push(...current_loans)
+      if( pending_loans ) data.push(...pending_loans)
+      
       setLoans( data )
       setLoading( false )
+      console.log("here: ", data)
     }
     // const {data, error } = await supabase
     //   .from('loans')
@@ -145,81 +150,74 @@ export default function Loan() {
                   </tr>
                 </thead>
                 <tbody>
-                  {shownloans.map(({loan, payments}, index) => (
-                    <>
-                    <tr
-                      onClick={() => {
-                        setLoanModal(true)
-                        setActiveIndex(index)
-                      }}
-                      className={`${
-                        index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
-                      } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
-                      key={index}
-                      >
-                      <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
-                      <td className="pr-6 py-3">
-                        {moment(loan.created_at).format("DD-MM-YYYY")}
-                      </td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(
-                          loan.outstanding_balance +
-                          loan.interest_paid/100 * loan.outstanding_balance
+                  {shownloans.map((loan, index) => {
+                    return (
+                      <>
+                      <tr
+                        onClick={() => {
+                          setLoanModal(true)
+                          setActiveIndex(index)
+                        }}
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-50 dark:bg-dark-bg" : ""
+                        } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
+                        key={index}
+                        >
+                        <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                        <td className="pr-6 py-3">
+                          {moment(loan?.created_at).format("DD-MM-YYYY")}
+                        </td>
+                        <td className="px-6 py-3">
+                          {currencyFormatter(
+                            loan?.application_meta ?
+                            loan?.application_meta?.total
+                            :
+                            loan?.loan.outstanding_balance +
+                            loan?.loan.interest_paid/100 * loan?.loan.outstanding_balance
+                            )}
+                        </td>
+                        <td className="px-6 py-3">
+                          {currencyFormatter(
+                            loan?.application_meta ?
+                            0
+                            :
+                            loan?.loan.amount_paid
                           )}
-                      </td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(loan.amount_paid)}
-                      </td>
-                      <td className="px-6 py-3">
-                        {currencyFormatter(loan.outstanding_balance)}
-                      </td>
-                      <td className="px-6 py-3">{currencyFormatter(loan.interest_rate)}</td>
-                      <td className={`px-6 py-3`}>
-                        <span
-                          className={` py-1 px-2 rounded-xl text-white ${
-                            loan.loan_status === "pending"
-                            ? "bg-yellow-400"
-                            : loan.loan_status === "cleared"
-                            ? "bg-green-400"
-                            : loan.loan_status === "on going"
-                            ? "bg-blue-400"
-                            : "bg-red-400"
-                          }`}
-                          >
-                          {loan?.loan_status === "defaulted" ? "arrears" : loan.loan_status}
-                        </span>
-                      </td>
-                      {/* <td className="px-6 py-3">
-                        {
-                          loan?.loan_status === "cleared"
-                          ?
-                          <button 
-                            className="outline-slate-300 text-white outline-offset-2  py-1 px-2 rounded-sm w-20 bg-gray-500 capitalize">
-                            paid
-                          </button>
-                          :
-                          loan?.loan_status === "defaulted"
-                          ?
-                          <button 
-                            className="bg-red-500 text-white outline-offset-2 py-1 px-2 rounded-sm w-20 capitalize">
-                            arrears
-                          </button>
-                          :
-                          <button 
-                            className="bg-green-500 text-white outline-offset-2 py-1 px-2 rounded-sm w-20 capitalize"
-                            onClick={() => navigate(`/loans/payment/${id}`)}
-                          >
-                            pay now
-                          </button>
-                        }
-                        
-                      </td> */}
-                    </tr>
-                    {loanModal && activeIndex === index && (
-                      <LoanModal setLoanModal={setLoanModal} loan={{loan, payments}} loanModal={loanModal}/>
-                      )}
-                    </>
-                  ))}
+                        </td>
+                        <td className="px-6 py-3">
+                          {currencyFormatter(
+                            loan?.application_meta ?
+                            loan?.application_meta?.total
+                            :
+                            loan?.loan.outstanding_balance
+                          )}
+                        </td>
+                        <td className="px-6 py-3">{currencyFormatter(loan?.application_meta ? loan.application_meta.interest_rate : loan?.loan?.interest_rate)}</td>
+                        <td className={`px-6 py-3`}>
+                          <span
+                            className={` py-1 px-2 rounded-xl text-white ${
+                              loan?.application_meta?.review_status === "pending"
+                              ? "bg-yellow-400"
+                              : loan?.application_meta?.review_status === "rejected"
+                              ? "bg-red-400"
+                              : loan?.loan.loan_status === "cleared"
+                              ? "bg-green-400"
+                              : loan?.loan.loan_status === "on going"
+                              ? "bg-blue-400"
+                              : "bg-red-400"
+                            }`}
+                            >
+                            {loan?.loan?.loan_status === "defaulted" ? "arrears" : loan?.loan?.loan_status || loan?.application_meta?.review_status}
+                          </span>
+                        </td>
+                      </tr>
+                      {loanModal && activeIndex === index && (
+                        <LoanModal setLoanModal={setLoanModal} loan={loan} loanModal={loanModal}/>
+                        )}
+                      </>
+                    )
+                  }
+                  )}
                   
                 </tbody>
               </table>

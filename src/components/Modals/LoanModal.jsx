@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
-export default function LoanModal({ passed, setLoanModal, loan: {loan, payments} }) {
+export default function LoanModal({ passed, setLoanModal, loan }) {
   const { darkMode } = useAuth();
   const navigate = useNavigate()
   const [ amortExpand, setAmortExpand ] = useState(true)
@@ -28,36 +28,36 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
         {/* {children} */}
         <div className="flex justify-between items-center w-full mb-5">
             <h1 className="font-bold text-lg flex flex-1 justify-center items-center">
-              Loan Details ({loan.loan_meta.applicants_name})
+              Loan Details ({loan?.loan?.loan_meta?.applicants_name || loan?.application_meta?.applicants_name})
               <span
                 className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
-                  loan.loan_status === "pending"
+                  loan?.application_meta?.review_status === "pending"
                   ? "bg-yellow-400"
-                  : loan.loan_status === "cleared"
-                  ? "bg-green-400"
-                  : loan.loan_status === "on going"
+                  : loan?.application_meta?.review_status === "rejected"
+                  ? "bg-red-400"
+                  : loan?.loan?.loan_status === "on going"
                   ? "bg-blue-400"
-                  : "bg-red-400"
+                  : loan?.loan?.loan_status === "cleared"
+                  && "bg-green-400"
                 }`}
               >
-                {loan?.loan_status === "defaulted" ? "arrears" : loan.loan_status}
+                {loan?.loan?.loan_status === "defaulted" ? "arrears" : loan?.loan?.loan_status || loan?.application_meta?.review_status}
               </span>
               <span className='flex flex-1 justify-center'>
-                {console.log("member_id: ", loan.member_id)}
-                {console.log("profile_id: ", profile.id)}
-
                 {
-                  loan?.loan_status !== 'cleared' &&
-                  (loan?.member_id === profile.id || roles.includes('treasurer') || roles.includes('asst_treasurer')) &&
-                  <button
-                    className="bg-green-500 text-white outline-offset-2 px-2 rounded-sm w-22 capitalize font-normal text-base py-1"
-                    onClick = {() => {
-                      navigate(`/loans/payment/${loan.id}`)
-                    }}
-                  >
-                    Pay Now
-                  </button>
+                  !loan?.application_meta &&
+                    loan?.loan?.loan_status !== 'cleared' &&
+                    (loan?.loan?.member_id === profile.id || roles.includes('treasurer') || roles.includes('asst_treasurer')) &&
+                    <button
+                      className="bg-green-500 text-white outline-offset-2 px-2 rounded-sm w-22 capitalize font-normal text-base py-1"
+                      onClick = {() => {
+                        navigate(`/loans/payment/${loan.id}`)
+                      }}
+                    >
+                      Pay Now
+                    </button>
                 }
+
               </span>
             </h1>
             <button
@@ -70,84 +70,102 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
         </div>
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Loan ID:</p>
-          <p className="font-bold col-span-3">{loan.loan_id}</p>
+          <p className="font-bold col-span-3">{loan?.loan?.loan_id || loan?.app_id}</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Principal:</p>
           <p className="font-bold col-span-3">
-            UGX {currencyFormatter(loan.amount_issued)}
+            UGX {currencyFormatter(loan?.application_meta ? loan?.application_meta?.amount : loan?.loan?.amount_issued)}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Amount Paid:</p>
           <p className="font-bold col-span-3">
-            UGX {currencyFormatter(loan.amount_paid)}
+            UGX {currencyFormatter(loan?.application_meta ? 0 : loan?.loan?.amount_paid )}
           </p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Interest Rate:</p>
-          <p className="font-bold col-span-3">{loan?.interest_rate}%</p>
+          <p className="font-bold col-span-3">{loan?.loan?.interest_rate || loan?.application_meta?.interest_rate}%</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Interest Paid:</p>
-          <p className="font-bold col-span-3">UGX {loan?.interest_paid}</p>
+          <p className="font-bold col-span-3">UGX {loan?.loan?.interest_paid || 0}</p>
         </div>
 
-        <div className="grid grid-cols-5 gap-2 mb-5 justify-start w-full">
+        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Amount to pay:</p>
           <p className="font-bold col-span-3">
             {currencyFormatter(
-              loan.outstanding_balance + (loan.interest_rate/100 * loan.outstanding_balance)
+              loan?.application_meta?
+              loan?.application_meta?.total 
+              :
+              loan?.loan?.outstanding_balance + (loan?.loan?.interest_rate/100 * loan?.loan?.outstanding_balance)
             )}
           </p>
         </div>
-
-        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">Approved at:</p>
-          <p className="font-bold col-span-3">
-            {moment(loan.loan_meta.approved_at).format("DD-MM-YYYY  hh:mm a")}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-          <p className="col-span-2">End Date:</p>
-          <p className="font-bold col-span-3">
-            {moment(loan.end_date).format("DD-MM-YYYY hh:mm a")}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-5 gap-2 mb-5 justify-start w-full">
-          <p className="col-span-2">Approved by:</p>
-          <p className="font-bold col-span-3">{loan.loan_meta.approved_by}</p>
-        </div>
-              
+        {
+          loan?.loan &&
+          <>
+            <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+              <p className="col-span-2">Approved at:</p>
+              <p className="font-bold col-span-3">
+                {moment(loan?.loan?.loan_meta?.approved_at).format("DD-MM-YYYY  hh:mm a")}
+              </p>
+            </div>
+            <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+              <p className="col-span-2">End Date:</p>
+              <p className="font-bold col-span-3">
+                {moment(loan?.loan?.end_date).format("DD-MM-YYYY hh:mm a")}
+              </p>
+            </div>
+            <div className="grid grid-cols-5 gap-2 mb-5 justify-start w-full">
+              <p className="col-span-2">Approved by:</p>
+              <p className="font-bold col-span-3">{loan?.loan_meta?.approved_by}</p>
+            </div>
+          </>
+        }
+  
         <div className="flex justify-between w-[100%]"><span className="font-bold">Amortization Schedule</span> 
-          {/* <button
-            className="cursor-pointer"
-            type="button"
-            onClick={() => {
-              setAmortExpand(!amortExpand)
-            }}
-          >{amortExpand ? "collapse" : "expand"}</button> */}
-
           { 
-          
-          loan.amortization_schedule.length > 2 && loan?.amortization_schedule?.length !== 3 &&
-            <button
-              className="cursor-pointer"
-              type="button"
-              onClick={() => {
-                setAmortExpand(!amortExpand)
-              }}
-            >{amortExpand ? "collapse" : "expand"}</button>
+            loan?.loan ?
+            (
+              loan?.loan?.amortization_schedule.length > 2  
+              && loan?.loan?.amortization_schedule?.length !== 3
+              && 
+              <button
+                className="cursor-pointer"
+                type="button"
+                onClick={() => {
+                  setAmortExpand(!amortExpand)
+                }}
+              >{amortExpand ? "collapse" : "expand"}
+              </button>
+            )
+            :
+            (
+              loan?.application_meta?.amortization_schedule?.length > 2
+              && loan?.application_meta?.amortization_schedule?.lenght !== 3
+              &&
+              <button
+                className="cursor-pointer"
+                type="button"
+                onClick={() => {
+                  setAmortExpand(!amortExpand)
+                }}
+              >{amortExpand ? "collapse" : "expand"}
+              </button>
+            )
+          }
+          {
+            
           }
         </div> 
-
-
+        
 
         <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
           <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
@@ -160,8 +178,37 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
             </tr>
           </thead>
           <tbody>
-            {loan.amortization_schedule &&
-              loan.amortization_schedule.map((amort, index) => (
+            {loan?.loan?.amortization_schedule &&
+              loan?.loan?.amortization_schedule.map((amort, index) => (
+                <tr key={index} className={`${amortExpand ? "" : "hidden"}`}>
+                  <td className="px-8 py-2">
+                    {console.log(amort)}
+                    {moment(loan.created_at).add(amort.month, "months").format("DD-MM-YYYY")}
+                  </td>
+                  <td className="px-8 py-2">
+                    {currencyFormatter(Math.round(amort.principal_installment * 100) / 100)}
+                  </td>
+                  <td className="px-8 py-2">
+                    {currencyFormatter(Math.round(amort.interest * 100) / 100)}
+                  </td>
+                  <td className="px-8 py-2">
+                    { amort.repayment_balance <= 0
+                      ? "0.00"
+                      : currencyFormatter(
+                      Math.round(amort.repayment_amount * 100) / 100
+                    )}
+                  </td>
+                  <td className="px-8 py-2">
+                    {amort.reducing_balance <= 0
+                      ? "0.00"
+                      : currencyFormatter(
+                          Math.round(amort.reducing_balance * 100) / 100
+                        )}
+                  </td>
+                </tr>
+              ))}
+              {loan?.application_meta?.amortization_schedule &&
+              loan?.application_meta?.amortization_schedule.map((amort, index) => (
                 <tr key={index} className={`${amortExpand ? "" : "hidden"}`}>
                   <td className="px-8 py-2">
                     {console.log(amort)}
@@ -193,7 +240,7 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
         </table>
         <div className="flex justify-between w-[100%]"><span className="font-bold">Repayments</span> 
           {
-            payments?.length > 2 && payments.length !== 3 &&
+            loan?.loan?.payments?.length > 2 && loan?.loan?.payments.length !== 3 &&
             <button
               className="cursor-pointer"
               type="button"
@@ -204,8 +251,9 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
             >{repaymentExpand ? "collapse" : "expand"}</button>
           }
         </div>
+
         { 
-          payments && payments?.length > 0 ? 
+          loan?.payments && loan?.payments?.length > 0 ? 
           <>
             <table className="w-[100%] text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-scroll">
               <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
@@ -218,7 +266,7 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
                 </tr>
               </thead>
               {
-                payments.map((payment, index) => (
+                loan?.payments.map((payment, index) => (
                   <tr 
                     key={index}
                     className={`${repaymentExpand ? "" : "hidden"}`}
@@ -253,8 +301,9 @@ export default function LoanModal({ passed, setLoanModal, loan: {loan, payments}
             {
               loan?.loan_status === "cleared" ? (loan?.member_id === current_user ? 'Thank you for clearing your loan.': 'Loan Cleared') 
               : loan?.loan_status === "on going" ? (loan?.member_id === current_user && 'You are advised to clear your monthly repayments. Thank you.')
-              : loan?.loan_status === "pending" ? (loan?.member_id === current_user ? 'Your loan repayment period starting soon.' : 'loan yet to start')
-              : loan?.loan_status === "defaulted" && (loan?.member_id === current_user ? "Please clear your arrears." : "Please remind the member to clear the loan.")
+              : loan?.application_meta?.review_status === "pending" ? (loan?.application_meta?.applicants_id === current_user ? 'Your loan repayment period starting soon.' : 'loan yet to start')
+              : loan?.loan_status === "defaulted" ? (loan?.member_id === current_user ? "Please clear your arrears." : "Please remind the member to clear the loan.")
+              : loan?.application_meta?.review_status === "rejected" && (loan?.application_meta?.applicants_id === current_user && "Sorry, your loan was rejected.")
             }
             </div>
             </>
