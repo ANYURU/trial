@@ -53,8 +53,11 @@ function EditModal({ setEditPop }) {
           setLoading(true);
           supabase
             .rpc("check_password", { current_password: password, _user_id: id })
-            .then(async ({ data }) => {
-              if (data) {
+            .then(async ({ data, error: password_error }) => {
+              if (password_error) {
+                setLoading(false);
+                toast.error(`Wrong password.`, { position: "top-center" });
+              } else {
                 const { error, data } = await supabase
                   .from("profiles")
                   .update({
@@ -75,23 +78,20 @@ function EditModal({ setEditPop }) {
 
                 if (error) {
                   setLoading(false);
-                  toast.error(`${error?.message}`, { position: "top-center" });
+                  throw error
                 } else {
-                  // setLoading(false)
-                  // setEditPop(false)
-                  // setProfile({...profile, ...data})
+                  setLoading(false)
+                  setEditPop(false)
+                  setProfile({...profile, ...data})
+                  toast.success('Profile updated successfully.', {position: 'top-center'})
                 }
-              } else {
-                setLoading(false);
-                toast.error(`Wrong password.`, { position: "top-center" });
               }
               setLoading(false);
             })
             .catch((error) => {
               setLoading(false);
-              console.log(`Error ${error}`);
+              toast.error(`${error?.message}`, {position: 'top-center'})
             });
-            
         }}
       >
         {({ values, errors, touched, handleChange, handleBlur }) => {
@@ -204,8 +204,9 @@ function EditModal({ setEditPop }) {
                   touched={touched}
                   handleBlur={handleBlur}
                   handleChange={handleChange}
+                  value={values?.present_address}
                 />
-
+                
                 <InputField
                   label="Marital Status"
                   id="marital_status"
@@ -214,6 +215,7 @@ function EditModal({ setEditPop }) {
                   touched={touched}
                   handleBlur={handleBlur}
                   handleChange={handleChange}
+                  value={values?.marital_status}
                 />
               </div>
 
@@ -226,6 +228,7 @@ function EditModal({ setEditPop }) {
                   touched={touched}
                   handleBlur={handleBlur}
                   handleChange={handleChange}
+                  value={values?.father_name}
                 />
                 <InputField
                   label="Father's Address"
@@ -235,6 +238,7 @@ function EditModal({ setEditPop }) {
                   touched={touched}
                   handleBlur={handleBlur}
                   handleChange={handleChange}
+                  value={values?.fathers_address}
                 />
               </div>
 
@@ -257,13 +261,6 @@ function EditModal({ setEditPop }) {
                   </div>
                 </div>
               </div>
-
-              {/* <div className='mb-3 flex flex-wrap gap-3'> */}
-              {/* <div className='flex flex-col'> */}
-              {/* <p>Enter password to save changes</p>
-                  <div className='flex-grow flex'> */}
-              {/* <input type="password" name="password" id="password" placeholder='Password' className='ring-1 ring-black rounded px-2 py-1 focus:ring focus:outline-none focus:ring-primary dark:bg-dark-bg-600' onChange={handleChange} onBlur={handleBlur} value={values?.password}/>
-                    {touched?.password && errors?.password && <div className="error">{errors?.password}</div>} */}
               <InputField
                 label="Enter password to save changes"
                 id="password"
@@ -274,9 +271,7 @@ function EditModal({ setEditPop }) {
                 handleChange={handleChange}
                 type="password"
               />
-              {/* </div> */}
-              {/* </div> */}
-              {/* </div> */}
+
 
               <div className="flex justify-end gap-3 mt-3">
                 <input
