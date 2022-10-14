@@ -1,0 +1,16 @@
+.otp-field {
+  margin: 3px;
+  border-radius: 8px;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.4rem;
+  text-align: center;
+  font-weight: bold;
+  transition: all 0.1s;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

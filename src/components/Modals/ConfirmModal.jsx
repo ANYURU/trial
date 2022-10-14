@@ -1,14 +1,17 @@
 import ReactDOM from "react-dom"
 import { IoCloseSharp } from 'react-icons/io5'
+import { useAuth } from "../../auth/AuthContext"
 
 function ConfirmModal({ passed, setPopUp, children }) {
 
+  const { darkMode } = useAuth()
+
   return ReactDOM.createPortal(
-    <div className="bg-black bg-opacity-40 w-screen h-screen absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center">
-      <div className="bg-white p-10 rounded-md m-2 shadow-md" ref={passed}>
+    <div className={`bg-black z-20 bg-opacity-40 w-screen min-h-screen fixed ${darkMode ? "dark" : ""} top-0 left-0 right-0 flex justify-center items-center`}>
+      <div className="relative bg-white dark:bg-dark-bg max-h-screen overflow-auto dark:text-secondary-text p-10  rounded-md m-2 sm:mb-5 shadow-md top-50 z-20" >
         <div className="flex justify-end">
           <p><IoCloseSharp 
-            className="cursor-pointer text-lg font-bold"
+            className="cursor-pointer text-lg font-bold dark:text-white"
             onClick={() => setPopUp(false)}
           /></p>
         </div>

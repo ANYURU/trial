@@ -1,13 +1,14 @@
-import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineBungalow, MdPeopleOutline } from 'react-icons/md'
+import { MdOutlinePersonOutline, MdCalendarViewWeek, MdOutlineAdminPanelSettings, MdPeopleOutline } from 'react-icons/md'
 import { IoMdCard } from 'react-icons/io'
 import { RiExchangeDollarLine } from 'react-icons/ri'
 import { SiHomeassistantcommunitystore } from 'react-icons/si'
+import { AiOutlineHome } from 'react-icons/ai'
 
 export const menuData = {
     member : [
         {
             label: 'Dashboard',
-            icon: <MdOutlineBungalow />,
+            icon: <AiOutlineHome />,
             link: 'dashboard'
         },
         {
@@ -16,13 +17,9 @@ export const menuData = {
             link: 'loans',
             sublinks: [
                 {
-                    label: 'Request',
+                    label: 'Request Loan',
                     link: 'loans/request'
                 },
-                {
-                    label: 'Payment',
-                    link: 'loans/payment'
-                }
             ]
         },
         {
@@ -31,7 +28,7 @@ export const menuData = {
             link: 'deposit',
             sublinks: [
                 {
-                    label: 'Deposit',
+                    label: 'Make Deposit',
                     link: '/deposit/deposit'
                 }
             ]
@@ -42,7 +39,7 @@ export const menuData = {
             link: 'withdraw',
             sublinks: [
                 {
-                    label: 'Request',
+                    label: 'Request Withdraw',
                     link: 'withdraw/request'
                 }
             ]
@@ -57,7 +54,7 @@ export const menuData = {
                     link: 'accounts/shares'
                 },
                 {
-                    label: 'Mwanaa',
+                    label: 'Mwana',
                     link: 'accounts/mwana'
                 },
                 {
@@ -79,7 +76,7 @@ export const menuData = {
     admin : [
         {
             label: 'Dashboard',
-            icon: <MdOutlineBungalow />,
+            icon: <AiOutlineHome />,
             link: 'dashboard'
         },
         {
@@ -92,12 +89,16 @@ export const menuData = {
                     link: 'loans/request'
                 },
                 {
-                    label: 'Payment',
-                    link: 'loans/payment'
+                    label: 'Member Loan',
+                    link: 'loans/members'
                 },
                 {
-                    label: 'Verify',
-                    link: 'loans/verify'
+                    label: 'Member Loan Requests',
+                    link: 'loans/members-requests'
+                },
+                {
+                    label: 'Payment Applications',
+                    link: 'loans/applications'
                 }
             ]
         },
@@ -111,9 +112,9 @@ export const menuData = {
                     link: '/deposit/deposit'
                 },
                 {
-                    label: 'Verify',
-                    link: '/deposit/verify'
-                },
+                    label: 'Member Deposits',
+                    link: '/deposit/members'
+                }
             ]
         },
         {
@@ -126,8 +127,8 @@ export const menuData = {
                     link: 'withdraw/request'
                 },
                 {
-                    label: 'Verify',
-                    link: 'withdraw/verify'
+                    label: 'Member Withdraws',
+                    link: 'withdraw/members'
                 }
             ]
         },
@@ -137,21 +138,21 @@ export const menuData = {
             link: 'accounts',
             sublinks: [
                 {
+                    label: 'Savings',
+                    link: 'accounts/savings'
+                },
+                {
                     label: 'Shares',
                     link: 'accounts/shares'
                 },
                 {
-                    label: 'Mwanaa',
+                    label: 'Mwana',
                     link: 'accounts/mwana'
                 },
                 {
                     label: 'Fixed',
                     link: 'accounts/fixed'
                 },
-                {
-                    label: 'Savings',
-                    link: 'accounts/savings'
-                }
             ]
         },
         {
@@ -164,6 +165,43 @@ export const menuData = {
                     link: 'members/applications'
                 }
             ]
+        },
+        {
+            label: 'Profile',
+            icon: <MdOutlinePersonOutline />,
+            link: 'profile'
+        }
+    ],
+    super_admin : [
+        {
+            label: 'Dashboard',
+            icon: <AiOutlineHome />,
+            link: 'dashboard'
+        },
+        {
+            label: 'Admins',
+            icon: <MdOutlineAdminPanelSettings />,
+            link: 'admins'
+        },
+        {
+            label: 'Members',
+            icon: <MdPeopleOutline />,
+            link: 'members'
+        },
+        {
+            label: 'Loans',
+            icon: <SiHomeassistantcommunitystore />,
+            link: 'loans/members'
+        },
+        {
+            label: 'Deposit',
+            icon: <RiExchangeDollarLine />,
+            link: 'deposit/members'
+        },
+        {
+            label: 'Withdraw',
+            icon: <IoMdCard />,
+            link: 'withdraw/members'
         },
         {
             label: 'Profile',

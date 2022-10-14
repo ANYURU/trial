@@ -1,15 +1,15 @@
-import { createRoot } from 'react-dom/client'
-import { StrictMode } from 'react';
-import App from './routes/App'
-import { AuthProvider } from './auth/AuthContext'
-import './index.css';
-import 'react-toastify/dist/ReactToastify.css';
+import { createRoot } from "react-dom/client";
+import { StrictMode } from "react";
+import App from "./routes/App";
+import { AuthProvider } from "./auth/AuthContext";
+import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
 
-const container = document.getElementById('root')
-const root = createRoot(container)
+const container = document.getElementById("root");
+const root = createRoot(container);
 
 root.render(
-  <StrictMode>
+  <StrictMode> 
     <AuthProvider>
       <App />
     </AuthProvider>

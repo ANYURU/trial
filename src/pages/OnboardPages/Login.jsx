@@ -1,63 +1,82 @@
 import { Link, useNavigate } from "react-router-dom";
-import logo from '../../assets/images/tube.png'
-import { PhoneTextField, PasswordTextField, Submit } from "../../components";
-import { Formik } from "formik";
+import logo from '../../assets/images/tube-no-bg.png'
+import { PhoneTextField, PasswordTextField, Submit, Spinner } from "../../components";
+import { Formik, Form } from "formik";
 import { validationSchema } from "../../helpers/validator";
-import { users } from "../../helpers/mockData";
 import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer } from 'react-toastify'
+import { supabase } from "../../helpers/supabase";
+import { useEffect, useState } from "react";
 
 export default function Login() {
   const navigate = useNavigate()
+  
 
-  const { signIn, setUser } = useAuth()
+  useEffect(() => {
+    document.title = 'Bweyogere tuberebumu'
+  }, [])
+
+  const { signIn, darkMode, socket } = useAuth()
+  const [ loading, setLoading ] = useState(false)
 
   const handleSubmit = async (event, values) => {
+    setLoading(true)
     event.preventDefault()
+    const { phoneNo, password } = values
 
-    const { error } = await signIn({
-      phone: '+256' + values.phoneNo,
-      password: values.password
-    })
+    supabase.rpc('check_phone', { phone: `256${phoneNo.slice(1)}`, _at:'login'})
+    .then(async ({ data, error }) => {
+      if ( error ) {
+        setLoading(false)
+        toast.error(`${error?.message}`, {position: "top-center"})
+      } else if ( data ) {
+        const {user, error} = await signIn({
+          phone: '256' + phoneNo.slice(1),
+          password: password
+        })
 
-    if ( error ) {
-      console.log(error)
-      toast.error(`User not found`, {position: "top-center"})
-    } else {
-      navigate('/dashboard')
-    }
-    // const checkNumber = users.filter(user => user.phoneNo === values.phoneNo)
-    // if(checkNumber.length !== 0){
-    //   const user = checkNumber.filter(user => user.password === values.password)
-    //   if(user.length !== 0){
-    //     setUser(user[0])
-    //     navigate('/dashboard')
-    //   } else {
-    //     toast.error(`User not found`, {position: "top-center"})
-    //   }
-    // }
+        setLoading(false)
+        if (error) {
+          toast.error(`${error?.message}`, {position: "top-center"})
+        } else { 
+          socket.auth = { username: user.id }
+          socket.connect()
+          navigate('/dashboard')
+        }
+      } else {
+        setLoading(false)
+        toast.error(`User does not exist.`, {position: "top-center"})
+      }
+    }).catch(error => console.log(error))
+    
   }
 
   return (
-    <div className=" inline-flex justify-center items-center w-screen h-screen font-montserrat">
-      <ToastContainer/>
-      <Formik initialValues={{ phoneNo: '', password: ''}} validationSchema={validationSchema}>
-        {({values, errors, touched, handleChange, handleBlur}) => {
-          return (
-            <form onSubmit={(event) => handleSubmit(event, values)} className='w-11/12 p-10 sm:w-8/12 md:w-6/12 lg:w-4/12 bg-white shadow-myShadow flex justify-center items-center flex-col rounded-lg'>
-              <img src={logo} alt='SACCO logo' width={150} />
-              <h1 className='block text-center font-bold text-2xl uppercase'>login</h1>
-              <PhoneTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
-              <PasswordTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
-              <Submit value="Login" disabled={Object.keys(errors).length === 0 ? false : true} />
-              <div className='flex justify-between w-full mt-3 text-sm'>
-                <Link to="/sign-up">Don't have an account?,<span className="text-primary font-semibold">SignUp.</span></Link>
-                <Link to="/forgot-password" className="text-primary font-semibold">Forgot Password?</Link>
-              </div>
-            </form>
-          )
-        }}
-      </Formik>
-    </div>
+      <div className={`inline-flex justify-center items-center w-screen  h-screen font-montserrat ${darkMode ? "dark" : ""}`}>
+          <ToastContainer/>
+          
+          <Formik initialValues={{ phoneNo: '', password: ''}} validationSchema={validationSchema}>
+            {({values, errors, touched, isValid, dirty, handleChange, handleBlur}) => {
+              return (
+                <Form onSubmit={(event) => handleSubmit(event, values)} className='relative w-11/12 p-10 sm:w-8/12 md:w-6/12 lg:w-4/12 bg-white dark:bg-dark-bg-700 dark:text-secondary-text shadow-myShadow flex justify-center items-center flex-col rounded-lg'>
+                  {loading && 
+                    <div className="absolute z-10 bg-white dark:bg-dark-bg-700 dark:bg-opacity-90 bg-opacity-90 w-full h-full rounded-lg">
+                      <Spinner />
+                    </div>
+                  }
+                  <img src={logo} alt='SACCO logo' width={120} />
+                  <h1 className='block text-center font-bold text-2xl uppercase dark:text-white'>login</h1>
+                  <PhoneTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
+                  <PasswordTextField errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
+                  <Submit value="Login" disabled={!(isValid && dirty)} />
+                  <div className='flex justify-between w-full mt-3 text-sm'>
+                    <Link to="/sign-up">Don't have an account? <span className="text-primary font-semibold">SignUp.</span></Link>
+                    <Link to="/forgot-password" className="text-primary font-semibold">Forgot Password?</Link>
+                  </div>
+                </Form>
+              )
+            }}
+          </Formik>
+      </div>
   )
 }

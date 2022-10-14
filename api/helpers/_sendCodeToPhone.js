@@ -1,7 +1,8 @@
 const  africastalking = require('africastalking')
 require('dotenv').config()
 
-const { USERNAME, APIKEY, SENDERID } = process.env
+// Destructuring africa's talking API environment variables.
+const { AFRICASTALKING_USERNAME, AFRICASTALKING_APIKEY } = process.env
 
 /**
  * @typedef {Object} Africastalking
@@ -13,21 +14,22 @@ const { USERNAME, APIKEY, SENDERID } = process.env
 /**
  * @function
  * @name sendCodeToPhone
- * @param {string} phone_number the number of the person intending to signup.
- * @param {number} otp the one time password submitted the person intending to signup.
+ * @param { string } phone_number the number of the person intending to signup.
+ * @param { number } msg A message containing a one time password.
+ * @param { string } country_code An optional parameter of the country code of the person signing up that +256 by default 
  * @returns { Promise<Africastalking> } A promise that returns a json object.
  */
 
-const sendCodeToPhone = (phone_number, otp) => {
+const sendCodeToPhone = (phone, msg, country_code="+256") => {
+    const phone_number = country_code+phone.slice(1)
     const client = africastalking({
-        username: USERNAME,
-        apiKey: APIKEY
+        username: AFRICASTALKING_USERNAME,
+        apiKey: AFRICASTALKING_APIKEY
     });
     
     return client.SMS.send({
-        to:phone_number,
-        message: `Bweyogerere Tubeerebumu Sacco. \n Your verification code is ${otp}.`,
-        from: SENDERID,
+        to: phone_number,
+        message: msg,
     })
 }
 
