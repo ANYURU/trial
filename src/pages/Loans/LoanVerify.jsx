@@ -81,18 +81,6 @@ export default function LoanVerify() {
       return data;
   };
 
-  // if (loan) {
-  //   try {
-  //     downloadFile(
-  //       loan?.application_meta.files[0].file_url.substring(9),
-  //       "loans"
-  //     )
-  //       .then((data) => setImageURL(data.avatar_url))
-  //       .catch((error) => console.log("failed"));
-  //   } catch (error) {
-  //     console.log("failed");
-  //   }
-  // }
 
   const approveLoanPaymentTransaction = async() => {
     const { data, error } = await supabase.rpc('approve_loan',  {members_id:loan.application_meta.applicant_id, application:loan.application_id})
@@ -242,7 +230,7 @@ export default function LoanVerify() {
                   <>
                     <p> Bank statement</p>
                     <img
-                      src={ loan.application_meta?.bank_settlement_url}
+                      src={ bankStatementURL }
                       width={200}
                       className="rounded"
                       alt="receipt"
@@ -256,7 +244,7 @@ export default function LoanVerify() {
                   <>
                     <p> One year's cashflow </p>
                     <img
-                      src={loan.application_meta?.a_years_cashflow_url}
+                      src={yearsCashflowURL}
                       width={200}
                       className="rounded"
                       alt="receipt"
