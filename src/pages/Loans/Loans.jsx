@@ -43,22 +43,24 @@ export default function Loan() {
   const indexOfFirstPage = indexOfLastPage - loansPerPage;
 
   let shownloans = loans ? loans.slice(indexOfFirstPage, indexOfLastPage) : [];
+  console.log("Filter 1: ", shownloans.filter( loan => loan?.loan?.loan_status === status))
 
   shownloans =
-    shownloans.filter((loan) => !status || loan.loan_status === status).length >
-    0
-      ? shownloans.filter((loan) => !status || loan.loan_status === status)
+    shownloans.filter((loan) => !status || loan?.loan?.loan_status === status || loan?.application_meta?.review_status === status).length >
+    0 || shownloans?.application_meta?.review_status
+      ? shownloans.filter((loan) => !status || loan?.loan?.loan_status === status || loan?.application_meta?.review_status === status)
       : null;
 
   shownloans = shownloans
     ? shownloans.filter(
-        (loan) => !date || loan.created_at.substring(0, 10) === date
+        (loan) => !date || loan?.created_at.substring(0, 10) === date || loan?.loan?.created_at.substring(0, 10) === date
       ).length > 0
       ? shownloans.filter(
-          (loan) => !date || loan.created_at.substring(0, 10) === date
+          (loan) => !date || loan.created_at.substring(0, 10) === date || loan?.loan.created_at.subsring(0, 10) === date
         )
       : null
     : null;
+
 
   const [activeIndex, setActiveIndex] = useState(null);
   const [show, setShow] = useState(false);
@@ -80,24 +82,11 @@ export default function Loan() {
       let data = []
       if( current_loans ) data.push(...current_loans)
       if( pending_loans ) data.push(...pending_loans)
-      
-      setLoans( data )
+
+      const sorted_data = data.sort((a,b) => new Date(b?.created_at) - new Date(a?.created_at))
+      setLoans( sorted_data )
       setLoading( false )
-      console.log("here: ", data)
     }
-    // const {data, error } = await supabase
-    //   .from('loans')
-    //   .select()
-    //   .order('created_at', {ascending: false})
-    
-    // if( error ) {
-    //   setLoading(false)
-    //   throw error
-    // } else {
-    //   console.log(data)
-    //   setLoans( data )
-    //   setLoading(false)
-    // }
 
   }
 
@@ -112,12 +101,12 @@ export default function Loan() {
               name="status"
               id=""
               className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-              onChange={(event) => setStatus(event.target.value)}
+              onChange={(event) => {setStatus(event.target.value); console.log(status)}}
             >
               <option value="">Status</option>
-              <option value="paid">Paid</option>
+              <option value="on going">On going</option>
               <option value="pending">Pending</option>
-              <option value="due">Due</option>
+              <option value="defaulted">Due</option>
             </select>
           </div>
           <div className="flex flex-col w-56">
@@ -203,8 +192,7 @@ export default function Loan() {
                               : loan?.loan.loan_status === "cleared"
                               ? "bg-green-400"
                               : loan?.loan.loan_status === "on going"
-                              ? "bg-blue-400"
-                              : "bg-red-400"
+                              && "bg-blue-400"
                             }`}
                             >
                             {loan?.loan?.loan_status === "defaulted" ? "arrears" : loan?.loan?.loan_status || loan?.application_meta?.review_status}

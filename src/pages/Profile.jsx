@@ -66,12 +66,10 @@ function Profile() {
           } else {
             toast.error(`Wrong password.`, { position: "top-center" });
           }
-          setLoading(false)
           return true
         })
         .catch((error) => {
           console.log(`Error ${error}`);
-          setLoading(false)
           return false
         });
     }
