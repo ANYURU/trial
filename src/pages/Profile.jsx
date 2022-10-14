@@ -19,6 +19,7 @@ function Profile() {
   const { 1: profile } = useOutletContext();
   const { id } = supabase.auth.user();
   const { signOut } = useAuth();
+  const [ loading, setLoading ] = useState(false)
 
   const handleTermination = (event, values) => {
     event.preventDefault();
@@ -65,12 +66,17 @@ function Profile() {
           } else {
             toast.error(`Wrong password.`, { position: "top-center" });
           }
+          setLoading(false)
+          return true
         })
         .catch((error) => {
           console.log(`Error ${error}`);
+          setLoading(false)
+          return false
         });
     }
-    document.changePasswordForm.reset();
+
+    document.getElementById("changePasswordForm").reset();
   };
 
   return (
@@ -167,7 +173,12 @@ function Profile() {
                   <Form
                     className="mb-3"
                     name="changePasswordForm"
-                    onSubmit={(event) => handleChangePassword(event, values)}
+                    id="changePasswordForm"
+                    onSubmit={(event) => {
+                      setLoading(true)
+                      console.log("here")
+                      handleChangePassword(event, values)
+                    }}
                   >
                     <h1 className="font-semibold mb-3">Password Reset</h1>
                     <div className="flex flex-col w-56 mb-5">
@@ -308,6 +319,7 @@ function Profile() {
             </Formik>
           </>
         ) : (
+          
           <div className="display flex justify-center">
             <Spinner />
           </div>
