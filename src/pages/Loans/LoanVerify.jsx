@@ -81,9 +81,6 @@ export default function LoanVerify() {
       return data;
   };
 
-
-
-
   // if (loan) {
   //   try {
   //     downloadFile(
@@ -101,6 +98,9 @@ export default function LoanVerify() {
     const { data, error } = await supabase.rpc('approve_loan',  {members_id:loan.application_meta.applicant_id, application:loan.application_id})
 
     if(error) throw error
+    toast.success(`Loan has been approved`,{
+      position: 'top-center'
+    })
     console.log(data)
   }
 

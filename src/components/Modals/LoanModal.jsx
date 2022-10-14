@@ -51,7 +51,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
                     <button
                       className="bg-green-500 text-white outline-offset-2 px-2 rounded-sm w-22 capitalize font-normal text-base py-1"
                       onClick = {() => {
-                        navigate(`/loans/payment/${loan.id}`)
+                        navigate(`/loans/payment/${loan?.loan?.id}`)
                       }}
                     >
                       Pay Now
