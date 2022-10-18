@@ -252,7 +252,7 @@ function Chat({user, profile, members,  conversations}) {
                                 </div>
                                 {/* Scroll to the bottom to see the last message */}
                             </div>
-                            <form className={`absolute h-12 bottom-0 border w-full bg-red-300 ${collapse ? "": "hidden"} ${!chatSelected ? "hidden border-none" : "bg-white"} flex justify-between p-3 items-center`} id="message-form">
+                            <form className={`absolute h-12 bottom-0 border w-full ${collapse ? "hidden": ""} ${!chatSelected ? "hidden border-none" : "bg-white"} flex justify-between p-3 items-center`} id="message-form">
                                 <input 
                                     type="text" 
                                     id="message"
