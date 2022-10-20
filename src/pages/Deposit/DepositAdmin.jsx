@@ -117,8 +117,6 @@ export default function DepositAdmin() {
 
   );
 
-  // paginated = shownDeposits
-
   //context
   const [show, setShow] = useState(false);
   const [activeIndex, setActiveIndex] = useState(false);
@@ -314,7 +312,7 @@ export default function DepositAdmin() {
         ) : !loading > 0 ? (
           <NothingShown />
         ) : (
-          <Spinner />
+          deposits.length < 1 ?  <Spinner /> : <NothingShown />
         )}
       </div>
     </div>
