@@ -13,9 +13,6 @@ export default function WithdrawVerify() {
   const [loading, setLoading] = useState(false);
   const [user, profile, setProfile, roles] = useOutletContext()
   const [showActions, setShowActions] = useState(true)
-
-  console.log(roles)
-
   
   useEffect(() => {
     getApplication()
@@ -30,22 +27,23 @@ export default function WithdrawVerify() {
       .eq("application_id", id)
       .single();
 
+    console.log("Withdraw: ", data)
+
     if( error ) throw error
 
     const [ my_role ] = roles && roles.filter(role => role !== "member" && role !== "admin")
-    if( ["secretary", "assitant_secretary", "treasurer", "assistant_treasurer"].includes(my_role)) {
-      if ( !data?.reviewed ) {
-        if( data?.application_meta?.admin_1?.admin_name) {
-          setShowActions(false)
-        }
-      }
+
+    if ( data.reviewed) {
+      setShowActions(false)
+    } else if( ["secretary", "assitant_secretary", "treasurer", "assistant_treasurer"].includes(my_role)) {
+      if( data?.application_meta?.admin_1?.admin_name) {
+        setShowActions(false)
+      } 
     } else if( ["chairperson", "vice_chairperson"].includes(my_role)) {
-      if(!data?.reviewed ) {
-        if( data?.application_meta?.admin_2?.admin_name) {
-          setShowActions(false)
-        }
+      if( data?.application_meta?.admin_2?.admin_name) {
+        setShowActions(false)
       }
-    }
+    } 
 
     setWithdraw(data);
   };
@@ -58,7 +56,6 @@ export default function WithdrawVerify() {
         application: id,
         admin: profile.id
       });
-    
 
       if (error) {
         console.log(error)
@@ -129,19 +126,15 @@ export default function WithdrawVerify() {
                   withdraw.application_meta.applicants_name}
                 's withdraw Request Details
                 <span
-                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
-                    withdraw?.review_status === 'rejected'
-                    ? "bg-red-400"
-                    : withdraw?.review_status === 'approved'
-                    ? "bg-green-400"
-                    : "bg-yellow-400"
+                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 inline-block capitalize ${
+                    withdraw?.transaction_meta ? "bg-green-400"
+                      : withdraw?.application_meta?.review_status === "rejected"
+                      ? "bg-red-400" : withdraw?.application_meta?.review_status === "approved"
+                      ? "bg-green-400"
+                      : "bg-yellow-400"
                   }`}
                 >
-                  {!withdraw.reviewed
-                    ? "Pending"
-                    : withdraw.application_meta.review_status === "approved"
-                    ? "Approved"
-                    : "Rejected"}
+                  { withdraw?.application_meta?.review_status }
                 </span>
               </h1>
 
