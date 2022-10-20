@@ -88,15 +88,6 @@ function ApplicationPg2({
     try {
       if (location.state?.from === "/members") {
         const  { fullname: administrator } = profile
-        // getOTP(phone_number, "VERIFICATION")
-        //   .then((response) => response.json())
-        //   .then((data) => {
-        //     localStorage.setItem("verification_key", data?.Details);
-        //     console.log(values);
-        //     setPageNumber(pageNumber + 1);
-        //     return;
-        //   })
-        //   .catch((error) => console.log(error));
 
         addMember(
           `256${phone_number.slice(1)}`,
@@ -116,9 +107,8 @@ function ApplicationPg2({
           })
           .catch((error) => console.log(error));
 
-        // console.log(data);
       } else {
-        console.log("else started");
+        console.log(profile.id)
         const { error, data } = await supabase
           .from("applications")
           .insert([
@@ -134,13 +124,13 @@ function ApplicationPg2({
               application_meta: {
                 applicants_id,
                 applicants_name,
+                review_status: "pending",
                 ...rest,
                 ...values,
               },
             },
           ])
           .single();
-        console.log(data);
 
         if (error) {
           console.log(error);
