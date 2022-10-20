@@ -13,6 +13,8 @@ import { currencyFormatter } from "../../helpers/currencyFormatter";
 export default function DepositAdmin() {
   const [deposits, setDeposits] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filtered, setFiltered] = useState([])
+
 
   useEffect(() => {
     getApplications().catch((error) => console.log(error));
@@ -78,9 +80,9 @@ export default function DepositAdmin() {
     (rejectedDeposits?.length / deposits.length) * 100
   );
 
-  let shownDeposits = deposits.slice(indexOfFirstPage, indexOfLastPage);
+  // let shownDeposits = deposits.slice(indexOfFirstPage, indexOfLastPage);
 
-  shownDeposits = shownDeposits
+  let shownDeposits = deposits
     .filter(
       (deposit) => {
         if( !account ) {
@@ -90,6 +92,8 @@ export default function DepositAdmin() {
         }
       }
     )
+
+  shownDeposits = shownDeposits
     .filter(
       (deposit) => {
         if( status === "") {
@@ -104,6 +108,7 @@ export default function DepositAdmin() {
       }
     );
 
+
   shownDeposits = shownDeposits.filter(
     (deposit) =>
       (deposit?.application_meta?.applicants_name || deposit?.transaction_meta?.member_name)
@@ -111,6 +116,8 @@ export default function DepositAdmin() {
         .indexOf(searchText.toLowerCase()) > -1
 
   );
+
+  // paginated = shownDeposits
 
   //context
   const [show, setShow] = useState(false);
@@ -122,6 +129,8 @@ export default function DepositAdmin() {
       }
     };
   }
+
+  shownDeposits = shownDeposits.slice(indexOfFirstPage, indexOfLastPage)
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
@@ -243,6 +252,7 @@ export default function DepositAdmin() {
                         } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                         key={index}
                         onClick={() => {
+                          console.log(deposit)
                           setActiveIndex(index);
                           setDepositModal(true)
                         }}
@@ -295,7 +305,7 @@ export default function DepositAdmin() {
                 setCurrentPage={setCurrentPage}
                 indexOfFirstPage={indexOfFirstPage}
                 indexOfLastPage={indexOfLastPage}
-                data={deposits}
+                data={shownDeposits}
                 depositsPerPage={withdrawPerPage}
                 setDepositsPerPage={setWithdrawPerPage}
               />
