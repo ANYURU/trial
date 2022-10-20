@@ -12,11 +12,14 @@ export default function WithdrawVerify() {
   const [withdraw, setWithdraw] = useState(null);
   const [loading, setLoading] = useState(false);
   const [user, profile, setProfile, roles] = useOutletContext()
-  const [showAdmin1Actions, setShowAdmin1Actions ] = useState(true)
-  const [showAdmin2Actions, setShowAdmin2Actions ] = useState(true)
+  const [showActions, setShowActions] = useState(true)
 
+  console.log(roles)
+
+  
   useEffect(() => {
-    getApplication();
+    getApplication()
+    .catch(error => console.log(error))
   }, []);
 
   const getApplication = async () => {
@@ -27,12 +30,21 @@ export default function WithdrawVerify() {
       .eq("application_id", id)
       .single();
 
-    if( data?.application_meta?.admin_1?.admin_name && ['treasurer', 'asst_treasurer', 'secretary', 'asst_secretary'].some(role => roles.includes(role))) {
-      setShowAdmin1Actions(false)
-    }
+    if( error ) throw error
 
-    if( data?.application_meta?.admin_2?.admin_name && ['chairperson', 'vice_chairperson'].some(role => roles.includes(role))) {
-      setShowAdmin2Actions(false)
+    const [ my_role ] = roles && roles.filter(role => role !== "member" && role !== "admin")
+    if( ["secretary", "assitant_secretary", "treasurer", "assistant_treasurer"].includes(my_role)) {
+      if ( !data?.reviewed ) {
+        if( data?.application_meta?.admin_1?.admin_name) {
+          setShowActions(false)
+        }
+      }
+    } else if( ["chairperson", "vice_chairperson"].includes(my_role)) {
+      if(!data?.reviewed ) {
+        if( data?.application_meta?.admin_2?.admin_name) {
+          setShowActions(false)
+        }
+      }
     }
 
     setWithdraw(data);
@@ -40,9 +52,6 @@ export default function WithdrawVerify() {
 
   const approveWithdrawTransaction = async () => {
     setLoading(true);
-    const {
-      application_meta: { applicants_id },
-    } = withdraw;
 
     try {
       const { error, data } = await supabase.rpc("approve_withdraw_transaction", {
@@ -63,6 +72,8 @@ export default function WithdrawVerify() {
         toast.success(`Withdraw has been approved.`, {
           position: "top-center",
         });
+
+        setShowActions(false)
       }
     } catch (error) {
       setLoading(false);
@@ -282,7 +293,7 @@ export default function WithdrawVerify() {
               </>
             }
             <div className="flex gap-10 justify-end items-center mt-3">
-              { withdraw && !withdraw.reviewed &&        
+              { showActions &&
                 (
                   <div className={`flex gap-10 justify-end items-center mt-3`}>
                     <button
