@@ -149,13 +149,16 @@ export default function Applications() {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
+                    <th></th>
                     <th className="px-6 py-4">Date</th>
                     <th className="px-6 py-4">Member's Name</th>
                     <th className="px-6 py-4">ID</th>
                     <th className="px-6 py-4">Amount</th>
                     <th className="px-6 py-4">Status</th>
-                    
-                    {/* <th className="px-6 py-4">Action</th> */}
+                    {
+                      roles.includes('super_admin') && 
+                      <th className="px-6 py-4">Action</th>
+                    }
                   </tr>
                 </thead>
                 <tbody>
@@ -178,6 +181,10 @@ export default function Applications() {
                             setMemberModal={setMemberModal}
                           />
                         )}
+                        <td  onClick={() => {
+                          setActiveIndex(index)
+                          setMemberModal(true)
+                        }}><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
                         <td className="px-6 py-3">
                           {application.created_at.substring(0, 10)}
                         </td>
@@ -214,7 +221,9 @@ export default function Applications() {
                           </span>
                         </td>
 
-                        { <td className="p-2">
+                        { 
+                        roles.includes('super_admin') && 
+                        <td className="p-2">
                         <div className="relative">
                           <button
                             className="block p-2 rounded-md dialog"
