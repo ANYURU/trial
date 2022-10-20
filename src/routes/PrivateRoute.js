@@ -29,7 +29,6 @@ const PrivateRoute = ({ allowedRoles }) => {
     const {data, error} = await supabase.rpc('possible_chats')
 
     if (error) console.log(error)
-    console.log("Members: ", data)
     setMembers(data)
   }
 
@@ -42,7 +41,6 @@ const PrivateRoute = ({ allowedRoles }) => {
     if(error) throw error
     setConversations(data)
   }
-
 
   useEffect(() => {
     // Getting information that is required in all components.
@@ -129,7 +127,10 @@ const PrivateRoute = ({ allowedRoles }) => {
                   </div>
                 ))}
             </div> 
-            <Chat user={user} profile={profile} members={members} conversations={conversations} setConversations={setConversations}/>
+            {
+              profile?.roles && profile.roles.includes('member') && 
+              <Chat user={user} profile={profile} members={members} conversations={conversations} setConversations={setConversations}/>
+            }
           </div>
         </div>
       </div>
