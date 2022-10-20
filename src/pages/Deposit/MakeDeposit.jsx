@@ -107,7 +107,7 @@ function MakeDeposit() {
 
                 resetForm({ values: initialValues });
                 setLoading(false);
-                toast.success(`${data?.transaction_meta?.fullname}'s deposit created successfully.`, {
+                toast.success(`${data?.transaction_meta?.member_name}'s deposit created successfully.`, {
                   position: "top-center",
                 });
 
