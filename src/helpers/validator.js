@@ -160,7 +160,8 @@ export const member2ValidationSchema = Yup.object({
   amount_in_words: Yup.string().matches(/^[a-zA-Z ]+$/, "Must only contain letters").required("Amount in words is required!"),
   nominees: Yup.array().of(
     Yup.object().shape({
-      nominee_id: Yup.string().required("Nominee Required")
+      nominee_id: Yup.string().required("Nominee Required"),
+      percentage: Yup.number().positive("Must be greater than 0").max(100, "Must be less than 100")
     })
-    )
+  )
 })
