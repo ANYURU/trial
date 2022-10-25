@@ -55,12 +55,39 @@ export default function ApplicationPg1({ initialValues, setInitialValues, setPag
                         <div className='flex flex-wrap gap-5'>
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="fullname"  label="Name" placeholder="Enter Full name" defaultValue={fullname} />
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="dob" label="Date of Birth" placeholder="06/04/2022" defaultValue={dob} type="date"/>
-                            <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="gender" label="Gender" placeholder="Gender" defaultValue={gender}/>
+                            {/* <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="gender" label="Gender" placeholder="Gender" defaultValue={gender}/> */}
+
+                            <div className='flex flex-col w-56 '>
+                                <label className=' text-sm'>Gender</label>
+                                <select name="gender" id="" defaultValue={gender} onChange={(event) => {
+                                    values.gender = event.target.value
+                                }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                    <option value="">--Select Gender--</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+
+
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="present_address" label="Present Address" placeholder="Address" defaultValue={present_address}/>
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="email_address" label="Email Address" placeholder="example@gmail.com" type="email" defaultValue={email_address}/>
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="phone_number" label="Phone Number" placeholder="Enter Phone No." type="phone" defaultValue={phone_number}/>
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="id_passport_number" label="ID/Passport No." placeholder="placeholder" defaultValue={id_passport_number}/>
-                            <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="marital_status" id="marital_status" label="Marital Status" placeholder="Single" defaultValue={marital_status} options={["single", "married"]}/>
+                            {/* <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="marital_status" id="marital_status" label="Marital Status" placeholder="Single" defaultValue={marital_status} options={["single", "married"]}/> */}
+
+                            <div className='flex flex-col w-56 '>
+                                <label className=' text-sm'>Marital Status</label>
+                                <select name="marital_status" id="" defaultValue={marital_status} onChange={(event) => {
+                                    values.marital_status = event.target.value
+                                }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                    <option value="">--Marital Status--</option>
+                                    <option value="single">Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="widowed">Widowed</option>
+                                    <option value="divorced">Divorced</option>
+                                </select>
+                            </div>
+
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="fathers_name" label="Father's Name" placeholder="Enter Father's Name" defaultValue={fathers_name}/>
                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="fathers_address" label="Father's Address" placeholder="Enter your Father's Address" defaultValue={fathers_address}/>
                         </div>

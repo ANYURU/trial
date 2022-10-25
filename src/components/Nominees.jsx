@@ -41,11 +41,11 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                                 className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
                                                 onChange={(event) => {
                                                     values.nominees[index]["nominee_id"] = event.target.value
-                                                    
+                                                    const [ member ] = profiles.filter(profile => profile.id === event.target.value)
+                                                    values.nominees[index]["fullname"] = member.fullname
                                                     console.log(nominees)
                                                 }}
                                                 onBlur={handleBlur(nominee_id)}
-                                                // value={values.member_id}
                                             >
                                                 <option value="">--Select Member--</option>
                                             {
@@ -57,7 +57,7 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                             <ErrorMessage name={`nominees.${index}].nominee_id`}>{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
                                             
                                         </div>
-                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][percentage]`}  label="Percentage" placeholder="Enter percentage" defaultValue={percentage}/>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][percentage]`}  label="Percentage" placeholder="Enter percentage" defaultValue={percentage} type="number"/>
                                     </div>
                                 ))
                             )}
@@ -70,8 +70,6 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                         nominee_id:'', 
                                         percentage:''
                                     }
-
-
                                 )}}
                             >
                                 +
