@@ -5,9 +5,7 @@ import { member2ValidationSchema } from "../../helpers/validator";
 import { useLocation, useOutletContext, useNavigate } from "react-router-dom";
 import { supabase } from "../../helpers/supabase";
 import { useAuth } from "../../auth/AuthContext";
-import { getOTP } from "../../helpers/getotp";
 import { toast } from "react-toastify";
-import { useState } from "react";
 import PasswordGenerator from "../../components/Form/PasswordGenerator";
 import { addMember } from "../../helpers/addMember";
 
@@ -19,7 +17,6 @@ function ApplicationPg2({
   password,
   setPassword,
 }) {
-  console.log(initialValues);
   const defaultInitialValues = {
     fullname:'',
     dob:'',
@@ -52,10 +49,7 @@ function ApplicationPg2({
     },
     nominees: [
       {
-        name:'',
-        id:'',
-        contact:'',
-        dob:'',
+        nominee_id:'',
         percentage:''
       }
     ],
@@ -76,8 +70,6 @@ function ApplicationPg2({
     user: { id: applicants_id },
   } = useAuth();
   const [user, profile, setProfile] = useOutletContext();
-  console.log(profile)
-  console.log(setProfile)
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
@@ -85,81 +77,81 @@ function ApplicationPg2({
     setInitialValues({ ...initialValues, ...values });
     const { fullname: applicants_name, phone_number, ...rest } = values;
 
-    try {
-      if (location.state?.from === "/members") {
-        const  { fullname: administrator } = profile
+    // try {
+    //   if (location.state?.from === "/members") {
+    //     const  { fullname: administrator } = profile
 
-        addMember(
-          `256${phone_number.slice(1)}`,
-          password,
-          values,
-          administrator
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            toast.success(`Member has successfully been created.`, {
-              position: "top-center",
-            });
-            setPassword("");
-            setInitialValues(defaultInitialValues);
-            navigate(-1);
-          })
-          .catch((error) => console.log(error));
+    //     addMember(
+    //       `256${phone_number.slice(1)}`,
+    //       password,
+    //       values,
+    //       administrator
+    //     )
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         console.log(data);
+    //         toast.success(`Member has successfully been created.`, {
+    //           position: "top-center",
+    //         });
+    //         setPassword("");
+    //         setInitialValues(defaultInitialValues);
+    //         navigate(-1);
+    //       })
+    //       .catch((error) => console.log(error));
 
-      } else {
-        console.log(profile.id)
-        const { error, data } = await supabase
-          .from("applications")
-          .insert([
-            {
-              _type: "membership",
-              created_at: new Date()
-                .toISOString()
-                .toLocaleString("en-GB", { timeZone: "UTC" }),
-              updated_at: new Date()
-                .toISOString()
-                .toLocaleString("en-GB", { timeZone: "UTC" }),
-              reviewed: false,
-              application_meta: {
-                applicants_id,
-                applicants_name,
-                review_status: "pending",
-                ...rest,
-                ...values,
-              },
-            },
-          ])
-          .single();
+    //   } else {
+    //     console.log(profile.id)
+    //     const { error, data } = await supabase
+    //       .from("applications")
+    //       .insert([
+    //         {
+    //           _type: "membership",
+    //           created_at: new Date()
+    //             .toISOString()
+    //             .toLocaleString("en-GB", { timeZone: "UTC" }),
+    //           updated_at: new Date()
+    //             .toISOString()
+    //             .toLocaleString("en-GB", { timeZone: "UTC" }),
+    //           reviewed: false,
+    //           application_meta: {
+    //             applicants_id,
+    //             applicants_name,
+    //             review_status: "pending",
+    //             ...rest,
+    //             ...values,
+    //           },
+    //         },
+    //       ])
+    //       .single();
 
-        if (error) {
-          console.log(error);
-          throw error;
-        } else {
-          setInitialValues({ values: initialValues });
-          toast.success(`Membership submitted for review`, {
-            position: "top-center",
-          });
+    //     if (error) {
+    //       console.log(error);
+    //       throw error;
+    //     } else {
+    //       setInitialValues({ values: initialValues });
+    //       toast.success(`Membership submitted for review`, {
+    //         position: "top-center",
+    //       });
 
-          const { data, error } = await supabase
-            .from("_member_profiles")
-            .select()
-            .eq("id", applicants_id)
-            .single();
+    //       const { data, error } = await supabase
+    //         .from("_member_profiles")
+    //         .select()
+    //         .eq("id", applicants_id)
+    //         .single();
 
-          if (error) {
-            throw error;
-          } else {
-            setProfile(data);
-            navigate("/dashboard");
-          }
-        }
-      }
-    } catch (error) {
-      // handle the errors depending on error status codes & give appropriate messages to the users
-      toast.error(`${error?.message}`, { position: "top-center" });
-      console.log(error);
-    }
+    //       if (error) {
+    //         throw error;
+    //       } else {
+    //         setProfile(data);
+    //         navigate("/dashboard");
+    //       }
+    //     }
+    //   }
+    // } catch (error) {
+    //   // handle the errors depending on error status codes & give appropriate messages to the users
+    //   toast.error(`${error?.message}`, { position: "top-center" });
+    //   console.log(error);
+    // }
   };
 
   return (

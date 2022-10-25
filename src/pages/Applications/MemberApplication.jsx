@@ -6,7 +6,6 @@ import { useAuth } from "../../auth/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { getOTP } from "../../helpers/getotp";
-import PasswordGenerator from "../../components/Form/PasswordGenerator";
 import ApplicationVerify from "./ApplicationVerify";
 import { Spinner } from "../../components";
 
@@ -51,10 +50,7 @@ function MemberApplication() {
     },
     nominees: [
       {
-        name: "",
-        id: "",
-        contact: "",
-        dob: "",
+        nominee_id:"",
         percentage: "",
       },
     ],
