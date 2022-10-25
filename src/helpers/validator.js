@@ -157,5 +157,10 @@ export const member1ValidationSchema = Yup.object({
 
 export const member2ValidationSchema = Yup.object({
   proposed_monthly_contributions: Yup.string().matches(/^[0-9]+$/, "Must be a number").required("Monthly contributions are required!"),
-  amount_in_words: Yup.string().matches(/^[a-zA-Z ]+$/, "Must only contain letters").required("Amount in words is required!")
+  amount_in_words: Yup.string().matches(/^[a-zA-Z ]+$/, "Must only contain letters").required("Amount in words is required!"),
+  nominees: Yup.array().of(
+    Yup.object().shape({
+      nominee_id: Yup.string().required("Nominee Required")
+    })
+    )
 })
