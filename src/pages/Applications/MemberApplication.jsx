@@ -52,7 +52,13 @@ function MemberApplication() {
       {
         nominee_id:"",
         percentage: "",
+        fullname: ""
       },
+      {
+        nominee_id:"",
+        percentage: "",
+        fullname: ""
+      }
     ],
     proposed_mode_of_remittances: {
       standing_order: false,
@@ -185,32 +191,6 @@ function MemberApplication() {
                 setInitialValues={setInitialValues}
               />
             )}
-            <div className="flex justify-end w-full">
-              {/* {
-                pageNumber === 2 
-                &&
-                <input
-                  type="submit"
-                  value='Previous'
-                  className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                  onClick={(event) => {
-                    event.preventDefault()
-                    setPageNumber(pageNumber - 1)
-                  }}
-                />
-              }
-              {
-                pageNumber === 2 
-                &&
-                <div className='flex justify-end w-full'>
-                  <button 
-                    type='submit'
-                    onClick={handleSubmit}
-                    className='outline outline-primary outline-2 text-white bg-primary px-4 py-1 rounded-lg cursor-pointer'
-                  >submit</button>
-                </div>
-              } */}
-            </div>
           </div>
         </div>
         </div>

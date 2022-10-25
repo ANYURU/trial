@@ -68,7 +68,8 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                     arrayHelpers.push(
                                     { 
                                         nominee_id:'', 
-                                        percentage:''
+                                        percentage:'',
+                                        fullname: ''
                                     }
                                 )}}
                             >
