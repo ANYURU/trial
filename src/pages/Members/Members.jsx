@@ -28,18 +28,17 @@ export default function Members() {
   }, [])
 
   const [user,  profile, setProfile, roles ]  = useOutletContext()
-  console.log(roles)
 
   const fetch_members = async () => {
     const { data, error } = await supabase.rpc("fetch_members")
     if( error ) throw error
     if( data ) { 
       const dataArray = data.filter( member => member.roles && member.roles.includes('member') )
-      console.log(dataArray)
       dataArray.length > 0 ? setMembers( dataArray ) : setMembers( null ); 
     } 
   }
 
+  console.log(roles)
   
 
   const [ members, setMembers ] = useState([])
