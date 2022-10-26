@@ -1,12 +1,33 @@
 import { Formik, Form }  from 'formik'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { InputField } from '../../components/Form/CustomInputField'
 import { loan2ValidationSchema, loan3ValidationSchema } from '../../helpers/validator'
 import { remove_separator, add_separator } from '../../helpers/thousand_separator'
 import { AmountInputField } from '../../components/Form/AmountInputField'
+import { supabase } from '../../helpers/supabase'
 
 function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
     const [ employed, setEmployed ] = useState(true)
+    const [ arrearedLoans, setArrearedLoans ] = useState([])
+
+    useEffect(() => {
+        // Get member's arreared loans.
+        getLoans()
+            .then(data => setArrearedLoans(data))
+            .catch(error => console.log(error))
+    })
+
+    const getLoans = async () => {
+        const { data: {current_loans}, error } = await supabase.rpc("fetch_loans")
+        if ( error ) {
+            throw error
+        } else {
+    
+            let data = []
+            if ( current_loans ) data.push(...current_loans.filter(loan => loan?.loan?.loan_status === 'defaulted').sort((a,b) => new Date(b?.created_at) - new Date(a?.created_at)))
+            return data
+        } 
+    }
 
     return (
       
@@ -133,6 +154,20 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
                         </div>
                     </div>
                 </div>
+                {
+                    values.loan_type === 'extended' && 
+                    <div className='flex flex-col w-56 '>
+                        <label className=' text-sm'>Existing Loan</label>
+                        <select name="existing_loan" id="" onChange={(event) => {
+                             console.log(event.target.value)
+                            }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                            <option value="">-- Select Loan--</option>
+                            {
+                                arrearedLoans?.length > 0 && arrearedLoans.map((existingLoan, index) => <option key={index} value={existingLoan.loan.id}>{existingLoan.loan.loan_id}</option>)
+                            }
+                        </select>
+                    </div>
+                }
 
                 <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="loan_purpose"  label="Purpose of loan" placeholder="Enter loan purpose" defaultValue={initialValues.loan_purpose} />
 
@@ -144,16 +179,6 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
                     }}
                 />
                 </div>
-                {/* <div className='flex flex-col w-56 '>
-                <label className=' text-sm'>Supporting files</label>
-                <input type="text" name="amount" className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600'
-                    onInput={(event) => {
-                        let formatted_string = add_separator(remove_separator(event.target.value))
-                        event.target.value = formatted_string
-                        setFieldValue(event.target.name, parseFloat(remove_separator(event.target.value)))
-                    }}
-                />
-                </div> */}
 
                 <AmountInputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="amount"  label="Amount in figures" placeholder="Enter loan amount" defaultValue={initialValues.amount} setFieldValue={setFieldValue} />
 
