@@ -51,10 +51,10 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                     <div className='flex flex-col w-56 '>
                                         <label className=' text-sm'>District</label>
                                         <select defaultValue={initialValues.district} value={values.district} name="district" id="" onChange={(event) => {
-                                            // initialValues.county = ""
-                                            // initialValues.sub_county = "" 
-                                            // initialValues.parish = ""
-                                            // initialValues.sub_parish = ""
+                                            initialValues.county = ""
+                                            initialValues.sub_county = "" 
+                                            initialValues.parish = ""
+                                            initialValues.sub_parish = ""
                                             
                                             const [ district ] = districts.filter(district => district.name.toLowerCase() === event.target.value)
                                             const counties = district && district.counties.filter(county => county?.name)
@@ -75,9 +75,9 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                         <label className=' text-sm'>County</label>
                                         <select defaultValue={initialValues.county} value={initialValues.county || values.county} name="county" id=""  onChange={(event) => {
                                             if( counties?.length > 0) {
-                                                // initialValues.sub_county = "" 
-                                                // initialValues.parish = ""
-                                                // initialValues.sub_parish = ""
+                                                initialValues.sub_county = "" 
+                                                initialValues.parish = ""
+                                                initialValues.sub_parish = ""
                                                 
                                                 const [ selectedCounty ] = counties.filter(county => county?.name.toLowerCase() === event.target.value)
                                                 selectedCounty?.sub_counties[0]?.name ? setSubCounties(selectedCounty.sub_counties) : setSubCounties([])
@@ -97,8 +97,8 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                         <label className=' text-sm'>Sub County</label>
                                         <select name="sub_county" value={initialValues.sub_county || values.sub_county} defaultValue={initialValues.sub_county } id="" onChange={(event) => {
                                             if( subCounties?.length > 0 ) {
-                                                // initialValues.parish = ""
-                                                // initialValues.sub_parish = ""
+                                                initialValues.parish = ""
+                                                initialValues.sub_parish = ""
                                                 
                                                 const [ selectedSubCounty ] = subCounties.filter(subCounty => subCounty?.name.toLowerCase() === event.target.value)
                                                 selectedSubCounty?.parishes[0]?.name ? setParishes(selectedSubCounty.parishes) : setParishes([])
@@ -116,12 +116,12 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                         <label className=' text-sm'>Parish</label>
                                         <select name="parish" defaultValue={initialValues.parish} id="" onChange={(event) => {
                                                 if(parishes?.length > 0) {
-                                                    // values.sub_parish = ""
+                                                    values.sub_parish = ""
 
                                                     const [ selectedParish ] = parishes.filter(parish => parish?.name.toLowerCase() === event.target.value)
                                                     console.log(event.target.value)
                                                     selectedParish?.sub_parishes[0]?.name ? setSubParishes(selectedParish.sub_parishes) : setSubParishes([])
-                                                    values.parish = event.target.value
+                                                    values.sub_parish = event.target.value
                                                 }
                                             }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
                                             <option value="">-- Select Parish--</option>
@@ -132,8 +132,7 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                     </div>
                                     <div className='flex flex-col w-56 '>
                                         <label className=' text-sm'>Sub-parish/Village</label>
-                                        <select name="sub_parish" defaultValue={initialValues.sub_parish || values.subParish } value={values.sub_parish || initialValues.sub_parish} id="" onChange={(event) => {
-                                            console.log(event.target.value)
+                                        <select name="sub_parish" id="" onChange={(event) => {
                                            values.sub_parish = event.target.value
                                         }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
                                             <option value="bingo">-- Select Sub-parish --</option>
