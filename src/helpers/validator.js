@@ -89,7 +89,7 @@ export const loanPaymentValidationSchema = Yup.object({
 
 export const loan1ValidationSchema = Yup.object({
   landline_number: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
-  kin_name: Yup.string().required(),
+  kin_name: Yup.string().required("Next of Kin required"),
   kin_contact: Yup.string().when( "kin_name", (kin_name) => {
     if(kin_name?.length > 0) {
       return Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required")
@@ -100,7 +100,6 @@ export const loan1ValidationSchema = Yup.object({
   spouse_name: Yup.string(),
   spouse_contact: Yup.string().when("spouse_name", (val, schema) => {
     if(val?.length > 0) {
-      console.log('here')
       return Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required") 
     } else {
       return Yup.string().notRequired()
