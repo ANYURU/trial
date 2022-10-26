@@ -60,7 +60,6 @@ export const evidencedRequestValidationSchema = Yup.object({
   comments: Yup.string(),
 })
 
-
 export const loanPaymentRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
   evidence: Yup.string().required('Required!'),
@@ -90,15 +89,34 @@ export const loanPaymentValidationSchema = Yup.object({
 
 export const loan1ValidationSchema = Yup.object({
   landline_number: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
-  kin_contact: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
-  spouse_contact: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
-  no_of_dependents: Yup.string().required("No. of dependents is required")
+  kin_name: Yup.string(),
+  kin_contact: Yup.string().when( "kin_name", (kin_name) => {
+    if(kin_name?.length > 0) {
+      return Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required")
+    } else {
+      return Yup.string().notRequired()
+    }
+  }),
+  spouse_name: Yup.string(),
+  spouse_contact: Yup.string().when("spouse_name", (val, schema) => {
+    if(val?.length > 0) {
+      console.log('here')
+      return Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required") 
+    } else {
+      return Yup.string().notRequired()
+    }
+  }),
+  no_of_dependents: Yup.string().required("No. of dependents is required"),
+  district: Yup.string().required('District required'),
+  county: Yup.string().required('County required'),
+  sub_county: Yup.string().required('Sub County required'),
+  parish: Yup.string().required('Parish required'),
+  sub_parish: Yup.string().required('Sub Parish required!')
 })
 
 export const loan2ValidationSchema = Yup.object({
   landline_number: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
-  employer_no: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
-  spouse_contact: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
+  employer_no: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),  
   no_of_dependents: Yup.string().required("No. of dependents is required"),
   employer: Yup.string().required("employer's name is required"),
   asset1: Yup.string().required("asset is required"),
