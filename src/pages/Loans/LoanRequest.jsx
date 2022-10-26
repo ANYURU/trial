@@ -7,36 +7,34 @@ import {
   ApplicationVerify,
 } from ".";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { useOutletContext } from "react-router-dom";
 import { Stepper } from "../../components";
 
 function LoanRequest() {
   const [pageNumber, setPageNumber] = useState(1);
   const [user, profile] = useOutletContext();
+  
 
   const [initialValues, setInitialValues] = useState({
-    applicant_name: profile.fullname,
-    applicant_id: profile.id,
-    position_in_sacco:
-      profile?.user_role && profile?.user_role.roles.length === 1
-        ? "member"
-        : "",
+    applicant_name: profile?.fullname,
+    applicant_id: profile?.id,
     postal_address: "",
     landline_number: "",
     marital_status: "",
     no_of_dependents: "",
-    town: "",
-    estate: "",
-    street: "",
-    house_no: "",
+    district: "",
+    county: "",
+    sub_county: "",
+    parish: "",
+    sub_parish:"",
     ownership: "",
     years_spent: "",
     kin_name: "",
-    kin_profession: "",
+    // kin_profession: "",
     kin_contact: "",
     spouse_name: "",
-    spouse_profession: "",
+    // spouse_profession: "",
     spouse_contact: "",
     employment: "",
     employer: "",
@@ -99,6 +97,7 @@ function LoanRequest() {
   });
 
   return (
+    
     <div className="flex-grow sm:mx-2 md:mx-5 my-2 h-[calc(100vh-70px)]">
       <ToastContainer />
       <div className="flex flex-col justify-between pb-3 md:h-[60px]">
