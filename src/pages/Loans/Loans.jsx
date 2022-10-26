@@ -187,7 +187,7 @@ export default function Loan() {
                             className={` py-1 px-2 rounded-xl text-white ${
                               loan?.application_meta?.review_status === "pending"
                               ? "bg-yellow-400"
-                              : loan?.application_meta?.review_status === "rejected"
+                              : loan?.application_meta?.review_status === "rejected" || loan?.loan?.loan_status === "defaulted"
                               ? "bg-red-400"
                               : loan?.loan.loan_status === "cleared"
                               ? "bg-green-400"
