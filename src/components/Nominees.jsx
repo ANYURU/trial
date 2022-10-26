@@ -42,8 +42,9 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                                 onChange={(event) => {
                                                     values.nominees[index]["nominee_id"] = event.target.value
                                                     const [ member ] = profiles.filter(profile => profile.id === event.target.value)
-                                                    values.nominees[index]["fullname"] = member.fullname
-                                                    console.log(nominees)
+                                                    values.nominees[index]["name"] = member.fullname
+                                                    values.nominees[index]["contact"] = member.phone_number
+                                                    values.nominees[index]["dob"] = member.dob
                                                 }}
                                                 onBlur={handleBlur(nominee_id)}
                                             >
