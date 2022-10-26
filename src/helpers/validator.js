@@ -79,8 +79,7 @@ export const nonEvidencedRequestValidationSchema = Yup.object({
       is: 'other',
       then: Yup.string().required("member is required!")
     }
-  ),
-  comments: Yup.string()
+  )
 })
 
 export const loanPaymentValidationSchema = Yup.object({
@@ -165,11 +164,32 @@ export const loan4ValidationSchema = Yup.object({
       name: Yup.string(),
       amount_advanced: Yup.string().when(
         'name', (name, schema) => {
-          if(name?.length > 0) console.log("here")
+          if(name?.length > 0) {
+            console.log(schema)
+            return Yup.string().required('Required')
+          }
         } 
       ),
+      date_granted: Yup.string().when(
+        'name', (name, schema) => {
+          if(name?.length > 0) return Yup.string().required('Required')
+        } 
+      ),
+      repayment_period: Yup.string().when(
+        'name', (name, schema) => {
+          if(name?.length > 0) return Yup.string().required('Required')
+        } 
+      ),
+      balance: Yup.string().when(
+        'name', (name, schema) => {
+          if(name?.length > 0) return Yup.string().required('Required')
+        } 
+      ),
+      
       percentage: Yup.number().positive("Must be greater than 0").max(100, "Must be less than 100")
-    })
+    }, 
+  
+    )
   )
 })
 
