@@ -33,7 +33,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
                 className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
                   loan?.application_meta?.review_status === "pending"
                   ? "bg-yellow-400"
-                  : loan?.application_meta?.review_status === "rejected"
+                  : loan?.application_meta?.review_status === "rejected" || loan?.loan?.loan_status === "defaulted"
                   ? "bg-red-400"
                   : loan?.loan?.loan_status === "on going"
                   ? "bg-blue-400"
