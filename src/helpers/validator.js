@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const numberRegExp = /^(0|[1-9]\d*)$/
 
 export const validationSchema = Yup.object({
   phoneNo: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
@@ -105,12 +106,14 @@ export const loan1ValidationSchema = Yup.object({
       return Yup.string().notRequired()
     }
   }),
-  no_of_dependents: Yup.string().required("No. of dependents is required"),
+  no_of_dependents: Yup.string().matches(numberRegExp, "Should be a number").required("No. of dependents is required"),
   district: Yup.string().required('District required'),
   county: Yup.string().required('County required'),
   sub_county: Yup.string().required('Sub County required'),
   parish: Yup.string().required('Parish required'),
-  sub_parish: Yup.string().required('Sub Parish required!')
+  sub_parish: Yup.string().required('Sub Parish required!'),
+  years_spent: Yup.string().matches(numberRegExp, "Should be a number").required("No. of dependents is required"),
+ 
 })
 
 export const loan2ValidationSchema = Yup.object({
@@ -124,6 +127,7 @@ export const loan2ValidationSchema = Yup.object({
   amount: Yup.string().required("Amount is required"),
   amount_in_words: Yup.string().required("required"),
   months: Yup.string().required("required"),
+  business_type: Yup.string().required('Business type required')
 })
 
 export const loan3ValidationSchema = Yup.object({
