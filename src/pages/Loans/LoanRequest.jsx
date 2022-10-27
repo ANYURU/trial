@@ -13,8 +13,11 @@ import { Stepper } from "../../components";
 
 function LoanRequest() {
   const [pageNumber, setPageNumber] = useState(1);
-  const [user, profile] = useOutletContext();
-  
+  const [ user, profile] = useOutletContext();
+  const [ counties, setCounties ] = useState([])
+  const [ subCounties, setSubCounties ] =  useState([])
+  const [ parishes, setParishes ] = useState([])
+  const [ subParishes, setSubParishes ] = useState([])
 
   const [initialValues, setInitialValues] = useState({
     applicant_name: profile?.fullname,
@@ -43,6 +46,7 @@ function LoanRequest() {
     employer_designation: "",
     retirement_date: "",
     employment_type: "",
+    type_of_employment: "",
     business_type: "",
     years_of_operation: "",
     business_income: "",
@@ -50,6 +54,7 @@ function LoanRequest() {
     asset2: "",
     asset3: "",
     loan_type: "",
+    existing_loan: "",
     loan_purpose: "",
     amount: "",
     amount_in_words: "",
@@ -115,6 +120,14 @@ function LoanRequest() {
               initialValues={initialValues}
               setInitialValues={setInitialValues}
               setPageNumber={setPageNumber}
+              counties={counties}
+              setCounties={setCounties}
+              subCounties={subCounties}
+              setSubCounties={setSubCounties}
+              parishes={parishes}
+              setParishes={setParishes}
+              subParishes={subParishes}
+              setSubParishes={setSubParishes}
             />
           )}
           {pageNumber === 2 && (
