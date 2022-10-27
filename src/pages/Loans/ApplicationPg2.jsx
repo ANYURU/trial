@@ -256,7 +256,7 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
                 className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
             />
         
-            <button
+            {/* <button
                 onClick={(event) => {
                     event.preventDefault()
 
@@ -265,7 +265,7 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
                 }}
             >
                 try me
-            </button>
+            </button> */}
 </div>
     </Form>
   )

@@ -145,6 +145,9 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
                 <Field type="checkbox" name="securities" value="guarantors" />
                 Guarantors
                 </label>
+                <ErrorMessage name="securities">{msg => <div className="error text-red-600 text-xs">
+                    {msg}
+                </div>}</ErrorMessage>
             </div>
             
         </div>
@@ -163,7 +166,7 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
                 value='Next'
                 className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
             />
-            <button
+            {/* <button
             onClick={(event) => {
                 event.preventDefault()
                 console.log("Values: ", values)
@@ -171,7 +174,7 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
             }}
             >
                 try me
-            </button>
+            </button> */}
         </div>
     </Form>
     )}}
