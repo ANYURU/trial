@@ -163,25 +163,24 @@ export const loan4ValidationSchema = Yup.object({
     Yup.object().shape({
       name: Yup.string(),
       amount_advanced: Yup.string().when(
-        'name', (name, schema) => {
+        'name', (name) => {
           if(name?.length > 0) {
-            console.log(schema)
             return Yup.string().required('Required')
           }
         } 
       ),
       date_granted: Yup.string().when(
-        'name', (name, schema) => {
-          if(name?.length > 0) return Yup.string().required('Required')
+        'name', (name) => {
+          if(name?.length > 0) return Yup.date().required('Required')
         } 
       ),
       repayment_period: Yup.string().when(
-        'name', (name, schema) => {
-          if(name?.length > 0) return Yup.string().required('Required')
+        'name', (name) => {
+          if(name?.length > 0) return Yup.string().matches(numberRegExp, "Should be a number").required('Required')
         } 
       ),
       balance: Yup.string().when(
-        'name', (name, schema) => {
+        'name', (name) => {
           if(name?.length > 0) return Yup.string().required('Required')
         } 
       ),
