@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { InputField } from '../../components/Form/CustomInputField'
 import { loan2ValidationSchema, loan3ValidationSchema } from '../../helpers/validator'
 import { remove_separator, add_separator } from '../../helpers/thousand_separator'
-import { AmountInputField } from '../../components/Form/AmountInputField'
 import { supabase } from '../../helpers/supabase'
 
 function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
