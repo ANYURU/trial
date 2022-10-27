@@ -55,7 +55,7 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                                 })
                                             }
                                             </select>
-                                            <ErrorMessage name={`nominees.${index}].nominee_id`}>{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
+                                            <ErrorMessage name={`nominees.[${index}].nominee_id`}>{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
                                             
                                         </div>
                                         <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][percentage]`}  label="Percentage" placeholder="Enter percentage" defaultValue={percentage} type="number"/>
