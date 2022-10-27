@@ -142,7 +142,6 @@ export const loan3ValidationSchema = Yup.object({
     then: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required")
   }),
   no_of_dependents: Yup.string().required("No. of dependents is required"),
-  // employer: Yup.string().required("employer's name is required"),
   employer: Yup.string().when('employment_type', {
     is: 'employed',
     then: Yup.string().required("Employer's name is required.")
@@ -158,37 +157,56 @@ export const loan3ValidationSchema = Yup.object({
   months: Yup.string().required("required!")
 })
 
-export const loan4ValidationSchema = Yup.object({
-  bank_loans: Yup.array().of(
-    Yup.object().shape({
-      name: Yup.string(),
-      amount_advanced: Yup.string().when(
-        'name', (name) => {
-          if(name?.length > 0) {
-            return Yup.string().required('Required')
-          }
-        } 
-      ),
-      date_granted: Yup.string().when(
-        'name', (name) => {
-          if(name?.length > 0) return Yup.date().required('Required')
-        } 
-      ),
-      repayment_period: Yup.string().when(
-        'name', (name) => {
-          if(name?.length > 0) return Yup.string().matches(numberRegExp, "Should be a number").required('Required')
-        } 
-      ),
-      balance: Yup.string().when(
-        'name', (name) => {
-          if(name?.length > 0) return Yup.string().required('Required')
-        } 
-      ),
+export const loan4ValidationSchema =  Yup.object({
+    bank_loans: Yup.array().of(
+      Yup.object().shape(
+        {
+          name: Yup.string().when(["amount_advanced", "date_granted", "repayment_period", "balance"], {
+            is: (amount_advanced, date_granted, repayment_period, balance) => amount_advanced !== undefined || date_granted !== undefined || repayment_period !== undefined || balance !== undefined,
+            then: Yup.string().required("Name required")
+          }),
+          amount_advanced: Yup.string().when(["name", "date_granted", "repayment_period", "balance"], {
+            is: (name, date_granted, repayment_period, balance) => name !== undefined || date_granted !== undefined || repayment_period !== undefined || balance !== undefined,
+            then: Yup.string().matches(numberRegExp, "Must be a number").required("Amount required")
+          }),
+          date_granted: Yup.string().when(["name", "amount_advanced", "repayment_period", "balance"], {
+            is: (name, amount_advanced, repayment_period, balance) => name !== undefined || amount_advanced !== undefined || repayment_period !== undefined || balance !== undefined,
+            then: Yup.string().required("Date required")
+          }),
+          repayment_period: Yup.string().when(["name", "amount_advanced", "date_granted", "balance"], {
+            is: (name, amount_advanced, date_granted, balance) => name !== undefined || amount_advanced !== undefined || date_granted !== undefined || balance !== undefined,
+            then: Yup.string().matches(numberRegExp, "Must be a number").required("Period required")
+          }),
+          balance: Yup.string().when(["name", "amount_advanced", "date_granted", "repayment_period"], {
+            is: (name, amount_advanced, date_granted, repayment_period) => name !== undefined || amount_advanced !== undefined || date_granted !== undefined || repayment_period !== undefined,
+            then: Yup.string().matches(numberRegExp, "Must be a number").required("Balance required")
+          })
       
-      percentage: Yup.number().positive("Must be greater than 0").max(100, "Must be less than 100")
-    }, 
-  
+        },
+        [
+          ["name", "amount_advanced"], 
+          ["name", "date_granted"], 
+          ["name", "repayment_period"],
+          ["name", "balance"],
+          ["amount_advanced", "date_granted"], 
+          ["amount_advanced", "repayment_period"], 
+          ["amount_advanced", "balance"], 
+          ["date_granted", "repayment_period"], 
+          ["date_granted", "balance"], 
+          ["repayment_period", "balance"]
+        ]
+      )
+
     )
+})
+
+
+export const loan5ValidationSchema =  Yup.object({
+  guarantors: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("Name required"),
+      contact: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
+    })
   )
 })
 
