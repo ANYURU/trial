@@ -1,21 +1,16 @@
-import { Formik, Field, Form, FieldArray }  from 'formik'
-import { supabase } from '../../helpers/supabase'
-import { useAuth } from '../../auth/AuthContext'
-import { toast, ToastContainer } from 'react-toastify'
-import { useOutletContext, useNavigate } from "react-router-dom"
-import { useState } from 'react'
+import { Formik, Field, Form, FieldArray, ErrorMessage }  from 'formik'
 import { InputField } from '../../components/Form/CustomInputField'
+import { loan4ValidationSchema } from '../../helpers/validator'
+import { remove_separator, add_separator } from '../../helpers/thousand_separator'
 
 export default function ApplicationPg3({ profile, initialValues, setInitialValues, setPageNumber }) {
-
-    const [ salary, setSalary ] = useState('false')
-    const [ shares, setShares ] = useState('false')
-    const [ guarantors, setGuarantors ] = useState('false')
 
     return (
     <Formik
     initialValues={initialValues}
+    validationSchema={loan4ValidationSchema}
     onSubmit={async ( values ) => {
+        console.log(values)
         setInitialValues(values)
         setPageNumber(4)
     }}
@@ -30,28 +25,83 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
                 render={(fieldArryProps) => {
 
                     return <div>
-                        {values.bank_loans.map((bank, index) => (
+                        {values.bank_loans.map(({amount_advanced}, index) => (
                             <>
-            <div className='m-2 flex gap-2' key={index}>
-                <div className='flex justify-center items-center'>
-                    <h1 className='font-bold'>0{index + 1}</h1>
-                </div>
-                <div className='flex flex-wrap gap-5'>
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`bank_loans[${index}].name`} defaultValue={initialValues.bank_loans[index].name}  label="Name" placeholder="Enter bank name" />
+                                <div className='m-2 flex gap-2' key={index}>
+                                    <div className='flex justify-center items-center'>
+                                        <h1 className='font-bold'>0{index + 1}</h1>
+                                    </div>
+                                    <div className='flex flex-wrap gap-5'>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`bank_loans[${index}].name`} defaultValue={initialValues.bank_loans[index].name}  label="Name" placeholder="Enter bank name" />
 
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} defaultValue={initialValues.bank_loans[index].amount_advanced} reference={`bank_loans[${index}].amount_advanced`}  label="Amount Advanced" placeholder="Enter amount" />
+                                        <div className="flex flex-col w-56 mb-3">
+                                            <label htmlFor={`bankLoanAmountAdvanced${index}`} className=" text-sm">
+                                                Amount Advanced
+                                            </label>
+                                            <input
+                                            type="text"
+                                            name={`bank_loans[${index}].amount_advanced`}
+                                            id={`bankLoanAmountAdvanced${index}`}
+                                            placeholder="Enter amount"
+                                            className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
+                                            onChange={(event) => {
+                                                
+                                                let formatted_string = add_separator(remove_separator(event.target.value))
+                                                event.target.value = formatted_string
+                                                setFieldValue(event.target.name, parseFloat(remove_separator(event.target.value)))
+                                                console.log(touched)
+                                            }}
+                                            onBlur={handleBlur}
+                                            defaultValue={add_separator(initialValues.bank_loans[index].amount_advanced)}
+                                            />
+                                            <ErrorMessage name={`bank_loans[${index}].amount_advanced`}>{msg => <div className="error text-red-600 text-xs">
+                                                {msg}
+                                            </div>}</ErrorMessage>
+                                        </div>
+                                        <div className='flex flex-col w-56 '>
+                                            <label className=' text-sm'>Date Granted</label>
+                                            <input 
+                                                type="date" defaultValue={initialValues.bank_loans[index].date_granted} 
+                                                className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' 
+                                                name={`bank_loans[${index}].date_granted`} 
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                            />
+                                            <ErrorMessage name={`initialValues.bank_loans[${index}].date_granted`}>{msg => <div className="error text-red-600 text-xs">
+                                                {msg}
+                                            </div>}</ErrorMessage>
+                                        </div>
 
-                    <div className='flex flex-col w-56 '>
-                        <label className=' text-sm'>Date Granted</label>
-                        <input type="date" defaultValue={initialValues.bank_loans[index].date_granted} className='ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600' name={`bank_loans[${index}].date_granted`} />
-                    </div>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`bank_loans[${index}].repayment_period`} defaultValue={initialValues.bank_loans[index].repayment_period}  label="Repayment Period" placeholder="Enter period" />
 
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`bank_loans[${index}].repayment_period`} defaultValue={initialValues.bank_loans[index].repayment_period}  label="Repayment Period" placeholder="Enter period" />
-
-                    <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`bank_loans[${index}].balance`}  label="Balance" placeholder="Enter balance" defaultValue={initialValues.bank_loans[index].balance} />
-                </div>
-            </div>
-                            <hr />
+                                        {/* <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`bank_loans[${index}].balance`}  label="Balance" placeholder="Enter balance" defaultValue={initialValues.bank_loans[index].balance} /> */}
+                                        <div className="flex flex-col w-56 mb-3">
+                                            <label htmlFor={`bankLoanBalance${index}`} className=" text-sm">
+                                                Balance
+                                            </label>
+                                            <input
+                                            type="text"
+                                            name={`bank_loans[${index}].balance`}
+                                            id={`bankBalance${index}`}
+                                            placeholder="Enter balance"
+                                            className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
+                                            onChange={(event) => {
+                                                
+                                                let formatted_string = add_separator(remove_separator(event.target.value))
+                                                event.target.value = formatted_string
+                                                setFieldValue(event.target.name, parseFloat(remove_separator(event.target.value)))
+                                                console.log(touched)
+                                            }}
+                                            onBlur={handleBlur}
+                                            defaultValue={add_separator(initialValues.bank_loans[index].balance)}
+                                            />
+                                            <ErrorMessage name={`bank_loans[${index}].balance`}>{msg => <div className="error text-red-600 text-xs">
+                                                {msg}
+                                            </div>}</ErrorMessage>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
                             </>
                             ))
                         }
@@ -113,6 +163,15 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
                 value='Next'
                 className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
             />
+            <button
+            onClick={(event) => {
+                event.preventDefault()
+                console.log("Values: ", values)
+                console.log("Errors: ", errors)
+            }}
+            >
+                try me
+            </button>
         </div>
     </Form>
     )}}
