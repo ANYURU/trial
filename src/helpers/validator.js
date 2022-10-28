@@ -158,6 +158,7 @@ export const loan3ValidationSchema = Yup.object({
 })
 
 export const loan4ValidationSchema =  Yup.object({
+    securities: Yup.array().min(2, 'Check at least 2 of the above options').required(),
     bank_loans: Yup.array().of(
       Yup.object().shape(
         {
