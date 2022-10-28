@@ -14,6 +14,7 @@ export default function ApplicantApproval() {
         if (error) throw error
         const [ application ] = data.filter( application => application.application_id === id)
         setApplication(application)
+        console.log(application)
       })
       .catch(error => console.log(error))
   }, [])
@@ -21,7 +22,6 @@ export default function ApplicantApproval() {
   const [ application, setApplication ] = useState(null)
 
   const approveMember = async () => {
-    console.log("here");
     const {
       application_meta: { applicants_id },
     } = application;
@@ -34,11 +34,10 @@ export default function ApplicantApproval() {
         throw error;
       } else {
         toast.success(`Member has been approved.`, { position: "top-center" });
-        // navigate(-1)
+        setApplication((application) => ({...application, ...data}))
       }
     } catch (error) {
       toast.error(`${error?.message}`, { position: "top-center" });
-      console.log(error);
     }
   };
 
@@ -50,11 +49,11 @@ export default function ApplicantApproval() {
       if (error) {
         throw error;
       } else {
-        console.log(data);
-        // handle the alerts and navigation
+        toast.success(`Member has been rejected.`,{ position: "top-center" });
+        setApplication((application) => ({...application, ...data}))
       }
     } catch (error) {
-      console.log(error);
+      toast.error(`${error?.message}`, { position: "top-center"})
     }
   };
 
