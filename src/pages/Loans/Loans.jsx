@@ -86,6 +86,7 @@ export default function Loan() {
       const sorted_data = data.sort((a,b) => new Date(b?.created_at) - new Date(a?.created_at))
       setLoans( sorted_data )
       setLoading( false )
+      console.log(data)
     }
 
   }
@@ -185,8 +186,10 @@ export default function Loan() {
                         <td className={`px-6 py-3`}>
                           <span
                             className={` py-1 px-2 rounded-xl text-white ${
-                              loan?.application_meta?.review_status === "pending"
+                              loan?.application_meta?.review_status === "pending" 
                               ? "bg-yellow-400"
+                              : loan?.loan?.loan_status === "pending"
+                              ? "bg-green-400"
                               : loan?.application_meta?.review_status === "rejected" || loan?.loan?.loan_status === "defaulted"
                               ? "bg-red-400"
                               : loan?.loan.loan_status === "cleared"
@@ -195,7 +198,7 @@ export default function Loan() {
                               && "bg-blue-400"
                             }`}
                             >
-                            {loan?.loan?.loan_status === "defaulted" ? "arrears" : loan?.loan?.loan_status || loan?.application_meta?.review_status}
+                            {loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Not started" : loan.loan.loan_status) || loan?.application_meta?.review_status }
                           </span>
                         </td>
                       </tr>
