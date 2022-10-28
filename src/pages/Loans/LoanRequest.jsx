@@ -19,6 +19,8 @@ function LoanRequest() {
   const [ parishes, setParishes ] = useState([])
   const [ subParishes, setSubParishes ] = useState([])
 
+  console.log(profile)
+
   const [initialValues, setInitialValues] = useState({
     applicant_name: profile?.fullname,
     applicant_id: profile?.id,
@@ -79,12 +81,12 @@ function LoanRequest() {
     guarantors: [
       {
         name: "",
-        financial_statement: "",
+        // financial_statement: "",
         contact: "",
       },
       {
         name: "",
-        financial_statement: "",
+        // financial_statement: "",
         contact: "",
       },
     ],
