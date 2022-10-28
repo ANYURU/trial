@@ -40,7 +40,7 @@ export default function ApplicationPg4({ initialValues, setInitialValues, setPag
                             render={(fieldArrayProp) => (
                                 <>
                                     {values.guarantors.map((guarantor, index) => (
-                                        <div className='flex flex-wrap gap-5 mb-5 outline p-2 outline-1 rounded-md outline-gray-300'>
+                                        <div className='flex flex-wrap gap-5 mb-2 outline p-2 outline-1 rounded-md outline-gray-300'>
                                             {/* <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`guarantors[${index}].name`} label="Name" placeholder="Enter name" /> */}
                                             <div className="flex flex-col w-56">
                                                 <label className="text-sm">
@@ -67,6 +67,10 @@ export default function ApplicationPg4({ initialValues, setInitialValues, setPag
                                             <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`guarantors[${index}].contact`} label="Contact" placeholder="Enter number" />
                                         </div>
                                     ))}
+                                    {
+                                        // errors?.guarantors && errors.gurantors.length === 1 && <div className="error text-xs text-red-500">{errors.guarantors}</div>
+                                        errors.guarantors && typeof(errors.guarantors) === "string" && <div className="error text-xs text-red-500">{errors.guarantors}</div>
+                                    }
                                     <button
                                         type="button"
                                         className='bg-primary text-white px-3 py-2 rounded m-2'
@@ -77,7 +81,7 @@ export default function ApplicationPg4({ initialValues, setInitialValues, setPag
                                         className='bg-accent-red text-white px-3 py-2 rounded m-2'
                                         onClick={() => values.guarantors.length > 1 ? fieldArrayProp.pop() : null}
                                     >-</button>
-                                    {/* <button
+                                    <button
                                         onClick={(event ) => {
                                             event.preventDefault()
                                             console.log("Errors: ", errors)
@@ -85,11 +89,14 @@ export default function ApplicationPg4({ initialValues, setInitialValues, setPag
                                         }}
                                     >
                                         tryme
-                                    </button> */}
+                                    </button>
                                 </>
                             )}        
                         ></FieldArray>
                     </div>
+                    {/* {
+                        errors?.guarantors && <div>{errors.guarantors}</div>
+                    } */}
                     <div className='flex justify-between w-full'>
                         <button
                             type="button"

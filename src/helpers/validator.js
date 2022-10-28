@@ -47,6 +47,17 @@ Yup.addMethod(Yup.string, 'isNumber', function () {
   }).required("Required!")
 })
 
+Yup.addMethod(Yup.array, "unique", function(
+  message,
+  mapper = (value) => value
+) {
+  return this.test(
+    "unique",
+    message,
+    (list = []) => list.length === new Set( list.map(mapper)).size
+  )
+})
+
 export const evidencedRequestValidationSchema = Yup.object({
   amount: Yup.string().isNumber(),
   account_type: Yup.string().required('Required!'),
@@ -208,7 +219,9 @@ export const loan5ValidationSchema =  Yup.object({
       name: Yup.string().required("Name required"),
       contact: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
     })
-  )
+    )
+    .unique("Names must be unique", val => val.name )
+    .unique("Contacts must be unique", val => val.contact)
 })
 
 
