@@ -6,6 +6,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function LoanModal({ passed, setLoanModal, loan }) {
   const { darkMode } = useAuth();
@@ -16,11 +17,14 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
   console.log(loan)
 
   return ReactDOM.createPortal(
+    
     <div
       className={`bg-black bg-opacity-30 z-40 w-screen h-screen fixed top-0 left-0 right-0 bottom-0 overflow-scroll flex justify-center items-center max-h-full overflow-y-auto${
         darkMode ? "dark" : ""
       } `}
     >
+      <ToastContainer />
+
       <div
         className="bg-white dark:bg-dark-bg dark:text-secondary-text p-10 rounded-md shadow-md flex flex-col items-center mx-2 overflow-x-hidden overflow-y-scroll max-h-screen sm:mt-20 md:mt-10"
         ref={passed}
@@ -30,18 +34,20 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
             <h1 className="font-bold text-lg flex flex-1 justify-center items-center">
               Loan Details ({loan?.loan?.loan_meta?.applicants_name || loan?.application_meta?.applicants_name})
               <span
-                className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
-                  loan?.application_meta?.review_status === "pending"
-                  ? "bg-yellow-400"
-                  : loan?.application_meta?.review_status === "rejected" || loan?.loan?.loan_status === "defaulted"
-                  ? "bg-red-400"
-                  : loan?.loan?.loan_status === "on going"
-                  ? "bg-blue-400"
-                  : loan?.loan?.loan_status === "cleared"
-                  && "bg-green-400"
-                }`}
+                className={` py-1 px-2 rounded-xl text-white text-sm ml-2 ${
+                              loan?.application_meta?.review_status === "pending" 
+                              ? "bg-yellow-400"
+                              : loan?.loan?.loan_status === "pending"
+                              ? "bg-green-400"
+                              : loan?.application_meta?.review_status === "rejected" || loan?.loan?.loan_status === "defaulted"
+                              ? "bg-red-400"
+                              : loan?.loan.loan_status === "cleared"
+                              ? "bg-green-400"
+                              : loan?.loan.loan_status === "on going"
+                              && "bg-blue-400"
+                            }`}
               >
-                {loan?.loan?.loan_status === "defaulted" ? "arrears" : loan?.loan?.loan_status || loan?.application_meta?.review_status}
+                {loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Not started" : loan.loan.loan_status) || loan?.application_meta?.review_status }
               </span>
               <span className='flex flex-1 justify-center'>
                 {
@@ -50,8 +56,14 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
                     (loan?.loan?.member_id === profile.id || roles.includes('treasurer') || roles.includes('asst_treasurer')) &&
                     <button
                       className="bg-green-500 text-white outline-offset-2 px-2 rounded-sm w-22 capitalize font-normal text-base py-1"
+                      // disabled={!moment().isSameOrAfter(moment(loan?.loan?.start_date))}
                       onClick = {() => {
-                        navigate(`/loans/payment/${loan?.loan?.id}`)
+                        if(!moment().isSameOrAfter(moment(loan?.loan?.start_date))) {
+                          toast.info(`Loan not started`, {position: 'top-center'})
+
+                        } else {
+                          navigate(`/loans/payment/${loan?.loan?.id}`)
+                        }
                       }}
                     >
                       Pay Now
@@ -118,6 +130,12 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
               </p>
             </div>
             <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+              <p className="col-span-2">Start Date:</p>
+              <p className="font-bold col-span-3">
+                {moment(loan?.loan?.start_date).format("DD-MM-YYYY hh:mm a")}
+              </p>
+            </div>
+            <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
               <p className="col-span-2">End Date:</p>
               <p className="font-bold col-span-3">
                 {moment(loan?.loan?.end_date).format("DD-MM-YYYY hh:mm a")}
@@ -125,7 +143,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
             </div>
             <div className="grid grid-cols-5 gap-2 mb-5 justify-start w-full">
               <p className="col-span-2">Approved by:</p>
-              <p className="font-bold col-span-3">{loan?.loan_meta?.approved_by}</p>
+              <p className="font-bold col-span-3">{loan?.loan?.loan_meta?.approved_by}</p>
             </div>
           </>
         }
