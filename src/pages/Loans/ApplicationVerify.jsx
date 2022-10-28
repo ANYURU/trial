@@ -10,12 +10,16 @@ import { uploadFile } from "../../helpers/uploadFile"
 import { OTPBox } from "../../components"
 import { generate_amortization_schedule } from "../../helpers/generateAmortizationSchedule"
 import { remove_separator } from "../../helpers/thousand_separator"
+import PdfDoc from "./PdfDoc"
+import { PDFViewer } from '@react-pdf/renderer';
+
 
 function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
   
-  const [user, { phone_number, fullname: applicants_name, user_role }] = useOutletContext()
+  const [ user, { phone_number, fullname: applicants_name, user_role, position_in_sacco, member_id } ] = useOutletContext()
   const { user: { id: applicants_id } } = useAuth()
   const { amount, months } = initialValues
+  const [ downloadForm, setDownloadForm ] = useState(false)
   const rate = 3;
   
   const defaultInitialValues = {
@@ -26,10 +30,11 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     landline_number: '',
     marital_status: '',
     no_of_dependents: '',
-    town: '',
-    estate: '',
-    street: '',
-    house_no: '',
+    district: '',
+    county: '',
+    sub_county: '',
+    parish: '',
+    sub_parish:'',
     ownership: '',
     years_spent: '',
     kin_name: '',
@@ -142,7 +147,6 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
       //   initialValues.a_years_cashflow = a_years_cashflow_url
       
       // }
-
     }  
 
     // Uploading additional files.
@@ -229,6 +233,7 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
                       applicants_name,
                       amortization_schedule,
                       ...initialValues, 
+                      position_in_sacco: position_in_sacco,
                       total,
                       interest_rate: rate
                     }
