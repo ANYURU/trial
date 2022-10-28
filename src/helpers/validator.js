@@ -100,14 +100,8 @@ export const loanPaymentValidationSchema = Yup.object({
 
 export const loan1ValidationSchema = Yup.object({
   landline_number: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
-  kin_name: Yup.string().required("Next of Kin required"),
-  kin_contact: Yup.string().when( "kin_name", (kin_name) => {
-    if(kin_name?.length > 0) {
-      return Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required")
-    } else {
-      return Yup.string().notRequired()
-    }
-  }),
+  kin_name: Yup.string().required("Name required"),
+  kin_contact: Yup.string().required("Contact required"),
   spouse_name: Yup.string(),
   spouse_contact: Yup.string().when("spouse_name", (val, schema) => {
     if(val?.length > 0) {
@@ -121,8 +115,10 @@ export const loan1ValidationSchema = Yup.object({
   county: Yup.string().required('County required'),
   sub_county: Yup.string().required('Sub County required'),
   parish: Yup.string().required('Parish required'),
-  sub_parish: Yup.string().required('Sub Parish required!'),
-  years_spent: Yup.string().matches(numberRegExp, "Should be a number").required("No. of dependents is required"),
+  sub_parish: Yup.string().required('Sub Parish required'),
+  years_spent: Yup.string().matches(numberRegExp, "Should be a number").required("Years spent required"),
+  ownership: Yup.string().required('Ownership required'),
+  marital_status: Yup.string().required('Marital status required')
  
 })
 

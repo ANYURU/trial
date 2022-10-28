@@ -27,15 +27,15 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
 
                                     <div className='flex flex-col w-56 '>
                                         <label className=' text-sm'>Marital Status</label>
-                                        <select name="marital_status" id="" defaultValue={ initialValues.marital_status } onChange={() => handleChange("marital_status")} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                        <select name="marital_status" id="" defaultValue={ initialValues.marital_status } onChange={() => handleChange("marital_status")} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" >
                                             <option value="">--Marital Status--</option>
                                             <option value="single">Single</option>
                                             <option value="married">Married</option>
                                             <option value="widowed">Widowed</option>
                                             <option value="divorced">Divorced</option>
                                         </select>
+                                        <ErrorMessage name="marital_status">{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
                                     </div>
-
                                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="no_of_dependents"  label="Number of dependents" placeholder="Enter number" defaultValue={initialValues.no_of_dependents}/>
 
                                 </div>
@@ -63,7 +63,7 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                             setCounties(counties)
                                             values.district  = event.target.value
             
-                                        }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                        }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" >
                                             <option value="">--Select District--</option>
                                             {
                                                 districts.map((district, index) => <option key={index} value={district.name.toLowerCase()} selected={event => console.log("selected event.target.value") }>{district.name}</option>)
@@ -81,17 +81,16 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                                 
                                                 const [ selectedCounty ] = counties.filter(county => county?.name.toLowerCase() === event.target.value)
                                                 selectedCounty?.sub_counties[0]?.name ? setSubCounties(selectedCounty.sub_counties) : setSubCounties([])
-                                                handleChange("county")
                                                 values.county = event.target.value
-                                                
                                             }
                                             
-                                        }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                        }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" >
                                             <option value="">--Select County--</option>
                                             {
                                                 counties && counties.map((county, index) => <option key={index} value={county.name.toLowerCase()}>{county.name}</option>)
                                             }
                                         </select>
+                                        <ErrorMessage name="county">{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
                                     </div>
                                     <div className='flex flex-col w-56 '>
                                         <label className=' text-sm'>Sub County</label>
@@ -105,12 +104,13 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                                 values.sub_county = event.target.value
                                             }
 
-                                        }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                        }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" >
                                             <option value="">-- Select Sub County --</option>
                                             {
                                                 subCounties && subCounties.map((subCounty, index) => <option key={index} value={subCounty.name.toLowerCase()}>{subCounty.name}</option>)
                                             }
                                         </select>
+                                        <ErrorMessage name="sub_county">{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
                                     </div>
                                     <div className='flex flex-col w-56 '>
                                         <label className=' text-sm'>Parish</label>
@@ -123,12 +123,13 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                                     selectedParish?.sub_parishes[0]?.name ? setSubParishes(selectedParish.sub_parishes) : setSubParishes([])
                                                     values.parish = event.target.value
                                                 }
-                                            }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                            }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" >
                                             <option value="">-- Select Parish--</option>
                                             {
                                                 parishes?.length > 0 && parishes.map((parish, index) => <option key={index} value={parish.name.toLowerCase()}>{parish.name}</option>)
                                             }
                                         </select>
+                                        <ErrorMessage name="parish">{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
                                     </div>
                                     <div className='flex flex-col w-56 '>
                                         <label className=' text-sm'>Sub-parish/Village</label>
@@ -136,13 +137,14 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                            values.sub_parish = event.target.value
                                         }} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" 
                                         defaultValue={initialValues.sub_parish}
-                                        required
+                                        
                                         >
                                             <option value="bingo">-- Select Sub-parish --</option>
                                             {
                                                 subParishes?.length > 0 && subParishes.map((subParish, index) => <option key={index} value={subParish.name.toLowerCase()}>{subParish.name}</option>)
                                             }
                                         </select>
+                                        <ErrorMessage name="sub_parish">{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
                                     </div>
                                     <div className='flex flex-col w-56 '>
                                         <label className='text-sm'>Ownership</label>
@@ -156,6 +158,7 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
                                                 <label htmlFor="rented" className='text-sm'>Rented</label>
                                             </div>
                                         </div>
+                                        <ErrorMessage name="ownership">{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
                                     </div>
 
                                     <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="years_spent"  label="Years Spent" placeholder="Enter years" defaultValue={initialValues.years_spent} />

@@ -67,7 +67,7 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
                                             />
-                                            <ErrorMessage name={`initialValues.bank_loans[${index}].date_granted`}>{msg => <div className="error text-red-600 text-xs">
+                                            <ErrorMessage name={`bank_loans[${index}].date_granted`}>{msg => <div className="error text-red-600 text-xs">
                                                 {msg}
                                             </div>}</ErrorMessage>
                                         </div>
