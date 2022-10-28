@@ -162,8 +162,8 @@ export default function Loan() {
                             loan?.application_meta ?
                             loan?.application_meta?.total
                             :
-                            loan?.loan.outstanding_balance +
-                            loan?.loan.interest_paid/100 * loan?.loan.outstanding_balance
+                            loan?.loan?.outstanding_balance +
+                            loan?.loan?.interest_paid/100 * loan?.loan.outstanding_balance
                             )}
                         </td>
                         <td className="px-6 py-3">
@@ -192,13 +192,13 @@ export default function Loan() {
                               ? "bg-green-400"
                               : loan?.application_meta?.review_status === "rejected" || loan?.loan?.loan_status === "defaulted"
                               ? "bg-red-400"
-                              : loan?.loan.loan_status === "cleared"
+                              : loan?.loan?.loan_status === "cleared"
                               ? "bg-green-400"
-                              : loan?.loan.loan_status === "on going"
+                              : loan?.loan?.loan_status === "on going"
                               && "bg-blue-400"
                             }`}
                             >
-                            {loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Not started" : loan.loan.loan_status) || loan?.application_meta?.review_status }
+                            {loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Not started" : loan?.loan?.loan_status) || loan?.application_meta?.review_status }
                           </span>
                         </td>
                       </tr>
