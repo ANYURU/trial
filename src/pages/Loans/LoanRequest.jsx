@@ -41,7 +41,7 @@ function LoanRequest() {
     spouse_name: "",
     // spouse_profession: "",
     spouse_contact: "",
-    employment: "",
+    employment: "employed",
     employer: "",
     employer_postal_address: "",
     employer_no: "",
