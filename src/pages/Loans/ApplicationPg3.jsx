@@ -142,6 +142,10 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
                 Share
                 </label>
                 <label className='block'>
+                <Field type="checkbox" name="securities" value="savings" />
+                Savings
+                </label>
+                <label className='block'>
                 <Field type="checkbox" name="securities" value="guarantors" />
                 Guarantors
                 </label>

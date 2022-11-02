@@ -10,8 +10,8 @@ import { uploadFile } from "../../helpers/uploadFile"
 import { OTPBox } from "../../components"
 import { generate_amortization_schedule } from "../../helpers/generateAmortizationSchedule"
 import { remove_separator } from "../../helpers/thousand_separator"
-import PdfDoc from "./PdfDoc"
-import { PDFViewer } from '@react-pdf/renderer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import LoanPDF from "./LoanPDF"
 
 
 function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
@@ -261,6 +261,25 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
   const [ otp, setOtp ] = useState(["", "", "", "", "", ""])
   return (
     <div className='flex flex-col justify-center items-center h-full w-full outline'>
+        <div className='flex justify-center items-center border border-1 mb-2 rounded-md'>
+          <PDFDownloadLink
+            document={<LoanPDF values={initialValues}/>}
+            fileName="Loan Application.pdf"
+          >
+            {
+              ({loading}) => {
+                return loading ?
+                <button className="bg-blue-500 py-2 px-3 text-white">
+                  loading
+                </button>
+                : 
+                <button className="bg-green-500 py-2 px-3 text-white">
+                  Download Form
+                </button>
+              }
+            }
+          </PDFDownloadLink>
+        </div>
         <h1 className='font-bold'>Verify your identity to confirm your submission</h1>
         <p className='text-sm'>An OTP has been sent to your phone number. Please enter a valid OTP to confirm submission.</p>
         <div className="flex flex-col justify-center items-center mt-5 p-5">

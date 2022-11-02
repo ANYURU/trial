@@ -27,7 +27,7 @@ export default function ApplicationPg1({ profile, initialValues, setInitialValue
 
                                     <div className='flex flex-col w-56 '>
                                         <label className=' text-sm'>Marital Status</label>
-                                        <select name="marital_status" id="" defaultValue={ initialValues.marital_status } onChange={() => handleChange("marital_status")} className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" >
+                                        <select name="marital_status" id="" defaultValue={ initialValues.marital_status } onChange={(event) => values.marital_status = event.target.value } className="ring-1 ring-black rounded px-2 py-2 bg-white dark:bg-dark-bg-600 focus:outline-none focus:ring-2 focus:ring-primary" >
                                             <option value="">--Marital Status--</option>
                                             <option value="single">Single</option>
                                             <option value="married">Married</option>

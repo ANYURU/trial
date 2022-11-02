@@ -51,6 +51,7 @@ export default function ApplicationPg4({ initialValues, setInitialValues, setPag
                                                     className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
                                                     onChange={(event) => {
                                                         values.guarantors[index]["name"] = event.target.value
+                    
                                                         
                                                     }}
                                                     onBlur={handleBlur(`guarantors[${index}]["name"]`)}
