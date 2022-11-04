@@ -47,11 +47,11 @@ export default function Sidebar({ user, showSidebar, setShowSidebar, disabled })
                 setSelectedIndex(index);
               }}
             >
-              <div className="flex items-center dark:text-secondary-text ">
+              <div className="flex items-center dark:text-secondary-text">
                 <IconContext.Provider
                   value={{ className: `font-bold text-lg` }}
                 >
-                  <i className="mx-2">{item.icon}</i>
+                  <i className={`${showSidebar ? "mx-2" : "mx-4"}`}>{item.icon}</i>
                 </IconContext.Provider>
                 {showSidebar && (
                   <span className="font-semibold">{item.label}</span>
@@ -128,7 +128,7 @@ export default function Sidebar({ user, showSidebar, setShowSidebar, disabled })
         >
           <HiOutlineChevronDoubleLeft />
         </i>
-        {showSidebar && <p>Collapse sidebar</p>}
+        {showSidebar && <p>Collapse</p>}
       </div>
     </div>
   );
