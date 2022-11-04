@@ -148,7 +148,7 @@ function Chat({user, profile, members,  conversations}) {
         //     styles
         // }
     > 
-        <div className="bg-white  rounded-full border h-14 w-14 p-1 capitalize flex justify-center items-center text-primary border-primary shadow-2xl"
+        <div className="bg-white  rounded-full border h-14 w-14 p-1 capitalize flex justify-center items-center text-primary border-primary shadow-2xl cursor-pointer"
             onClick={() => {
                 setCollapse(!collapse)
             }}
@@ -269,7 +269,7 @@ function Chat({user, profile, members,  conversations}) {
                                     value={message}
                                 />
                                 <button 
-                                    className={`border rounded-full w-9 h-9 m-2 flex justify-center items-center ml-3 ${message?.length > 0 ? 'bg-primary text-white' : 'text-gray-400 '}`}
+                                    className={`border rounded-full w-9 h-9 m-2 flex justify-center items-center ml-3 ${message?.length > 0 ? 'bg-primary text-white' : 'text-gray-400 '} cursor-pointer`}
                                     type="submit"
                                     disabled={message.length < 1}
                                     onClick={async (event) => {
@@ -295,7 +295,7 @@ function Chat({user, profile, members,  conversations}) {
                                 members && members?.length > 0 && members.map((member, index) => 
                                     <div 
                                         key={index} 
-                                        className={`p-3 hover:border hover:border-t-1 hover:border-b-1 hover:border-r-0 hover:border-l-0 hover:bg-stone-50 flex gap-3 items-center ${member?.fullname.toLowerCase().indexOf(filter.toLowerCase()) > -1 ? "" : "hidden"}`}
+                                        className={`p-3 hover:border hover:border-t-1 hover:border-b-1 hover:border-r-0 hover:border-l-0 hover:bg-stone-50 flex gap-3 items-center ${member?.fullname.toLowerCase().indexOf(filter.toLowerCase()) > -1 ? "" : "hidden"} cursor-pointer`}
                                         onClick={async () => {
                                             const selectedConversation = await conversations && conversations.filter(message => (message.receiver_id === member.receiver_id && message.sender_id === my_id) || (message.sender_id === member.receiver_id && message.receiver_id === my_id))
                                             setSelectedConversation(selectedConversation)
