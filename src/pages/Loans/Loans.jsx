@@ -8,6 +8,7 @@ import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { Spinner, NothingShown } from "../../components";
 import { useNavigate } from 'react-router-dom'
+import { MdDownload } from "react-icons/md";
 
 export default function Loan() {
   const [user, { id }] = useOutletContext();
@@ -91,6 +92,50 @@ export default function Loan() {
 
   }
 
+  const generate_loan_report = async() => {
+    // processLoans
+    const formattedLoans = loans.map(loan => {
+      return {
+        member_name: loan?.loan?.loan_meta?.applicants_name ? loan.loan.loan_meta.applicants_name : loan?.application_meta?.applicants_name,
+        loan_status: loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Approved" : loan.loan.loan_status) || loan?.application_meta?.review_status,
+        loan_id: loan?.loan?.loan_id ? loan?.loan?.loan_id : loan?.app_id,
+        principal: loan?.application_meta ? loan?.application_meta?.amount : loan?.loan?.amount_issued,
+        amount_paid: loan?.application_meta ? 0 : loan?.loan?.amount_paid,
+        interest_rate: loan?.loan ? loan?.loan?.interest_rate :  loan?.application_meta?.interest_rate,
+        approved_at: loan?.loan ? moment(loan?.loan.loan_meta?.approved_at).format("DD-MM-YYYY hh:mm a") : "",
+        start_date: loan?.loan ? moment(loan?.loan?.start_date).format("DD-MM-YYYY hh:mm a") : "",
+        end_date: loan?.loan ? moment(loan?.loan?.end_date).format("DD-MM-YYYY hh:mm a") : "",
+        approved_by: loan?.loan ? loan?.loan?.loan_meta?.approved_by : ""
+      }
+    })
+
+
+    // Process the csv
+    const fields = Object.keys(formattedLoans[0])
+    const replacer = (key, value) =>  value === null ? '' : value  
+    let csv = formattedLoans.map(function(row){
+      return fields.map(function(fieldName) {
+        return JSON.stringify(row[fieldName], replacer)
+      }).join(',')
+    })
+    csv.unshift(fields.join(',')) // add header column
+    csv = csv.join('\r\n');
+    
+
+    // Downloading rg csv
+    const filename = 'Bweyogerere Tuberebumu loan report' + new Date().toISOString().slice(0, 10) + '.csv';
+  
+    const link = document.createElement('a');
+    link.style.display = 'none';
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+  }
+
   return (
     <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
       <div className="flex flex-col justify-between pb-3 md:h-[110px]">
@@ -122,12 +167,26 @@ export default function Loan() {
           </div>
         </div>
       </div>
+      <div className="flex justify-end mb-3">
+        <button
+          className="bg-green-500 align-text-middle px-3 py-2 text-white font-bold rounded flex items-center"
+          onClick={() => {
+            generate_loan_report()
+      
+          }}
+
+        >
+          Export
+          <MdDownload className="ml-1"/>
+        </button>
+
+      </div>
 
       <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-120px)] dark:bg-dark-bg-700">
         {shownloans && shownloans.length > 0 ? (
           <>
             <div className="w-full overflow-x-auto h-full  relative overflow-y-auto">
-              <table className="w-full h-6 text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
+              <table className="w-full h-6 text-sm text-left text-gray-500 dark:text-gray-400 mb-5" id="loans">
                 <thead className="text-xs text-white uppercase  bg-gray-700 dark:bg-gray-700">
                   <tr>
                     <th></th>
