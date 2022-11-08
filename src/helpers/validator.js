@@ -133,7 +133,6 @@ export const loan2ValidationSchema = Yup.object({
   amount: Yup.string().required("Amount is required"),
   amount_in_words: Yup.string().required("required"),
   months: Yup.string().required("required"),
-  business_type: Yup.string().required('Business type required'),
   loan_type: Yup.string(),
   existing_loan: Yup.string().when("loan_type", {
     is: 'extended',
@@ -144,15 +143,7 @@ export const loan2ValidationSchema = Yup.object({
 export const loan3ValidationSchema = Yup.object({
   landline_number: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required"),
   employment_type: Yup.string(),
-  employer_no: Yup.string().when('employment_type', {
-    is: 'employed',
-    then: Yup.string().matches(phoneRegExp, 'Invalid phone number').min(10, 'Phone number must have 10 digits').required("Phone Number is required")
-  }),
   no_of_dependents: Yup.string().required("No. of dependents is required"),
-  employer: Yup.string().when('employment_type', {
-    is: 'employed',
-    then: Yup.string().required("Employer's name is required.")
-  }),
   asset1: Yup.string().required("asset is required"),
   asset2: Yup.string().required("asset 2 is required"),
   business_type: Yup.string().required("required"),
@@ -161,7 +152,11 @@ export const loan3ValidationSchema = Yup.object({
   loan_purpose: Yup.string().required("required"),
   amount: Yup.string().required("Amount is required!"),
   amount_in_words: Yup.string().required("required!"),
-  months: Yup.string().required("required!")
+  months: Yup.string().required("required!"),
+  existing_loan: Yup.string().when("loan_type", {
+    is: 'extended',
+    then: Yup.string().required("Arreared loan is required.")
+  })
 })
 
 export const loan4ValidationSchema =  Yup.object({

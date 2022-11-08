@@ -55,6 +55,7 @@ function LoanRequest() {
     email_address: profile?.email_address,
     dob: profile?.dob,
     gender: profile?.gender,
+    avatar: profile.avatar,
     postal_address: "",
     landline_number: "",
     marital_status: "",

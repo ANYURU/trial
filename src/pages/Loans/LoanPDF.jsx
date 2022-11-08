@@ -375,9 +375,10 @@ function LoanPDF({values, accountsInformation}) {
           </View>
 
           {/* page number */}
-          <Text style={[{textAlign: 'center', width: "100%", fontSize: 8, position:'absolute', bottom: 15}, styles.debug]} render={({pageNumber, totalPages}) => (
-            `${pageNumber}/${totalPages}`
-          )}/> 
+          <Text style={[{textAlign: 'center', width: "100%", fontSize: 8, position:'absolute', bottom: 15}]} render={({pageNumber, totalPages}) => (
+            `Page ${pageNumber} of ${totalPages}`
+          )}/>
+          <Text style={[{textAlign: 'left', width: "100%", fontSize: 8, position:'absolute', bottom:15, paddingLeft:15}]}>Revised: 19.06.2016</Text> 
           
         </View>
       </Page> 
@@ -568,7 +569,14 @@ function LoanPDF({values, accountsInformation}) {
                 <Text style={[{fontSize:8, marginVertical: 2}]}>Note: (Financial statements of the above individuals based on their account numbers must be attached to this form)</Text>
               </View>
             </View>
-            {/* End */}        
+            {/* End */} 
+
+            {/* page number */}
+            <Text style={[{textAlign: 'center', width: "100%", fontSize: 8, position:'absolute', bottom: 15}]} render={({pageNumber, totalPages}) => (
+              `Page ${pageNumber} of ${totalPages}`
+            )}/>
+            <Text style={[{textAlign: 'left', width: "100%", fontSize: 8, position:'absolute', bottom:15, paddingLeft:15}]}>Revised: 19.06.2016</Text> 
+                  
           </View>
         </View>
       </Page>  
@@ -718,6 +726,13 @@ function LoanPDF({values, accountsInformation}) {
             </View>
             {/* End */}        
           </View>
+
+          {/* page number */}
+          <Text style={[{textAlign: 'center', width: "100%", fontSize: 8, position:'absolute', bottom: 15}]} render={({pageNumber, totalPages}) => (
+            `Page ${pageNumber} of ${totalPages}`
+          )}/>
+          <Text style={[{textAlign: 'left', width: "100%", fontSize: 8, position:'absolute', bottom:15, paddingLeft:15}]}>Revised: 19.06.2016</Text> 
+          
         </View>
       </Page>
       <Page style={[{ position: 'relative' } ]}>
@@ -765,6 +780,13 @@ function LoanPDF({values, accountsInformation}) {
             </View>
             {/* End */}        
           </View>
+
+          {/* page number */}
+          <Text style={[{textAlign: 'center', width: "100%", fontSize: 8, position:'absolute', bottom: 15}]} render={({pageNumber, totalPages}) => (
+            `Page ${pageNumber} of ${totalPages}`
+          )}/>
+          <Text style={[{textAlign: 'left', width: "100%", fontSize: 8, position:'absolute', bottom:15, paddingLeft:15}]}>Revised: 19.06.2016</Text> 
+          
         </View>
       </Page>
       <Page style={[{ position: 'relative' } ]}>
@@ -1004,6 +1026,12 @@ function LoanPDF({values, accountsInformation}) {
             </View>
             {/* End */}        
           </View>
+
+          {/* page number */}
+          <Text style={[{textAlign: 'center', width: "100%", fontSize: 8, position:'absolute', bottom: 15}]} render={({pageNumber, totalPages}) => (
+            `Page ${pageNumber} of ${totalPages}`
+          )}/>
+          <Text style={[{textAlign: 'left', width: "100%", fontSize: 8, position:'absolute', bottom:15, paddingLeft:15}]}>Revised: 19.06.2016</Text> 
         </View>
       </Page>
       {/* Transformed */}
@@ -1118,6 +1146,11 @@ function LoanPDF({values, accountsInformation}) {
               {/* End */}        
             </View>
           </View>
+          {/* page number */}
+          <Text style={[{textAlign: 'center', width: "100%", fontSize: 8, position:'absolute', bottom: 15}]} render={({pageNumber, totalPages}) => (
+            `Page ${pageNumber} of ${totalPages}`
+          )}/>
+          <Text style={[{textAlign: 'left', width: "100%", fontSize: 8, position:'absolute', bottom:15, paddingLeft:15}]}>Revised: 19.06.2016</Text> 
         </View>
       </Page>  
     </Document>

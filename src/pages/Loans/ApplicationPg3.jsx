@@ -2,8 +2,10 @@ import { Formik, Field, Form, FieldArray, ErrorMessage }  from 'formik'
 import { InputField } from '../../components/Form/CustomInputField'
 import { loan4ValidationSchema } from '../../helpers/validator'
 import { remove_separator, add_separator } from '../../helpers/thousand_separator'
+import React from 'react'
 
 export default function ApplicationPg3({ profile, initialValues, setInitialValues, setPageNumber }) {
+    
 
     return (
     <Formik
@@ -26,7 +28,7 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
 
                     return <div>
                         {values.bank_loans.map(({amount_advanced}, index) => (
-                            <>
+                            <React.Fragment key={index}>
                                 <div className='m-2 flex gap-2' key={index}>
                                     <div className='flex justify-center items-center'>
                                         <h1 className='font-bold'>0{index + 1}</h1>
@@ -102,7 +104,7 @@ export default function ApplicationPg3({ profile, initialValues, setInitialValue
                                     </div>
                                 </div>
                                 <hr />
-                            </>
+                            </React.Fragment>
                             ))
                         }
                     </div>

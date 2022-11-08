@@ -4,7 +4,7 @@ import { InputField } from '../../components/Form/CustomInputField'
 import { districts } from '../../helpers/districts'
 
 export default function ApplicationPg1({ profile, initialValues, setInitialValues, setPageNumber, counties, setCounties, subCounties, setSubCounties, parishes, setParishes, subParishes, setSubParishes }) {
-    
+    console.log(profile)
     return (
         <div>
             <Formik
