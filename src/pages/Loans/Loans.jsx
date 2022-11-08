@@ -175,11 +175,12 @@ export default function Loan() {
                           )}
                         </td>
                         <td className="px-6 py-3">
+                          
                           {currencyFormatter(
                             loan?.application_meta ?
                             loan?.application_meta?.total
                             :
-                            loan?.loan.outstanding_balance
+                            loan?.loan.amount_issued
                           )}
                         </td>
                         <td className="px-6 py-3">{currencyFormatter(loan?.application_meta ? loan.application_meta.interest_rate : loan?.loan?.interest_rate)}</td>
@@ -198,7 +199,7 @@ export default function Loan() {
                               && "bg-blue-400"
                             }`}
                             >
-                            {loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Not started" : loan?.loan?.loan_status) || loan?.application_meta?.review_status }
+                            {loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Approved" : loan?.loan?.loan_status) || loan?.application_meta?.review_status }
                           </span>
                         </td>
                       </tr>

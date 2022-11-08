@@ -47,7 +47,7 @@ export default function LoanModal({ passed, setLoanModal, loan }) {
                               && "bg-blue-400"
                             }`}
               >
-                {loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Not started" : loan.loan.loan_status) || loan?.application_meta?.review_status }
+                {loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Approved" : loan.loan.loan_status) || loan?.application_meta?.review_status }
               </span>
               <span className='flex flex-1 justify-center'>
                 {
