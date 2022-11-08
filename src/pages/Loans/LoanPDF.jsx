@@ -1,4 +1,3 @@
-import React from 'react'
 import {
     Document,
     Page,
@@ -11,10 +10,8 @@ import {
 import logo from '../../assets/images/tube-no-bg.png'
 import checked from '../../assets/images/checked.png'
 import unchecked from '../../assets/images/notchecked.png'
-import { MdOutlineCheckBox, MdOutlineCheckBoxOutlineBlank } from 'react-icons/md';
-
-
-
+import moment  from 'moment'
+import { currencyFormatter } from '../../helpers/currencyFormatter'
 
 const styles = StyleSheet.create({
     logo:{
@@ -58,7 +55,9 @@ const styles = StyleSheet.create({
 
 });
 
-function LoanPDF({values}) {
+function LoanPDF({values, accountsInformation}) {
+
+  console.log("Accounts information: ",accountsInformation)
   const {
     // Personal Information
     applicant_name,
@@ -83,9 +82,46 @@ function LoanPDF({values}) {
     guarantors,
     amount,
     months,
-    amortization_schedule
+    amortization_schedule,
+    member_id,
+    phone_number,
+    email_address,
+    dob,
+    gender,
+    position_in_sacco,
+    years_spent,
+
+    // Employment details
+    employer,
+    employer_postal_address,
+    employer_no,
+    employer_designation,
+    retirement_date,
+    type_of_employment,
+    asset1,
+    asset2,
+    asset3,
+    business_type,
+    years_of_operation,
+    business_income,
+
+    // Loan particulars
+    loan_type,
+    existing_loan,
+    loan_purpose,
+    amount_in_words,
+    repayment_method,
+
+    // Loans in other banks
+    bank_loans,
+
+    // Securities offered
+    securities_offered,
 
   } = values
+
+
+  
 
 
 
@@ -101,6 +137,7 @@ function LoanPDF({values}) {
             <Text style={[{fontSize: 8, opacity: 0.3}]}>BWEYOGERERE TUBEREBUMU CO-OPERATIVE</Text>
             <Text style={[{fontSize: 8, opacity:0.3}]}>SAVING AND CREDIT SOCIETY LTD</Text>
           </View>
+
           <View style={[{position:'absolute', zIndex: 2, height: "100%", width: "100%"}]}>
             {/* This is where the content of the application form goes. */}
             {/* Begin */}
@@ -134,7 +171,7 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row", alignItems:"flex-start"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Applicant's Name: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>David Derrick Anyuru</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{applicant_name || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Nationality: </Text>
@@ -142,11 +179,11 @@ function LoanPDF({values}) {
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Member ID: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>TUBE 00523001</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{member_id || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Postal Address: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>27764 K'LA</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{postal_address || "      "}</Text>
                   </View>
                 </View>
               </View>
@@ -156,19 +193,19 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Landline No: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>23378383937</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{landline_number || "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Phone Number: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>0757501751</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{phone_number || "         "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Email: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>davidderrickanyuru@gmail.com</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{email_address || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Date of Birth: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>30/09/1997</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{moment(dob).format('DD/MM/YYYY') || "        "}</Text>
                   </View>
                 </View>
               </View>
@@ -176,19 +213,19 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Gender: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Male</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black", textTransform:"capitalize"}]}>{gender || "      "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Position in Sacco: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Treasurer</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black", textTransform:"capitalize"}]}>{position_in_sacco || "      "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Postal Address: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>27764 K'LA</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{postal_address ||  "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Marital status: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Single</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black", textTransform:"capitalize"}]}>{marital_status || "       "}</Text>
                   </View>
                 </View>
               </View>
@@ -198,11 +235,11 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Name: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Nakitto Rebecca Millicent</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{kin_name || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Contact: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>0772519722</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{kin_contact || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                   </View>  
@@ -215,11 +252,11 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Name: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{"        "}</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{spouse_name || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Contact: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{"        "}</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{spouse_contact || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                   </View>  
@@ -233,19 +270,19 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>District: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Kawempe</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black", textTransform:"capitalize"}]}>{district || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>County: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Central Division</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black", textTransform:"capitalize"}]}>{county || "         "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Sub County: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Bwaise 1</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black", textTransform:"capitalize"}]}>{sub_county || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Parish: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Kazo</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black", textTransform:"capitalize"}]}>{parish || "        "}</Text>
                   </View>
                 </View>
               </View>
@@ -253,11 +290,11 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Sub Parish: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Kawempe</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black", textTransform:"capitalize"}]}>{sub_parish || "          "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Years spent: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>5 years</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{`${years_spent} years` || "          "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
 
@@ -281,19 +318,19 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Employer's Name: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Ablestate</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{employer || "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Postal Address: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{"       "}</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{employer_postal_address || "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Telephone Number: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>5 years</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{employer_no || "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Designation: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Manager</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{employer_designation || "       "}</Text>
                   </View>
                 </View>
               </View>
@@ -301,15 +338,15 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Retirement Date: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Ablestate</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{retirement_date || "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Employment Terms: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Casual</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{type_of_employment || "        "}</Text>
                   </View>
                   <View style={[{flex: 2, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Assets owned: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Land, Motor Vechicle, Twinkle Toes Limited.</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{ asset3 ? `${asset1},  ${asset2} and ${asset3}` : `${asset1} and ${asset2}` || "        "}</Text>
                   </View>
                 </View>
               </View>
@@ -317,19 +354,18 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Type of Business: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Parnership</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{business_type || "      "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Years of operation: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>5 years</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{`${years_of_operation} years` || "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Business Income: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>UGX 5,000,000</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{business_income ? `UGX ${currencyFormatter(business_income)}` : "         "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
-                    {/* <Text style={[{fontSize:8, paddingRight: 2}]}>Designation: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Manager</Text> */}
+
                   </View>
                 </View>
               </View>
@@ -337,6 +373,12 @@ function LoanPDF({values}) {
             </View>
             {/* End */}        
           </View>
+
+          {/* page number */}
+          <Text style={[{textAlign: 'center', width: "100%", fontSize: 8, position:'absolute', bottom: 15}, styles.debug]} render={({pageNumber, totalPages}) => (
+            `${pageNumber}/${totalPages}`
+          )}/> 
+          
         </View>
       </Page> 
       <Page style={[{ position: 'relative' } ]}>
@@ -356,42 +398,39 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Loan Type: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Extended</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black", textTransform:"capitalize"}]}>{loan_type || "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Extended Loan Id: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>TUBELN0390393034</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{existing_loan || "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Purpose of Loan: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>To come out of the recession</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{loan_purpose || "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Amount applied for in figures: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>1,000,000</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{currencyFormatter(amount) ||  "       "}</Text>
                   </View>
-                  
-                  
                 </View>
               </View>
               <View style={[{height:40, marginTop:5, marginBottom:5}]}>
-                <View style={[{flex: 1, flexDirection:"row"}]}>
+                <View style={[{flex: 2, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Amount applied for in words: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>One million Uganda shillings only</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{ amount_in_words || "       "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Repayment period: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>5 months</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{`${months} months`}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Repayment method: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Cash</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{ repayment_method || "       "}</Text>
                   </View>
-                  <View style={[{flex: 1, padding:2}]}>
-                    {/* <Text style={[{fontSize:8, paddingRight: 2}]}>Amount applied for in figures: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>1,000,000</Text> */}
-                  </View>
+                  {/* <View style={[{flex: 1, padding:2}]}>
+                    
+                  </View> */}
                 </View>
               </View>
               <Text style={[{fontSize: 9}]}>LOANS IN OTHER BANKS</Text>
@@ -399,23 +438,23 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Name: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Centenary bank</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[0]?.name ? bank_loans[0]["name"]  : "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Amount advannced: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>UGX 1,000,000</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[0]?.amount_advanced ? `UGX ${currencyFormatter(bank_loans[0].amount_advanced)}` : "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Date granted: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>12/3/2022</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[0]?.date_granted ? moment(bank_loans[0].date_granted).format("DD/MM/YYYY") : "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Repayment period: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>Electronic Fund Transfer</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[0]?.repayment_period ? `${bank_loans[0]["repayment_period"]} months` :  "        "} </Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Balance: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>UGX 80,000</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[0]?.balance ? `UGX ${currencyFormatter(bank_loans[0].balance)}` :`UGX 0`}</Text>
                   </View>
                 </View>
               </View>
@@ -423,23 +462,23 @@ function LoanPDF({values}) {
                 <View style={[{flex: 1, flexDirection:"row"}]}>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Name: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{"     "}</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[1]?.name ? bank_loans[1]["name"]  : "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Amount advannced: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{"     "}</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[1]?.amount_advanced ? `UGX ${currencyFormatter(bank_loans[1].amount_advanced)}` : "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Date granted: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{"     "}</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[1]?.date_granted ? moment(bank_loans[1].date_granted).format("DD/MM/YYYY") : "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Repayment period: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{"     "}</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[1]?.repayment_period ? `${bank_loans[1]["repayment_period"]} months` :  "        "}</Text>
                   </View>
                   <View style={[{flex: 1, padding:2}]}>
                     <Text style={[{fontSize:8, paddingRight: 2}]}>Balance: </Text>
-                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{"     "}</Text>
+                    <Text style={[{fontSize:8, border: "solid", borderBottom:1, borderBottomColor:"black"}]}>{bank_loans[1]?.balance ? `UGX ${currencyFormatter(bank_loans[1].balance)}` : `UGX 0`}</Text>
                   </View>
                 </View>
               </View>
@@ -562,18 +601,18 @@ function LoanPDF({values}) {
                       <Text style={[{flex:1, fontSize:8, paddingLeft:5}]}>Desciption</Text>
                     </View>
                   </View>
-                  <View style={[{height: 12}]}>
+                  <View style={[{height: 20}]}>
                     <View style={[{flex: 1, borderBottom: "solid", borderBottomWidth: 1, borderBottomColor: "black", flexDirection:"row", borderRight:"solid", borderRightWidth: 1, borderRightColor: "black", borderLeft: "solid", borderLeftWidth:1, borderLeftColor:"black"}]}>
                       <Text style={[{flex:1, fontSize:8, borderRight: "solid", borderRightWidth: 1, borderRightColor: "black", paddingLeft: 5}]}>Shares</Text>
-                      <Text style={[{flex:1, fontSize:8, borderRight: "solid", borderRightWidth: 1, borderRightColor: "black", paddingLeft: 5}]}>{"       "}</Text>
-                      <Text style={[{flex:1, fontSize:8, paddingLeft:5}]}>{"          "}</Text>
+                      <Text style={[{flex:1, fontSize:8, borderRight: "solid", borderRightWidth: 1, borderRightColor: "black", paddingLeft: 5}]}>{accountsInformation?.shares?.balance > 0 ? `UGX ${ accountsInformation.shares.balance / Number(securities_offered[0].shares) * 100}` :  "UGX 0"}</Text>
+                      <Text style={[{flex:1, fontSize:8, paddingLeft:5}]}>{ securities_offered[0]?.shares ? `${securities_offered[0].shares}% of the current balance on member's shares account.` : "         " }</Text>
                     </View>
                   </View>
-                  <View style={[{height: 12}]}>
+                  <View style={[{height: 20}]}>
                     <View style={[{flex: 1, borderBottom: "solid", borderBottomWidth: 1, borderBottomColor: "black", flexDirection:"row", borderRight:"solid", borderRightWidth: 1, borderRightColor: "black", borderLeft: "solid", borderLeftWidth:1, borderLeftColor:"black"}]}>
                       <Text style={[{flex:1, fontSize:8, borderRight: "solid", borderRightWidth: 1, borderRightColor: "black", paddingLeft: 5}]}>Savings</Text>
-                      <Text style={[{flex:1, fontSize:8, borderRight: "solid", borderRightWidth: 1, borderRightColor: "black", paddingLeft: 5}]}>{"       "}</Text>
-                      <Text style={[{flex:1, fontSize:8, paddingLeft:5}]}>{"          "}</Text>
+                      <Text style={[{flex:1, fontSize:8, borderRight: "solid", borderRightWidth: 1, borderRightColor: "black", paddingLeft: 5}]}>{accountsInformation?.savings?.balance > 0 ? `UGX ${ accountsInformation.savings.balance / Number(securities_offered[0].savings) * 100}` : "UGX 0"}</Text>
+                      <Text style={[{flex:1, fontSize:8, paddingLeft:5}]}>{ securities_offered[0]?.savings ? `${securities_offered[0].savings}% of the current balance on member's savings balance.` : "          "}</Text>
                     </View>
                   </View>
                   <View style={[{height: 20}]}>
@@ -715,11 +754,11 @@ function LoanPDF({values}) {
                 <View style={[{flex:0.025, flexDirection: "row", justifyContent:"space-between"}]}>
                   <View style={{flex: 2, flexDirection:"row", alignItems:"flex-end"}}>
                     <Text style={{fontSize: 8}}>Name: </Text>
-                    <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1}}>{"Enoch William Egwang"}</Text>
+                    <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1}}>{applicant_name || "        "}</Text>
                   </View>
                   <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                     <Text style={{fontSize: 8}}>Date: </Text>
-                    <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1}}>{"21/10/2022"}</Text>
+                    <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1}}>{moment().format("DD/MM/YYYY")}</Text>
                   </View>
                 </View>
               </View>
@@ -750,71 +789,71 @@ function LoanPDF({values}) {
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{width: 10, fontSize: 8}}>1. </Text>
                       <Text style={{fontSize: 8}}>Total Shares (UG Shs)</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"UGX 1,000,000"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{accountsInformation?.shares?.balance ? `UGX ${currencyFormatter(accountsInformation.shares.balance)}` : "UGX 0"}</Text>
                     </View>
                   </View>
                   <View style={[{flex:0.1, flexDirection: "row", justifyContent:"space-between"}]}>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{width: 10, fontSize: 8}}>2. </Text>
                       <Text style={{fontSize: 8}}>Total Savings (UG Shs)</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"UGX 1,000,000"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{accountsInformation?.savings?.balance ? `UGX ${currencyFormatter(accountsInformation.savings.balance)}` : "UGX 0"}</Text>
                     </View>
                   </View>
                   <View style={[{flex:0.1, flexDirection: "row", justifyContent:"space-between"}]}>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{width: 10, fontSize: 8}}>3. </Text>
                       <Text style={{fontSize: 8}}>Maximum Credit (1-2) Ug Shs</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"UGX 1,500,000"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{`UGX ${currencyFormatter(accountsInformation?.shares?.balance * 2)}`}</Text>
                     </View>
                   </View>
                   <View style={[{flex:0.1, flexDirection: "row", justifyContent:"space-between"}]}>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{width: 10, fontSize: 8}}>4. </Text>
                       <Text style={{fontSize: 8}}>Amount currently requested (UG Shs)</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"UGX 600,000"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{`UGX ${currencyFormatter(amount)}`}</Text>
                     </View>
                   </View>
                   <View style={[{flex:0.1, flexDirection: "row", justifyContent:"space-between"}]}>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{width: 10, fontSize: 8}}>5. </Text>
                       <Text style={{fontSize: 8}}>Member's basic salary (UG Shs)</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"UGX 700,000"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{`UGX ${currencyFormatter(business_income)} annually` || "Not specified"}</Text>
                     </View>
                   </View>
                   <View style={[{flex:0.1, flexDirection: "row", justifyContent:"space-between"}]}>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{width: 10, fontSize: 8}}>6. </Text>
                       <Text style={{fontSize: 8}}>Recurrent deductions including new loan (Ug Shs)</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"UGX 100,000"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"         "}</Text>
                     </View>
                   </View>
                   <View style={[{flex:0.1, flexDirection: "row", justifyContent:"space-between"}]}>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{width: 10, fontSize: 8}}>7. </Text>
                       <Text style={{fontSize: 8}}>Two-thirds of Basic Salary (Basic Salary /3 x 2 or Net income x 0.66)</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"UGX 2,100,000"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{business_income ? `UGX ${currencyFormatter(business_income)}` : "Can't be determined"}</Text>
                     </View>
                   </View>
                   <View style={[{flex:0.1, flexDirection: "row", justifyContent:"space-between"}]}>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{width: 10, fontSize: 8}}>8. </Text>
-                      <Text style={{fontSize: 8}}>Recurrent deductions including new loan (Ug Shs)</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"UGX, 100,0000"}</Text>
+                      <Text style={{fontSize: 8}}>Amount Recommended (Ug Shs)</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"         " }</Text>
                     </View>
                   </View>
                   <View style={[{flex:0.1, flexDirection: "row", justifyContent:"space-between"}]}>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{width: 10, fontSize: 8}}>9. </Text>
                       <Text style={{fontSize: 8}}>Amount repayable within</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"UGX, 800,0000"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"         "}</Text>
                     </View>
                   </View>
       
                 </View>
                 <View style={[{height: 50, marginHorizontal: 15}]}>
-                  <Text style={[{fontSize: 8, marginBottom:10}]}>The guarantors can cover the loan amount </Text>
+                  <Text style={[{fontSize: 8, marginBottom:10}]}>The guarantors can cover the loan amount {""}</Text>
                   <Text style={[{fontSize: 8, marginBottom: 5}]}>I certify that the application is/is not within the Rules of th Sacco. If not, state Why</Text>
-                  <Text style={[{borderBottom: "dotted", borderBottomWidth: 1, borderBottomColor:"black", width:"100%", fontSize:8}]}>{"      "}</Text>
+                  <Text style={[{borderBottom: "dotted", borderBottomWidth: 1, borderBottomColor:"black", width:"100%", fontSize:8}]}>{"         "}</Text>
                 </View>
                 
                 <Text style={[{fontSize: 8, paddingVertical:2, paddingHorizontal:15}]}>(Computation)</Text>
@@ -860,7 +899,7 @@ function LoanPDF({values}) {
                       return (
                         <View>
                           I certify that the information regarding shares, outstanding loan and gurantors detail is correct as per the attached document and recommend/ approve a loan Ug Shs 
-                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{"  "}UGX 1,000,000{"  "}</Text>(in figures)
+                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{"       "}{amount > 0 ? `UGX ${currencyFormatter(amount)}` : "          "}{"       "}</Text>(in figures)
                         </View>
                         )
                     }}/>
@@ -874,25 +913,25 @@ function LoanPDF({values}) {
               <View style={[{flex: 1}]}>
                 <View style={[{flex: 0.04, flexDirection:"row", alignItems: 'flex-end', marginBottom: 5}]}>
                   <Text style={{fontSize: 8, width: 30}}>In words</Text>
-                  <Text style={[{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 2}]}>{"One million Uganda shillings only"}</Text>
+                  <Text style={[{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 2}]}>{amount_in_words}</Text>
                 </View>
                 <View style={[{flex: 0.04, flexDirection:"row", alignItems: 'flex-end', marginBottom: 10}]}>
                   <View style={[{ flex: 1, flexDirection:"row"}]}>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{fontSize: 8}}>Loan officer</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{" Biraro Derrick Peter"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"                "}</Text>
                     </View>
                     <View style={{flex: 1, flexDirection:"row", alignItems:"flex-end"}}>
                       <Text style={{fontSize: 8}}>Designation</Text>
-                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{" Chairperson Credits Commitee"}</Text>
+                      <Text style={{fontSize: 8, borderBottom: "dotted", borderBottomWidth:1, borderBottomColor: "black", flex: 1, paddingLeft: 4}}>{"                "}</Text>
                     </View>
                   </View>
                 </View>
                 <View style={[{flex: 0.25, alignContent:'space-between'}]}>
                   <Text style={[{fontSize: 9}]}>Comments</Text>
-                  <Text style={[{fontSize: 8, borderBottom:"dotted", borderBottomWidth:1, borderBottomColor:"black", marginVertical:3}]}>{"   ACB   "}</Text>
-                  <Text style={[{fontSize: 8, borderBottom:"dotted", borderBottomWidth:1, borderBottomColor:"black", marginVertical:3}]}>{"   DKD   "}</Text>
-                  <Text style={[{fontSize: 8, borderBottom:"dotted", borderBottomWidth:1, borderBottomColor:"black", marginVertical:3}]}>{"   EFE   "}</Text>
+                  <Text style={[{fontSize: 8, borderBottom:"dotted", borderBottomWidth:1, borderBottomColor:"black", marginVertical:3}]}>{"         "}</Text>
+                  <Text style={[{fontSize: 8, borderBottom:"dotted", borderBottomWidth:1, borderBottomColor:"black", marginVertical:3}]}>{"         "}</Text>
+                  <Text style={[{fontSize: 8, borderBottom:"dotted", borderBottomWidth:1, borderBottomColor:"black", marginVertical:3}]}>{"         "}</Text>
                 </View>
                 <Text style={[{fontSize: 9, marginVertical: 5}]}>CREDIT COMMITTEE</Text>
                 <View style={[{height: 15}]}>
@@ -990,15 +1029,15 @@ function LoanPDF({values}) {
                       return (
                         <View>
                           I{" "}{applicant_name}{" "} accept a loan amounting to UG Shs  
-                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{"  "}{"    "}{"  "}</Text>
+                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{" "}{currencyFormatter(amount)}{"       "}</Text>
                           in words
-                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{"  "}{"    "}{"  "}</Text>
+                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{" "}{"    "}{"  "}</Text>
                           charged at an interest rate of 
-                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{"  "}{"    "}{"  "}</Text>
+                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{"  "}{` 3 % `}{"  "}</Text>
                           to be paid within 
-                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{"  "}{"    "}{"  "}</Text>
+                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{"  "}{`${months}`}{"  "}</Text>
                           months and to be not less than Ug Shs
-                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{"  "}{"    "}{"  "}</Text>
+                          <Text style={{textDecoration:"underline", textDecorationStyle:"dotted", paddingHorizontal: 5, width:120}}>{" "}{amortization_schedule[0]?.principal_installment ? `UGX ${currencyFormatter(amortization_schedule[0]?.principal_installment)}` : "      "}{"       "}</Text>
                           per month.
                         </View>
                         )
