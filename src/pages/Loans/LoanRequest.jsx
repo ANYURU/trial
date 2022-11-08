@@ -6,10 +6,11 @@ import {
   ApplicationPg5,
   ApplicationVerify,
 } from ".";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { useOutletContext } from "react-router-dom";
 import { Stepper } from "../../components";
+import { supabase } from "../../helpers/supabase";
 
 function LoanRequest() {
   const [pageNumber, setPageNumber] = useState(1);
@@ -18,12 +19,42 @@ function LoanRequest() {
   const [ subCounties, setSubCounties ] =  useState([])
   const [ parishes, setParishes ] = useState([])
   const [ subParishes, setSubParishes ] = useState([])
+  const [ profiles, setProfiles ] = useState([])
+  const [ accountsInformation, setAccountsInformation ] = useState()
 
-  console.log(profile)
+  
+  useEffect(() => {
+    getProfiles()
+        .then(data => setProfiles(data))
+        .catch(error => console.log(error))
+
+    getAccountInformation().catch(error => console.log(error))
+
+      
+  }, [])
+
+  const getProfiles = async() => {
+      const {data, error } = await supabase.rpc('get_member_profiles') 
+
+      if(error) throw error
+      return data
+  }
+
+  const getAccountInformation = async () => {
+    const { data, error } = await supabase.rpc("get_accounts_information");
+    if (error) throw error;
+    setAccountsInformation(data);
+  };
 
   const [initialValues, setInitialValues] = useState({
     applicant_name: profile?.fullname,
     applicant_id: profile?.id,
+    position_in_sacco: profile?.position_in_sacco,
+    member_id: profile?.member_id,
+    phone_number: profile?.phone_number,
+    email_address: profile?.email_address,
+    dob: profile?.dob,
+    gender: profile?.gender,
     postal_address: "",
     landline_number: "",
     marital_status: "",
@@ -61,6 +92,7 @@ function LoanRequest() {
     amount: "",
     amount_in_words: "",
     months: "",
+    repayment_method: "",
     securities: [],
     bank_loans: [
       {
@@ -152,6 +184,7 @@ function LoanRequest() {
               initialValues={initialValues}
               setInitialValues={setInitialValues}
               setPageNumber={setPageNumber}
+              profiles={profiles}
             />
           )}
           {pageNumber === 5 && (
@@ -167,6 +200,7 @@ function LoanRequest() {
               initialValues={initialValues}
               setInitialValues={setInitialValues}
               setPageNumber={setPageNumber}
+              accountsInformation={accountsInformation}
             />
           )}
         </div>
