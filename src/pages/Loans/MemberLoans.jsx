@@ -9,6 +9,8 @@ import { Spinner, NothingShown } from "../../components";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { MdDownload } from "react-icons/md";
+import { generateReportFromJson } from "../../helpers/generateReportFromJson";
 
 
 
@@ -98,20 +100,68 @@ export default function MemberLoans() {
     const { data, error } = await supabase.rpc("fetch_member_loans")
     if ( error ) throw error 
     setLoans(data)
-    // const { data, error } = await supabase
-    //   .from('loans')
-    //   .select()
-    //   .order('created_at', {ascending:false})
-    //   .not('member_id', 'eq', id)
-
-
-    //   console.log(loan)
-    //   // console.log(supabase.auth.user().id)
-    //   if (error ) throw error
-    //   console.log(data)
-    //   setLoans(data)
+    console.log(data)
 
     console.log("here are the member loans")
+  }
+
+
+  const generate_member_loan_report = () => {
+    const formattedData = loans.map(loan => {
+      return {
+        "Member Name": loan.loan.loan_meta.applicants_name,
+        "Loan Status": loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Approved" : loan.loan.loan_status),
+        "Loan ID": loan?.loan?.loan_id,
+        "Principal": loan?.amount_issued ,
+        "Amount Paid": loan?.loan?.amount_paid,
+        "Interest Rate": loan?.loan?.interest_rate,
+        "Approved By": moment(loan?.loan.loan_meta?.approved_at).format("DD-MM-YYYY hh:mm a") ,
+        "Start Date": moment(loan?.loan?.start_date).format("DD-MM-YYYY hh:mm a") ,
+        "End Date": moment(loan?.loan?.end_date).format("DD-MM-YYYY hh:mm a"),
+        "Approved by": loan?.loan?.loan_meta?.approved_by,
+        "Interest Paid": loan?.loan?.interest_paid,
+        "Interest to pay": loan?.loan?.interest_to_pay,
+        "Imported": loan?.loan?.loan_meta?.imported_by ? "True" : "False"
+      }
+    })
+
+
+    generateReportFromJson(formattedData, "Loans")
+
+    const loans_with_payments = loans.filter(loan => loan?.payments)
+
+    let all_payments = []
+
+    loans_with_payments.forEach(loan => {
+
+      let processedPayments = loan.payments.map(payment => {
+        return {
+          "Date": moment(payment.created_at).format("DD-MM-YYYY"),
+          "Principal": currencyFormatter(Math.round(payment.amount * 100) / 100),
+          "Interest Paid": currencyFormatter(Math.round(payment?.transaction_meta?.interest_paid * 100) / 100),
+          "Amount To Pay": Math.round(payment?.transactions_meta?.amount_to_pay ?? 0 * 100) / 100,
+          "Reducing Balance": payment?.reducing_balance <= 0
+            ? "0.00"
+            : currencyFormatter(
+              Math.round(payment?.reducing_balance ?? 0 * 100) / 100
+            ),
+          "Loan ID": loan.loan.loan_id
+        };
+      });
+
+      all_payments.push(...processedPayments);
+
+    })
+
+    generateReportFromJson(all_payments, "Loan Payments")
+
+    
+
+
+
+
+
+
   }
 
   return (
@@ -156,6 +206,19 @@ export default function MemberLoans() {
             />
           </div>
         </div>
+      </div>
+      <div className="flex justify-end mb-3">
+        <button
+          className="bg-green-500 align-text-middle px-3 py-2 text-white font-bold rounded flex items-center"
+          onClick={() => {
+            generate_member_loan_report()
+            console.log("here")
+          }}
+        >
+          Export
+          <MdDownload className="ml-1"/>
+        </button>
+
       </div>
 
       <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-120px)] dark:bg-dark-bg-700">
@@ -226,30 +289,6 @@ export default function MemberLoans() {
                           {loan.loan_status}
                         </span>
                       </td>
-
-                        {/* <td className="px-6 py-3">
-                          <div className="relative">
-                            <button
-                              className="block rounded-md dialog cursor-context-menu"
-                              onClick={(event) => {
-                                setActiveIndex(index);
-                                setShow(!show);
-                                event.stopPropagation();
-                              }}
-                            >
-                              <FaEllipsisV />
-                            </button>
-                            <LoansContext
-                              activeIndex={activeIndex}
-                              show={show}
-                              index={index}
-                              setShow={setShow}
-                              member={activeIndex === index ? loan : null}
-                              id={loan.id}
-                              setLoanModal={setLoanModal}
-                            />
-                          </div>
-                        </td> */}
                       </tr>
                       {loanModal && activeIndex === index && (
                         <LoanModal setLoanModal={setLoanModal} loan={{loan, payments}} />

@@ -1,5 +1,5 @@
  // Quick and simple export target #table_id into a csv
- export const generateReport = (table_id) => {
+ export const generateReportFromTable = (table_id) => {
     // Select rows from table_id
     var rows = document.querySelectorAll('table#' + table_id + ' tr');
     // Construct csv

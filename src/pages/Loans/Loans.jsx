@@ -96,16 +96,17 @@ export default function Loan() {
     // processLoans
     const formattedLoans = loans.map(loan => {
       return {
-        member_name: loan?.loan?.loan_meta?.applicants_name ? loan.loan.loan_meta.applicants_name : loan?.application_meta?.applicants_name,
-        loan_status: loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Approved" : loan.loan.loan_status) || loan?.application_meta?.review_status,
-        loan_id: loan?.loan?.loan_id ? loan?.loan?.loan_id : loan?.app_id,
-        principal: loan?.application_meta ? loan?.application_meta?.amount : loan?.loan?.amount_issued,
-        amount_paid: loan?.application_meta ? 0 : loan?.loan?.amount_paid,
-        interest_rate: loan?.loan ? loan?.loan?.interest_rate :  loan?.application_meta?.interest_rate,
-        approved_at: loan?.loan ? moment(loan?.loan.loan_meta?.approved_at).format("DD-MM-YYYY hh:mm a") : "",
-        start_date: loan?.loan ? moment(loan?.loan?.start_date).format("DD-MM-YYYY hh:mm a") : "",
-        end_date: loan?.loan ? moment(loan?.loan?.end_date).format("DD-MM-YYYY hh:mm a") : "",
-        approved_by: loan?.loan ? loan?.loan?.loan_meta?.approved_by : ""
+        "Member Name": loan?.loan?.loan_meta?.applicants_name ? loan.loan.loan_meta.applicants_name : loan?.application_meta?.applicants_name,
+        "Loan Status": loan?.loan?.loan_status === "defaulted" ? "arrears" : (loan?.loan?.loan_status === "pending" ? "Approved" : loan.loan.loan_status) || loan?.application_meta?.review_status,
+        "Loan ID": loan?.loan?.loan_id ? loan?.loan?.loan_id : loan?.app_id,
+        "Principal": loan?.application_meta ? loan?.application_meta?.amount : loan?.loan?.amount_issued,
+        "Amount Paid": loan?.application_meta ? 0 : loan?.loan?.amount_paid,
+        "Interest Rate": loan?.loan ? loan?.loan?.interest_rate :  loan?.application_meta?.interest_rate,
+        "Approved At": loan?.loan ? moment(loan?.loan.loan_meta?.approved_at).format("DD-MM-YYYY hh:mm a") : "",
+        "Start Date": loan?.loan ? moment(loan?.loan?.start_date).format("DD-MM-YYYY hh:mm a") : "",
+        "End Date": loan?.loan ? moment(loan?.loan?.end_date).format("DD-MM-YYYY hh:mm a") : "",
+        "Approved by": loan?.loan ? loan?.loan?.loan_meta?.approved_by : "",
+        "Imported": loan?.loan?.loan_meta?.imported_by ? "True" : "False"
       }
     })
 

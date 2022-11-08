@@ -1,4 +1,4 @@
-const generate_loan_report = async(formattedData) => {
+export const generateReportFromJson = async(formattedData, title) => {
 
     // Process the csv
     const fields = Object.keys(formattedData[0])
@@ -13,7 +13,7 @@ const generate_loan_report = async(formattedData) => {
     
 
     // Downloading rg csv
-    const filename = 'Bweyogerere Tuberebumu loan report' + new Date().toISOString().slice(0, 10) + '.csv';
+    const filename = `Bweyogerere Tuberebumu ${title} report` + new Date().toISOString().slice(0, 10) + '.csv';
   
     const link = document.createElement('a');
     link.style.display = 'none';
