@@ -220,7 +220,6 @@ export const loan5ValidationSchema =  Yup.object({
     .unique("Contacts must be unique", val => val.contact)
 })
 
-
 export const member1ValidationSchema = Yup.object({
   fullname: Yup.string().required("fullname is required!"),
   phone_number: Yup.string().required("phone number is required!"),
