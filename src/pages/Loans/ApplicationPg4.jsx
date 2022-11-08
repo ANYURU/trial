@@ -1,27 +1,9 @@
 import { Formik, Form, FieldArray, ErrorMessage }  from 'formik'
 import { InputField } from '../../components/Form/CustomInputField'
 import { loan5ValidationSchema } from '../../helpers/validator'
-import { useEffect, useState } from 'react'
-import { supabase } from '../../helpers/supabase'
 
-export default function ApplicationPg4({ initialValues, setInitialValues, setPageNumber }) {
-    const [ profiles, setProfiles ] = useState([])
+export default function ApplicationPg4({ initialValues, setInitialValues, setPageNumber, profiles }) {
 
-    useEffect(() => {
-        getProfiles()
-            .then(data => {
-                setProfiles(data)
-            })
-            .catch(error => console.log(error))
-
-    })
-
-    const getProfiles = async() => {
-        const {data, error } = await supabase.rpc('get_member_profiles') 
-    
-        if(error) throw error
-        return data
-    }
     return (
         <Formik
         initialValues={initialValues}

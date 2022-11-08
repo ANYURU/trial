@@ -178,7 +178,7 @@ function ApplicationPg2({ initialValues, setInitialValues, setPageNumber }) {
                                         <label className='text-sm' htmlFor='normal'>Normal</label>
                                     </div>
                                     <div className='flex gap-1'>
-                                        <input type="radio" id="extended" name="loan_type" value="extended" onChange={handleChange("loan_type")} />
+                                        <input type="radio" id="extended" name="loan_type" value="extended" onChange={handleChange("loan_type")} disabled={arrearedLoans?.length <= 0}/>
                                         <label className='text-sm' htmlFor='extended'>Extended</label>
                                     </div>
                                 </div>
