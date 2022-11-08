@@ -14,12 +14,12 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import LoanPDF from "./LoanPDF"
 
 
-function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
+function ApplicationVerify({ initialValues, setPageNumber, setInitialValues, accountsInformation }) {
   
   const [ user, { phone_number, fullname: applicants_name, user_role, position_in_sacco, member_id } ] = useOutletContext()
   const { user: { id: applicants_id } } = useAuth()
   const { amount, months } = initialValues
-  const [ downloadForm, setDownloadForm ] = useState(false)
+  
   const rate = 3;
   
   const defaultInitialValues = {
@@ -103,6 +103,8 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     bank_settlement:""
   }
 
+  const { amortization_schedule: schedule, total: total_amount } = generate_amortization_schedule(amount, rate ,Number(months))
+  
   const uploadApplicationFiles = async () => {
     const { guarantors, bank_statement, a_years_cashflow, additional_files, supporting_files } = initialValues
 
@@ -208,6 +210,7 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     const amount = parseFloat(remove_separator(initialValues.amount))
     const { amortization_schedule, total } = generate_amortization_schedule(amount, rate ,Number(months))
     console.log(amortization_schedule)
+    
 
     verifyOTP( phone_number, one_time_password, verification_key)
       .then( response => response.json() )
@@ -263,7 +266,7 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     <div className='flex flex-col justify-center items-center h-full w-full outline'>
         <div className='flex justify-center items-center border border-1 mb-2 rounded-md'>
           <PDFDownloadLink
-            document={<LoanPDF values={initialValues}/>}
+            document={<LoanPDF values={{...initialValues, amortization_schedule: schedule, total: total_amount}} accountsInformation={accountsInformation}/>}
             fileName="Loan Application.pdf"
           >
             {
