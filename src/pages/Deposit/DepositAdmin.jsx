@@ -9,11 +9,14 @@ import { AiFillCheckSquare } from "react-icons/ai";
 import DepositModal from "../../components/Modals/DepositModal";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { MdDownload } from "react-icons/md";
+import { generateReportFromJson } from "../../helpers/generateReportFromJson";
 
 export default function DepositAdmin() {
   const [deposits, setDeposits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtered, setFiltered] = useState([])
+
 
 
   useEffect(() => {
@@ -130,6 +133,26 @@ export default function DepositAdmin() {
 
   shownDeposits = shownDeposits.slice(indexOfFirstPage, indexOfLastPage)
 
+
+  const generate_deposits_report = () => {
+    const formattedDeposits = deposits.map(deposit => {
+      return {
+        "Member Name": deposit?.transaction_meta ? deposit?.transaction_meta?.member_name : deposit?.application_meta?.applicants_name,
+        "Transaction ID": deposit?.application_meta ? deposit.app_id : deposit?.trans_id,
+        "Date": deposit?.created_at,
+        "Amount": deposit?.transaction_meta ? deposit?.amount : deposit?.application_meta?.amount,
+        "Account": deposit?.transaction_meta ? deposit?.transaction_meta?.account_type : deposit?.application_meta?.account_type,
+        "Approved At": deposit?.transaction_meta ? deposit?.transaction_meta?.approved_at : "",
+        "Status": deposit?.transaction_meta ? deposit?.status : deposit?.application_meta?.status,
+        "Approved By": deposit?.transaction_meta ? deposit?.transaction_meta?.approved_by : ""
+      }
+    })
+
+
+    console.log(formattedDeposits)
+    generateReportFromJson(formattedDeposits, 'Member Deposits')
+  }
+
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
       <div className="flex flex-col justify-between pb-3 mb-2 overflow-hidden md:h-[150px]">
@@ -175,54 +198,71 @@ export default function DepositAdmin() {
             </div>
           </div>
         </div>
-
-        <div className="flex sm:flex-wrap gap-1">
-          <div className="flex justify-between searchInput">
-            <input
-              type="text"
-              className="px-2 py-1 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text"
-              placeholder="Search by name..."
-              onChange={(event) => setSearchText(event.target.value)}
-            />
+        <div className="flex">
+          <div className="flex sm:flex-wrap gap-1 w-[70%]">
+            <div className="flex justify-between searchInput">
+              <input
+                type="text"
+                className="px-2 py-1 sm:py-1 dark:bg-dark-bg-600 dark:text-secondary-text"
+                placeholder="Search by name..."
+                onChange={(event) => setSearchText(event.target.value)}
+              />
+            </div>
+            <div className="flex flex-col w-56">
+              <select
+                name="status"
+                id=""
+                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+                onChange={(event) => {
+                  setStatus(event.target.value);
+                }}
+              >
+                <option value="">Status</option>
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div className="flex flex-col w-56">
+              <select
+                name="account"
+                id=""
+                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+                onChange={(event) => setAccount(event.target.value)}
+              >
+                <option value="">Account</option>
+                <option value="savings">Savings</option>
+                <option value="shares">Shares</option>
+                <option value="mwana">Mwana</option>
+                <option value="fixed">Fixed</option>
+              </select>
+            </div>
+            <div className="flex flex-col w-56">
+              <input
+                type="date"
+                name="inputDate"
+                onChange={(event) => setDate(event.target.value)}
+                className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
+              />
+            </div>
           </div>
-          <div className="flex flex-col w-56">
-            <select
-              name="status"
-              id=""
-              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-              onChange={(event) => {
-                setStatus(event.target.value);
+          <div className="flex w-[30%] mb-5 justify-end">
+            <button
+              className="bg-green-500 align-text-middle px-3 py-2 text-white font-bold rounded flex items-center"
+              onClick={() => {
+                // generate_member_loan_report()
+                generate_deposits_report()
+                console.log("here")
               }}
             >
-              <option value="">Status</option>
-              <option value="approved">Approved</option>
-              <option value="pending">Pending</option>
-              <option value="rejected">Rejected</option>
-            </select>
+              Export
+              <MdDownload className="ml-1"/>
+            </button>  
           </div>
-          <div className="flex flex-col w-56">
-            <select
-              name="account"
-              id=""
-              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-              onChange={(event) => setAccount(event.target.value)}
-            >
-              <option value="">Account</option>
-              <option value="savings">Savings</option>
-              <option value="shares">Shares</option>
-              <option value="mwana">Mwana</option>
-              <option value="fixed">Fixed</option>
-            </select>
-          </div>
-          <div className="flex flex-col w-56">
-            <input
-              type="date"
-              name="inputDate"
-              onChange={(event) => setDate(event.target.value)}
-              className="rounded inputDate dark:bg-dark-bg-600 dark:text-secondary-text"
-            />
-          </div>
+        
         </div>
+    
+        
         {/* </div> */}
       </div>
       <div className="bg-white pb-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
