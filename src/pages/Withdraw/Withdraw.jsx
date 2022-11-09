@@ -151,7 +151,7 @@ export default function Deposit() {
   };
 
   return (
-    <div className="mx-5 my-2 h-[calc(100vh-70px)]">
+    <div className="mx-5 my-2 h-[calc(100vh-140px)]">
       <Helmet>
         <title>Deposit - Bweyogere tuberebumu</title>
       </Helmet>
