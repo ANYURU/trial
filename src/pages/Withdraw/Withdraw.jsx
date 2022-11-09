@@ -1,14 +1,11 @@
 import { Pagination, Spinner, NothingShown } from "../../components";
 import { useState, useEffect, Fragment } from "react";
 import { supabase } from "../../helpers/supabase";
-import { FaEllipsisV } from "react-icons/fa";
-import { MdInfo } from "react-icons/md";
 import { Helmet } from "react-helmet";
 import WithdrawModal from "../../components/Modals/WithdrawModal";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { useOutletContext } from "react-router-dom";
-import { filterByStatus } from "../../helpers/utilites";
 import { MdDownload } from "react-icons/md";
 import { generateReportFromJson } from "../../helpers/generateReportFromJson";
 

@@ -15,9 +15,7 @@ import { generateReportFromJson } from "../../helpers/generateReportFromJson";
 export default function DepositAdmin() {
   const [deposits, setDeposits] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filtered, setFiltered] = useState([])
-
-
+  const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
     getApplications().catch((error) => console.log(error));
@@ -35,22 +33,27 @@ export default function DepositAdmin() {
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [withdrawPerPage, setWithdrawPerPage] = useState(10);
-  const [depositModal, setDepositModal] = useState(false)
+  const [depositModal, setDepositModal] = useState(false);
   const indexOfLastPage = currentPage * withdrawPerPage;
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage;
 
   const getApplications = async () => {
-    const { data: { applications, transactions }, error } = await supabase.rpc("fetch_member_deposits");
+    const {
+      data: { applications, transactions },
+      error,
+    } = await supabase.rpc("fetch_member_deposits");
 
     if (error) {
       throw error;
     } else {
-      let data = []
-      if (applications) data.push(...applications)
-      if (transactions) data.push(...transactions)
+      let data = [];
+      if (applications) data.push(...applications);
+      if (transactions) data.push(...transactions);
 
-      const sorted_data = data.sort((a,b) => new Date(b?.created_at) - new Date(a?.created_at))
-      setDeposits(sorted_data ?? null)      
+      const sorted_data = data.sort(
+        (a, b) => new Date(b?.created_at) - new Date(a?.created_at)
+      );
+      setDeposits(sorted_data ?? null);
     }
   };
 
@@ -69,10 +72,13 @@ export default function DepositAdmin() {
   const approvedDeposits = deposits.filter(
     (deposit) => deposit?.transaction_meta
   );
-  const pendingDeposits = deposits.filter((deposit) => deposit?.application_meta);
+  const pendingDeposits = deposits.filter(
+    (deposit) => deposit?.application_meta
+  );
   const rejectedDeposits = deposits.filter(
     (deposit) =>
-      deposit?.reviewed && deposit?.application_meta.review_status !== "approved"
+      deposit?.reviewed &&
+      deposit?.application_meta.review_status !== "approved"
   );
 
   const approved = Math.round(
@@ -85,39 +91,37 @@ export default function DepositAdmin() {
 
   // let shownDeposits = deposits.slice(indexOfFirstPage, indexOfLastPage);
 
-  let shownDeposits = deposits
-    .filter(
-      (deposit) => {
-        if( !account ) {
-          return deposit
-        } else {
-          return ( deposit?.transaction_meta?.account_type || deposit?.application_meta?.account_type)
-        }
-      }
-    )
+  let shownDeposits = deposits.filter((deposit) => {
+    if (!account) {
+      return deposit;
+    } else {
+      return (
+        deposit?.transaction_meta?.account_type ||
+        deposit?.application_meta?.account_type
+      );
+    }
+  });
 
-  shownDeposits = shownDeposits
-    .filter(
-      (deposit) => {
-        if( status === "") {
-          return deposit
-        } else if ( status === "pending") {
-          return deposit?.application_meta?.review_status === "pending"
-        } else if ( status === "approved") {
-          return deposit?.transaction_meta
-        } else if (status === "rejected" ) {
-          return deposit?.application_meta?.review_status === "rejected"
-        }
-      }
-    );
-
+  shownDeposits = shownDeposits.filter((deposit) => {
+    if (status === "") {
+      return deposit;
+    } else if (status === "pending") {
+      return deposit?.application_meta?.review_status === "pending";
+    } else if (status === "approved") {
+      return deposit?.transaction_meta;
+    } else if (status === "rejected") {
+      return deposit?.application_meta?.review_status === "rejected";
+    }
+  });
 
   shownDeposits = shownDeposits.filter(
     (deposit) =>
-      (deposit?.application_meta?.applicants_name || deposit?.transaction_meta?.member_name)
+      (
+        deposit?.application_meta?.applicants_name ||
+        deposit?.transaction_meta?.member_name
+      )
         .toLowerCase()
         .indexOf(searchText.toLowerCase()) > -1
-
   );
 
   //context
@@ -131,27 +135,39 @@ export default function DepositAdmin() {
     };
   }
 
-  shownDeposits = shownDeposits.slice(indexOfFirstPage, indexOfLastPage)
-
+  shownDeposits = shownDeposits.slice(indexOfFirstPage, indexOfLastPage);
 
   const generate_deposits_report = () => {
-    const formattedDeposits = deposits.map(deposit => {
+    const formattedDeposits = deposits.map((deposit) => {
       return {
-        "Member Name": deposit?.transaction_meta ? deposit?.transaction_meta?.member_name : deposit?.application_meta?.applicants_name,
-        "Transaction ID": deposit?.application_meta ? deposit.app_id : deposit?.trans_id,
-        "Date": deposit?.created_at,
-        "Amount": deposit?.transaction_meta ? deposit?.amount : deposit?.application_meta?.amount,
-        "Account": deposit?.transaction_meta ? deposit?.transaction_meta?.account_type : deposit?.application_meta?.account_type,
-        "Approved At": deposit?.transaction_meta ? deposit?.transaction_meta?.approved_at : "",
-        "Status": deposit?.transaction_meta ? deposit?.status : deposit?.application_meta?.status,
-        "Approved By": deposit?.transaction_meta ? deposit?.transaction_meta?.approved_by : ""
-      }
-    })
+        "Member Name": deposit?.transaction_meta
+          ? deposit?.transaction_meta?.member_name
+          : deposit?.application_meta?.applicants_name,
+        "Transaction ID": deposit?.application_meta
+          ? deposit.app_id
+          : deposit?.trans_id,
+        Date: deposit?.created_at,
+        Amount: deposit?.transaction_meta
+          ? deposit?.amount
+          : deposit?.application_meta?.amount,
+        Account: deposit?.transaction_meta
+          ? deposit?.transaction_meta?.account_type
+          : deposit?.application_meta?.account_type,
+        "Approved At": deposit?.transaction_meta
+          ? deposit?.transaction_meta?.approved_at
+          : "",
+        Status: deposit?.transaction_meta
+          ? "approved"
+          : deposit?.application_meta?.review_status,
+        "Approved By": deposit?.transaction_meta
+          ? deposit?.transaction_meta?.approved_by
+          : "",
+      };
+    });
 
-
-    console.log(formattedDeposits)
-    generateReportFromJson(formattedDeposits, 'Member Deposits')
-  }
+    console.log(formattedDeposits);
+    generateReportFromJson(formattedDeposits, "Member Deposits");
+  };
 
   return (
     <div className="mx-5 my-2 h-[calc(100vh-70px)]">
@@ -251,18 +267,16 @@ export default function DepositAdmin() {
               className="bg-green-500 align-text-middle px-3 py-2 text-white font-bold rounded flex items-center"
               onClick={() => {
                 // generate_member_loan_report()
-                generate_deposits_report()
-                console.log("here")
+                generate_deposits_report();
+                console.log("here");
               }}
             >
               Export
-              <MdDownload className="ml-1"/>
-            </button>  
+              <MdDownload className="ml-1" />
+            </button>
           </div>
-        
         </div>
-    
-        
+
         {/* </div> */}
       </div>
       <div className="bg-white pb-6 overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
@@ -290,39 +304,53 @@ export default function DepositAdmin() {
                         } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                         key={index}
                         onClick={() => {
-                          console.log(deposit)
+                          console.log(deposit);
                           setActiveIndex(index);
-                          setDepositModal(true)
+                          setDepositModal(true);
                         }}
                       >
-                        <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
-                        <td className="px-6 py-3">
-                          {deposit?.created_at ? moment(deposit?.created_at).format("DD-MM-YYYY") : "Unspecified"}
-                        </td>
-                        <td className="px-6 py-3">{deposit?.app_id || deposit?.trans_id}</td>
-                        <td className="px-6 py-3">
-                          {deposit?.application_meta?.applicants_name || deposit?.transaction_meta?.member_name }
+                        <td>
+                          <span className="ml-2 px-4 py-3 text-sm">&gt;</span>
                         </td>
                         <td className="px-6 py-3">
-                          {deposit?.application_meta?.account_type || deposit?.transaction_meta.account_type}
+                          {deposit?.created_at
+                            ? moment(deposit?.created_at).format("DD-MM-YYYY")
+                            : "Unspecified"}
                         </td>
                         <td className="px-6 py-3">
-                          {currencyFormatter(deposit?.application_meta?.amount || deposit?.amount)}
+                          {deposit?.app_id || deposit?.trans_id}
+                        </td>
+                        <td className="px-6 py-3">
+                          {deposit?.application_meta?.applicants_name ||
+                            deposit?.transaction_meta?.member_name}
+                        </td>
+                        <td className="px-6 py-3">
+                          {deposit?.application_meta?.account_type ||
+                            deposit?.transaction_meta.account_type}
+                        </td>
+                        <td className="px-6 py-3">
+                          {currencyFormatter(
+                            deposit?.application_meta?.amount || deposit?.amount
+                          )}
                         </td>
 
                         <td className={`px-6 py-3`}>
                           <span
                             className={` py-1 px-2 rounded-xl text-white ${
-                              deposit?.transaction_meta ? 'bg-green-400' 
-                              : deposit.application_meta?.review_status === "rejected" ? 'bg-red-400'
-                              : 'bg-yellow-400'
+                              deposit?.transaction_meta
+                                ? "bg-green-400"
+                                : deposit.application_meta?.review_status ===
+                                  "rejected"
+                                ? "bg-red-400"
+                                : "bg-yellow-400"
                             }`}
                           >
-                            {
-                              deposit?.transaction_meta ? "approved"
-                              : deposit?.application_meta?.review_status === "rejected" ? 'Rejected'
-                              : 'Pending'
-                            }
+                            {deposit?.transaction_meta
+                              ? "approved"
+                              : deposit?.application_meta?.review_status ===
+                                "rejected"
+                              ? "Rejected"
+                              : "Pending"}
                           </span>
                         </td>
                       </tr>
@@ -351,8 +379,10 @@ export default function DepositAdmin() {
           </>
         ) : !loading > 0 ? (
           <NothingShown />
+        ) : deposits.length < 1 ? (
+          <Spinner />
         ) : (
-          deposits.length < 1 ?  <Spinner /> : <NothingShown />
+          <NothingShown />
         )}
       </div>
     </div>
