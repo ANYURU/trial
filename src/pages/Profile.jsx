@@ -19,6 +19,7 @@ function Profile() {
   const { 1: profile } = useOutletContext();
   const { id } = supabase.auth.user();
   const { signOut } = useAuth();
+  const [ loading, setLoading ] = useState(false)
 
   const handleTermination = (event, values) => {
     event.preventDefault();
@@ -65,12 +66,15 @@ function Profile() {
           } else {
             toast.error(`Wrong password.`, { position: "top-center" });
           }
+          return true
         })
         .catch((error) => {
           console.log(`Error ${error}`);
+          return false
         });
     }
-    document.changePasswordForm.reset();
+
+    document.getElementById("changePasswordForm").reset();
   };
 
   return (
@@ -167,7 +171,12 @@ function Profile() {
                   <Form
                     className="mb-3"
                     name="changePasswordForm"
-                    onSubmit={(event) => handleChangePassword(event, values)}
+                    id="changePasswordForm"
+                    onSubmit={(event) => {
+                      setLoading(true)
+                      console.log("here")
+                      handleChangePassword(event, values)
+                    }}
                   >
                     <h1 className="font-semibold mb-3">Password Reset</h1>
                     <div className="flex flex-col w-56 mb-5">
@@ -227,8 +236,8 @@ function Profile() {
                     onSubmit={(event) => handleTermination(event, values)}
                   >
                     <h1 className="font-semibold">Danger Zone</h1>
-                    <div className="my-2 outline outline-1 p-2 rounded-md">
-                      <h1>Self Termination</h1>
+                    <div className="my-2 outline outline-5 p-2 rounded-md bg-red-100 outline-red-700">
+                      <h1 className="font-semibold">Self Termination</h1>
                       <p>
                         Self termination implies that you no longer subscribe to
                         and therefore sieze being a member of Bweyogerere
@@ -247,7 +256,7 @@ function Profile() {
                             id=""
                             placeholder="Password"
                             onChange={handleChange("password")}
-                            className="ring-1 ring-black dark:ring-dark-bg-600 dark:bg-dark-bg-700 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                            className="ring-1 ring-red-200 dark:ring-dark-bg-600 dark:bg-dark-bg-700 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary bg-red-50"
                             required
                           />
                         </div>
@@ -308,6 +317,7 @@ function Profile() {
             </Formik>
           </>
         ) : (
+          
           <div className="display flex justify-center">
             <Spinner />
           </div>

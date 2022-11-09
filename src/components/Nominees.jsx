@@ -1,23 +1,64 @@
-import { FieldArray } from "formik";
+import { FieldArray, ErrorMessage } from "formik";
 import { InputField } from "./Form/CustomInputField";
+import { useEffect, useState } from "react";
+import { supabase } from "../helpers/supabase";
 
 export default function Nominee({ values, errors, touched, handleChange, handleBlur }) {
+    const [ profiles,  setProfiles ] = useState([])
+
+    useEffect(() => {
+        getProfiles()
+            .then(data => setProfiles(data))
+            .catch(error => console.log(error))
+
+
+    }, [])
+
+    const getProfiles = async() => {
+        const {data, error } = await supabase.rpc('get_member_profiles') 
+    
+        if(error) throw error
+        return data
+    }
+
     let { nominees } = values
     return (
         <div className='mb-3'>
             <h1 className='font-semibold'>Nominee Information</h1>
                 <FieldArray
                     name="nominees"
-                    render={(arrayHelpers) =>( 
+                    render={(arrayHelpers) => ( 
                         <>
                             { values.nominees && values.nominees.length > 0 && (
-                                values.nominees.map(({name, id, contact, dob, percentage}, index) => (
+                                values.nominees.map(({ nominee_id, percentage }, index) => (
                                     <div key={index} className='flex flex-wrap gap-5 mb-3 outline outline-1 rounded p-2'>
-                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][name]`}  label="Name" placeholder="Enter Full name" defaultValue={name}/>
-                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][id]`}  label="Nominee's ID" placeholder="Enter Nominee's ID" defaultValue={id}/>
-                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][contact]`}  label="Contact" placeholder="address / mobile " defaultValue={contact}/>
-                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][dob]`} label="Date of Birth" placeholder="dd/mm/yyyy" defaultValue={dob} type="date"/>
-                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][percentage]`}  label="Percentage" placeholder="Enter percentage" defaultValue={percentage}/>
+                                        <div className="flex flex-col w-56">
+                                            <label className="text-sm">
+                                                Select Member
+                                            </label>
+                                            <select
+                                                name={`nominees[${index}][nominee_id]`}
+                                                className="ring-1 ring-black rounded px-2 py-1 bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+                                                onChange={(event) => {
+                                                    values.nominees[index]["nominee_id"] = event.target.value
+                                                    const [ member ] = profiles.filter(profile => profile.id === event.target.value)
+                                                    values.nominees[index]["name"] = member.fullname
+                                                    values.nominees[index]["contact"] = member.phone_number
+                                                    values.nominees[index]["dob"] = member.dob
+                                                }}
+                                                onBlur={handleBlur(nominee_id)}
+                                            >
+                                                <option value="">--Select Member--</option>
+                                            {
+                                                profiles && profiles.map(({fullname, id}, index) => {
+                                                return  <option key={index} value={ id } className="capitalize">{ fullname }</option>
+                                                })
+                                            }
+                                            </select>
+                                            <ErrorMessage name={`nominees.[${index}].nominee_id`}>{msg => <div className="error text-xs text-red-500">{msg}</div>}</ErrorMessage>
+                                            
+                                        </div>
+                                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference={`nominees[${index}][percentage]`}  label="Percentage" placeholder="Enter percentage" defaultValue={percentage} type="number"/>
                                     </div>
                                 ))
                             )}
@@ -27,11 +68,9 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                     event.preventDefault()
                                     arrayHelpers.push(
                                     { 
-                                        name:'', 
-                                        id:'', 
-                                        contact:'', 
-                                        dob:'', 
-                                        percentage:''
+                                        nominee_id:'', 
+                                        percentage:'',
+                                        fullname: ''
                                     }
                                 )}}
                             >
@@ -41,7 +80,7 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                                 className='bg-accent-red text-white px-3 py-2 rounded m-2'
                                 onClick={(event) => {
                                     event.preventDefault()
-                                    nominees.length > 1 && arrayHelpers.pop()
+                                    nominees.length > 2 && arrayHelpers.pop()
                                 }}
                             >
                                 -   
@@ -49,6 +88,7 @@ export default function Nominee({ values, errors, touched, handleChange, handleB
                         </>
                     )}
                 />
+                
         </div>
     )
 }

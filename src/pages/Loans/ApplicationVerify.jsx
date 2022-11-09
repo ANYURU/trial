@@ -10,12 +10,16 @@ import { uploadFile } from "../../helpers/uploadFile"
 import { OTPBox } from "../../components"
 import { generate_amortization_schedule } from "../../helpers/generateAmortizationSchedule"
 import { remove_separator } from "../../helpers/thousand_separator"
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import LoanPDF from "./LoanPDF"
 
-function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
+
+function ApplicationVerify({ initialValues, setPageNumber, setInitialValues, accountsInformation }) {
   
-  const [user, { phone_number, fullname: applicants_name, user_role }] = useOutletContext()
+  const [ user, { phone_number, fullname: applicants_name, user_role, position_in_sacco, member_id } ] = useOutletContext()
   const { user: { id: applicants_id } } = useAuth()
   const { amount, months } = initialValues
+  
   const rate = 3;
   
   const defaultInitialValues = {
@@ -26,10 +30,11 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     landline_number: '',
     marital_status: '',
     no_of_dependents: '',
-    town: '',
-    estate: '',
-    street: '',
-    house_no: '',
+    district: '',
+    county: '',
+    sub_county: '',
+    parish: '',
+    sub_parish:'',
     ownership: '',
     years_spent: '',
     kin_name: '',
@@ -98,6 +103,8 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     bank_settlement:""
   }
 
+  const { amortization_schedule: schedule, total: total_amount } = generate_amortization_schedule(amount, rate ,Number(months))
+  
   const uploadApplicationFiles = async () => {
     const { guarantors, bank_statement, a_years_cashflow, additional_files, supporting_files } = initialValues
 
@@ -142,7 +149,6 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
       //   initialValues.a_years_cashflow = a_years_cashflow_url
       
       // }
-
     }  
 
     // Uploading additional files.
@@ -204,6 +210,7 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
     const amount = parseFloat(remove_separator(initialValues.amount))
     const { amortization_schedule, total } = generate_amortization_schedule(amount, rate ,Number(months))
     console.log(amortization_schedule)
+    
 
     verifyOTP( phone_number, one_time_password, verification_key)
       .then( response => response.json() )
@@ -229,6 +236,7 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
                       applicants_name,
                       amortization_schedule,
                       ...initialValues, 
+                      position_in_sacco: position_in_sacco,
                       total,
                       interest_rate: rate
                     }
@@ -236,6 +244,7 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
                 )
     
               if (error) {
+                console.log(error)
                 throw error
               } else {
                 console.log(data)
@@ -255,6 +264,25 @@ function ApplicationVerify({ initialValues, setPageNumber, setInitialValues }) {
   const [ otp, setOtp ] = useState(["", "", "", "", "", ""])
   return (
     <div className='flex flex-col justify-center items-center h-full w-full outline'>
+        <div className='flex justify-center items-center border border-1 mb-2 rounded-md'>
+          <PDFDownloadLink
+            document={<LoanPDF values={{...initialValues, amortization_schedule: schedule, total: total_amount}} accountsInformation={accountsInformation}/>}
+            fileName="Loan Application.pdf"
+          >
+            {
+              ({loading}) => {
+                return loading ?
+                <button className="bg-blue-500 py-2 px-3 text-white">
+                  loading
+                </button>
+                : 
+                <button className="bg-green-500 py-2 px-3 text-white">
+                  Download Form
+                </button>
+              }
+            }
+          </PDFDownloadLink>
+        </div>
         <h1 className='font-bold'>Verify your identity to confirm your submission</h1>
         <p className='text-sm'>An OTP has been sent to your phone number. Please enter a valid OTP to confirm submission.</p>
         <div className="flex flex-col justify-center items-center mt-5 p-5">

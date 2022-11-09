@@ -6,45 +6,81 @@ import {
   ApplicationPg5,
   ApplicationVerify,
 } from ".";
-import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 import { useOutletContext } from "react-router-dom";
 import { Stepper } from "../../components";
+import { supabase } from "../../helpers/supabase";
 
 function LoanRequest() {
   const [pageNumber, setPageNumber] = useState(1);
-  const [user, profile] = useOutletContext();
+  const [ user, profile] = useOutletContext();
+  const [ counties, setCounties ] = useState([])
+  const [ subCounties, setSubCounties ] =  useState([])
+  const [ parishes, setParishes ] = useState([])
+  const [ subParishes, setSubParishes ] = useState([])
+  const [ profiles, setProfiles ] = useState([])
+  const [ accountsInformation, setAccountsInformation ] = useState()
+
+  
+  useEffect(() => {
+    getProfiles()
+        .then(data => setProfiles(data))
+        .catch(error => console.log(error))
+
+    getAccountInformation().catch(error => console.log(error))
+
+      
+  }, [])
+
+  const getProfiles = async() => {
+      const {data, error } = await supabase.rpc('get_member_profiles') 
+
+      if(error) throw error
+      return data
+  }
+
+  const getAccountInformation = async () => {
+    const { data, error } = await supabase.rpc("get_accounts_information");
+    if (error) throw error;
+    setAccountsInformation(data);
+  };
 
   const [initialValues, setInitialValues] = useState({
-    applicant_name: profile.fullname,
-    applicant_id: profile.id,
-    position_in_sacco:
-      profile?.user_role && profile?.user_role.roles.length === 1
-        ? "member"
-        : "",
+    applicant_name: profile?.fullname,
+    applicant_id: profile?.id,
+    position_in_sacco: profile?.position_in_sacco,
+    member_id: profile?.member_id,
+    phone_number: profile?.phone_number,
+    email_address: profile?.email_address,
+    dob: profile?.dob,
+    gender: profile?.gender,
+    avatar: profile.avatar,
     postal_address: "",
     landline_number: "",
     marital_status: "",
     no_of_dependents: "",
-    town: "",
-    estate: "",
-    street: "",
-    house_no: "",
+    district: "",
+    county: "",
+    sub_county: "",
+    parish: "",
+    sub_parish:"",
     ownership: "",
     years_spent: "",
     kin_name: "",
-    kin_profession: "",
+    // kin_profession: "",
     kin_contact: "",
     spouse_name: "",
-    spouse_profession: "",
+    // spouse_profession: "",
     spouse_contact: "",
-    employment: "",
+    employment: "employed",
     employer: "",
     employer_postal_address: "",
     employer_no: "",
     employer_designation: "",
     retirement_date: "",
     employment_type: "",
+    type_of_employment: "",
     business_type: "",
     years_of_operation: "",
     business_income: "",
@@ -52,10 +88,12 @@ function LoanRequest() {
     asset2: "",
     asset3: "",
     loan_type: "",
+    existing_loan: "",
     loan_purpose: "",
     amount: "",
     amount_in_words: "",
     months: "",
+    repayment_method: "",
     securities: [],
     bank_loans: [
       {
@@ -76,12 +114,12 @@ function LoanRequest() {
     guarantors: [
       {
         name: "",
-        financial_statement: "",
+        // financial_statement: "",
         contact: "",
       },
       {
         name: "",
-        financial_statement: "",
+        // financial_statement: "",
         contact: "",
       },
     ],
@@ -99,6 +137,7 @@ function LoanRequest() {
   });
 
   return (
+    
     <div className="flex-grow sm:mx-2 md:mx-5 my-2 h-[calc(100vh-70px)]">
       <ToastContainer />
       <div className="flex flex-col justify-between pb-3 md:h-[60px]">
@@ -116,6 +155,14 @@ function LoanRequest() {
               initialValues={initialValues}
               setInitialValues={setInitialValues}
               setPageNumber={setPageNumber}
+              counties={counties}
+              setCounties={setCounties}
+              subCounties={subCounties}
+              setSubCounties={setSubCounties}
+              parishes={parishes}
+              setParishes={setParishes}
+              subParishes={subParishes}
+              setSubParishes={setSubParishes}
             />
           )}
           {pageNumber === 2 && (
@@ -138,6 +185,7 @@ function LoanRequest() {
               initialValues={initialValues}
               setInitialValues={setInitialValues}
               setPageNumber={setPageNumber}
+              profiles={profiles}
             />
           )}
           {pageNumber === 5 && (
@@ -153,6 +201,7 @@ function LoanRequest() {
               initialValues={initialValues}
               setInitialValues={setInitialValues}
               setPageNumber={setPageNumber}
+              accountsInformation={accountsInformation}
             />
           )}
         </div>

@@ -1,64 +1,63 @@
 import { supabase } from "../../helpers/supabase";
 import { useState, useEffect } from "react";
-import { MdOutlineSearch } from "react-icons/md";
 import Pagination from "../../components/Pagination";
 import { Spinner } from "../../components";
-import { useNavigate } from "react-router-dom";
-import { FaEllipsisV } from "react-icons/fa";
-import { AiFillCheckSquare } from "react-icons/ai";
 import { NothingShown } from "../../components";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import WithdrawModal from "../../components/Modals/WithdrawModal2";
-import { MdInfo } from "react-icons/md";
+import { generateReportFromJson } from "../../helpers/generateReportFromJson";
+import { MdDownload } from "react-icons/md";
 
 export default function WithdrawMembers() {
   const [status, setStatus] = useState("");
   const [searchText, setSearchText] = useState("");
   const [date, setDate] = useState(null);
   const [withdrawModal, setWithdrawModal] = useState(false);
-  const [show, setShow ] = useState(false)
-  const [loading, setLoading] = useState(true)
-  
-
-  const navigate = useNavigate();
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [withdraws, setWithdraws] = useState([]);
 
-  const handleWithdraw = (withdrawID) => {
-    navigate(`/withdraw/members/${withdrawID}`);
-  };
-
   useEffect(() => {
-    getApplications().catch(error => console.log(error))
-    
-    const mySubscription = supabase
-      .from('applications')
-      .on('*', async ( payload ) => {
-        await getApplications().catch(error => console.log(error))
-      })
-      .subscribe()
+    getApplications().catch((error) => console.log(error));
 
-    return () => supabase.removeSubscription(mySubscription)
+    const mySubscription = supabase
+      .from("applications")
+      .on("*", async (payload) => {
+        await getApplications().catch((error) => console.log(error));
+      })
+      .subscribe();
+
+    supabase
+      .from("transactions")
+      .on("*", async (payload) => {
+        await getApplications().catch((error) => console.log(error));
+      })
+      .subscribe();
+
+    return () => supabase.removeSubscription(mySubscription);
   }, []);
 
   const getApplications = async () => {
-    const { data: {transactions, applications}, error } = await supabase.rpc("fetch_member_withdraws")
-      if( error ) {
-        setLoading(false)
-        throw error
-      } else {
-        console.log('Transactions: ',transactions)
+    const {
+      data: { transactions, applications },
+      error,
+    } = await supabase.rpc("fetch_member_withdraws");
+    if (error) {
+      setLoading(false);
+      throw error;
+    } else {
+      let data = [];
+      if (applications) data.push(...applications);
+      if (transactions) data.push(...transactions);
 
-        console.log('Applications: ',applications)
-        let data = []
-        if (applications) data.push(...applications)
-        if (transactions) data.push(...transactions)
-        setWithdraws(data ?? null)
-        setLoading(false)
-
-        console.log("Here ",data)
-      }
+      const sorted_data = data.sort(
+        (a, b) => new Date(b?.created_at) - new Date(a?.created_at)
+      );
+      setWithdraws(sorted_data ?? null);
+      setLoading(false);
+    }
   };
 
   //pagination
@@ -67,35 +66,40 @@ export default function WithdrawMembers() {
   const indexOfLastPage = currentPage * withdrawPerPage;
   const indexOfFirstPage = indexOfLastPage - withdrawPerPage;
 
-  let filteredWithdraws =  withdraws && withdraws.filter((application) => {
-    if( status === "") {
-      return application
-    } else if ( status === "pending") {
-      return application?.application_meta?.review_status === "pending"
-    } else if ( status === "approved") {
-      return application?.transaction_meta
-    } else if (status === "rejected" ) {
-      return application?.application_meta?.review_status === "rejected"
-    }
-
-  });
+  let filteredWithdraws =
+    withdraws &&
+    withdraws.filter((application) => {
+      if (status === "") {
+        return application;
+      } else if (status === "pending") {
+        return application?.application_meta?.review_status === "pending";
+      } else if (status === "approved") {
+        return application?.transaction_meta;
+      } else if (status === "rejected") {
+        return application?.application_meta?.review_status === "rejected";
+      }
+    });
 
   filteredWithdraws = filteredWithdraws.filter(
     (withdraw) =>
-      (withdraw?.application_meta?.applicants_name || withdraw?.transaction_meta?.member_name || withdraw?.trans_id)
+      (
+        withdraw?.application_meta?.applicants_name ||
+        withdraw?.transaction_meta?.member_name ||
+        withdraw?.trans_id
+      )
         .toLowerCase()
         .indexOf(searchText.toLowerCase()) > -1
   );
 
   const approvedwithdraws = filteredWithdraws.filter(
-    (deposit) => deposit.application_meta?.review_status === "approved"
+    (deposit) => deposit?.transaction_meta
   );
   const pendingwithdraws = filteredWithdraws.filter(
-    (deposit) => !deposit.reviewed
+    (deposit) => deposit?.application_meta?.review_status === "pending"
   );
   const rejectedwithdraws = filteredWithdraws.filter(
     (deposit) =>
-      deposit.reviewed && deposit.application_meta?.review_status !== "approved"
+      deposit.reviewed && deposit.application_meta?.review_status === "rejected"
   );
 
   const approved =
@@ -126,8 +130,40 @@ export default function WithdrawMembers() {
     };
   }
 
+  const generate_withdraw_report = () => {
+    const formattedDeposits = withdraws.map((deposit) => {
+      return {
+        "Member Name": deposit?.transaction_meta
+          ? deposit?.transaction_meta?.member_name
+          : deposit?.application_meta?.applicants_name,
+        "Transaction ID": deposit?.application_meta
+          ? deposit.app_id
+          : deposit?.trans_id,
+        Date: deposit?.created_at,
+        Amount: deposit?.transaction_meta
+          ? deposit?.amount
+          : deposit?.application_meta?.amount,
+        Account: deposit?.transaction_meta
+          ? deposit?.transaction_meta?.account_type
+          : deposit?.application_meta?.account_type,
+        "Approved At": deposit?.transaction_meta
+          ? deposit?.transaction_meta?.approved_at
+          : "",
+        Status: deposit?.transaction_meta
+          ? "approved"
+          : deposit?.application_meta?.review_status,
+        "Approved By": deposit?.transaction_meta
+          ? deposit?.transaction_meta?.approved_by
+          : "",
+      };
+    });
+
+    console.log(formattedDeposits);
+    generateReportFromJson(formattedDeposits, "Member Withdraws");
+  };
+
   return (
-    <div className="flex-grow mx-5 my-2 h-[calc(100vh-70px)]">
+    <div className="flex-grow mx-5 my-2 h-[calc(100vh-140px)]">
       <div className="flex flex-col justify-between pb-3 md:h-[110px]">
         <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
           Members Withdraw
@@ -215,6 +251,18 @@ export default function WithdrawMembers() {
           />
         </div>
       </div>
+      <div className="flex justify-end mb-3 mt-3">
+        <button
+          className="bg-green-500 align-text-middle px-3 py-2 text-white font-bold rounded flex items-center"
+          onClick={() => {
+            generate_withdraw_report();
+            console.log("here");
+          }}
+        >
+          Export
+          <MdDownload className="ml-1" />
+        </button>
+      </div>
       <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-170px)] dark:bg-dark-bg-700">
         {filteredWithdraws.length > 0 ? (
           <>
@@ -234,9 +282,7 @@ export default function WithdrawMembers() {
                   </tr>
                 </thead>
                 <tbody>
-
                   {shownWithdraw.map((withdraw, index) => {
-                    console.log(shownWithdraw)
                     return (
                       <>
                         <tr
@@ -245,40 +291,55 @@ export default function WithdrawMembers() {
                           } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                           key={index}
                           onClick={() => {
-                            setActiveIndex(index)
-                            setWithdrawModal(true)
+                            setActiveIndex(index);
+                            setWithdrawModal(true);
                           }}
                         >
-                          <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                          <td>
+                            <span className="ml-2 px-4 py-3 text-sm">&gt;</span>
+                          </td>
                           <td className="px-6 py-3">
-                            {withdraw?.application_meta?.applicants_name || withdraw?.transaction_meta?.member_name}
+                            {withdraw?.application_meta?.applicants_name ||
+                              withdraw?.transaction_meta?.member_name}
                           </td>
                           <td className="px-6 py-3">
                             {moment(withdraw.created_at).format("DD-MM-YYYY")}
                           </td>
-                          <td className="px-6 py-3">{withdraw?.app_id || withdraw?.trans_id}</td>
                           <td className="px-6 py-3">
-                            {withdraw.application_meta?.account_type || withdraw?.transaction_meta?.account_type}
+                            {withdraw?.app_id || withdraw?.trans_id}
                           </td>
                           <td className="px-6 py-3">
-                            {currencyFormatter(withdraw?.application_meta?.amount || withdraw?.amount)}
+                            {withdraw.application_meta?.account_type ||
+                              withdraw?.transaction_meta?.account_type}
                           </td>
                           <td className="px-6 py-3">
-                            {withdraw.application_meta?.cashout_method || withdraw?.transaction_meta.cashout_method || "Unknown"}
+                            {currencyFormatter(
+                              withdraw?.application_meta?.amount ||
+                                withdraw?.amount
+                            )}
+                          </td>
+                          <td className="px-6 py-3">
+                            {withdraw?.application_meta?.cashout_method ||
+                              withdraw?.transaction_meta?.cashout_method ||
+                              "Unknown"}
                           </td>
                           <td className={`px-6 py-3`}>
                             <span
                               className={` py-1 px-2 rounded-xl text-white ${
-                                withdraw.transaction_meta ? "bg-green-400"
-                                  : withdraw.application_meta?.review_status === "rejected"
+                                withdraw.transaction_meta
+                                  ? "bg-green-400"
+                                  : withdraw.application_meta?.review_status ===
+                                    "rejected"
                                   ? "bg-red-400"
                                   : "bg-yellow-400"
                               }`}
                             >
-                              {withdraw.transaction_meta ? "Approved"
-                                  : withdraw.application_meta?.review_status === "rejected"
-                                  ? "Rejected"
-                                  : "Pending"}
+                              {withdraw.transaction_meta
+                                ? "Approved"
+                                : withdraw.application_meta?.review_status ===
+                                  "rejected"
+                                ? "Rejected"
+                                : "Pending"}
                             </span>
                           </td>
 
@@ -328,10 +389,10 @@ export default function WithdrawMembers() {
                             withdraw={withdraw}
                             setWithdrawModal={setWithdrawModal}
                           />
-                          
                         )}
                       </>
-                  )})}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

@@ -45,7 +45,7 @@ export default function ApplicationPg5({ fullname, initialValues, setInitialValu
 
                         <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="securities_offered[0].savings" label="Savings" placeholder="Enter savings" />
 
-                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="securities_offered[0].other" label="other" placeholder="Enter savings" />
+                        <InputField errors={errors} touched={touched} handleChange={handleChange}  handleBlur={handleBlur} reference="securities_offered[0].other" label="other" placeholder="Enter others" />
 
                     </div>
                 </div>
@@ -126,9 +126,6 @@ export default function ApplicationPg5({ fullname, initialValues, setInitialValu
                         type="submit"
                         value='Verify'
                         className='outline outline-gray-500 outline-2 text-gray-500 px-4 py-1 rounded-lg cursor-pointer'
-                        // onClick={() => {
-                        //   setPageNumber(pageNumber + 1)
-                        // }}
                     />
                 </div>
             </Form>

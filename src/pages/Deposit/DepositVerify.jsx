@@ -19,6 +19,7 @@ export default function DepositVerify() {
     getApplication()
       .then(async ( data ) => {
         if( data ) {
+          console.log("here: ", data)
           setDeposit( data )
           // Downloading the image.
           if( !imageURL ) {
@@ -42,7 +43,7 @@ export default function DepositVerify() {
   const getApplication = async () => {
     const { error, data } = await supabase.rpc("fetch_deposit_applications")
     if(error) throw error
-
+    console.log(data)
     if(data) {
       const [deposit_application] = data.filter( deposit_application => deposit_application.application_id === id)
       return deposit_application
@@ -53,22 +54,23 @@ export default function DepositVerify() {
   // }
 
   const approveDepositTransaction = async () => {
-    const {
-      application_meta: { applicants_id },
-    } = deposit;
-
     try {
-      const { data, error } = await supabase.rpc("approve_transaction", {
-        members_id: applicants_id,
+      const { data, error } = await supabase.rpc("approve_deposit_application", {
         application: id,
       });
+
       if (error) {
         throw error;
       } else {
+        console.log("Result: ", data)
+        
         // handle the alerts and navigation
         toast.success(`Transaction has been approved.`, {
           position: "top-center",
         });
+        setDeposit((deposit) => ({ ...deposit, ...data}))
+
+        console.log("Modified deposit: ", { ...deposit, ...data})
       }
     } catch (error) {
       toast.error(`${error?.message}`, { position:"top-center"})
@@ -110,18 +112,15 @@ export default function DepositVerify() {
               <h1 className="font-semibold mb-3">
                 {deposit.application_meta && deposit.application_meta.applicants_name}'s Deposit Details
                 <span
-                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
+                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 inline-block capitalize ${
                     deposit?.transaction_meta ? "bg-green-400"
-                              : deposit?.application_meta?.review_status === "rejected"
-                              ? "bg-red-400"
-                              : "bg-yellow-400"
+                      : deposit?.application_meta?.review_status === "rejected"
+                      ? "bg-red-400" : deposit?.application_meta?.review_status === "approved"
+                      ? "bg-green-400"
+                      : "bg-yellow-400"
                   }`}
                 >
-                  {!deposit.reviewed
-                    ? "Pending"
-                    : deposit.application_meta && deposit.application_meta.review_status === "approved"
-                    ? "Approved"
-                    : "Rejected"}
+                  {deposit?.application_meta?.review_status}
                 </span>
               </h1>
               <div className="outline outline-1 outline-gray-100 dark:outline-secondary-text p-3">
@@ -144,7 +143,7 @@ export default function DepositVerify() {
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
-                  <p className="col-span-2">Shares</p>
+                  <p className="col-span-2">Account</p>
                   <p className="font-bold col-span-3">
                     : {deposit.application_meta && deposit.application_meta.account_type}
                   </p>
@@ -172,8 +171,8 @@ export default function DepositVerify() {
                 </div>
               </div>
             </div>
-            {deposit.application_meta.applicants_id !== profile.id &&
-              !deposit.application_meta.reviewed && (
+            {deposit?.application_meta.applicants_id !== profile.id &&
+              deposit?.application_meta.review_status === 'pending' && (
                 <div className="flex gap-10 justify-end items-center mt-3">
                   <button
                     type="submit"

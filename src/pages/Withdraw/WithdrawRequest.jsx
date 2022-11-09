@@ -64,7 +64,6 @@ function WithdrawRequest() {
       <ToastContainer />
       <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
         Withdraw Request
-        { console.log(Date.now())}
       </h1>
       <div
         className={`flex bg-white relative dark:bg-dark-bg-700 dark:text-secondary-text min-h-full`}
@@ -139,10 +138,14 @@ function WithdrawRequest() {
                   }
                 )
   
-                if(error) throw error
-                toast.success(`Request submitted for review.`, {
-                  position: "top-center",
-                })
+                if(error) {
+                  throw error
+                }
+                else {
+                  toast.success(`Request submitted for review.`, {
+                    position: "top-center",
+                  })
+                }
   
                 resetForm({values: initialValues})
                 setLoading(false)
@@ -262,9 +265,6 @@ function WithdrawRequest() {
                             </div>
                           )}
                         </div>
-                      }
-                      {
-                        console.log(values.designated_for)
                       }
                     </div>
                   

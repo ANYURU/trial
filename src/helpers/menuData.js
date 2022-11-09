@@ -153,6 +153,10 @@ export const menuData = {
                     label: 'Fixed',
                     link: 'accounts/fixed'
                 },
+                {
+                    label: 'Reserve',
+                    link: 'accounts/reserve'
+                }
             ]
         },
         {

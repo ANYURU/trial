@@ -80,14 +80,19 @@ function MakeDeposit() {
               amount,
               comments,
               evidence,
+    
 
             } = values;
 
+            console.log(values)
 
             try {
-              const { Key: url } = await uploadFile(evidence, "deposits");
 
+              
+              
               if( values.designated_for === "other") {
+                const { Key: url } = await uploadFile(evidence, "deposits");
+
                 const details = {
                   ...values,
                   file_url: url,
@@ -105,11 +110,36 @@ function MakeDeposit() {
 
                 resetForm({ values: initialValues });
                 setLoading(false);
-                toast.success(`${data?.transaction_meta?.fullname}'s deposit created successfully.`, {
+                toast.success(`${data?.transaction_meta?.member_name}'s deposit created successfully.`, {
                   position: "top-center",
                 });
 
+              } else if ( values.designated_for === "organisation") {
+                
+                const details = {
+                  ...values,
+                  _type: "reserve",
+                  created_at: new Date()
+                        .toISOString()
+                        .toLocaleString("en-GB", { timeZone: "UTC" }),
+                  updated_at: new Date()
+                        .toISOString()
+                        .toLocaleString("en-GB", { timeZone: "UTC" }),
+                  applicants_id,
+                  fullname: applicants_name,
+                  member_id: applicants_id,
+                }
+
+
+               const { data, error } = await supabase.rpc('handle_reserve_account_deposit', {details: JSON.stringify(details)})
+               if(error) throw error
+               console.log(data)
+
+                console.log("here")
+                setLoading(false)
+
               } else {
+                const { Key: url } = await uploadFile(evidence, "deposits");
 
                 const { error } = await supabase
                   .from("applications")
@@ -172,7 +202,7 @@ function MakeDeposit() {
                   <div className="mb-3 flex flex-col md:flex-row gap-5 ">
                     {
                       roles && roles.includes('treasurer') && 
-                      <div className='flex flex-col w-56 pb-3'>
+                      <div className='flex flex-col w-80 pb-3'>
                         <label className='text-sm'>Designated for</label>
                         <div className='flex justify-between'>
                             <div className='flex gap-1'>
@@ -182,6 +212,10 @@ function MakeDeposit() {
                             <div className='flex gap-1'>
                                 <input type="radio" id="other" name="designated_for" value="other" className='w-4 h-4' onChange={handleChange("designated_for")}/>
                                 <label htmlFor="other" className='text-sm'>Other Member</label>
+                            </div>
+                            <div className='flex gap-1'>
+                                <input type="radio" id="other" name="designated_for" value="organisation" className='w-4 h-4' onChange={handleChange("designated_for")}/>
+                                <label htmlFor="other" className='text-sm'>Organisation</label>
                             </div>
                         </div>
                       </div>
@@ -237,10 +271,21 @@ function MakeDeposit() {
                         value={values.account_type}
                       >
                         <option value="">--Select Account--</option>
-                        <option value="savings">Savings</option>
-                        <option value="shares">Shares</option>
-                        <option value="fixed">Fixed</option>
-                        <option value="mwana">Mwana</option>
+                        {
+                          roles.includes('treasurer') && values.designated_for === "organisation" ? <>
+                            {/* <option value="sacco">Sacco</option> */}
+                            <option value="reserve">Reserve</option>
+                            {/* <option value="commercial">Commercial</option> */}
+                          </> 
+                            :
+                          <>  
+                            <option value="">--Select Account--</option>
+                            <option value="savings">Savings</option>
+                            <option value="shares">Shares</option>
+                            <option value="fixed">Fixed</option>
+                            <option value="mwana">Mwana</option>
+                          </>
+                        }
                       </select>
                       {touched?.account_type && errors?.account_type && (
                         <div className="error text-red-600 text-xs">
@@ -270,27 +315,30 @@ function MakeDeposit() {
                       )}
                     </div>
                   </div>
-                  <div className="mb-3 flex flex-col md:flex-row gap-5">
-                    <div className="flex flex-col w-56 ">
-                      <label className=" text-sm">Upload Receipt</label>
-                      <input
-                        type="file"
-                        name="evidence"
-                        id="evidence"
-                        placeholder="Enter postal address"
-                        className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
-                        onChange={(event) => {
-                          values.evidence = event.currentTarget.files[0];
-                        }}
-                        onBlur={handleBlur}
-                      />
-                      {touched?.evidence && errors?.evidence && (
-                        <div className="error text-red-600 text-xs">
-                          {errors?.evidence}
-                        </div>
-                      )}
+                  {
+                    values?.designated_for != 'organisation' &&
+                    <div className="mb-3 flex flex-col md:flex-row gap-5">
+                      <div className="flex flex-col w-56 ">
+                        <label className=" text-sm">Upload Receipt</label>
+                        <input
+                          type="file"
+                          name="evidence"
+                          id="evidence"
+                          placeholder="Enter postal address"
+                          className="ring-1 ring-black rounded px-2 py-1 dark:bg-dark-bg-600"
+                          onChange={(event) => {
+                            values.evidence = event.currentTarget.files[0];
+                          }}
+                          onBlur={handleBlur}
+                        />
+                        {touched?.evidence && errors?.evidence && (
+                          <div className="error text-red-600 text-xs">
+                            {errors?.evidence}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  }
                   <div className="mb-3">
                     <h1 className="font-semibold">Comments</h1>
                     <textarea

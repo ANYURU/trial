@@ -1,23 +1,19 @@
 import { Pagination, Spinner, NothingShown } from "../../components";
 import { useState, useEffect, Fragment } from "react";
 import { supabase } from "../../helpers/supabase";
-import { FaEllipsisV } from "react-icons/fa";
-import { MdInfo } from "react-icons/md";
 import { Helmet } from "react-helmet";
 import WithdrawModal from "../../components/Modals/WithdrawModal";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { useOutletContext } from "react-router-dom";
-import { filterByStatus } from "../../helpers/utilites";
+import { MdDownload } from "react-icons/md";
+import { generateReportFromJson } from "../../helpers/generateReportFromJson";
 
 export default function Deposit() {
-
   const [deposits, setDeposits] = useState([]);
   const [depositModal, setDepositModal] = useState(false);
   const [account, setAccount] = useState("");
-  const [status, setStatus] = useState("")
-
-
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     document.title = "Deposit - Bweyogere tuberebumu";
@@ -28,17 +24,16 @@ export default function Deposit() {
       .on("*", async (payload) => {
         console.log(payload);
         await getApplications();
-      })
-    getDeposits()
+      });
+    getDeposits();
 
     const mySubscriptions = supabase
-      .from('transactions')
-      .on('*', async payload => {
-        console.log(payload)
-        await getDeposits()
+      .from("transactions")
+      .on("*", async (payload) => {
+        console.log(payload);
+        await getDeposits();
       })
-      .subscribe()
-
+      .subscribe();
 
     return () => supabase.removeSubscription(mySubscription);
   }, []);
@@ -46,7 +41,7 @@ export default function Deposit() {
   const [user, profile] = useOutletContext();
 
   const [date, setDate] = useState(null);
-  const [ loading, setLoading ] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   const getApplications = async () => {
     const { data } = await supabase
@@ -54,97 +49,140 @@ export default function Deposit() {
       .select()
       .eq("_type", "deposit")
       .eq("created_by", profile.id)
-      .order("created_at", { ascending: false })
-      console.log(data)
+      .order("created_at", { ascending: false });
     setDeposits(data && data.length > 0 ? data : null);
+
+    console.log(data);
   };
 
-
   const getDeposits = async () => {
-    const { data: { transactions, applications}, error } = await supabase.rpc("fetch_withdraws")
-      if( error ) {
-        setLoading(false)
-        throw error
-      } else {
-        let data = []
-        if (applications) data.push(...applications)
-        if (transactions) data.push(...transactions)
-        setDeposits( data ?? null)
-        setLoading(false)
+    const {
+      data: { transactions, applications },
+      error,
+    } = await supabase.rpc("fetch_withdraws");
+    if (error) {
+      setLoading(false);
+      throw error;
+    } else {
+      let data = [];
+      if (applications) data.push(...applications);
+      if (transactions) data.push(...transactions);
+      setDeposits(data ?? null);
+      setLoading(false);
+      console.log(data);
+    }
+  };
+
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [depositsPerPage, setDepositsPerPage] = useState(10);
+  const indexOfLastPage = currentPage * depositsPerPage;
+  const indexOfFirstPage = indexOfLastPage - depositsPerPage;
+
+  const [show, setShow] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(false);
+
+  if (show === true) {
+    window.onclick = function (event) {
+      if (!event.target.matches(".dialog")) {
+        setShow(false);
       }
+    };
   }
 
-    // pagination
-    const [currentPage, setCurrentPage] = useState(1);
-    const [depositsPerPage, setDepositsPerPage] = useState(10);
-    const indexOfLastPage = currentPage * depositsPerPage;
-    const indexOfFirstPage = indexOfLastPage - depositsPerPage;
-  
-    const [show, setShow] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(false);
-  
-    if (show === true) {
-      window.onclick = function (event) {
-        if (!event.target.matches(".dialog")) {
-          setShow(false);
-        }
-      };
-    }
-  
-    let filteredDeposits =
-      deposits &&
-      deposits.filter(
-        (deposit) => !date || deposit.created_at.substring(0, 10) === date
-      )?.length > 0
-        ? deposits.filter(
-            (deposit) => !date || deposit.created_at.substring(0, 10) === date
-          )
-        : null;
-  
-    filteredDeposits =
-      !filteredDeposits ||
-      filteredDeposits.filter(deposit => !status || status === "" ? deposit : status === 'approved' ? deposit?.transaction_meta : deposit?.application_meta?.review_status === status).filter(
-        (deposit) =>
-          !account || (deposit?.transaction_meta ? deposit?.transaction_meta?.account_type === account : deposit?.application_meta?.account_type === account)
-      )
-    
-      
+  let filteredDeposits =
+    deposits &&
+    deposits.filter(
+      (deposit) => !date || deposit.created_at.substring(0, 10) === date
+    )?.length > 0
+      ? deposits.filter(
+          (deposit) => !date || deposit.created_at.substring(0, 10) === date
+        )
+      : null;
 
-    
-    return (
-      <div className="mx-5 my-2 h-[calc(100vh-70px)]">
-        <Helmet>
-          <title>Deposit - Bweyogere tuberebumu</title>
-        </Helmet>
-        <div className="flex flex-col justify-between pb-3 md:h-[110px]">
-          <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
-            My Deposits
-          </h1>
-  
-          <div className="flex my-3 justify-between gap-5">
-            <div className="flex flex-col w-56">
-              <select
-                name="status"
-                id=""
-                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
-                onChange={(event) => {
-                  setStatus(event.target.value);
-                  console.log(event.target.value)
-                  console.log(filteredDeposits)
-                  
-                }}
-              >
-                <option value="">Status</option>
-                <option value="approved">Approved</option>
-                <option value="pending">Pending</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-            <div className="flex flex-col w-56">
-              <select
-                name="account"
-                id=""
-                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+  filteredDeposits =
+    !filteredDeposits ||
+    filteredDeposits
+      .filter((deposit) =>
+        !status || status === ""
+          ? deposit
+          : status === "approved"
+          ? deposit?.transaction_meta
+          : deposit?.application_meta?.review_status === status
+      )
+      .filter(
+        (deposit) =>
+          !account ||
+          (deposit?.transaction_meta
+            ? deposit?.transaction_meta?.account_type === account
+            : deposit?.application_meta?.account_type === account)
+      );
+
+  const generate_withdraw_report = () => {
+    const formattedWithdraws = deposits.map((deposit) => {
+      return {
+        "Member Name": deposit?.transaction_meta
+          ? deposit?.transaction_meta?.member_name
+          : deposit?.application_meta?.applicants_name,
+        "Transaction ID": deposit?.application_meta
+          ? deposit.app_id
+          : deposit?.trans_id,
+        Date: deposit?.created_at,
+        Amount: deposit?.transaction_meta
+          ? deposit?.amount
+          : deposit?.application_meta?.amount,
+        Account: deposit?.transaction_meta
+          ? deposit?.transaction_meta?.account_type
+          : deposit?.application_meta?.account_type,
+        "Approved At": deposit?.transaction_meta
+          ? deposit?.transaction_meta?.approved_at
+          : "",
+        Status: deposit?.transaction_meta
+          ? "approved"
+          : deposit?.application_meta?.review_status,
+        "Approved By": deposit?.transaction_meta
+          ? deposit?.transaction_meta?.approved_by
+          : "",
+      };
+    });
+
+    console.log(formattedWithdraws);
+    generateReportFromJson(formattedWithdraws, "Personal Withdraws");
+  };
+
+  return (
+    <div className="mx-5 my-2 h-[calc(100vh-140px)]">
+      <Helmet>
+        <title>Deposit - Bweyogere tuberebumu</title>
+      </Helmet>
+      <div className="flex flex-col justify-between pb-3 md:h-[110px]">
+        <h1 className="mb-5 mt-2 font-bold uppercase dark:text-white">
+          My Deposits
+        </h1>
+
+        <div className="flex my-3 justify-between gap-5">
+          <div className="flex flex-col w-56">
+            <select
+              name="status"
+              id=""
+              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
+              onChange={(event) => {
+                setStatus(event.target.value);
+                console.log(event.target.value);
+                console.log(filteredDeposits);
+              }}
+            >
+              <option value="">Status</option>
+              <option value="approved">Approved</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div className="flex flex-col w-56">
+            <select
+              name="account"
+              id=""
+              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-600 dark:text-secondary-text"
               onChange={(event) => setAccount(event.target.value)}
             >
               <option value="">Account</option>
@@ -165,6 +203,19 @@ export default function Deposit() {
             />
           </div>
         </div>
+      </div>
+      {/* Export here */}
+      <div className="flex justify-end mb-3 mt-3">
+        <button
+          className="bg-green-500 align-text-middle px-3 py-2 text-white font-bold rounded flex items-center"
+          onClick={() => {
+            generate_withdraw_report();
+            console.log("here");
+          }}
+        >
+          Export
+          <MdDownload className="ml-1" />
+        </button>
       </div>
 
       <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-120px)] dark:bg-dark-bg-700">
@@ -194,34 +245,48 @@ export default function Deposit() {
                         } hover:bg-gray-100 dark:hover:bg-dark-bg-600 cursor-pointer`}
                         key={index}
                         onClick={() => {
-                          console.log(deposit)
-                          setDepositModal(true)
-                          setActiveIndex(index)
+                          console.log(deposit);
+                          setDepositModal(true);
+                          setActiveIndex(index);
                         }}
                       >
-                        <td><span className="ml-2 px-4 py-3 text-sm">&gt;</span></td>
+                        <td>
+                          <span className="ml-2 px-4 py-3 text-sm">&gt;</span>
+                        </td>
                         <td className="pr-6 py-3">
                           {moment(deposit.created_at).format("DD-MM-YYYY")}
                         </td>
-                        <td className="px-6 py-3">{deposit?.trans_id || deposit?.app_id}</td>
                         <td className="px-6 py-3">
-                          {deposit?.transaction_meta?.account_type || deposit?.application_meta?.account_type}
+                          {deposit?.trans_id || deposit?.app_id}
                         </td>
                         <td className="px-6 py-3">
-                          {currencyFormatter(deposit?.amount || deposit?.application_meta?.amount)}
+                          {deposit?.transaction_meta?.account_type ||
+                            deposit?.application_meta?.account_type}
                         </td>
                         <td className="px-6 py-3">
-                          {deposit?.transaction_meta?.cashout_method || deposit?.application_meta?.cashout_method || "Unspecified"}
+                          {currencyFormatter(
+                            deposit?.amount || deposit?.application_meta?.amount
+                          )}
                         </td>
                         <td className="px-6 py-3">
-                          <span className={` py-1 px-2 rounded-xl text-white ${
-                            deposit?.application_meta?.review_status === "pending"
-                            ? "bg-yellow-400"
-                            : deposit?.application_meta?.review_status === "rejected" ?
-                            "bg-red-400" 
-                            : "bg-green-400"
-                          }`}>
-                            {deposit?.application_meta?.review_status || "approved"}
+                          {deposit?.transaction_meta?.cashout_method ||
+                            deposit?.application_meta?.cashout_method ||
+                            "Unspecified"}
+                        </td>
+                        <td className="px-6 py-3">
+                          <span
+                            className={` py-1 px-2 rounded-xl text-white ${
+                              deposit?.application_meta?.review_status ===
+                              "pending"
+                                ? "bg-yellow-400"
+                                : deposit?.application_meta?.review_status ===
+                                  "rejected"
+                                ? "bg-red-400"
+                                : "bg-green-400"
+                            }`}
+                          >
+                            {deposit?.application_meta?.review_status ||
+                              "approved"}
                           </span>
                         </td>
                       </tr>
@@ -232,7 +297,6 @@ export default function Deposit() {
                         />
                       )}
                     </Fragment>
-                    
                   ))}
                 </tbody>
               </table>
@@ -249,10 +313,15 @@ export default function Deposit() {
               />
             </div>
           </>
-        ) : deposits === null || deposits?.length !== 0 || filteredDeposits === null || filteredDeposits?.length === 0 ? (
+        ) : deposits === null ||
+          deposits?.length !== 0 ||
+          filteredDeposits === null ||
+          filteredDeposits?.length === 0 ? (
           <NothingShown />
+        ) : loading ? (
+          <Spinner />
         ) : (
-          loading ? <Spinner /> : <NothingShown />
+          <NothingShown />
         )}
       </div>
     </div>

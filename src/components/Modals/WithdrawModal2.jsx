@@ -10,6 +10,8 @@ export default function WithdrawModal({ passed, setWithdrawModal, withdraw }) {
   const { darkMode } = useAuth();
   const navigate = useNavigate();
   const [ user, profile, setProfile, roles] = useOutletContext()
+  console.log(withdraw)
+  console.log(roles)
 
   return ReactDOM.createPortal(
     <div
@@ -42,9 +44,16 @@ export default function WithdrawModal({ passed, setWithdrawModal, withdraw }) {
               </span>
             </span>
             {
-              withdraw?.application_meta && roles.includes('treasurer') && 
+              withdraw?.application_meta && (
+                roles.includes('treasurer') || 
+                roles.includes('asst_treasurer') || 
+                roles.includes('secretary') || 
+                roles.includes('asst_secretary') ||
+                roles.includes('chairperson') ||
+                roles.includes('vice_chairperson')
+              ) && 
               <button
-                className="bg-green-500 text-white outline-offset-2 px-1 rounded-sm w-22 capitalize font-normal text-base py-0.5 ml-5"
+                className="bg-green-500 text-white outline-offset-2 px-1 rounded-sm w-22 capitalize font-normal text-base py-0.5 ml-5 mr-5"
                 onClick = {() => {
                   navigate(`/withdraw/members/${withdraw.application_id}`);
                 }}
@@ -64,7 +73,7 @@ export default function WithdrawModal({ passed, setWithdrawModal, withdraw }) {
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">withdraw ID</p>
-          <p className="font-bold col-span-3">: {withdraw?.application_id || withdraw?.trans_id}</p>
+          <p className="font-bold col-span-3">: {withdraw?.app_id || withdraw?.application_id  || withdraw?.trans_id }</p>
         </div>
 
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -105,7 +114,7 @@ export default function WithdrawModal({ passed, setWithdrawModal, withdraw }) {
         <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
           <p className="col-span-2">Reason</p>
           <p className="font-bold col-span-3">:{" "}
-            {withdraw?.application_meta?.comments || withdraw?.transaction_meta?.comments }
+            {withdraw?.application_meta?.comments || withdraw?.transaction_meta?.comments || "Unspecified"}
           </p>
         </div>
       </div>

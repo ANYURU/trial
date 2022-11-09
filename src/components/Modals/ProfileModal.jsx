@@ -34,7 +34,7 @@ function ProfileModal({ show, setShow }) {
               .match({ 'id': user.id})
               .single()
 
-            if(error) throw error
+            if(error) console.log(error)
             await socket.emit("logout", user.id)
             await signOut()
             navigate('/login')

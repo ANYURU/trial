@@ -9,6 +9,8 @@ import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
 import { useOutletContext } from "react-router-dom";
 import { filterByStatus } from "../../helpers/utilites";
+import { MdDownload } from "react-icons/md";
+import { generateReportFromJson } from "../../helpers/generateReportFromJson";
 
 export default function Deposit() {
 
@@ -72,6 +74,7 @@ export default function Deposit() {
         if (transactions) data.push(...transactions)
         setDeposits(data ?? null)
         setLoading(false)
+        console.log(data)
       }
   }
 
@@ -109,11 +112,28 @@ export default function Deposit() {
           !account || (deposit?.transaction_meta ? deposit?.transaction_meta?.account_type === account : deposit?.application_meta?.account_type === account)
       )
     
+    const generate_deposits_report = ( ) => {
+      const formattedDeposits = deposits.map( deposit => {
+        return {
+          "Transaction ID": deposit?.application_meta ? deposit?.app_id : deposit?.trans_id,
+          "Date": deposit?.created_at,
+          "Amount": deposit?.transaction_meta ? deposit?.amount : deposit?.application_meta?.amount,
+          "Account": deposit?.transaction_meta ? deposit?.transaction_meta?.account_type : deposit?.application_meta?.account_type,
+          "Approved At": deposit?.transaction_meta ? deposit.transaction_meta?.approved_at : "",
+          "Status": deposit?.transaction_meta ? deposit?.transaction_meta?.review_status : "pending",
+          "Approved By": deposit?.transaction_meta ? deposit?.transaction_meta?.approved_by : ""
+        }
+      })
+
+      console.log(formattedDeposits, 'my deposits')
+
+      generateReportFromJson(formattedDeposits, 'Personal Deposits')
+    }
       
 
     
     return (
-      <div className="mx-5 my-2 h-[calc(100vh-70px)]">
+      <div className="mx-5 my-2 h-[calc(100vh-140px)]">
         <Helmet>
           <title>Deposit - Bweyogere tuberebumu</title>
         </Helmet>
@@ -166,6 +186,18 @@ export default function Deposit() {
             />
           </div>
         </div>
+      </div>
+      <div className="flex justify-end mb-3 mt-3">
+        <button
+          className="bg-green-500 align-text-middle px-3 py-2 text-white font-bold rounded flex items-center"
+          onClick={() => {
+            generate_deposits_report()
+            console.log("here")
+          }}
+        >
+          Export
+          <MdDownload className="ml-1"/>
+        </button>
       </div>
 
       <div className="bg-white overflow-hidden  relative  md:h-[calc(100%-120px)] dark:bg-dark-bg-700">

@@ -27,7 +27,7 @@ export default function DepositModal({ passed, setDepositModal, deposit }) {
           <div>
             <span className="font-bold text-lg">Deposit Details</span>
             {
-              deposit?.application_meta && roles.includes('treasurer') &&
+              deposit?.application_meta && roles.includes('treasurer' || 'asst_treasurer') &&
               <button
                 className="bg-green-500 text-white outline-offset-2 px-1 rounded-sm w-22 capitalize font-normal text-base py-0.5 border ml-10"
                 onClick = {() => {

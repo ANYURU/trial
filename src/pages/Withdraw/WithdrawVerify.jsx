@@ -5,14 +5,18 @@ import { toast, ToastContainer } from "react-toastify";
 import { Spinner } from "../../components";
 import moment from "moment";
 import { currencyFormatter } from "../../helpers/currencyFormatter";
+import { useOutletContext } from "react-router-dom";
 
 export default function WithdrawVerify() {
   const { id } = useParams();
   const [withdraw, setWithdraw] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [user, profile, setProfile, roles] = useOutletContext()
+  const [showActions, setShowActions] = useState(true)
+  
   useEffect(() => {
-    getApplication();
+    getApplication()
+    .catch(error => console.log(error))
   }, []);
 
   const getApplication = async () => {
@@ -22,32 +26,51 @@ export default function WithdrawVerify() {
       .eq("_type", "withdraw")
       .eq("application_id", id)
       .single();
-      console.log(data)
 
+    console.log("Withdraw: ", data)
+
+    if( error ) throw error
+
+    const [ my_role ] = roles && roles.filter(role => role !== "member" && role !== "admin")
+
+    if ( data.reviewed) {
+      setShowActions(false)
+    } else if( ["secretary", "assitant_secretary", "treasurer", "assistant_treasurer"].includes(my_role)) {
+      if( data?.application_meta?.admin_1?.admin_name) {
+        setShowActions(false)
+      } 
+    } else if( ["chairperson", "vice_chairperson"].includes(my_role)) {
+      if( data?.application_meta?.admin_2?.admin_name) {
+        setShowActions(false)
+      }
+    } 
 
     setWithdraw(data);
   };
 
   const approveWithdrawTransaction = async () => {
     setLoading(true);
-    const {
-      application_meta: { applicants_id },
-    } = withdraw;
 
     try {
-      const { error, data } = await supabase.rpc("approve_transaction", {
-        members_id: applicants_id,
+      const { error, data } = await supabase.rpc("approve_withdraw_transaction", {
         application: id,
+        admin: profile.id
       });
 
       if (error) {
+        console.log(error)
         setLoading(false);
         toast.error(`${error?.message}`, { position: "top-center" });
       } else {
+        console.log(data)
+        setWithdraw((withdraw) => ({...withdraw, application_meta: data?.application_meta}))
+        console.log("withdraw", {...withdraw, application_meta: data?.application_meta})
         setLoading(false);
         toast.success(`Withdraw has been approved.`, {
           position: "top-center",
         });
+
+        setShowActions(false)
       }
     } catch (error) {
       setLoading(false);
@@ -58,8 +81,9 @@ export default function WithdrawVerify() {
   const rejectWithdrawTransaction = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.rpc("reject_application", {
+      const { data, error } = await supabase.rpc("reject_withdraw_transaction", {
         application: id,
+        admin: profile.id
       });
       if (error) {
         setLoading(false);
@@ -102,19 +126,15 @@ export default function WithdrawVerify() {
                   withdraw.application_meta.applicants_name}
                 's withdraw Request Details
                 <span
-                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 ${
-                    !withdraw.reviewed
-                      ? "bg-yellow-400"
-                      : withdraw.application_meta.review_status === "approved"
+                  className={` py-1 px-2 rounded-lg text-white text-xs ml-1 inline-block capitalize ${
+                    withdraw?.transaction_meta ? "bg-green-400"
+                      : withdraw?.application_meta?.review_status === "rejected"
+                      ? "bg-red-400" : withdraw?.application_meta?.review_status === "approved"
                       ? "bg-green-400"
-                      : "bg-red-400"
+                      : "bg-yellow-400"
                   }`}
                 >
-                  {!withdraw.reviewed
-                    ? "Pending"
-                    : withdraw.application_meta.review_status === "approved"
-                    ? "Approved"
-                    : "Rejected"}
+                  { withdraw?.application_meta?.review_status }
                 </span>
               </h1>
 
@@ -132,6 +152,12 @@ export default function WithdrawVerify() {
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Designated for :</p>
+                  <p className="font-bold col-span-3">
+                    {withdraw?.application_meta?.designated_for === 'other' ? 'Other member' : 'Oneself'}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
                   <p className="col-span-2">Account:</p>
                   <p className="font-bold col-span-3">
                     {withdraw.application_meta.account_type}
@@ -141,6 +167,12 @@ export default function WithdrawVerify() {
                   <p className="col-span-2">Amount:</p>
                   <p className="font-bold col-span-3">
                     UGX {currencyFormatter(withdraw.application_meta.amount)}
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                  <p className="col-span-2">Cashout method:</p>
+                  <p className="font-bold col-span-3">
+                    {withdraw?.application_meta?.cashout_method}
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
@@ -162,31 +194,116 @@ export default function WithdrawVerify() {
                 )}
               </div>
             </div>
+            {
+              withdraw?.application_meta?.designated_for === "other" &&
+              <>
+                <div className="outline outline-1 outline-gray-100 p-3 mb-3">
+                  <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                    <p className="col-span-2">Member's name:</p>
+                    <p className="font-bold col-span-3">
+                      {withdraw?.application_meta?.member?.fullname}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                    <p className="col-span-2">Phone number:</p>
+                    <p className="font-bold col-span-3">
+                      {withdraw?.application_meta?.member?.phone_number}
+                    </p>
+                  </div>
+                </div>
+                {
+                  ( withdraw?.application_meta?.admin_1?.admin_name || withdraw?.application_meta?.admin_2?.admin_name ) &&
+                  <div className="outline outline-1 outline-gray-100 p-3">
+                    <h1 className="mb-5 mt-2 uppercase dark:text-white font-bold">
+                      Review details
+                    </h1>
+                    {
+                      // withdraw?.application_meta?.admin_1?.admin_name &&
+                      <>
+                        <h1 className="mb-2 mt-2 font-bold capitalize dark:text-white">
+                          Treasury and Secretariate 
+                        </h1>
+                        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                          <p className="col-span-2">Reviewed by:</p>
+                          <p className="font-bold col-span-3">
+                            {withdraw?.application_meta?.admin_1?.admin_name}
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                          <p className="col-span-2">Role:</p>
+                          <p className="font-bold col-span-3">
+                            {withdraw?.application_meta?.admin_1?.position_in_sacco}
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                          <p className="col-span-2">Status:</p>
+                          <p className="font-bold col-span-3">
+                            {withdraw?.application_meta?.admin_1?.review_status}
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full border-b pb-3">
+                          <p className="col-span-2">Reviewed at:</p>
+                          <p className="font-bold col-span-3">
+                          {withdraw?.application_meta?.admin_1?.reviewed_at && moment(withdraw.application_meta?.admin_1?.reviewed_at).format("DD-MM-YYYY  hh:mm a")}
+                          </p>
+                        </div>
+                      </>
+                    }
+                    {
+                      // withdraw?.application_meta?.admin_2?.admin_name &&
+                      <>
+                        <h1 className="mb-2 mt-2 font-bold capitalize dark:text-white">
+                          Leadership 
+                        </h1>
+                        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                          <p className="col-span-2">Reviewed by:</p>
+                          <p className="font-bold col-span-3">
+                            {withdraw?.application_meta?.admin_2?.admin_name}
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                          <p className="col-span-2">Role:</p>
+                          <p className="font-bold col-span-3">
+                            {withdraw?.application_meta?.admin_2?.position_in_sacco}
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                          <p className="col-span-2">Status:</p>
+                          <p className="font-bold col-span-3">
+                            {withdraw?.application_meta?.admin_2?.review_status}
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-5 gap-2 mb-2 justify-start w-full">
+                          <p className="col-span-2">Reviewed at:</p>
+                          <p className="font-bold col-span-3">
+                            {withdraw?.application_meta?.admin_2?.reviewed_at && moment(withdraw?.application_meta?.admin_2?.reviewed_at).format("DD-MM-YYYY  hh:mm a")}
+                          </p>
+                        </div>
+                      </>
+                    }
+                  </div>
+                }
+              </>
+            }
             <div className="flex gap-10 justify-end items-center mt-3">
-              {withdraw && !withdraw.reviewed && (
-                <div className="flex gap-10 justify-end items-center mt-3">
-                  <button
-                    className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-                    onClick={() => rejectWithdrawTransaction()}
-                  >
-                    Reject
-                  </button>
-                  <button
-                    className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
-                    onClick={() => approveWithdrawTransaction()}
-                  >
-                    Approve
-                  </button>
-                </div>
-              )}
-              {withdraw && withdraw.reviewed && (
-                <div className="flex justify-end items-center mt-3">
-                  Reviewed by:{" "}
-                  <span className="font-bold">
-                    {withdraw.application_meta.reviewed_by}
-                  </span>
-                </div>
-              )}
+              { showActions &&
+                (
+                  <div className={`flex gap-10 justify-end items-center mt-3`}>
+                    <button
+                      className="bg-accent-red inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                      onClick={() => rejectWithdrawTransaction()}
+                    >
+                      Reject
+                    </button>
+                    <button
+                      className="bg-green-600 inline-flex items-center justify-center  text-white text-base font-medium px-4 py-2"
+                      onClick={() => approveWithdrawTransaction()}
+                    >
+                      Approve
+                    </button>
+                  </div>
+                )
+              }
             </div>
           </div>
         ) : (

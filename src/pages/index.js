@@ -37,6 +37,7 @@ import Savings from './Accounts/Savings'
 import Mwana from './Accounts/Mwana'
 import Fixed from './Accounts/Fixed'
 import Shares from './Accounts/Shares'
+import Reserve from './Accounts/Reserve'
 
 // applications
 import Applications from './Applications/Applications'
@@ -58,7 +59,7 @@ export { Loans, LoanHistory, LoanPayment, LoanRequest, DepositAdmin, LoanAdmin, 
 
 export { Withdraw, WithdrawHistory, WithdrawRequest, WithdrawMembers}
 
-export { Accounts, Savings, Mwana, Fixed, Shares, MemberLoans}
+export { Accounts, Savings, Mwana, Fixed, Shares, MemberLoans, Reserve}
 
 export { Members, DepositVerify, LoanVerify, WithdrawVerify, Applications, MemberApplication, ApplicantApproval }
 
