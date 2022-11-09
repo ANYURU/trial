@@ -39,6 +39,7 @@ import {
   Fixed,
   Shares,
   DepositAdmin,
+  Reserve,
 } from "../pages";
 import { Admins, AdminInfo, SuperAdDashboard } from "../pages";
 import {
@@ -111,6 +112,14 @@ export default function App() {
                   <LoanVerify />
                 </ErrorBoundary>
               }
+            />
+            <Route 
+              path="accounts/reserve"
+              element={
+                <ErrorBoundary>
+                  <Reserve />
+                </ErrorBoundary>
+              }  
             />
             <Route
               path="loans/members"
@@ -203,7 +212,6 @@ export default function App() {
             />
           </Route>
 
-          {/* Accessed by only the system_admin */}
 
           {/* Accessed by both members and admins */}
           <Route
@@ -230,6 +238,7 @@ export default function App() {
             <Route path="accounts/mwana" element={<Mwana />} />
             <Route path="accounts/fixed" element={<Fixed />} />
             <Route path="accounts/shares" element={<Shares />} />
+            
 
             <Route path="/withdraw" element={<Withdraw />} />
             <Route path="withdraw/history" element={<WithdrawHistory />} />
