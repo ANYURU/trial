@@ -9,6 +9,8 @@ import { supabase } from "../../helpers/supabase";
 import { Spinner, NothingShown } from "../../components";
 import { useLocation, useOutletContext } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { MdDownload } from "react-icons/md";
+import { generateReportFromJson } from "../../helpers/generateReportFromJson";
 
 export default function Members() {
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function Members() {
     const { data, error } = await supabase.rpc("fetch_members")
     if( error ) throw error
     if( data ) { 
+      console.log(data)
       const dataArray = data.filter( member => member.roles && member.roles.includes('member') )
       dataArray.length > 0 ? setMembers( dataArray ) : setMembers( null ); 
     } 
@@ -88,6 +91,24 @@ export default function Members() {
     };
   }
 
+  const export_members = () => {
+    const formattedMembers = members.map(member => {
+      return {
+        "Name" : member.fullname,
+        "Email Address": member.email_address ?? "Not specified",
+        "Date of Birth": member.dob ?? "",
+        "Gender": member.gender ?? "",
+        "ID / Passport Number": member.id_passport_number ?? "",
+        "Marital Status": member.marital_status ?? "",
+        "Phone Number": member.phone_number ?? "",
+        "Position in Sacco": member.position_in_sacco ?? ""
+      }
+    })
+
+    console.log(formattedMembers)
+    generateReportFromJson(formattedMembers, 'Members')
+  }
+
   return (
     <div className="mx-5 my-2 md:h-[calc(100vh-70px)]">
       <ToastContainer />
@@ -116,26 +137,39 @@ export default function Members() {
             </button>
           )}
         </div>
-
-        <div className="flex justify-between my-3 m-1">
-          <div className="flex flex-col w-56 mr-1">
-            <select
-              name="status"
-              className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
-              onChange={(event) => setStatus(event.target.value)}
-            >
-              <option value="">Select Status</option>
-              <option value="active">Active</option>
-              <option value="dormant">Dormant</option>
-            </select>
+        <div className="flex">
+          <div className="flex justify-between my-3 m-1 w-[92%]">
+            <div className="flex flex-col w-56 mr-1">
+              <select
+                name="status"
+                className="py-2 px-2 rounded bg-white dark:bg-dark-bg-700 dark:text-secondary-text"
+                onChange={(event) => setStatus(event.target.value)}
+              >
+                <option value="">Select Status</option>
+                <option value="active">Active</option>
+                <option value="dormant">Dormant</option>
+              </select>
+            </div>
+            <div className="flex flex-col w-56 ml-1 dark:text-secondary-text">
+              <input
+                type="date"
+                onChange={(event) => setDate(event.target.value)}
+                className=" rounded px-2 py-2 dark:bg-dark-bg-700"
+              />
+            </div>
           </div>
-          <div className="flex flex-col w-56 ml-1 dark:text-secondary-text">
-            <input
-              type="date"
-              onChange={(event) => setDate(event.target.value)}
-              className=" rounded px-2 py-2 dark:bg-dark-bg-700"
-            />
-          </div>
+          <div className="flex justify-end mb-3 mt-3 w-[8%]">
+              <button
+                className="bg-green-500 align-text-middle px-3 py-2 text-white font-bold rounded flex items-center"
+                onClick={() => {
+                  export_members()
+                  console.log("here")
+                }}
+              >
+                Export
+                <MdDownload className="ml-1"/>
+              </button>
+            </div>
         </div>
       </div>
 
